@@ -1,0 +1,785 @@
+--- a/platform/switch/runtime/sdl_video.c
++++ b/platform/switch/runtime/sdl_video.c
+@@ -27,6 +27,9 @@
+     FormatLuma8 = 3,
+     FormatLumaA8 = 4,
+     FormatAlpha8 = 5,
++    /* GalNX P44: two-plane movie textures. Not a packed layout; the NV12 upload path below
++     * hands Y and interleaved UV to SDL separately so the GLES2 shader converts them. */
++    FormatNv12 = 6,
+ };
+ 
+ /* Engine BlendMode codes. */
+@@ -45,6 +48,9 @@
+     SDL_Texture* texture;
+     int width;
+     int height;
++    /* Engine PixelFormat the texture was created with, so a reused id never keeps a stale
++     * layout when the same graph switches between RGBA and NV12 content. */
++    int format;
+ } TextureEntry;
+ 
+ static SDL_Window* window;
+@@ -85,6 +91,8 @@
+         case FormatLuma8:
+         case FormatAlpha8: return 1;
+         case FormatLumaA8: return 2;
++        /* NV12 is planar; it never goes through the packed conversion path. */
++        case FormatNv12: return 4;
+         default: return 4;
+     }
+ }
+@@ -471,6 +479,7 @@
+     entry->texture = texture;
+     entry->width = width;
+     entry->height = height;
++    entry->format = format;
+     return 0;
+ }
+ 
+@@ -496,6 +505,101 @@
+         SDL_UpdateTexture(entry->texture, &rect, rgba, width * 4);
+     }
+     return 0;
++}
++
++/* ---- NV12 movie textures ---------------------------------------------------------------
++ * The movie decoder produces NV12 planes (full-size luma, half-size interleaved chroma). Uploading
++ * them as an SDL NV12 texture lets the GLES2 renderer do YUV -> RGB in its fragment shader: the CPU
++ * never touches the pixels, and only 1.5 bytes per pixel cross into the GPU instead of the 4 bytes
++ * an RGBA conversion needs. */
++
++static int nv12_uv_pitch(int width) {
++    return ((width + 1) / 2) * 2;
++}
++
++int galnx_sdl_nv12_supported(void) {
++    static int cached = -1;
++    SDL_Texture* probe;
++    FILE* force;
++    if (cached >= 0) return cached;
++    /* Debug switch: sdmc:/switch/rfvp/nv12_off.txt forces the RGBA path so the two upload
++     * modes can be compared without rebuilding. */
++    force = fopen("sdmc:/switch/rfvp/nv12_off.txt", "rb");
++    if (force != NULL) {
++        fclose(force);
++        cached = 0;
++        galnx_log("[rfvp] NV12 upload disabled by sdmc:/switch/rfvp/nv12_off.txt\n");
++        return 0;
++    }
++
++    if (!ready) return 0;
++    probe = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_NV12, SDL_TEXTUREACCESS_STREAMING, 16, 16);
++    if (probe == NULL) {
++        cached = 0;
++        galnx_log("[rfvp] NV12 textures unavailable: %s; movies use the RGBA path\n", SDL_GetError());
++        return 0;
++    }
++    SDL_DestroyTexture(probe);
++    cached = 1;
++    return 1;
++}
++
++static int sdl_texture_create_nv12_impl(unsigned id, int width, int height,
++                                        const unsigned char* y_plane, long y_length,
++                                        const unsigned char* uv_plane, long uv_length) {
++    TextureEntry* entry;
++    SDL_Texture* texture;
++    int reused = 0;
++    int uv_pitch;
++    long uv_bytes;
++    if (!ready || width <= 0 || height <= 0) return -1;
++    if (y_plane == NULL || uv_plane == NULL) return -2;
++    uv_pitch = nv12_uv_pitch(width);
++    uv_bytes = (long) uv_pitch * ((height + 1) / 2);
++    if (y_length < (long) width * height) return -3;
++    if (uv_length < uv_bytes) return -3;
++    entry = find_texture(id);
++    if (entry == NULL && texture_count >= MaxTextures) return -2;
++    /* Same id and size: keep the GL object, as the RGBA path does for graphs that redraw. */
++    if (entry != NULL && entry->texture != NULL && entry->width == width &&
++        entry->height == height && entry->format == FormatNv12) {
++        texture = entry->texture;
++        reused = 1;
++    } else {
++        texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_NV12,
++                                   SDL_TEXTUREACCESS_STREAMING, width, height);
++        if (texture == NULL) return -4;
++        SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
++        SDL_SetTextureScaleMode(texture, SDL_ScaleModeLinear);
++    }
++    if (SDL_UpdateNVTexture(texture, NULL, y_plane, width, uv_plane, uv_pitch) != 0) {
++        galnx_log("[rfvp] SDL_UpdateNVTexture %dx%d failed: %s\n", width, height, SDL_GetError());
++        if (!reused) SDL_DestroyTexture(texture);
++        return -6;
++    }
++    if (entry == NULL) {
++        entry = &textures[texture_count++];
++    } else if (entry->texture != texture) {
++        SDL_DestroyTexture(entry->texture);
++    }
++    entry->id = (int) id;
++    entry->texture = texture;
++    entry->width = width;
++    entry->height = height;
++    entry->format = FormatNv12;
++    return 0;
++}
++
++int galnx_sdl_texture_create_nv12(unsigned id, int width, int height,
++                                  const unsigned char* y_plane, long y_length,
++                                  const unsigned char* uv_plane, long uv_length) {
++    uint64_t started = stat_now();
++    int rc;
++    batch_flush();
++    rc = sdl_texture_create_nv12_impl(id, width, height, y_plane, y_length, uv_plane, uv_length);
++    stat_upload_calls++;
++    stat_upload_us += stat_now() - started;
++    return rc;
+ }
+ 
+ int galnx_sdl_texture_create(unsigned id, int width, int height, int format,
+--- a/platform/switch/runtime/rfvp_movie_h264.c
++++ b/platform/switch/runtime/rfvp_movie_h264.c
+@@ -431,3 +431,48 @@
+ int galnx_movie_is_hw(void) { return g_ctx != NULL ? g_ctx->used_hw : 0; }
+ int galnx_movie_frame_index(void) { return g_ctx != NULL ? (int)g_ctx->frame_index : 0; }
+ int galnx_movie_nv12_selftest(void) { return g_nv12_selftest; }
++
++/* GalNX P44: copy the current frame into tight NV12 planes (Y rows, then interleaved UV rows) so
++ * the renderer can upload it as a two-plane texture and convert it on the GPU. Returns the number
++ * of bytes written, or a negative value when the frame cannot be staged. */
++long galnx_movie_stage_nv12(unsigned char* dst, long capacity) {
++    int width, height, uv_pitch, uv_width, uv_rows, row;
++    long y_bytes, uv_bytes, total;
++    if (g_ctx == NULL || dst == NULL) return -1;
++    width = g_ctx->width;
++    height = g_ctx->height;
++    if (width <= 0 || height <= 0) return -1;
++    if (g_ctx->plane_y == NULL || g_ctx->plane_u == NULL) return -1;
++    uv_pitch = ((width + 1) / 2) * 2;
++    uv_width = (width + 1) / 2;
++    uv_rows = (height + 1) / 2;
++    y_bytes = (long) width * height;
++    uv_bytes = (long) uv_pitch * uv_rows;
++    total = y_bytes + uv_bytes;
++    if (capacity < total) return -2;
++
++    for (row = 0; row < height; ++row) {
++        memcpy(dst + (long) row * width, g_ctx->plane_y + (long) row * g_ctx->y_stride,
++               (size_t) width);
++    }
++    if (g_ctx->planar) {
++        const uint8_t* src_u = g_ctx->plane_u;
++        const uint8_t* src_v = g_ctx->plane_v;
++        int stride = g_ctx->uv_stride;
++        if (src_v == NULL) return -1;
++        for (row = 0; row < uv_rows; ++row) {
++            unsigned char* out = dst + y_bytes + (long) row * uv_pitch;
++            int col;
++            for (col = 0; col < uv_width; ++col) {
++                out[col * 2 + 0] = src_u[(long) row * stride + col];
++                out[col * 2 + 1] = src_v[(long) row * stride + col];
++            }
++        }
++    } else {
++        for (row = 0; row < uv_rows; ++row) {
++            memcpy(dst + y_bytes + (long) row * uv_pitch,
++                   g_ctx->plane_u + (long) row * g_ctx->uv_stride, (size_t) uv_width * 2);
++        }
++    }
++    return total;
++}
+--- a/platform/switch/runtime/rfvp_movie_h264.h
++++ b/platform/switch/runtime/rfvp_movie_h264.h
+@@ -30,6 +30,9 @@
+ const char *galnx_movie_error(void);
+ /* 1 when sdmc:/switch/rfvp/h264_nv12_selftest.txt exists (emulator shadow test). */
+ int galnx_movie_nv12_selftest(void);
++/* GalNX P44: stage the current frame as tight NV12 planes (Y first, then interleaved UV).
++ * Returns the byte count written, or <0 when the current frame cannot be staged. */
++long galnx_movie_stage_nv12(uint8_t *dst, long capacity);
+ 
+ /* BT.709 limited-range YUV -> packed R,G,B,A. */
+ void galnx_nv12_to_rgba(const uint8_t *y, const uint8_t *uv, int width, int height,
+--- a/crates/rfvp/src/host_api/render.rs
++++ b/crates/rfvp/src/host_api/render.rs
+@@ -130,6 +130,22 @@
+         pixels: Option<&[u8]>,
+     ) -> RfvpResult<()>;
+ 
++    /// GalNX P44: upload a movie frame as two planes (full-size luma and half-size interleaved
++    /// chroma, i.e. NV12). A backend whose GPU samples YUV directly converts it in the fragment
++    /// shader, so the CPU skips the colour conversion and only 1.5 bytes per pixel are moved
++    /// instead of 4. Backends without that path keep the default error and the caller falls back
++    /// to RGBA uploads.
++    fn create_texture_nv12(
++        &mut self,
++        _id: TextureId,
++        _width: u32,
++        _height: u32,
++        _y_plane: &[u8],
++        _uv_plane: &[u8],
++    ) -> RfvpResult<()> {
++        Err(RfvpError::Unsupported)
++    }
++
+     fn update_texture(&mut self, id: TextureId, rect: TextureRect, pixels: &[u8])
+         -> RfvpResult<()>;
+ 
+@@ -270,6 +286,8 @@
+     Indexed4,
+     Indexed8,
+     LumaA8,
++    /// Two-plane movie texture; data is tight NV12 (Y plane then interleaved UV plane).
++    Nv12,
+     Native(u16),
+ }
+ 
+@@ -404,6 +422,20 @@
+         desc: PortableTextureDesc,
+         data: &[u8],
+     ) -> Result<(), Self::Error> {
++        if desc.format == TextureFormat::Nv12 {
++            let y_bytes = desc.width as usize * desc.height as usize;
++            if data.len() <= y_bytes {
++                return Err(RfvpError::InvalidData);
++            }
++            return RfvpRenderer::create_texture_nv12(
++                self,
++                TextureId(handle.0),
++                desc.width as u32,
++                desc.height as u32,
++                &data[..y_bytes],
++                &data[y_bytes..],
++            );
++        }
+         RfvpRenderer::create_texture(
+             self,
+             TextureId(handle.0),
+--- a/crates/rfvp/src/rendering/prim_commands.rs
++++ b/crates/rfvp/src/rendering/prim_commands.rs
+@@ -253,6 +253,25 @@
+         let generation = graph.get_generation();
+         if self.graph_generation(graph_id) == Some(generation) {
+             // Uploaded already; its CPU pixels may have been evicted since.
++            return Ok(true);
++        }
++        if let Some(planes) = graph.get_nv12_planes() {
++            // GalNX P44: a movie frame stays NV12 all the way to the GPU. The backend's fragment
++            // shader does YUV -> RGB, so there is no CPU conversion and no RGBA re-upload.
++            let (width, height) = (graph.get_width(), graph.get_height());
++            if width == 0 || height == 0 {
++                return Ok(false);
++            }
++            backend.create_texture(
++                host_texture_id(graph_id),
++                PortableTextureDesc {
++                    width,
++                    height,
++                    format: TextureFormat::Nv12,
++                },
++                planes,
++            )?;
++            self.set_graph_generation(graph_id, generation);
+             return Ok(true);
+         }
+         let Some(img) = graph.get_texture().as_ref() else {
+--- a/crates/rfvp/src/subsystem/resources/graph_buff.rs
++++ b/crates/rfvp/src/subsystem/resources/graph_buff.rs
+@@ -80,6 +80,10 @@
+ 
+     /// Track how this graph was populated so it can be restored correctly.
+     pub load_kind: GraphBuffLoadKind,
++
++    /// GalNX P44: tight NV12 planes (Y then interleaved UV) of a movie frame that is uploaded as
++    /// a two-plane texture. When this is set the GPU converts it, so the CPU never builds RGBA.
++    pub nv12: Option<Vec<u8>>,
+ 
+     /// CPU pixels are byte-identical to decoding `texture_path` (no GraphRGB / parts overlay
+     /// has modified them), so they can be dropped and re-decoded from the VFS on demand.
+@@ -120,6 +124,7 @@
+             text_raster_scale: 0.0,
+             generation: 0,
+             load_kind: GraphBuffLoadKind::Unknown,
++            nv12: None,
+             cpu_pristine: false,
+             cpu_overlaid: false,
+             cpu_evicted: false,
+@@ -411,12 +416,48 @@
+         &self.texture
+     }
+ 
++    /// GalNX P44: the NV12 planes of a movie frame, when it is uploaded without a CPU conversion.
++    pub fn get_nv12_planes(&self) -> Option<&[u8]> {
++        self.nv12.as_deref()
++    }
++
++    /// GalNX P44: replace the contents with tight NV12 planes and return the buffer that was
++    /// there before, so the movie player can recycle the allocation.
++    pub fn load_from_nv12_recycle(
++        &mut self,
++        planes: Vec<u8>,
++        width: u32,
++        height: u32,
++    ) -> Result<Option<Vec<u8>>> {
++        if width == 0 || height == 0 || width > u16::MAX as u32 || height > u16::MAX as u32 {
++            return Err(anyhow!(
++                "graph_buff: invalid NV12 frame {width}x{height} ({} bytes)",
++                planes.len()
++            ));
++        }
++        let uv_pitch = ((width + 1) / 2) * 2;
++        let expected = width as usize * height as usize
++            + uv_pitch as usize * ((height as usize + 1) / 2);
++        if planes.len() != expected {
++            return Err(anyhow!(
++                "graph_buff: invalid NV12 frame {width}x{height} ({} bytes)",
++                planes.len()
++            ));
++        }
++        self.finish_raw_rgba_load(width, height, width, height, 0, 0, 0.0)?;
++        let previous = self.nv12.take();
++        self.texture = None;
++        self.nv12 = Some(planes);
++        Ok(previous)
++    }
++
+     pub fn unload(&mut self) {
+         #[cfg(feature = "psx")]
+         { self.streamed_clut = None; }
+         self.texture = None;
+         self.texture_ready = false;
+         self.texture_path = String::new();
++        self.nv12 = None;
+         self.offset_x = 0;
+         self.offset_y = 0;
+         self.width = 0;
+@@ -1069,6 +1110,8 @@
+         self.cpu_pristine = false;
+         self.cpu_evicted = false;
+         self.hit_mask = None;
++        // GalNX P44: RGBA content replaced the planar movie frame, so drop its planes.
++        self.nv12 = None;
+         Ok(())
+     }
+ 
+@@ -1378,8 +1421,11 @@
+ 
+ impl GraphBuff {
+     pub fn capture_snapshot_with_id(&self, id: u16) -> GraphBuffSnapshotV1 {
+-        // Skip empty graphs.
+-        if !self.texture_ready && self.texture.is_none() && self.texture_path.is_empty() {
++        // Skip empty graphs. GalNX P44: NV12 planes are decoder scratch that is re-decoded every
++        // frame and cannot be restored from a save, so they are never captured either.
++        if (!self.texture_ready && self.texture.is_none() && self.texture_path.is_empty())
++            || self.nv12.is_some()
++        {
+             return GraphBuffSnapshotV1 {
+                 id,
+                 r_value: self.r_value,
+--- a/crates/rfvp/src/subsystem/resources/motion_manager/mod.rs
++++ b/crates/rfvp/src/subsystem/resources/motion_manager/mod.rs
+@@ -1154,6 +1154,19 @@
+         graph.load_from_buff_recycle(buff, width, height)
+     }
+ 
++    /// GalNX P44: upload a movie frame as NV12 planes, returning the previous planes so the
++    /// decoder can recycle the buffer.
++    pub fn load_texture_nv12_recycle(
++        &mut self,
++        id: u16,
++        planes: Vec<u8>,
++        width: u32,
++        height: u32,
++    ) -> Result<Option<Vec<u8>>> {
++        let graph = &mut self.textures[id as usize];
++        graph.load_from_nv12_recycle(planes, width, height)
++    }
++
+     pub fn text_reprint(
+         &mut self,
+         fonts: &crate::subsystem::resources::text_manager::FontEnumerator,
+--- a/crates/rfvp/src/subsystem/resources/videoplayer/mod.rs
++++ b/crates/rfvp/src/subsystem/resources/videoplayer/mod.rs
+@@ -56,9 +56,12 @@
+     LayerNoAudio,
+ }
+ 
+-/// A decoded frame, RGBA.
++/// A decoded frame: either RGBA, or GalNX P44 tight NV12 planes (Y then interleaved UV) that
++/// are uploaded as a two-plane texture and converted on the GPU.
+ pub struct MovieFrame {
+     pub rgba: Vec<u8>,
++    /// Non-empty when this frame is NV12; the rgba field is empty then.
++    pub nv12: Vec<u8>,
+     pub width: u32,
+     pub height: u32,
+ }
+@@ -75,6 +78,9 @@
+ 
+     /// GalNX P33: give a frame buffer back so the decoder can reuse it.
+     fn recycle_buffer(&mut self, _buffer: Vec<u8>) {}
++
++    /// GalNX P44: give the NV12 plane buffer back so the decoder can reuse it.
++    fn recycle_nv12(&mut self, _planes: Vec<u8>) {}
+ }
+ 
+ /// What a decoder needs to open a movie.
+@@ -199,19 +205,30 @@
+             // GalNX P33: perf::start() is the host microsecond clock. The
+             // no_std platform_time::Instant only advances once per tick, so all
+             // of these timings used to read 0 on the console.
++            let MovieFrame { rgba, nv12, width, height } = frame;
++            let nv12_upload = !nv12.is_empty();
+             let upload_started = crate::perf::start();
+-            let recycled = motion.load_texture_from_buff_recycle(
+-                MOVIE_GRAPH_ID,
+-                frame.rgba,
+-                frame.width,
+-                frame.height,
+-            )?;
+-            let upload_us = crate::perf::start()
+-                .saturating_sub(upload_started)
+-                .min(u32::MAX as u64) as u32;
+-            if let Some(buffer) = recycled {
+-                source.recycle_buffer(buffer);
+-            }
++            // GalNX P44: the decoder handed over NV12 planes. They go up as a two-plane texture
++            // (1.5 bytes per pixel) and the fragment shader does YUV -> RGB, so neither the CPU
++            // conversion nor the 4-byte RGBA upload happens any more.
++            let upload_us = if nv12_upload {
++                let recycled = motion.load_texture_nv12_recycle(MOVIE_GRAPH_ID, nv12, width, height)?;
++                if let Some(planes) = recycled {
++                    source.recycle_nv12(planes);
++                }
++                crate::perf::start()
++                    .saturating_sub(upload_started)
++                    .min(u32::MAX as u64) as u32
++            } else {
++                let recycled =
++                    motion.load_texture_from_buff_recycle(MOVIE_GRAPH_ID, rgba, width, height)?;
++                if let Some(buffer) = recycled {
++                    source.recycle_buffer(buffer);
++                }
++                crate::perf::start()
++                    .saturating_sub(upload_started)
++                    .min(u32::MAX as u64) as u32
++            };
+             motion.refresh_prims(MOVIE_GRAPH_ID);
+             // GalNX P29: the movie sprite has to be the last child of root prim 0.
+             // The renderer walks the prim tree in child order and does not sort by
+@@ -224,11 +241,12 @@
+             self.frames = self.frames.saturating_add(1);
+             if self.frames == 1 || self.frames % 30 == 0 {
+                 log::info!(
+-                    "movie: presented frame={} {}x{} upload_us={}",
++                    "movie: presented frame={} {}x{} upload_us={} nv12={}",
+                     self.frames,
+-                    frame.width,
+-                    frame.height,
+-                    upload_us
++                    width,
++                    height,
++                    upload_us,
++                    if nv12_upload { 1 } else { 0 }
+                 );
+             }
+         }
+--- a/crates/rfvp/src/subsystem/resources/videoplayer/horizon_h264.rs
++++ b/crates/rfvp/src/subsystem/resources/videoplayer/horizon_h264.rs
+@@ -17,7 +17,7 @@
+ use alloc::collections::VecDeque;
+ use alloc::string::String;
+ use alloc::vec::Vec;
+-use core::ffi::{c_char, c_int};
++use core::ffi::{c_char, c_int, c_long};
+ use core::ptr;
+ 
+ use anyhow::{anyhow, Result};
+@@ -49,6 +49,8 @@
+     fn galnx_movie_is_hw() -> c_int;
+     fn galnx_movie_error() -> *const c_char;
+     fn galnx_movie_nv12_selftest() -> c_int;
++    fn galnx_movie_stage_nv12(dst: *mut u8, capacity: c_long) -> c_long;
++    fn galnx_sdl_nv12_supported() -> c_int;
+ 
+     fn galnx_nv12_to_rgba(
+         y: *const u8,
+@@ -115,6 +117,8 @@
+ struct DecodedFrame {
+     pts_ms: u32,
+     rgba: Vec<u8>,
++    /// GalNX P44: non-empty when the frame is presented as NV12 planes instead of RGBA.
++    nv12_planes: Vec<u8>,
+     width: u32,
+     height: u32,
+ }
+@@ -134,6 +138,10 @@
+     last_convert_us: u32,
+     /// One recycled RGBA buffer, like the WMV backend's spare_buffer.
+     spare_buffer: Option<Vec<u8>>,
++    /// GalNX P44: one recycled NV12 plane buffer.
++    plane_buffer: Option<Vec<u8>>,
++    /// GalNX P44: upload frames as NV12 planes and let the GPU convert them.
++    nv12_upload: bool,
+     /// Shadow-test scratch buffers: only allocated when the emulator marker
+     /// sdmc:/switch/rfvp/h264_nv12_selftest.txt exists.
+     nv12_scratch: Option<Vec<u8>>,
+@@ -143,7 +151,7 @@
+ }
+ 
+ impl H264Playback {
+-    fn new(asset: String, audio: Option<MovieAudio>) -> Self {
++    fn new(asset: String, audio: Option<MovieAudio>, nv12_upload: bool) -> Self {
+         Self {
+             asset,
+             stash: VecDeque::new(),
+@@ -157,6 +165,8 @@
+             last_decode_us: 0,
+             last_convert_us: 0,
+             spare_buffer: None,
++            plane_buffer: None,
++            nv12_upload,
+             nv12_scratch: None,
+             shadow_rgba: None,
+             audio,
+@@ -307,6 +317,46 @@
+         }
+         let width = width as u32;
+         let height = height as u32;
++
++        // GalNX P44: the decoder keeps NV12 in place; we only copy the planes into one tight
++        // buffer, which the renderer uploads as a two-plane texture. The GPU does YUV -> RGB, so
++        // neither the NEON conversion nor the 4-byte-per-pixel RGBA upload happens. Falling back
++        // keeps the old behaviour if a frame cannot be staged.
++        if self.nv12_upload {
++            match self.stage_nv12(width, height) {
++                Ok(planes) => {
++                    self.decoded_frames = self.decoded_frames.saturating_add(1);
++                    if hw != 0 {
++                        self.hw_frames = self.hw_frames.saturating_add(1);
++                    }
++                    if self.decoded_frames <= 5 || self.decoded_frames % DECODE_LOG_EVERY == 0 {
++                        log::info!(
++                            "movie h264: decoded frame={} pts={} ms {}x{} hw={} decode_us={} stage_us={} nv12=1",
++                            self.decoded_frames,
++                            pts_ms as u32,
++                            width,
++                            height,
++                            hw,
++                            self.last_decode_us,
++                            self.last_convert_us
++                        );
++                    }
++                    self.stash.push_back(DecodedFrame {
++                        pts_ms: if pts_ms > 0.0 { pts_ms as u32 } else { 0 },
++                        rgba: Vec::new(),
++                        nv12_planes: planes,
++                        width,
++                        height,
++                    });
++                    return Ok(true);
++                }
++                Err(error) => {
++                    log::warn!("movie h264: {error}; falling back to CPU NV12 -> RGBA");
++                    self.nv12_upload = false;
++                }
++            }
++        }
++
+         let needed = width as usize * height as usize * 4;
+         let mut rgba = self.spare_buffer.take().unwrap_or_default();
+         if rgba.len() != needed {
+@@ -390,10 +440,34 @@
+         self.stash.push_back(DecodedFrame {
+             pts_ms: if pts_ms > 0.0 { pts_ms as u32 } else { 0 },
+             rgba,
++            nv12_planes: Vec::new(),
+             width,
+             height,
+         });
+         Ok(true)
++    }
++
++    /// GalNX P44: copy the current frame's NV12 planes into the recycled buffer, tight (no row
++    /// padding), ready for a two-plane texture upload.
++    fn stage_nv12(&mut self, width: u32, height: u32) -> Result<Vec<u8>> {
++        let uv_pitch = ((width + 1) / 2) * 2;
++        let total = width as usize * height as usize
++            + uv_pitch as usize * ((height as usize + 1) / 2);
++        let mut planes = self.plane_buffer.take().unwrap_or_default();
++        if planes.len() != total {
++            planes.clear();
++            planes.resize(total, 0);
++        }
++        let started = perf::start();
++        let written = unsafe { galnx_movie_stage_nv12(planes.as_mut_ptr(), planes.len() as c_long) };
++        self.last_convert_us = perf::start()
++            .saturating_sub(started)
++            .min(u32::MAX as u64) as u32;
++        if written <= 0 {
++            return Err(anyhow!("NV12 staging failed (rc={})", written));
++        }
++        planes.truncate(written as usize);
++        Ok(planes)
+     }
+ 
+     fn next_due_frame(&mut self) -> Result<Option<DecodedFrame>> {
+@@ -472,6 +546,7 @@
+         self.maybe_start_audio();
+         Ok(Some(MovieFrame {
+             rgba: frame.rgba,
++            nv12: frame.nv12_planes,
+             width: frame.width,
+             height: frame.height,
+         }))
+@@ -484,6 +559,12 @@
+     fn recycle_buffer(&mut self, buffer: Vec<u8>) {
+         if self.spare_buffer.is_none() {
+             self.spare_buffer = Some(buffer);
++        }
++    }
++
++    fn recycle_nv12(&mut self, planes: Vec<u8>) {
++        if self.plane_buffer.is_none() {
++            self.plane_buffer = Some(planes);
+         }
+     }
+ 
+@@ -515,7 +596,11 @@
+         unsafe { galnx_movie_close() };
+         return None;
+     }
+-    log::info!("Movie: opened (Switch NVDEC H.264) asset={asset}");
++    let nv12_upload = unsafe { galnx_sdl_nv12_supported() } != 0;
++    log::info!(
++        "Movie: opened (Switch NVDEC H.264, upload={}) asset={asset}",
++        if nv12_upload { "nv12" } else { "rgba" }
++    );
+     let audio = load_movie_audio(request);
+-    Some(Box::new(H264Playback::new(asset, audio)))
+-}
++    Some(Box::new(H264Playback::new(asset, audio, nv12_upload)))
++}
+--- a/crates/rfvp/src/subsystem/resources/videoplayer/horizon.rs
++++ b/crates/rfvp/src/subsystem/resources/videoplayer/horizon.rs
+@@ -415,6 +415,7 @@
+         self.maybe_start_audio();
+         Ok(Some(MovieFrame {
+             rgba: frame.rgba,
++            nv12: Vec::new(),
+             width: frame.width,
+             height: frame.height,
+         }))
+--- a/crates/rfvp/src/subsystem/resources/videoplayer/inline.rs
++++ b/crates/rfvp/src/subsystem/resources/videoplayer/inline.rs
+@@ -343,6 +343,7 @@
+         self.last_presented_pts_ms = frame.pts_ms;
+         Ok(Some(MovieFrame {
+             rgba: frame.rgba,
++            nv12: Vec::new(),
+             width: self.screen_w,
+             height: self.screen_h,
+         }))
+@@ -368,6 +369,7 @@
+         self.last_presented_pts_ms = frame.pts_ms;
+         Ok(Some(MovieFrame {
+             rgba: frame.rgba,
++            nv12: Vec::new(),
+             width: self.screen_w,
+             height: self.screen_h,
+         }))
+--- a/crates/rfvp/src/subsystem/resources/videoplayer/threaded.rs
++++ b/crates/rfvp/src/subsystem/resources/videoplayer/threaded.rs
+@@ -1070,6 +1070,7 @@
+         self.last_presented_pts = frame.pts_us;
+         Ok(Some(MovieFrame {
+             rgba: frame.data.into_vec(),
++            nv12: Vec::new(),
+             width: frame.width,
+             height: frame.height,
+         }))
+@@ -1095,6 +1096,7 @@
+         self.last_presented_pts_ms = frame.pts_ms;
+         Ok(Some(MovieFrame {
+             rgba: frame.rgba,
++            nv12: Vec::new(),
+             width: self.screen_w,
+             height: self.screen_h,
+         }))
+@@ -1120,6 +1122,7 @@
+         self.last_presented_pts_ms = frame.pts_ms;
+         Ok(Some(MovieFrame {
+             rgba: frame.rgba,
++            nv12: Vec::new(),
+             width: self.screen_w,
+             height: self.screen_h,
+         }))
+--- a/platform/switch/host/src/render.rs
++++ b/platform/switch/host/src/render.rs
+@@ -23,6 +23,15 @@
+     extern "C" {
+         pub fn galnx_sdl_video_init() -> c_int;
+         pub fn galnx_sdl_video_shutdown();
++        pub fn galnx_sdl_texture_create_nv12(
++            id: c_uint,
++            width: c_int,
++            height: c_int,
++            y_plane: *const c_uchar,
++            y_length: c_ulong,
++            uv_plane: *const c_uchar,
++            uv_length: c_ulong,
++        ) -> c_int;
+         pub fn galnx_sdl_texture_create(
+             id: c_uint,
+             width: c_int,
+@@ -286,6 +295,48 @@
+         }
+         self.formats.retain(|(texture, _)| *texture != id.0);
+         self.formats.push((id.0, format));
++        Ok(())
++    }
++
++    /// GalNX P44: upload a movie frame as NV12 planes. SDL's GLES2 renderer keeps them as a
++    /// two-plane texture and its fragment shader converts YUV -> RGB while drawing, so the CPU
++    /// conversion and the RGBA upload are gone.
++    fn create_texture_nv12(
++        &mut self,
++        id: TextureId,
++        width: u32,
++        height: u32,
++        y_plane: &[u8],
++        uv_plane: &[u8],
++    ) -> RfvpResult<()> {
++        if !self.ensure_video() {
++            return Ok(());
++        }
++        let rc = unsafe {
++            sdl::galnx_sdl_texture_create_nv12(
++                id.0 as c_uint,
++                width as c_int,
++                height as c_int,
++                y_plane.as_ptr() as *const c_uchar,
++                y_plane.len() as c_ulong,
++                uv_plane.as_ptr() as *const c_uchar,
++                uv_plane.len() as c_ulong,
++            )
++        };
++        if rc != 0 {
++            // The caller keeps drawing; the graph simply stays on its previous contents.
++            sdl::log(&alloc::format!(
++                "rfvp: nv12 texture create failed: id={} {}x{} rc={}
++",
++                id.0,
++                width,
++                height,
++                rc
++            ));
++            return Ok(());
++        }
++        self.formats.retain(|(texture, _)| *texture != id.0);
++        self.formats.push((id.0, 6));
+         Ok(())
+     }
+ 

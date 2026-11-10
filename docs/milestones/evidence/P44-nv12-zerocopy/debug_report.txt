@@ -1,0 +1,1086 @@
+frame 2220: 23.0 fps over the last 60 frames, slowest frame 58.8 ms
+stages (ms per frame): snow 0.07 tree 3.05 submit 0.92 end_frame 0.79 vm 0.19 syscalls 0.05
+virtual frame 1920x1080
+
+log:
+[INFO] [diag t=93944864247us] [cache] bytes put size=3468 total=3468/201326592
+[INFO] [diag t=93944865999us] [cache] prefetch skip path="graph/diss00": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944867476us] [cache] bytes put size=12106 total=15574/201326592
+[INFO] [diag t=93944867489us] [cache] prefetch skip path="graph/diss01": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944867676us] [cache] bytes put size=12113 total=27687/201326592
+[INFO] [diag t=93944867683us] [cache] prefetch skip path="graph/diss02": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944868945us] [cache] bytes put size=279785 total=307472/201326592
+[INFO] [diag t=93944868962us] [cache] prefetch skip path="graph/diss03": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944870147us] [cache] bytes put size=280062 total=587534/201326592
+[INFO] [diag t=93944870163us] [cache] prefetch skip path="graph/diss04": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944870339us] [cache] bytes put size=15353 total=602887/201326592
+[INFO] [diag t=93944870348us] [cache] prefetch skip path="graph/diss05": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944870486us] [cache] bytes put size=15386 total=618273/201326592
+[INFO] [diag t=93944870495us] [cache] prefetch skip path="graph/diss06": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944877176us] [cache] bytes put size=1459381 total=2077654/201326592
+[INFO] [diag t=93944877355us] vfs path="graph/diss07" bytes=1459381 us=6687 reads=1
+[INFO] [diag t=93944877487us] [cache] prefetch skip path="graph/diss07": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944878320us] [cache] bytes put size=141501 total=2219155/201326592
+[INFO] [diag t=93944878335us] [cache] prefetch skip path="graph/diss08": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944879097us] [cache] bytes put size=140297 total=2359452/201326592
+[INFO] [diag t=93944879108us] [cache] prefetch skip path="graph/diss09": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944879219us] [cache] bytes put size=4812 total=2364264/201326592
+[INFO] [diag t=93944879229us] [cache] prefetch skip path="graph/diss10": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944879813us] [cache] bytes put size=4814 total=2369078/201326592
+[INFO] [diag t=93944879821us] [cache] prefetch skip path="graph/diss11": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944880086us] [cache] bytes put size=6794 total=2375872/201326592
+[INFO] [diag t=93944880097us] [cache] prefetch skip path="graph/diss12": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944880217us] [cache] bytes put size=6801 total=2382673/201326592
+[INFO] [diag t=93944880222us] [cache] prefetch skip path="graph/diss13": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944880376us] [cache] bytes put size=13044 total=2395717/201326592
+[INFO] [diag t=93944880386us] [cache] prefetch skip path="graph/diss14": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944880528us] [cache] bytes put size=13209 total=2408926/201326592
+[INFO] [diag t=93944880537us] [cache] prefetch skip path="graph/diss15": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944880634us] [cache] bytes put size=5858 total=2414784/201326592
+[INFO] [diag t=93944880642us] [cache] prefetch skip path="graph/diss16": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944880812us] [cache] bytes put size=5862 total=2420646/201326592
+[INFO] [diag t=93944880818us] [cache] prefetch skip path="graph/diss17": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944881124us] [cache] bytes put size=15977 total=2436623/201326592
+[INFO] [diag t=93944881130us] [cache] prefetch skip path="graph/diss18": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944881258us] [cache] bytes put size=16096 total=2452719/201326592
+[INFO] [diag t=93944881265us] [cache] prefetch skip path="graph/diss19": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944885815us] [cache] bytes put size=1028355 total=3481074/201326592
+[INFO] [diag t=93944885829us] vfs path="graph/diss20" bytes=1028355 us=4557 reads=1
+[INFO] [diag t=93944885837us] [cache] prefetch skip path="graph/diss20": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944886626us] [cache] bytes put size=152011 total=3633085/201326592
+[INFO] [diag t=93944886636us] [cache] prefetch skip path="graph/diss21": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944887389us] [cache] bytes put size=152479 total=3785564/201326592
+[INFO] [diag t=93944887400us] [cache] prefetch skip path="graph/diss22": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944887568us] [cache] bytes put size=19185 total=3804749/201326592
+[INFO] [diag t=93944887575us] [cache] prefetch skip path="graph/diss23": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944887713us] [cache] bytes put size=19415 total=3824164/201326592
+[INFO] [diag t=93944887719us] [cache] prefetch skip path="graph/diss24": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944887858us] [cache] bytes put size=17029 total=3841193/201326592
+[INFO] [diag t=93944887863us] [cache] prefetch skip path="graph/diss25": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944888001us] [cache] bytes put size=19201 total=3860394/201326592
+[INFO] [diag t=93944888005us] [cache] prefetch skip path="graph/diss26": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944888333us] [cache] bytes put size=69533 total=3929927/201326592
+[INFO] [diag t=93944888339us] [cache] prefetch skip path="graph/diss27": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944888678us] [cache] bytes put size=69564 total=3999491/201326592
+[INFO] [diag t=93944888686us] [cache] prefetch skip path="graph/diss28": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944889001us] [cache] bytes put size=69534 total=4069025/201326592
+[INFO] [diag t=93944889005us] [cache] prefetch skip path="graph/diss29": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944889346us] [cache] bytes put size=69436 total=4138461/201326592
+[INFO] [diag t=93944889357us] [cache] prefetch skip path="graph/diss30": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944889581us] [cache] bytes put size=27067 total=4165528/201326592
+[INFO] [diag t=93944889592us] [cache] prefetch skip path="graph/diss31": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944889806us] [cache] bytes put size=26718 total=4192246/201326592
+[INFO] [diag t=93944889814us] [cache] prefetch skip path="graph/diss32": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944889997us] [cache] bytes put size=26944 total=4219190/201326592
+[INFO] [diag t=93944890005us] [cache] prefetch skip path="graph/diss33": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944893589us] [cache] bytes put size=865086 total=5084276/201326592
+[INFO] [diag t=93944893608us] [cache] prefetch skip path="graph/diss34": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944893838us] [cache] bytes put size=6324 total=5090600/201326592
+[INFO] [diag t=93944893852us] [cache] prefetch skip path="graph/diss35": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944894061us] [cache] bytes put size=7237 total=5097837/201326592
+[INFO] [diag t=93944894070us] [cache] prefetch skip path="graph/diss36": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944895758us] [cache] bytes put size=357081 total=5454918/201326592
+[INFO] [diag t=93944895772us] [cache] prefetch skip path="graph/diss37": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944896422us] [cache] bytes put size=138995 total=5593913/201326592
+[INFO] [diag t=93944896432us] [cache] prefetch skip path="graph/diss38": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944899999us] [cache] bytes put size=845462 total=6439375/201326592
+[INFO] [diag t=93944900016us] [cache] prefetch skip path="graph/diss39": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944903743us] [cache] bytes put size=838293 total=7277668/201326592
+[INFO] [diag t=93944903765us] [cache] prefetch skip path="graph/diss40": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944907512us] [cache] bytes put size=838426 total=8116094/201326592
+[INFO] [diag t=93944907530us] [cache] prefetch skip path="graph/diss41": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944912667us] [cache] bytes put size=1064556 total=9180650/201326592
+[INFO] [diag t=93944912682us] vfs path="graph/diss42" bytes=1064556 us=5138 reads=1
+[INFO] [diag t=93944912690us] [cache] prefetch skip path="graph/diss42": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944914188us] [cache] bytes put size=232607 total=9413257/201326592
+[INFO] [diag t=93944914205us] [cache] prefetch skip path="graph/diss43": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944915630us] [cache] bytes put size=272758 total=9686015/201326592
+[INFO] [diag t=93944915644us] [cache] prefetch skip path="graph/diss44": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944920425us] [cache] bytes put size=1064344 total=10750359/201326592
+[INFO] [diag t=93944920443us] vfs path="graph/diss45" bytes=1064344 us=4787 reads=1
+[INFO] [diag t=93944920454us] [cache] prefetch skip path="graph/diss45": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944924103us] [cache] bytes put size=838528 total=11588887/201326592
+[INFO] [diag t=93944924133us] [cache] prefetch skip path="graph/diss46": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944924411us] [cache] bytes put size=19257 total=11608144/201326592
+[INFO] [diag t=93944924420us] [cache] prefetch skip path="graph/diss47": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944924582us] [cache] bytes put size=19501 total=11627645/201326592
+[INFO] [diag t=93944924587us] [cache] prefetch skip path="graph/diss48": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944927907us] [cache] bytes put size=764776 total=12392421/201326592
+[INFO] [diag t=93944927926us] [cache] prefetch skip path="graph/diss50": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944931228us] [cache] bytes put size=837105 total=13229526/201326592
+[INFO] [diag t=93944931243us] [cache] prefetch skip path="graph/diss51": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944934929us] [cache] bytes put size=796183 total=14025709/201326592
+[INFO] [diag t=93944934948us] [cache] prefetch skip path="graph/diss52": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944938979us] [cache] bytes put size=835787 total=14861496/201326592
+[INFO] [diag t=93944938999us] [cache] prefetch skip path="graph/diss53": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944941670us] [cache] bytes put size=426133 total=15287629/201326592
+[INFO] [diag t=93944941687us] [cache] prefetch skip path="graph/diss54": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944943460us] [cache] bytes put size=428298 total=15715927/201326592
+[INFO] [diag t=93944943472us] [cache] prefetch skip path="graph/diss55": Unexpected texture type: Single8Bit
+[INFO] [diag t=93944945809us] [cache] bytes put size=21119 total=15737046/201326592
+[INFO] [diag t=93944967015us] graph decode split path="graph/menu_bg" inflate_us=7377 convert_us=13736
+[INFO] [diag t=93944968131us] [cache] texture put path="graph/menu_bg" size=626400 evicted=0 evicted_bytes=0 total=626400/268435456
+[INFO] [diag t=93944968962us] [cache] bytes put size=41146 total=15778192/201326592
+[INFO] [diag t=93944971025us] graph decode split path="graph/menu_byebye" inflate_us=1513 convert_us=537
+[INFO] [diag t=93944971702us] [cache] texture put path="graph/menu_byebye" size=271952 evicted=0 evicted_bytes=0 total=898352/268435456
+[INFO] [diag t=93944971964us] [cache] bytes put size=993 total=15779185/201326592
+[INFO] [diag t=93944972310us] graph decode split path="graph/menu_chk" inflate_us=333 convert_us=3
+[INFO] [diag t=93944972356us] [cache] texture put path="graph/menu_chk" size=2700 evicted=0 evicted_bytes=0 total=901052/268435456
+[INFO] [diag t=93944972793us] [cache] bytes put size=14238 total=15793423/201326592
+[INFO] [diag t=93944973219us] graph decode split path="graph/menu_del_mes" inflate_us=373 convert_us=45
+[INFO] [diag t=93944973231us] [cache] texture put path="graph/menu_del_mes" size=76608 evicted=0 evicted_bytes=0 total=977660/268435456
+[INFO] [diag t=93944973456us] [cache] bytes put size=11383 total=15804806/201326592
+[INFO] [diag t=93944973859us] graph decode split path="graph/menu_exit_mes" inflate_us=353 convert_us=44
+[INFO] [diag t=93944973870us] [cache] texture put path="graph/menu_exit_mes" size=85652 evicted=0 evicted_bytes=0 total=1063312/268435456
+[INFO] [diag t=93944974193us] [cache] bytes put size=14155 total=15818961/201326592
+[INFO] [diag t=93944974628us] graph decode split path="graph/menu_init_mes" inflate_us=381 convert_us=45
+[INFO] [diag t=93944974714us] [cache] texture put path="graph/menu_init_mes" size=84288 evicted=0 evicted_bytes=0 total=1147600/268435456
+[INFO] [diag t=93944974824us] [cache] bytes put size=3131 total=15822092/201326592
+[INFO] [diag t=93944974994us] graph decode split path="graph/menu_no_1" inflate_us=146 convert_us=18
+[INFO] [diag t=93944975005us] [cache] texture put path="graph/menu_no_1" size=33280 evicted=0 evicted_bytes=0 total=1180880/268435456
+[INFO] [diag t=93944975182us] [cache] bytes put size=5201 total=15827293/201326592
+[INFO] [diag t=93944975455us] graph decode split path="graph/menu_no_2" inflate_us=228 convert_us=37
+[INFO] [diag t=93944975469us] [cache] texture put path="graph/menu_no_2" size=62320 evicted=0 evicted_bytes=0 total=1243200/268435456
+[INFO] [diag t=93944975696us] [cache] bytes put size=9983 total=15837276/201326592
+[INFO] [diag t=93944976080us] graph decode split path="graph/menu_ow_mes" inflate_us=331 convert_us=46
+[INFO] [diag t=93944976093us] [cache] texture put path="graph/menu_ow_mes" size=86044 evicted=0 evicted_bytes=0 total=1329244/268435456
+[INFO] [diag t=93944976374us] [cache] bytes put size=13734 total=15851010/201326592
+[INFO] [diag t=93944976817us] graph decode split path="graph/menu_qload_mes" inflate_us=390 convert_us=47
+[INFO] [diag t=93944976826us] [cache] texture put path="graph/menu_qload_mes" size=87216 evicted=0 evicted_bytes=0 total=1416460/268435456
+[INFO] [diag t=93944977053us] [cache] bytes put size=12318 total=15863328/201326592
+[INFO] [diag t=93944977471us] graph decode split path="graph/menu_title_mes" inflate_us=360 convert_us=49
+[INFO] [diag t=93944977489us] [cache] texture put path="graph/menu_title_mes" size=83520 evicted=0 evicted_bytes=0 total=1499980/268435456
+[INFO] [diag t=93944977815us] [cache] bytes put size=12814 total=15876142/201326592
+[INFO] [diag t=93944978295us] graph decode split path="graph/menu_undo_mes" inflate_us=417 convert_us=56
+[INFO] [diag t=93944978781us] [cache] texture put path="graph/menu_undo_mes" size=99456 evicted=0 evicted_bytes=0 total=1599436/268435456
+[INFO] [diag t=93944978930us] [cache] bytes put size=2946 total=15879088/201326592
+[INFO] [diag t=93944979098us] graph decode split path="graph/menu_yes_1" inflate_us=142 convert_us=20
+[INFO] [diag t=93944979154us] [cache] texture put path="graph/menu_yes_1" size=32000 evicted=0 evicted_bytes=0 total=1631436/268435456
+[INFO] [diag t=93944979312us] [cache] bytes put size=4365 total=15883453/201326592
+[INFO] [diag t=93944979533us] graph decode split path="graph/menu_yes_2" inflate_us=187 convert_us=27
+[INFO] [diag t=93944979545us] [cache] texture put path="graph/menu_yes_2" size=45440 evicted=0 evicted_bytes=0 total=1676876/268435456
+[INFO] [diag t=93944979628us] [cache] bytes put size=1059 total=15884512/201326592
+[INFO] [diag t=93944979679us] graph decode split path="graph/prompt1" inflate_us=43 convert_us=4
+[INFO] [diag t=93944979686us] [cache] texture put path="graph/prompt1" size=5320 evicted=0 evicted_bytes=0 total=1682196/268435456
+[INFO] [diag t=93944979747us] [cache] bytes put size=965 total=15885477/201326592
+[INFO] [diag t=93944979787us] graph decode split path="graph/prompt10" inflate_us=34 convert_us=3
+[INFO] [diag t=93944979793us] [cache] texture put path="graph/prompt10" size=4104 evicted=0 evicted_bytes=0 total=1686300/268435456
+[INFO] [diag t=93944979843us] [cache] bytes put size=1038 total=15886515/201326592
+[INFO] [diag t=93944979884us] graph decode split path="graph/prompt11" inflate_us=35 convert_us=3
+[INFO] [diag t=93944979891us] [cache] texture put path="graph/prompt11" size=5016 evicted=0 evicted_bytes=0 total=1691316/268435456
+[INFO] [diag t=93944979968us] [cache] bytes put size=1047 total=15887562/201326592
+[INFO] [diag t=93944980026us] graph decode split path="graph/prompt12" inflate_us=46 convert_us=5
+[INFO] [diag t=93944980036us] [cache] texture put path="graph/prompt12" size=5472 evicted=0 evicted_bytes=0 total=1696788/268435456
+[INFO] [diag t=93944980153us] [cache] bytes put size=1161 total=15888723/201326592
+[INFO] [diag t=93944980210us] graph decode split path="graph/prompt13" inflate_us=46 convert_us=5
+[INFO] [diag t=93944980476us] [cache] texture put path="graph/prompt13" size=5472 evicted=0 evicted_bytes=0 total=1702260/268435456
+[INFO] [diag t=93944980575us] [cache] bytes put size=1129 total=15889852/201326592
+[INFO] [diag t=93944980627us] graph decode split path="graph/prompt14" inflate_us=43 convert_us=4
+[INFO] [diag t=93944980635us] [cache] texture put path="graph/prompt14" size=5472 evicted=0 evicted_bytes=0 total=1707732/268435456
+[INFO] [diag t=93944980721us] [cache] bytes put size=1119 total=15890971/201326592
+[INFO] [diag t=93944980767us] graph decode split path="graph/prompt15" inflate_us=39 convert_us=5
+[INFO] [diag t=93944980773us] [cache] texture put path="graph/prompt15" size=5320 evicted=0 evicted_bytes=0 total=1713052/268435456
+[INFO] [diag t=93944980823us] [cache] bytes put size=1106 total=15892077/201326592
+[INFO] [diag t=93944980865us] graph decode split path="graph/prompt16" inflate_us=37 convert_us=3
+[INFO] [diag t=93944981020us] [cache] texture put path="graph/prompt16" size=5320 evicted=0 evicted_bytes=0 total=1718372/268435456
+[INFO] [diag t=93944981094us] [cache] bytes put size=1097 total=15893174/201326592
+[INFO] [diag t=93944981152us] graph decode split path="graph/prompt17" inflate_us=46 convert_us=5
+[INFO] [diag t=93944981162us] [cache] texture put path="graph/prompt17" size=5472 evicted=0 evicted_bytes=0 total=1723844/268435456
+[INFO] [diag t=93944981225us] [cache] bytes put size=1061 total=15894235/201326592
+[INFO] [diag t=93944981275us] graph decode split path="graph/prompt18" inflate_us=43 convert_us=4
+[INFO] [diag t=93944981282us] [cache] texture put path="graph/prompt18" size=5320 evicted=0 evicted_bytes=0 total=1729164/268435456
+[INFO] [diag t=93944981331us] [cache] bytes put size=1040 total=15895275/201326592
+[INFO] [diag t=93944981374us] graph decode split path="graph/prompt19" inflate_us=36 convert_us=4
+[INFO] [diag t=93944981380us] [cache] texture put path="graph/prompt19" size=5320 evicted=0 evicted_bytes=0 total=1734484/268435456
+[INFO] [diag t=93944981425us] [cache] bytes put size=992 total=15896267/201326592
+[INFO] [diag t=93944981465us] graph decode split path="graph/prompt2" inflate_us=33 convert_us=4
+[INFO] [diag t=93944981472us] [cache] texture put path="graph/prompt2" size=4408 evicted=0 evicted_bytes=0 total=1738892/268435456
+[INFO] [diag t=93944981512us] [cache] bytes put size=992 total=15897259/201326592
+[INFO] [diag t=93944981554us] graph decode split path="graph/prompt20" inflate_us=35 convert_us=4
+[INFO] [diag t=93944981559us] [cache] texture put path="graph/prompt20" size=5320 evicted=0 evicted_bytes=0 total=1744212/268435456
+[INFO] [diag t=93944981635us] [cache] bytes put size=925 total=15898184/201326592
+[INFO] [diag t=93944981704us] graph decode split path="graph/prompt21" inflate_us=55 convert_us=5
+[INFO] [diag t=93944981718us] [cache] texture put path="graph/prompt21" size=5320 evicted=0 evicted_bytes=0 total=1749532/268435456
+[INFO] [diag t=93944981792us] [cache] bytes put size=732 total=15898916/201326592
+[INFO] [diag t=93944981839us] graph decode split path="graph/prompt22" inflate_us=37 convert_us=4
+[INFO] [diag t=93944981848us] [cache] texture put path="graph/prompt22" size=4752 evicted=0 evicted_bytes=0 total=1754284/268435456
+[INFO] [diag t=93944981912us] [cache] bytes put size=56 total=15898972/201326592
+[INFO] [diag t=93944982138us] graph decode split path="graph/prompt23" inflate_us=167 convert_us=53
+[INFO] [diag t=93944982148us] [cache] texture put path="graph/prompt23" size=4 evicted=0 evicted_bytes=0 total=1754288/268435456
+[INFO] [diag t=93944982242us] [cache] bytes put size=942 total=15899914/201326592
+[INFO] [diag t=93944982288us] graph decode split path="graph/prompt3" inflate_us=38 convert_us=3
+[INFO] [diag t=93944982295us] [cache] texture put path="graph/prompt3" size=3496 evicted=0 evicted_bytes=0 total=1757784/268435456
+[INFO] [diag t=93944982369us] [cache] bytes put size=872 total=15900786/201326592
+[INFO] [diag t=93944982404us] graph decode split path="graph/prompt4" inflate_us=30 convert_us=2
+[INFO] [diag t=93944982410us] [cache] texture put path="graph/prompt4" size=2584 evicted=0 evicted_bytes=0 total=1760368/268435456
+[INFO] [diag t=93944982460us] [cache] bytes put size=832 total=15901618/201326592
+[INFO] [diag t=93944982490us] graph decode split path="graph/prompt5" inflate_us=27 convert_us=1
+[INFO] [diag t=93944982497us] [cache] texture put path="graph/prompt5" size=1672 evicted=0 evicted_bytes=0 total=1762040/268435456
+[INFO] [diag t=93944983008us] [cache] bytes put size=510 total=15902128/201326592
+[INFO] [diag t=93944983042us] graph decode split path="graph/prompt6" inflate_us=26 convert_us=1
+[INFO] [diag t=93944983050us] [cache] texture put path="graph/prompt6" size=1064 evicted=0 evicted_bytes=0 total=1763104/268435456
+[INFO] [diag t=93944983143us] [cache] bytes put size=746 total=15902874/201326592
+[INFO] [diag t=93944983186us] graph decode split path="graph/prompt7" inflate_us=33 convert_us=2
+[INFO] [diag t=93944983196us] [cache] texture put path="graph/prompt7" size=1036 evicted=0 evicted_bytes=0 total=1764140/268435456
+[INFO] [diag t=93944983326us] [cache] bytes put size=837 total=15903711/201326592
+[INFO] [diag t=93944983362us] graph decode split path="graph/prompt8" inflate_us=30 convert_us=2
+[INFO] [diag t=93944983369us] [cache] texture put path="graph/prompt8" size=1976 evicted=0 evicted_bytes=0 total=1766116/268435456
+[INFO] [diag t=93944983425us] [cache] bytes put size=899 total=15904610/201326592
+[INFO] [diag t=93944983468us] graph decode split path="graph/prompt9" inflate_us=37 convert_us=2
+[INFO] [diag t=93944983476us] [cache] texture put path="graph/prompt9" size=2888 evicted=0 evicted_bytes=0 total=1769004/268435456
+[INFO] [diag t=93944991988us] [cache] bytes put size=1495136 total=17399746/201326592
+[INFO] [diag t=93944992001us] vfs path="graph/slf_load_bg" bytes=1495136 us=8518 reads=1
+[INFO] [diag t=93945035632us] graph decode split path="graph/slf_load_bg" inflate_us=34851 convert_us=8774
+[INFO] [diag t=93945035690us] [cache] texture put path="graph/slf_load_bg" size=8294400 evicted=0 evicted_bytes=0 total=10063404/268435456
+[INFO] [diag t=93945038066us] [cache] bytes put size=98483 total=17498229/201326592
+[INFO] [diag t=93945060739us] graph decode split path="graph/slf_prt_sheet" inflate_us=17072 convert_us=5583
+[INFO] [diag t=93945060817us] [cache] texture put path="graph/slf_prt_sheet" size=6625600 evicted=0 evicted_bytes=0 total=16689004/268435456
+[INFO] [diag t=93945068731us] [cache] bytes put size=1554819 total=19053048/201326592
+[INFO] [diag t=93945068747us] vfs path="graph/slf_save_bg" bytes=1554819 us=7897 reads=1
+[INFO] [diag t=93945109289us] graph decode split path="graph/slf_save_bg" inflate_us=33955 convert_us=6579
+[INFO] [diag t=93945109333us] [cache] texture put path="graph/slf_save_bg" size=8294400 evicted=0 evicted_bytes=0 total=24983404/268435456
+[INFO] [diag t=93945109641us] [cache] bytes put size=10540 total=19063588/201326592
+[INFO] [diag t=93945110029us] graph decode split path="graph/sys_config_1" inflate_us=337 convert_us=37
+[INFO] [diag t=93945110045us] [cache] texture put path="graph/sys_config_1" size=58560 evicted=0 evicted_bytes=0 total=25041964/268435456
+[INFO] [diag t=93945110226us] [cache] bytes put size=12185 total=19075773/201326592
+[INFO] [diag t=93945110566us] graph decode split path="graph/sys_config_2" inflate_us=294 convert_us=37
+[INFO] [diag t=93945110579us] [cache] texture put path="graph/sys_config_2" size=58560 evicted=0 evicted_bytes=0 total=25100524/268435456
+[INFO] [diag t=93945110980us] [cache] bytes put size=12148 total=19087921/201326592
+[INFO] [diag t=93945111697us] graph decode split path="graph/sys_config_M" inflate_us=608 convert_us=101
+[INFO] [diag t=93945111719us] [cache] texture put path="graph/sys_config_M" size=179316 evicted=0 evicted_bytes=0 total=25279840/268435456
+[INFO] [diag t=93945111975us] [cache] bytes put size=7379 total=19095300/201326592
+[INFO] [diag t=93945112209us] graph decode split path="graph/sys_exit_1" inflate_us=204 convert_us=21
+[INFO] [diag t=93945112224us] [cache] texture put path="graph/sys_exit_1" size=35872 evicted=0 evicted_bytes=0 total=25315712/268435456
+[INFO] [diag t=93945112488us] [cache] bytes put size=8515 total=19103815/201326592
+[INFO] [diag t=93945112724us] graph decode split path="graph/sys_exit_2" inflate_us=209 convert_us=22
+[INFO] [diag t=93945112735us] [cache] texture put path="graph/sys_exit_2" size=35872 evicted=0 evicted_bytes=0 total=25351584/268435456
+[INFO] [diag t=93945113101us] [cache] bytes put size=12392 total=19116207/201326592
+[INFO] [diag t=93945113819us] graph decode split path="graph/sys_exit_M" inflate_us=610 convert_us=99
+[INFO] [diag t=93945113838us] [cache] texture put path="graph/sys_exit_M" size=179316 evicted=0 evicted_bytes=0 total=25530900/268435456
+[INFO] [diag t=93945114072us] [cache] bytes put size=7582 total=19123789/201326592
+[INFO] [diag t=93945114319us] graph decode split path="graph/sys_hidewin_1" inflate_us=212 convert_us=26
+[INFO] [diag t=93945114336us] [cache] texture put path="graph/sys_hidewin_1" size=38940 evicted=0 evicted_bytes=0 total=25569840/268435456
+[INFO] [diag t=93945114508us] [cache] bytes put size=8853 total=19132642/201326592
+[INFO] [diag t=93945114752us] graph decode split path="graph/sys_hidewin_2" inflate_us=210 convert_us=24
+[INFO] [diag t=93945114767us] [cache] texture put path="graph/sys_hidewin_2" size=38940 evicted=0 evicted_bytes=0 total=25608780/268435456
+[INFO] [diag t=93945115096us] [cache] bytes put size=14226 total=19146868/201326592
+[INFO] [diag t=93945115966us] graph decode split path="graph/sys_hidewin_M" inflate_us=757 convert_us=100
+[INFO] [diag t=93945115991us] [cache] texture put path="graph/sys_hidewin_M" size=179316 evicted=0 evicted_bytes=0 total=25788096/268435456
+[INFO] [diag t=93945116206us] [cache] bytes put size=8540 total=19155408/201326592
+[INFO] [diag t=93945116472us] graph decode split path="graph/sys_load_1" inflate_us=219 convert_us=26
+[INFO] [diag t=93945116486us] [cache] texture put path="graph/sys_load_1" size=42212 evicted=0 evicted_bytes=0 total=25830308/268435456
+[INFO] [diag t=93945116710us] [cache] bytes put size=9794 total=19165202/201326592
+[INFO] [diag t=93945116966us] graph decode split path="graph/sys_load_2" inflate_us=225 convert_us=23
+[INFO] [diag t=93945116978us] [cache] texture put path="graph/sys_load_2" size=42212 evicted=0 evicted_bytes=0 total=25872520/268435456
+[INFO] [diag t=93945117268us] [cache] bytes put size=14906 total=19180108/201326592
+[INFO] [diag t=93945118027us] graph decode split path="graph/sys_load_M" inflate_us=648 convert_us=103
+[INFO] [diag t=93945118050us] [cache] texture put path="graph/sys_load_M" size=182832 evicted=0 evicted_bytes=0 total=26055352/268435456
+[INFO] [diag t=93945118226us] [cache] bytes put size=11371 total=19191479/201326592
+[INFO] [diag t=93945118575us] graph decode split path="graph/sys_return_1" inflate_us=303 convert_us=37
+[INFO] [diag t=93945118589us] [cache] texture put path="graph/sys_return_1" size=61920 evicted=0 evicted_bytes=0 total=26117272/268435456
+[INFO] [diag t=93945118793us] [cache] bytes put size=13131 total=19204610/201326592
+[INFO] [diag t=93945119155us] graph decode split path="graph/sys_return_2" inflate_us=316 convert_us=36
+[INFO] [diag t=93945119172us] [cache] texture put path="graph/sys_return_2" size=61920 evicted=0 evicted_bytes=0 total=26179192/268435456
+[INFO] [diag t=93945119703us] [cache] bytes put size=12135 total=19216745/201326592
+[INFO] [diag t=93945120417us] graph decode split path="graph/sys_return_M" inflate_us=601 convert_us=101
+[INFO] [diag t=93945120437us] [cache] texture put path="graph/sys_return_M" size=179316 evicted=0 evicted_bytes=0 total=26358508/268435456
+[INFO] [diag t=93945120658us] [cache] bytes put size=9135 total=19225880/201326592
+[INFO] [diag t=93945120921us] graph decode split path="graph/sys_save_1" inflate_us=219 convert_us=30
+[INFO] [diag t=93945120935us] [cache] texture put path="graph/sys_save_1" size=39120 evicted=0 evicted_bytes=0 total=26397628/268435456
+[INFO] [diag t=93945121141us] [cache] bytes put size=10481 total=19236361/201326592
+[INFO] [diag t=93945121445us] graph decode split path="graph/sys_save_2" inflate_us=270 convert_us=24
+[INFO] [diag t=93945121465us] [cache] texture put path="graph/sys_save_2" size=39120 evicted=0 evicted_bytes=0 total=26436748/268435456
+[INFO] [diag t=93945121985us] [cache] bytes put size=13985 total=19250346/201326592
+[INFO] [diag t=93945123023us] graph decode split path="graph/sys_save_M" inflate_us=890 convert_us=135
+[INFO] [diag t=93945123047us] [cache] texture put path="graph/sys_save_M" size=182832 evicted=0 evicted_bytes=0 total=26619580/268435456
+[INFO] [diag t=93945123216us] [cache] bytes put size=7074 total=19257420/201326592
+[INFO] [diag t=93945123453us] graph decode split path="graph/sys_title_1" inflate_us=205 convert_us=25
+[INFO] [diag t=93945123464us] [cache] texture put path="graph/sys_title_1" size=43424 evicted=0 evicted_bytes=0 total=26663004/268435456
+[INFO] [diag t=93945123667us] [cache] bytes put size=8259 total=19265679/201326592
+[INFO] [diag t=93945123910us] graph decode split path="graph/sys_title_2" inflate_us=210 convert_us=26
+[INFO] [diag t=93945123920us] [cache] texture put path="graph/sys_title_2" size=43424 evicted=0 evicted_bytes=0 total=26706428/268435456
+[INFO] [diag t=93945124278us] [cache] bytes put size=14005 total=19279684/201326592
+[INFO] [diag t=93945125270us] graph decode split path="graph/sys_title_M" inflate_us=869 convert_us=116
+[INFO] [diag t=93945125311us] [cache] texture put path="graph/sys_title_M" size=179316 evicted=0 evicted_bytes=0 total=26885744/268435456
+[INFO] [diag t=93945126211us] [cache] bytes put size=9544 total=19289228/201326592
+[INFO] [diag t=93945126499us] graph decode split path="graph/sys_undo_1" inflate_us=243 convert_us=31
+[INFO] [diag t=93945126517us] [cache] texture put path="graph/sys_undo_1" size=46360 evicted=0 evicted_bytes=0 total=26932104/268435456
+[INFO] [diag t=93945126743us] [cache] bytes put size=11051 total=19300279/201326592
+[INFO] [diag t=93945127050us] graph decode split path="graph/sys_undo_2" inflate_us=267 convert_us=33
+[INFO] [diag t=93945127067us] [cache] texture put path="graph/sys_undo_2" size=46360 evicted=0 evicted_bytes=0 total=26978464/268435456
+[INFO] [diag t=93945127546us] [cache] bytes put size=15845 total=19316124/201326592
+[INFO] [diag t=93945128473us] graph decode split path="graph/sys_undo_M" inflate_us=783 convert_us=126
+[INFO] [diag t=93945128516us] [cache] texture put path="graph/sys_undo_M" size=179316 evicted=0 evicted_bytes=0 total=27157780/268435456
+[INFO] [diag t=93945130044us] [cache] bytes put size=312547 total=19628671/201326592
+[INFO] [diag t=93945141514us] graph decode split path="graph/sys_window_left" inflate_us=9913 convert_us=1540
+[INFO] [diag t=93945141560us] [cache] texture put path="graph/sys_window_left" size=2676496 evicted=0 evicted_bytes=0 total=29834276/268435456
+[INFO] [diag t=93945143321us] [cache] bytes put size=319338 total=19948009/201326592
+[INFO] [diag t=93945154369us] graph decode split path="graph/sys_window_right" inflate_us=9569 convert_us=1461
+[INFO] [diag t=93945154407us] [cache] texture put path="graph/sys_window_right" size=2656900 evicted=0 evicted_bytes=0 total=32491176/268435456
+[INFO] [diag t=93945156709us] [cache] bytes put size=135544 total=20083553/201326592
+[INFO] [diag t=93945161123us] graph decode split path="graph/sys_window_title" inflate_us=4109 convert_us=285
+[INFO] [diag t=93945161158us] [cache] texture put path="graph/sys_window_title" size=530580 evicted=0 evicted_bytes=0 total=33021756/268435456
+[INFO] MoviePlay: path=movie/01.wmv flag=True is_layer_effect=false
+[INFO] Movie: opened (Switch NVDEC H.264, upload=nv12) asset=movie/01_h264.mp4
+[INFO] [diag t=93945423731us] [cache] bytes put size=2250777 total=22334330/201326592
+[INFO] [diag t=93945423801us] vfs path="movie/01.ogg" bytes=2250777 us=28745 reads=0
+[INFO] movie audio: loaded movie/01.ogg (Ogg Vorbis, 2250777 bytes); queued for the audio thread
+[INFO] movie h264: decoded frame=1 pts=33 ms 1920x1080 hw=0 decode_us=95785 stage_us=2178 nv12=1
+[INFO] [diag t=93945528837us] audio source id=8192 path=None
+[INFO] movie audio: playing movie/01.ogg (Ogg Vorbis, 2250777 bytes)
+[INFO] movie: presented frame=1 1920x1080 upload_us=248 nv12=1
+[INFO] movie h264: decoded frame=2 pts=66 ms 1920x1080 hw=0 decode_us=29930 stage_us=1818 nv12=1
+[ERROR] id must be in range 0..256
+[INFO] [diag t=93945581826us] audio type_volume label=SE type=1 volume=0.9
+[INFO] [diag t=93945583068us] audio type_volume label=SE type=0 volume=1
+[INFO] [diag t=93945583158us] audio type_volume label=SE type=4 volume=0.7
+[INFO] [diag t=93945583164us] audio type_volume label=SE type=2 volume=0.7
+[INFO] [diag t=93945583167us] audio type_volume label=SE type=3 volume=0.6
+[INFO] [diag t=93945585180us] audio source id=4111 path=Some("se_sys/001")
+[INFO] [diag t=93945590981us] [cache] bytes put size=956656 total=23290986/201326592
+[INFO] [diag t=93945591325us] audio source id=4112 path=Some("se_sys/002")
+[INFO] [diag t=93945592782us] [cache] bytes put size=289296 total=23580282/201326592
+[INFO] [diag t=93945592818us] audio source id=4113 path=Some("se_sys/003")
+[INFO] [diag t=93945594657us] [cache] bytes put size=305360 total=23885642/201326592
+[INFO] [diag t=93945594690us] audio source id=4114 path=Some("se_sys/004")
+[INFO] [diag t=93945595050us] [cache] bytes put size=52876 total=23938518/201326592
+[INFO] [diag t=93945595072us] audio source id=4115 path=Some("se_sys/005")
+[INFO] [diag t=93945595629us] [cache] bytes put size=100048 total=24038566/201326592
+[INFO] [diag t=93945595646us] audio source id=4116 path=Some("se_sys/006")
+[INFO] [diag t=93945597149us] [cache] bytes put size=297204 total=24335770/201326592
+[INFO] [diag t=93945597179us] audio source id=4117 path=Some("se_sys/007")
+[INFO] [diag t=93945597880us] [cache] bytes put size=129560 total=24465330/201326592
+[INFO] [diag t=93945597897us] audio source id=4118 path=Some("se_sys/008")
+[INFO] [diag t=93945598639us] [cache] bytes put size=147172 total=24612502/201326592
+[INFO] [diag t=93945598657us] audio source id=4119 path=Some("se_sys/009")
+[INFO] [diag t=93945600482us] [cache] bytes put size=385748 total=24998250/201326592
+[INFO] [diag t=93945600504us] audio source id=4120 path=Some("se_sys/010")
+[INFO] [diag t=93945602668us] [cache] bytes put size=472720 total=25470970/201326592
+[INFO] [diag t=93945602688us] audio source id=4121 path=Some("se_sys/011")
+[INFO] [diag t=93945604513us] [cache] bytes put size=374336 total=25845306/201326592
+[INFO] [diag t=93945604531us] audio source id=4122 path=Some("se_sys/012")
+[INFO] [diag t=93945605017us] [cache] bytes put size=88312 total=25933618/201326592
+[INFO] [diag t=93945605027us] audio source id=4123 path=Some("se_sys/013")
+[INFO] [diag t=93945605736us] [cache] bytes put size=128380 total=26061998/201326592
+[INFO] [probe] graph_load path="graph/main_window_mask"
+[INFO] [diag t=93945609677us] [cache] bytes put size=20097 total=26082095/201326592
+[INFO] [diag t=93945609908us] graph decode path="graph/main_window_mask" bytes=20097
+[INFO] [diag t=93945617069us] [cache] texture put path="graph/main_window_mask" size=1758720 evicted=0 evicted_bytes=0 total=34780476/268435456
+[INFO] [diag t=93945617227us] graph decoded path="graph/main_window_mask" 1920x229 us=7261
+[WARN] float_to_int: Invalid value type
+[INFO] [probe] graph_load path="graph/sidewindow"
+[INFO] [diag t=93945624963us] [cache] bytes put size=24138 total=26106233/201326592
+[INFO] [diag t=93945624980us] graph decode path="graph/sidewindow" bytes=24138
+[INFO] [diag t=93945626008us] [cache] texture put path="graph/sidewindow" size=127680 evicted=0 evicted_bytes=0 total=34908156/268435456
+[INFO] [probe] graph_load path="graph/icon_skip"
+[INFO] [diag t=93945626594us] [cache] bytes put size=1178 total=26107411/201326592
+[INFO] [diag t=93945626610us] graph decode path="graph/icon_skip" bytes=1178
+[INFO] [diag t=93945626691us] [cache] texture put path="graph/icon_skip" size=9680 evicted=0 evicted_bytes=0 total=34917836/268435456
+[INFO] [probe] graph_load path="graph/icon_autoskip"
+[INFO] [diag t=93945627049us] [cache] bytes put size=1761 total=26109172/201326592
+[INFO] [diag t=93945627055us] graph decode path="graph/icon_autoskip" bytes=1761
+[INFO] [diag t=93945627151us] [cache] texture put path="graph/icon_autoskip" size=14080 evicted=0 evicted_bytes=0 total=34931916/268435456
+[INFO] [probe] graph_load path="graph/icon_play_frame"
+[INFO] [diag t=93945627470us] [cache] bytes put size=1319 total=26110491/201326592
+[INFO] [diag t=93945627481us] graph decode path="graph/icon_play_frame" bytes=1319
+[INFO] [diag t=93945627574us] [cache] texture put path="graph/icon_play_frame" size=16720 evicted=0 evicted_bytes=0 total=34948636/268435456
+[INFO] [probe] graph_load path="graph/icon_play_bar"
+[INFO] [diag t=93945627787us] [cache] bytes put size=394 total=26110885/201326592
+[INFO] [diag t=93945627797us] graph decode path="graph/icon_play_bar" bytes=394
+[INFO] [diag t=93945627843us] [cache] texture put path="graph/icon_play_bar" size=5376 evicted=0 evicted_bytes=0 total=34954012/268435456
+[INFO] [probe] graph_load path="graph/fc_wincls_1"
+[INFO] [diag t=93945628954us] [cache] bytes put size=1055 total=26111940/201326592
+[INFO] [diag t=93945628964us] graph decode path="graph/fc_wincls_1" bytes=1055
+[INFO] [diag t=93945629363us] [cache] texture put path="graph/fc_wincls_1" size=6400 evicted=0 evicted_bytes=0 total=34960412/268435456
+[INFO] [probe] graph_load path="graph/fc_qload_1"
+[INFO] [diag t=93945629738us] [cache] bytes put size=1239 total=26113179/201326592
+[INFO] [diag t=93945629748us] graph decode path="graph/fc_qload_1" bytes=1239
+[INFO] [diag t=93945629822us] [cache] texture put path="graph/fc_qload_1" size=6400 evicted=0 evicted_bytes=0 total=34966812/268435456
+[INFO] [probe] graph_load path="graph/fc_qsave_1"
+[INFO] [diag t=93945630203us] [cache] bytes put size=1251 total=26114430/201326592
+[INFO] [diag t=93945630209us] graph decode path="graph/fc_qsave_1" bytes=1251
+[INFO] [diag t=93945630275us] [cache] texture put path="graph/fc_qsave_1" size=6400 evicted=0 evicted_bytes=0 total=34973212/268435456
+[INFO] [probe] graph_load path="graph/fc_back_1"
+[INFO] [diag t=93945630619us] [cache] bytes put size=1077 total=26115507/201326592
+[INFO] [diag t=93945630630us] graph decode path="graph/fc_back_1" bytes=1077
+[INFO] [diag t=93945630695us] [cache] texture put path="graph/fc_back_1" size=6400 evicted=0 evicted_bytes=0 total=34979612/268435456
+[INFO] [probe] graph_load path="graph/fc_play_1"
+[INFO] [diag t=93945631015us] [cache] bytes put size=742 total=26116249/201326592
+[INFO] [diag t=93945631020us] graph decode path="graph/fc_play_1" bytes=742
+[INFO] [diag t=93945631073us] [cache] texture put path="graph/fc_play_1" size=6400 evicted=0 evicted_bytes=0 total=34986012/268435456
+[INFO] [probe] graph_load path="graph/fc_voice_1"
+[INFO] [diag t=93945631365us] [cache] bytes put size=1386 total=26117635/201326592
+[INFO] [diag t=93945631370us] graph decode path="graph/fc_voice_1" bytes=1386
+[INFO] [diag t=93945631433us] [cache] texture put path="graph/fc_voice_1" size=6400 evicted=0 evicted_bytes=0 total=34992412/268435456
+[INFO] [probe] graph_load path="graph/fc_skip_1"
+[INFO] [diag t=93945632153us] [cache] bytes put size=822 total=26118457/201326592
+[INFO] [diag t=93945632169us] graph decode path="graph/fc_skip_1" bytes=822
+[INFO] [diag t=93945632242us] [cache] texture put path="graph/fc_skip_1" size=6400 evicted=0 evicted_bytes=0 total=34998812/268435456
+[INFO] [probe] graph_load path="graph/fc_system_1"
+[INFO] [diag t=93945632649us] [cache] bytes put size=1163 total=26119620/201326592
+[INFO] [diag t=93945632655us] graph decode path="graph/fc_system_1" bytes=1163
+[INFO] [diag t=93945632725us] [cache] texture put path="graph/fc_system_1" size=6400 evicted=0 evicted_bytes=0 total=35005212/268435456
+[INFO] [probe] graph_load path="graph/fc_lock_1"
+[INFO] [diag t=93945633054us] [cache] bytes put size=880 total=26120500/201326592
+[INFO] [diag t=93945633063us] graph decode path="graph/fc_lock_1" bytes=880
+[INFO] [diag t=93945633126us] [cache] texture put path="graph/fc_lock_1" size=6400 evicted=0 evicted_bytes=0 total=35011612/268435456
+[INFO] [probe] graph_load path="graph/fc_save_1"
+[INFO] [diag t=93945633486us] [cache] bytes put size=1026 total=26121526/201326592
+[INFO] [diag t=93945633495us] graph decode path="graph/fc_save_1" bytes=1026
+[INFO] [diag t=93945633559us] [cache] texture put path="graph/fc_save_1" size=6400 evicted=0 evicted_bytes=0 total=35018012/268435456
+[INFO] [probe] graph_load path="graph/fc_load_1"
+[INFO] [diag t=93945633884us] [cache] bytes put size=1041 total=26122567/201326592
+[INFO] [diag t=93945633893us] graph decode path="graph/fc_load_1" bytes=1041
+[INFO] [diag t=93945633956us] [cache] texture put path="graph/fc_load_1" size=6400 evicted=0 evicted_bytes=0 total=35024412/268435456
+[INFO] [probe] graph_load path="graph/fc_wincls_2"
+[INFO] [diag t=93945634275us] [cache] bytes put size=885 total=26123452/201326592
+[INFO] [diag t=93945634281us] graph decode path="graph/fc_wincls_2" bytes=885
+[INFO] [diag t=93945634335us] [cache] texture put path="graph/fc_wincls_2" size=6400 evicted=0 evicted_bytes=0 total=35030812/268435456
+[INFO] [probe] graph_load path="graph/fc_qload_2"
+[INFO] [diag t=93945634642us] [cache] bytes put size=1074 total=26124526/201326592
+[INFO] [diag t=93945634646us] graph decode path="graph/fc_qload_2" bytes=1074
+[INFO] [diag t=93945634702us] [cache] texture put path="graph/fc_qload_2" size=6400 evicted=0 evicted_bytes=0 total=35037212/268435456
+[INFO] [probe] graph_load path="graph/fc_qsave_2"
+[INFO] [diag t=93945635004us] [cache] bytes put size=1168 total=26125694/201326592
+[INFO] [diag t=93945635008us] graph decode path="graph/fc_qsave_2" bytes=1168
+[INFO] [diag t=93945635064us] [cache] texture put path="graph/fc_qsave_2" size=6400 evicted=0 evicted_bytes=0 total=35043612/268435456
+[INFO] [probe] graph_load path="graph/fc_back_2"
+[INFO] [diag t=93945635337us] [cache] bytes put size=921 total=26126615/201326592
+[INFO] [diag t=93945635342us] graph decode path="graph/fc_back_2" bytes=921
+[INFO] [diag t=93945635394us] [cache] texture put path="graph/fc_back_2" size=6400 evicted=0 evicted_bytes=0 total=35050012/268435456
+[INFO] [probe] graph_load path="graph/fc_play_2"
+[INFO] [diag t=93945635680us] [cache] bytes put size=594 total=26127209/201326592
+[INFO] [diag t=93945635686us] graph decode path="graph/fc_play_2" bytes=594
+[INFO] [diag t=93945635734us] [cache] texture put path="graph/fc_play_2" size=6400 evicted=0 evicted_bytes=0 total=35056412/268435456
+[INFO] [probe] graph_load path="graph/fc_voice_2"
+[INFO] [diag t=93945636101us] [cache] bytes put size=1195 total=26128404/201326592
+[INFO] [diag t=93945636116us] graph decode path="graph/fc_voice_2" bytes=1195
+[INFO] [diag t=93945636203us] [cache] texture put path="graph/fc_voice_2" size=6400 evicted=0 evicted_bytes=0 total=35062812/268435456
+[INFO] [probe] graph_load path="graph/fc_skip_2"
+[INFO] [diag t=93945636600us] [cache] bytes put size=692 total=26129096/201326592
+[INFO] [diag t=93945636613us] graph decode path="graph/fc_skip_2" bytes=692
+[INFO] [diag t=93945636693us] [cache] texture put path="graph/fc_skip_2" size=6400 evicted=0 evicted_bytes=0 total=35069212/268435456
+[INFO] [probe] graph_load path="graph/fc_system_2"
+[INFO] [diag t=93945637026us] [cache] bytes put size=1018 total=26130114/201326592
+[INFO] [diag t=93945637032us] graph decode path="graph/fc_system_2" bytes=1018
+[INFO] [diag t=93945637094us] [cache] texture put path="graph/fc_system_2" size=6400 evicted=0 evicted_bytes=0 total=35075612/268435456
+[INFO] [probe] graph_load path="graph/fc_lock_2"
+[INFO] [diag t=93945637394us] [cache] bytes put size=792 total=26130906/201326592
+[INFO] [diag t=93945637399us] graph decode path="graph/fc_lock_2" bytes=792
+[INFO] [diag t=93945637453us] [cache] texture put path="graph/fc_lock_2" size=6400 evicted=0 evicted_bytes=0 total=35082012/268435456
+[INFO] [probe] graph_load path="graph/fc_save_2"
+[INFO] [diag t=93945637799us] [cache] bytes put size=848 total=26131754/201326592
+[INFO] [diag t=93945637811us] graph decode path="graph/fc_save_2" bytes=848
+[INFO] [diag t=93945637873us] [cache] texture put path="graph/fc_save_2" size=6400 evicted=0 evicted_bytes=0 total=35088412/268435456
+[INFO] [probe] graph_load path="graph/fc_load_2"
+[INFO] [diag t=93945638242us] [cache] bytes put size=850 total=26132604/201326592
+[INFO] [diag t=93945638251us] graph decode path="graph/fc_load_2" bytes=850
+[INFO] [diag t=93945638322us] [cache] texture put path="graph/fc_load_2" size=6400 evicted=0 evicted_bytes=0 total=35094812/268435456
+[INFO] [probe] graph_load path="graph/fc_play_3"
+[INFO] [diag t=93945638644us] [cache] bytes put size=483 total=26133087/201326592
+[INFO] [diag t=93945638654us] graph decode path="graph/fc_play_3" bytes=483
+[INFO] [diag t=93945638706us] [cache] texture put path="graph/fc_play_3" size=6400 evicted=0 evicted_bytes=0 total=35101212/268435456
+[INFO] [probe] graph_load path="graph/fc_skip_3"
+[INFO] [diag t=93945639089us] [cache] bytes put size=561 total=26133648/201326592
+[INFO] [diag t=93945639095us] graph decode path="graph/fc_skip_3" bytes=561
+[INFO] [diag t=93945639148us] [cache] texture put path="graph/fc_skip_3" size=6400 evicted=0 evicted_bytes=0 total=35107612/268435456
+[INFO] [probe] graph_load path="graph/fc_lock_3"
+[INFO] [diag t=93945639493us] [cache] bytes put size=908 total=26134556/201326592
+[INFO] [diag t=93945639506us] graph decode path="graph/fc_lock_3" bytes=908
+[INFO] [diag t=93945639570us] [cache] texture put path="graph/fc_lock_3" size=6400 evicted=0 evicted_bytes=0 total=35114012/268435456
+[INFO] [probe] graph_load path="graph/fc_lock_4"
+[INFO] [diag t=93945639915us] [cache] bytes put size=820 total=26135376/201326592
+[INFO] [diag t=93945639921us] graph decode path="graph/fc_lock_4" bytes=820
+[INFO] [diag t=93945639977us] [cache] texture put path="graph/fc_lock_4" size=6400 evicted=0 evicted_bytes=0 total=35120412/268435456
+[INFO] [probe] graph_load path="graph/fc_wincls_help"
+[INFO] [diag t=93945640369us] [cache] bytes put size=4156 total=26139532/201326592
+[INFO] [diag t=93945640375us] graph decode path="graph/fc_wincls_help" bytes=4156
+[INFO] [diag t=93945640538us] [cache] texture put path="graph/fc_wincls_help" size=25200 evicted=0 evicted_bytes=0 total=35145612/268435456
+[INFO] [probe] graph_load path="graph/fc_qload_help"
+[INFO] [diag t=93945640869us] [cache] bytes put size=4062 total=26143594/201326592
+[INFO] [diag t=93945640879us] graph decode path="graph/fc_qload_help" bytes=4062
+[INFO] [diag t=93945641040us] [cache] texture put path="graph/fc_qload_help" size=25200 evicted=0 evicted_bytes=0 total=35170812/268435456
+[INFO] [probe] graph_load path="graph/fc_qsave_help"
+[INFO] [diag t=93945641376us] [cache] bytes put size=3985 total=26147579/201326592
+[INFO] [diag t=93945641385us] graph decode path="graph/fc_qsave_help" bytes=3985
+[INFO] [diag t=93945642199us] [cache] texture put path="graph/fc_qsave_help" size=25200 evicted=0 evicted_bytes=0 total=35196012/268435456
+[INFO] [probe] graph_load path="graph/fc_back_help"
+[INFO] [diag t=93945642601us] [cache] bytes put size=3957 total=26151536/201326592
+[INFO] [diag t=93945642608us] graph decode path="graph/fc_back_help" bytes=3957
+[INFO] [diag t=93945642776us] [cache] texture put path="graph/fc_back_help" size=25200 evicted=0 evicted_bytes=0 total=35221212/268435456
+[INFO] [probe] graph_load path="graph/fc_play_help"
+[INFO] [diag t=93945643230us] [cache] bytes put size=3926 total=26155462/201326592
+[INFO] [diag t=93945643239us] graph decode path="graph/fc_play_help" bytes=3926
+[INFO] [diag t=93945643407us] [cache] texture put path="graph/fc_play_help" size=25200 evicted=0 evicted_bytes=0 total=35246412/268435456
+[INFO] [probe] graph_load path="graph/fc_voice_help"
+[INFO] [diag t=93945643778us] [cache] bytes put size=3935 total=26159397/201326592
+[INFO] [diag t=93945643785us] graph decode path="graph/fc_voice_help" bytes=3935
+[INFO] [diag t=93945643950us] [cache] texture put path="graph/fc_voice_help" size=25200 evicted=0 evicted_bytes=0 total=35271612/268435456
+[INFO] [probe] graph_load path="graph/fc_skip_help"
+[INFO] [diag t=93945644347us] [cache] bytes put size=3597 total=26162994/201326592
+[INFO] [diag t=93945644359us] graph decode path="graph/fc_skip_help" bytes=3597
+[INFO] [diag t=93945644525us] [cache] texture put path="graph/fc_skip_help" size=25200 evicted=0 evicted_bytes=0 total=35296812/268435456
+[INFO] [probe] graph_load path="graph/fc_system_help"
+[INFO] [diag t=93945644909us] [cache] bytes put size=3904 total=26166898/201326592
+[INFO] [diag t=93945644916us] graph decode path="graph/fc_system_help" bytes=3904
+[INFO] [diag t=93945645086us] [cache] texture put path="graph/fc_system_help" size=25200 evicted=0 evicted_bytes=0 total=35322012/268435456
+[INFO] [probe] graph_load path="graph/fc_lock_help"
+[INFO] [diag t=93945645451us] [cache] bytes put size=4070 total=26170968/201326592
+[INFO] [diag t=93945645462us] graph decode path="graph/fc_lock_help" bytes=4070
+[INFO] [diag t=93945645635us] [cache] texture put path="graph/fc_lock_help" size=25200 evicted=0 evicted_bytes=0 total=35347212/268435456
+[INFO] [probe] graph_load path="graph/fc_load_help"
+[INFO] [diag t=93945646027us] [cache] bytes put size=4051 total=26175019/201326592
+[INFO] [diag t=93945646033us] graph decode path="graph/fc_load_help" bytes=4051
+[INFO] [diag t=93945646193us] [cache] texture put path="graph/fc_load_help" size=25200 evicted=0 evicted_bytes=0 total=35372412/268435456
+[INFO] [probe] graph_load path="graph/fc_save_help"
+[INFO] [diag t=93945646528us] [cache] bytes put size=3931 total=26178950/201326592
+[INFO] [diag t=93945646537us] graph decode path="graph/fc_save_help" bytes=3931
+[INFO] [diag t=93945646700us] [cache] texture put path="graph/fc_save_help" size=25200 evicted=0 evicted_bytes=0 total=35397612/268435456
+[INFO] [probe] graph_load path="graph/prompt1"
+[INFO] [diag t=93945648876us] graph cache hit path="graph/prompt1"
+[INFO] [probe] graph_load path="graph/prompt1"
+[INFO] [diag t=93945649780us] graph cache hit path="graph/prompt1"
+[INFO] [probe] graph_load path="graph/prompt2"
+[INFO] [diag t=93945649919us] graph cache hit path="graph/prompt2"
+[INFO] [probe] graph_load path="graph/prompt3"
+[INFO] [diag t=93945650033us] graph cache hit path="graph/prompt3"
+[INFO] [probe] graph_load path="graph/prompt4"
+[INFO] [diag t=93945650148us] graph cache hit path="graph/prompt4"
+[INFO] [probe] graph_load path="graph/prompt5"
+[INFO] [diag t=93945650259us] graph cache hit path="graph/prompt5"
+[INFO] [probe] graph_load path="graph/prompt6"
+[INFO] [diag t=93945650371us] graph cache hit path="graph/prompt6"
+[INFO] [probe] graph_load path="graph/prompt7"
+[INFO] [diag t=93945650483us] graph cache hit path="graph/prompt7"
+[INFO] [probe] graph_load path="graph/prompt8"
+[INFO] [diag t=93945650595us] graph cache hit path="graph/prompt8"
+[INFO] [probe] graph_load path="graph/prompt9"
+[INFO] [diag t=93945650710us] graph cache hit path="graph/prompt9"
+[INFO] [probe] graph_load path="graph/prompt10"
+[INFO] [diag t=93945650823us] graph cache hit path="graph/prompt10"
+[INFO] [probe] graph_load path="graph/prompt11"
+[INFO] [diag t=93945650937us] graph cache hit path="graph/prompt11"
+[INFO] [probe] graph_load path="graph/prompt12"
+[INFO] [diag t=93945651046us] graph cache hit path="graph/prompt12"
+[INFO] [probe] graph_load path="graph/prompt13"
+[INFO] [diag t=93945651155us] graph cache hit path="graph/prompt13"
+[INFO] [probe] graph_load path="graph/prompt14"
+[INFO] [diag t=93945651276us] graph cache hit path="graph/prompt14"
+[INFO] [probe] graph_load path="graph/prompt15"
+[INFO] [diag t=93945651406us] graph cache hit path="graph/prompt15"
+[INFO] [probe] graph_load path="graph/prompt16"
+[INFO] [diag t=93945651545us] graph cache hit path="graph/prompt16"
+[INFO] [probe] graph_load path="graph/prompt17"
+[INFO] [diag t=93945651653us] graph cache hit path="graph/prompt17"
+[INFO] [probe] graph_load path="graph/prompt18"
+[INFO] [diag t=93945651759us] graph cache hit path="graph/prompt18"
+[INFO] [probe] graph_load path="graph/prompt19"
+[INFO] [diag t=93945651865us] graph cache hit path="graph/prompt19"
+[INFO] [probe] graph_load path="graph/prompt20"
+[INFO] [diag t=93945651970us] graph cache hit path="graph/prompt20"
+[INFO] [probe] graph_load path="graph/prompt21"
+[INFO] [diag t=93945652074us] graph cache hit path="graph/prompt21"
+[INFO] [probe] graph_load path="graph/prompt22"
+[INFO] [diag t=93945652179us] graph cache hit path="graph/prompt22"
+[INFO] [diag t=93945654464us] [cache] bytes put size=535 total=26179485/201326592
+[INFO] [diag t=93945659557us] [cache] bytes put size=355 total=26179840/201326592
+[INFO] [diag t=93945660209us] [cache] bytes put size=360 total=26180200/201326592
+[INFO] [diag t=93945660532us] [cache] bytes put size=344 total=26180544/201326592
+[INFO] [diag t=93945660761us] [cache] bytes put size=889 total=26181433/201326592
+[INFO] [diag t=93945661724us] [cache] bytes put size=592 total=26182025/201326592
+[INFO] [diag t=93945662176us] [cache] bytes put size=590 total=26182615/201326592
+[INFO] [diag t=93945662608us] [cache] bytes put size=511 total=26183126/201326592
+[INFO] [diag t=93945663007us] [cache] bytes put size=377 total=26183503/201326592
+[INFO] [diag t=93945663490us] [cache] bytes put size=255 total=26183758/201326592
+[INFO] [diag t=93945663723us] [cache] bytes put size=271 total=26184029/201326592
+[INFO] [diag t=93945663889us] [cache] bytes put size=243 total=26184272/201326592
+[INFO] [probe] graph_load path="graph/main_window_mask"
+[INFO] [diag t=93945665274us] graph cache hit path="graph/main_window_mask"
+[WARN] float_to_int: Invalid value type
+[INFO] [probe] graph_load path="graph/sidewindow"
+[INFO] [diag t=93945667631us] graph cache hit path="graph/sidewindow"
+[INFO] [probe] graph_load path="graph/icon_skip"
+[INFO] [diag t=93945667912us] graph cache hit path="graph/icon_skip"
+[INFO] [probe] graph_load path="graph/icon_autoskip"
+[INFO] [diag t=93945668132us] graph cache hit path="graph/icon_autoskip"
+[INFO] [probe] graph_load path="graph/icon_play_frame"
+[INFO] [diag t=93945668349us] graph cache hit path="graph/icon_play_frame"
+[INFO] [probe] graph_load path="graph/icon_play_bar"
+[INFO] [diag t=93945668480us] graph cache hit path="graph/icon_play_bar"
+[INFO] [probe] graph_load path="graph/fc_wincls_1"
+[INFO] [diag t=93945668714us] graph cache hit path="graph/fc_wincls_1"
+[INFO] [probe] graph_load path="graph/fc_qload_1"
+[INFO] [diag t=93945668924us] graph cache hit path="graph/fc_qload_1"
+[INFO] [probe] graph_load path="graph/fc_qsave_1"
+[INFO] [diag t=93945669134us] graph cache hit path="graph/fc_qsave_1"
+[INFO] [probe] graph_load path="graph/fc_back_1"
+[INFO] [diag t=93945669343us] graph cache hit path="graph/fc_back_1"
+[INFO] [probe] graph_load path="graph/fc_play_1"
+[INFO] [diag t=93945669549us] graph cache hit path="graph/fc_play_1"
+[INFO] [probe] graph_load path="graph/fc_voice_1"
+[INFO] [diag t=93945669772us] graph cache hit path="graph/fc_voice_1"
+[INFO] [probe] graph_load path="graph/fc_skip_1"
+[INFO] [diag t=93945669978us] graph cache hit path="graph/fc_skip_1"
+[INFO] [probe] graph_load path="graph/fc_system_1"
+[INFO] [diag t=93945670185us] graph cache hit path="graph/fc_system_1"
+[INFO] [probe] graph_load path="graph/fc_lock_1"
+[INFO] [diag t=93945670389us] graph cache hit path="graph/fc_lock_1"
+[INFO] [probe] graph_load path="graph/fc_save_1"
+[INFO] [diag t=93945670595us] graph cache hit path="graph/fc_save_1"
+[INFO] [probe] graph_load path="graph/fc_load_1"
+[INFO] [diag t=93945670799us] graph cache hit path="graph/fc_load_1"
+[INFO] [probe] graph_load path="graph/fc_wincls_2"
+[INFO] [diag t=93945671140us] graph cache hit path="graph/fc_wincls_2"
+[INFO] [probe] graph_load path="graph/fc_qload_2"
+[INFO] [diag t=93945671361us] graph cache hit path="graph/fc_qload_2"
+[INFO] [probe] graph_load path="graph/fc_qsave_2"
+[INFO] [diag t=93945671565us] graph cache hit path="graph/fc_qsave_2"
+[INFO] [probe] graph_load path="graph/fc_back_2"
+[INFO] [diag t=93945671773us] graph cache hit path="graph/fc_back_2"
+[INFO] [probe] graph_load path="graph/fc_play_2"
+[INFO] [diag t=93945672043us] graph cache hit path="graph/fc_play_2"
+[INFO] [probe] graph_load path="graph/fc_voice_2"
+[INFO] [diag t=93945672278us] graph cache hit path="graph/fc_voice_2"
+[INFO] [probe] graph_load path="graph/fc_skip_2"
+[INFO] [diag t=93945672483us] graph cache hit path="graph/fc_skip_2"
+[INFO] [probe] graph_load path="graph/fc_system_2"
+[INFO] [diag t=93945672688us] graph cache hit path="graph/fc_system_2"
+[INFO] [probe] graph_load path="graph/fc_lock_2"
+[INFO] [diag t=93945672943us] graph cache hit path="graph/fc_lock_2"
+[INFO] [probe] graph_load path="graph/fc_save_2"
+[INFO] [diag t=93945673264us] graph cache hit path="graph/fc_save_2"
+[INFO] [probe] graph_load path="graph/fc_load_2"
+[INFO] [diag t=93945673471us] graph cache hit path="graph/fc_load_2"
+[INFO] [probe] graph_load path="graph/fc_play_3"
+[INFO] [diag t=93945673725us] graph cache hit path="graph/fc_play_3"
+[INFO] [probe] graph_load path="graph/fc_skip_3"
+[INFO] [diag t=93945674005us] graph cache hit path="graph/fc_skip_3"
+[INFO] [probe] graph_load path="graph/fc_lock_3"
+[INFO] [diag t=93945674314us] graph cache hit path="graph/fc_lock_3"
+[INFO] [probe] graph_load path="graph/fc_lock_4"
+[INFO] [diag t=93945674633us] graph cache hit path="graph/fc_lock_4"
+[INFO] [probe] graph_load path="graph/fc_wincls_help"
+[INFO] [diag t=93945674966us] graph cache hit path="graph/fc_wincls_help"
+[INFO] [probe] graph_load path="graph/fc_qload_help"
+[INFO] [diag t=93945675280us] graph cache hit path="graph/fc_qload_help"
+[INFO] [probe] graph_load path="graph/fc_qsave_help"
+[INFO] [diag t=93945675529us] graph cache hit path="graph/fc_qsave_help"
+[INFO] [probe] graph_load path="graph/fc_back_help"
+[INFO] [diag t=93945675755us] graph cache hit path="graph/fc_back_help"
+[INFO] [probe] graph_load path="graph/fc_play_help"
+[INFO] [diag t=93945676045us] graph cache hit path="graph/fc_play_help"
+[INFO] [probe] graph_load path="graph/fc_voice_help"
+[INFO] [diag t=93945676340us] graph cache hit path="graph/fc_voice_help"
+[INFO] [probe] graph_load path="graph/fc_skip_help"
+[INFO] [diag t=93945676602us] graph cache hit path="graph/fc_skip_help"
+[INFO] [probe] graph_load path="graph/fc_system_help"
+[INFO] [diag t=93945676819us] graph cache hit path="graph/fc_system_help"
+[INFO] [probe] graph_load path="graph/fc_lock_help"
+[INFO] [diag t=93945677035us] graph cache hit path="graph/fc_lock_help"
+[INFO] [probe] graph_load path="graph/fc_load_help"
+[INFO] [diag t=93945677254us] graph cache hit path="graph/fc_load_help"
+[INFO] [probe] graph_load path="graph/fc_save_help"
+[INFO] [diag t=93945677493us] graph cache hit path="graph/fc_save_help"
+[INFO] [probe] graph_load path="graph/prompt1"
+[INFO] [diag t=93945677994us] graph cache hit path="graph/prompt1"
+[INFO] [probe] graph_load path="graph/prompt1"
+[INFO] [diag t=93945678318us] graph cache hit path="graph/prompt1"
+[INFO] [probe] graph_load path="graph/prompt2"
+[INFO] [diag t=93945678430us] graph cache hit path="graph/prompt2"
+[INFO] [probe] graph_load path="graph/prompt3"
+[INFO] [diag t=93945678537us] graph cache hit path="graph/prompt3"
+[INFO] [probe] graph_load path="graph/prompt4"
+[INFO] [diag t=93945678643us] graph cache hit path="graph/prompt4"
+[INFO] [probe] graph_load path="graph/prompt5"
+[INFO] [diag t=93945678749us] graph cache hit path="graph/prompt5"
+[INFO] [probe] graph_load path="graph/prompt6"
+[INFO] [diag t=93945678856us] graph cache hit path="graph/prompt6"
+[INFO] [probe] graph_load path="graph/prompt7"
+[INFO] [diag t=93945678960us] graph cache hit path="graph/prompt7"
+[INFO] [probe] graph_load path="graph/prompt8"
+[INFO] [diag t=93945679066us] graph cache hit path="graph/prompt8"
+[INFO] [probe] graph_load path="graph/prompt9"
+[INFO] [diag t=93945679171us] graph cache hit path="graph/prompt9"
+[INFO] [probe] graph_load path="graph/prompt10"
+[INFO] [diag t=93945679285us] graph cache hit path="graph/prompt10"
+[INFO] [probe] graph_load path="graph/prompt11"
+[INFO] [diag t=93945679404us] graph cache hit path="graph/prompt11"
+[INFO] [probe] graph_load path="graph/prompt12"
+[INFO] [diag t=93945679512us] graph cache hit path="graph/prompt12"
+[INFO] [probe] graph_load path="graph/prompt13"
+[INFO] [diag t=93945679616us] graph cache hit path="graph/prompt13"
+[INFO] [probe] graph_load path="graph/prompt14"
+[INFO] [diag t=93945679734us] graph cache hit path="graph/prompt14"
+[INFO] [probe] graph_load path="graph/prompt15"
+[INFO] [diag t=93945679843us] graph cache hit path="graph/prompt15"
+[INFO] [probe] graph_load path="graph/prompt16"
+[INFO] [diag t=93945679948us] graph cache hit path="graph/prompt16"
+[INFO] [probe] graph_load path="graph/prompt17"
+[INFO] [diag t=93945680053us] graph cache hit path="graph/prompt17"
+[INFO] [probe] graph_load path="graph/prompt18"
+[INFO] [diag t=93945680159us] graph cache hit path="graph/prompt18"
+[INFO] [probe] graph_load path="graph/prompt19"
+[INFO] [diag t=93945680373us] graph cache hit path="graph/prompt19"
+[INFO] [probe] graph_load path="graph/prompt20"
+[INFO] [diag t=93945680562us] graph cache hit path="graph/prompt20"
+[INFO] [probe] graph_load path="graph/prompt21"
+[INFO] [diag t=93945680668us] graph cache hit path="graph/prompt21"
+[INFO] [probe] graph_load path="graph/prompt22"
+[INFO] [diag t=93945680775us] graph cache hit path="graph/prompt22"
+[INFO] [diag t=93945681561us] vfs cache hit path="graph/gaiji_ikari" bytes=535
+[INFO] [diag t=93945682038us] vfs cache hit path="graph/gaiji_ase" bytes=355
+[INFO] [diag t=93945682231us] vfs cache hit path="graph/gaiji_shiru" bytes=360
+[INFO] [diag t=93945682376us] vfs cache hit path="graph/gaiji_heart" bytes=344
+[INFO] [diag t=93945682511us] vfs cache hit path="graph/gaiji_ikari156" bytes=889
+[INFO] [diag t=93945682829us] vfs cache hit path="graph/gaiji_ase156" bytes=592
+[INFO] [diag t=93945683100us] vfs cache hit path="graph/gaiji_shiru156" bytes=590
+[INFO] [diag t=93945683410us] vfs cache hit path="graph/gaiji_heart156" bytes=511
+[INFO] [diag t=93945683679us] vfs cache hit path="graph/gaiji_ikari68" bytes=377
+[INFO] [diag t=93945683756us] vfs cache hit path="graph/gaiji_ase68" bytes=255
+[INFO] [diag t=93945683831us] vfs cache hit path="graph/gaiji_shiru68" bytes=271
+[INFO] [diag t=93945683901us] vfs cache hit path="graph/gaiji_heart68" bytes=243
+[INFO] [save] SaveCreate(3) value=Int(901)
+[INFO] [save] state total=398998B
+[INFO] [diag t=93945929973us] [save] materialize thumb=200x113 encode_ms=17.55 len=489419
+[INFO] [diag t=93945937045us] [save] commit slot=901 len=489419 write_ms=5.39 ok=true
+[INFO] movie h264: decoded frame=3 pts=100 ms 1920x1080 hw=0 decode_us=33716 stage_us=1836 nv12=1
+[INFO] movie h264: decoded frame=4 pts=133 ms 1920x1080 hw=0 decode_us=33326 stage_us=1782 nv12=1
+[INFO] [probe] graph_load path="graph/title_bg1_A"
+[INFO] [diag t=93946053772us] [cache] bytes put size=3399783 total=29584055/201326592
+[INFO] [diag t=93946053790us] vfs path="graph/title_bg1_A" bytes=3399783 us=18634 reads=1
+[INFO] [diag t=93946053807us] graph decode path="graph/title_bg1_A" bytes=3399783
+[INFO] [diag t=93946136219us] [cache] texture put path="graph/title_bg1_A" size=12960000 evicted=0 evicted_bytes=0 total=48357612/268435456
+[INFO] [diag t=93946136238us] graph decoded path="graph/title_bg1_A" 2400x1350 us=82431
+[INFO] [probe] graph_load path="graph/title_whiteframe"
+[INFO] [diag t=93946137718us] [cache] bytes put size=27278 total=29611333/201326592
+[INFO] [diag t=93946137734us] graph decode path="graph/title_whiteframe" bytes=27278
+[INFO] [diag t=93946165567us] [cache] texture put path="graph/title_whiteframe" size=8294400 evicted=0 evicted_bytes=0 total=56652012/268435456
+[INFO] [diag t=93946165588us] graph decoded path="graph/title_whiteframe" 1920x1080 us=27854
+[INFO] [probe] graph_load path="graph/title_bg_mask"
+[INFO] [diag t=93946166263us] [cache] bytes put size=8120 total=29619453/201326592
+[INFO] [diag t=93946166273us] graph decode path="graph/title_bg_mask" bytes=8120
+[INFO] [diag t=93946193883us] [cache] texture put path="graph/title_bg_mask" size=8294400 evicted=0 evicted_bytes=0 total=64946412/268435456
+[INFO] [diag t=93946193908us] graph decoded path="graph/title_bg_mask" 1920x1080 us=27636
+[INFO] [probe] graph_load path="graph/title_shinku1"
+[INFO] [diag t=93946201954us] [cache] bytes put size=1590594 total=31210047/201326592
+[INFO] [diag t=93946201970us] vfs path="graph/title_shinku1" bytes=1590594 us=7765 reads=1
+[INFO] [diag t=93946201986us] graph decode path="graph/title_shinku1" bytes=1590594
+[INFO] [diag t=93946247974us] [cache] texture put path="graph/title_shinku1" size=8294400 evicted=0 evicted_bytes=0 total=73240812/268435456
+[INFO] [diag t=93946247993us] graph decoded path="graph/title_shinku1" 1920x1080 us=46007
+[INFO] [probe] graph_load path="graph/title_logo1"
+[INFO] [diag t=93946252182us] [cache] bytes put size=295664 total=31505711/201326592
+[INFO] [diag t=93946252207us] graph decode path="graph/title_logo1" bytes=295664
+[INFO] [diag t=93946260840us] [cache] texture put path="graph/title_logo1" size=1499020 evicted=0 evicted_bytes=0 total=74739832/268435456
+[INFO] [diag t=93946260860us] graph decoded path="graph/title_logo1" 1205x311 us=8653
+[INFO] [probe] graph_load path="graph/title_copyright"
+[INFO] [diag t=93946261465us] [cache] bytes put size=21917 total=31527628/201326592
+[INFO] [diag t=93946261479us] graph decode path="graph/title_copyright" bytes=21917
+[INFO] [diag t=93946262157us] [cache] texture put path="graph/title_copyright" size=96760 evicted=0 evicted_bytes=0 total=74836592/268435456
+[INFO] [probe] graph_load path="graph/title_start"
+[INFO] [diag t=93946262647us] [cache] bytes put size=19487 total=31547115/201326592
+[INFO] [diag t=93946262654us] graph decode path="graph/title_start" bytes=19487
+[INFO] [diag t=93946263232us] [cache] texture put path="graph/title_start" size=108800 evicted=0 evicted_bytes=0 total=74945392/268435456
+[INFO] [probe] graph_load path="graph/title_start1"
+[INFO] [diag t=93946264085us] [cache] bytes put size=28794 total=31575909/201326592
+[INFO] [diag t=93946264093us] graph decode path="graph/title_start1" bytes=28794
+[INFO] [diag t=93946264856us] [cache] texture put path="graph/title_start1" size=123760 evicted=0 evicted_bytes=0 total=75069152/268435456
+[INFO] [probe] graph_load path="graph/title_start2"
+[INFO] [diag t=93946265266us] [cache] bytes put size=18942 total=31594851/201326592
+[INFO] [diag t=93946265276us] graph decode path="graph/title_start2" bytes=18942
+[INFO] [diag t=93946265846us] [cache] texture put path="graph/title_start2" size=108800 evicted=0 evicted_bytes=0 total=75177952/268435456
+[INFO] [probe] graph_load path="graph/title_start3"
+[INFO] [diag t=93946266158us] [cache] bytes put size=16719 total=31611570/201326592
+[INFO] [diag t=93946266166us] graph decode path="graph/title_start3" bytes=16719
+[INFO] [diag t=93946266729us] [cache] texture put path="graph/title_start3" size=108800 evicted=0 evicted_bytes=0 total=75286752/268435456
+[INFO] [probe] graph_load path="graph/title_start4"
+[INFO] [diag t=93946267012us] [cache] bytes put size=14449 total=31626019/201326592
+[INFO] [diag t=93946267021us] graph decode path="graph/title_start4" bytes=14449
+[INFO] [diag t=93946267554us] [cache] texture put path="graph/title_start4" size=108800 evicted=0 evicted_bytes=0 total=75395552/268435456
+[INFO] [probe] graph_load path="graph/title_start5"
+[INFO] [diag t=93946267921us] [cache] bytes put size=11989 total=31638008/201326592
+[INFO] [diag t=93946267934us] graph decode path="graph/title_start5" bytes=11989
+[INFO] [diag t=93946268479us] [cache] texture put path="graph/title_start5" size=108800 evicted=0 evicted_bytes=0 total=75504352/268435456
+[INFO] [probe] graph_load path="graph/title_continue"
+[INFO] [diag t=93946268875us] [cache] bytes put size=16771 total=31654779/201326592
+[INFO] [diag t=93946268886us] graph decode path="graph/title_continue" bytes=16771
+[INFO] [diag t=93946269389us] [cache] texture put path="graph/title_continue" size=92800 evicted=0 evicted_bytes=0 total=75597152/268435456
+[INFO] [probe] graph_load path="graph/title_continue1"
+[INFO] [diag t=93946270275us] [cache] bytes put size=24522 total=31679301/201326592
+[INFO] [diag t=93946270291us] graph decode path="graph/title_continue1" bytes=24522
+[INFO] [diag t=93946271236us] [cache] texture put path="graph/title_continue1" size=105560 evicted=0 evicted_bytes=0 total=75702712/268435456
+[INFO] [probe] graph_load path="graph/title_continue2"
+[INFO] [diag t=93946271666us] [cache] bytes put size=16217 total=31695518/201326592
+[INFO] [diag t=93946271679us] graph decode path="graph/title_continue2" bytes=16217
+[INFO] [diag t=93946272225us] [cache] texture put path="graph/title_continue2" size=92800 evicted=0 evicted_bytes=0 total=75795512/268435456
+[INFO] [probe] graph_load path="graph/title_continue3"
+[INFO] [diag t=93946272570us] [cache] bytes put size=14227 total=31709745/201326592
+[INFO] [diag t=93946272582us] graph decode path="graph/title_continue3" bytes=14227
+[INFO] [diag t=93946273060us] [cache] texture put path="graph/title_continue3" size=92800 evicted=0 evicted_bytes=0 total=75888312/268435456
+[INFO] [probe] graph_load path="graph/title_continue4"
+[INFO] [diag t=93946273390us] [cache] bytes put size=12225 total=31721970/201326592
+[INFO] [diag t=93946273401us] graph decode path="graph/title_continue4" bytes=12225
+[INFO] [diag t=93946273869us] [cache] texture put path="graph/title_continue4" size=92800 evicted=0 evicted_bytes=0 total=75981112/268435456
+[INFO] [probe] graph_load path="graph/title_continue5"
+[INFO] [diag t=93946274212us] [cache] bytes put size=9918 total=31731888/201326592
+[INFO] [diag t=93946274224us] graph decode path="graph/title_continue5" bytes=9918
+[INFO] [diag t=93946274650us] [cache] texture put path="graph/title_continue5" size=92800 evicted=0 evicted_bytes=0 total=76073912/268435456
+[INFO] [probe] graph_load path="graph/title_album"
+[INFO] [diag t=93946274946us] [cache] bytes put size=12466 total=31744354/201326592
+[INFO] [diag t=93946274955us] graph decode path="graph/title_album" bytes=12466
+[INFO] [diag t=93946275476us] [cache] texture put path="graph/title_album" size=72000 evicted=0 evicted_bytes=0 total=76145912/268435456
+[INFO] [probe] graph_load path="graph/title_album1"
+[INFO] [diag t=93946276175us] [cache] bytes put size=17974 total=31762328/201326592
+[INFO] [diag t=93946276184us] graph decode path="graph/title_album1" bytes=17974
+[INFO] [diag t=93946276697us] [cache] texture put path="graph/title_album1" size=81900 evicted=0 evicted_bytes=0 total=76227812/268435456
+[INFO] [probe] graph_load path="graph/title_album2"
+[INFO] [diag t=93946276996us] [cache] bytes put size=12281 total=31774609/201326592
+[INFO] [diag t=93946277004us] graph decode path="graph/title_album2" bytes=12281
+[INFO] [diag t=93946277386us] [cache] texture put path="graph/title_album2" size=72000 evicted=0 evicted_bytes=0 total=76299812/268435456
+[INFO] [probe] graph_load path="graph/title_album3"
+[INFO] [diag t=93946277771us] [cache] bytes put size=10724 total=31785333/201326592
+[INFO] [diag t=93946277785us] graph decode path="graph/title_album3" bytes=10724
+[INFO] [diag t=93946278358us] [cache] texture put path="graph/title_album3" size=72000 evicted=0 evicted_bytes=0 total=76371812/268435456
+[INFO] [probe] graph_load path="graph/title_album4"
+[INFO] [diag t=93946278723us] [cache] bytes put size=9447 total=31794780/201326592
+[INFO] [diag t=93946278734us] graph decode path="graph/title_album4" bytes=9447
+[INFO] [diag t=93946279097us] [cache] texture put path="graph/title_album4" size=72000 evicted=0 evicted_bytes=0 total=76443812/268435456
+[INFO] [probe] graph_load path="graph/title_album5"
+[INFO] [diag t=93946279373us] [cache] bytes put size=7952 total=31802732/201326592
+[INFO] [diag t=93946279383us] graph decode path="graph/title_album5" bytes=7952
+[INFO] [diag t=93946279732us] [cache] texture put path="graph/title_album5" size=72000 evicted=0 evicted_bytes=0 total=76515812/268435456
+[INFO] [probe] graph_load path="graph/title_option"
+[INFO] [diag t=93946280149us] [cache] bytes put size=14913 total=31817645/201326592
+[INFO] [diag t=93946280164us] graph decode path="graph/title_option" bytes=14913
+[INFO] [diag t=93946280659us] [cache] texture put path="graph/title_option" size=81000 evicted=0 evicted_bytes=0 total=76596812/268435456
+[INFO] [probe] graph_load path="graph/title_option1"
+[INFO] [diag t=93946281423us] [cache] bytes put size=22510 total=31840155/201326592
+[INFO] [diag t=93946281435us] graph decode path="graph/title_option1" bytes=22510
+[INFO] [diag t=93946282052us] [cache] texture put path="graph/title_option1" size=82800 evicted=0 evicted_bytes=0 total=76679612/268435456
+[INFO] [probe] graph_load path="graph/title_option2"
+[INFO] [diag t=93946282359us] [cache] bytes put size=14369 total=31854524/201326592
+[INFO] [diag t=93946282365us] graph decode path="graph/title_option2" bytes=14369
+[INFO] [diag t=93946282783us] [cache] texture put path="graph/title_option2" size=75600 evicted=0 evicted_bytes=0 total=76755212/268435456
+[INFO] [probe] graph_load path="graph/title_option3"
+[INFO] [diag t=93946283164us] [cache] bytes put size=12368 total=31866892/201326592
+[INFO] [diag t=93946283171us] graph decode path="graph/title_option3" bytes=12368
+[INFO] [diag t=93946283562us] [cache] texture put path="graph/title_option3" size=72000 evicted=0 evicted_bytes=0 total=76827212/268435456
+[INFO] [probe] graph_load path="graph/title_option4"
+[INFO] [diag t=93946283843us] [cache] bytes put size=10549 total=31877441/201326592
+[INFO] [diag t=93946283852us] graph decode path="graph/title_option4" bytes=10549
+[INFO] [diag t=93946284251us] [cache] texture put path="graph/title_option4" size=72000 evicted=0 evicted_bytes=0 total=76899212/268435456
+[INFO] [probe] graph_load path="graph/title_option5"
+[INFO] [diag t=93946284521us] [cache] bytes put size=8545 total=31885986/201326592
+[INFO] [diag t=93946284528us] graph decode path="graph/title_option5" bytes=8545
+[INFO] [diag t=93946284873us] [cache] texture put path="graph/title_option5" size=72000 evicted=0 evicted_bytes=0 total=76971212/268435456
+[INFO] [probe] graph_load path="graph/title_end"
+[INFO] [diag t=93946285273us] [cache] bytes put size=9093 total=31895079/201326592
+[INFO] [diag t=93946285296us] graph decode path="graph/title_end" bytes=9093
+[INFO] [diag t=93946285644us] [cache] texture put path="graph/title_end" size=44800 evicted=0 evicted_bytes=0 total=77016012/268435456
+[INFO] [probe] graph_load path="graph/title_end1"
+[INFO] [diag t=93946286252us] [cache] bytes put size=13571 total=31908650/201326592
+[INFO] [diag t=93946286258us] graph decode path="graph/title_end1" bytes=13571
+[INFO] [diag t=93946286624us] [cache] texture put path="graph/title_end1" size=51520 evicted=0 evicted_bytes=0 total=77067532/268435456
+[INFO] [probe] graph_load path="graph/title_end2"
+[INFO] [diag t=93946286855us] [cache] bytes put size=8783 total=31917433/201326592
+[INFO] [diag t=93946286865us] graph decode path="graph/title_end2" bytes=8783
+[INFO] [diag t=93946287145us] [cache] texture put path="graph/title_end2" size=44800 evicted=0 evicted_bytes=0 total=77112332/268435456
+[INFO] [probe] graph_load path="graph/title_end3"
+[INFO] [diag t=93946287457us] [cache] bytes put size=7671 total=31925104/201326592
+[INFO] [diag t=93946287462us] graph decode path="graph/title_end3" bytes=7671
+[INFO] [diag t=93946287777us] [cache] texture put path="graph/title_end3" size=44800 evicted=0 evicted_bytes=0 total=77157132/268435456
+[INFO] [probe] graph_load path="graph/title_end4"
+[INFO] [diag t=93946288034us] [cache] bytes put size=6694 total=31931798/201326592
+[INFO] [diag t=93946288044us] graph decode path="graph/title_end4" bytes=6694
+[INFO] [diag t=93946288294us] [cache] texture put path="graph/title_end4" size=44800 evicted=0 evicted_bytes=0 total=77201932/268435456
+[INFO] [probe] graph_load path="graph/title_end5"
+[INFO] [diag t=93946288585us] [cache] bytes put size=5661 total=31937459/201326592
+[INFO] [diag t=93946288595us] graph decode path="graph/title_end5" bytes=5661
+[INFO] [diag t=93946288831us] [cache] texture put path="graph/title_end5" size=44800 evicted=0 evicted_bytes=0 total=77246732/268435456
+[INFO] [probe] graph_load path="graph/light000"
+[INFO] [diag t=93946289737us] [cache] bytes put size=7565 total=31945024/201326592
+[INFO] [diag t=93946289745us] graph decode path="graph/light000" bytes=7565
+[INFO] [diag t=93946289990us] [cache] texture put path="graph/light000" size=44160 evicted=0 evicted_bytes=0 total=77290892/268435456
+[INFO] [probe] graph_load path="graph/light000"
+[INFO] [diag t=93946290097us] graph cache hit path="graph/light000"
+[INFO] [probe] graph_load path="graph/logo_bg"
+[INFO] [diag t=93946294103us] [cache] bytes put size=6107 total=31951131/201326592
+[INFO] [diag t=93946294115us] graph decode path="graph/logo_bg" bytes=6107
+[INFO] [diag t=93946320378us] [cache] texture put path="graph/logo_bg" size=8294400 evicted=0 evicted_bytes=0 total=85585292/268435456
+[INFO] [diag t=93946320398us] graph decoded path="graph/logo_bg" 1920x1080 us=26283
+[INFO] [probe] graph_load path="graph/logo_favo"
+[INFO] [diag t=93946320948us] [cache] bytes put size=27062 total=31978193/201326592
+[INFO] [diag t=93946320961us] graph decode path="graph/logo_favo" bytes=27062
+[INFO] [diag t=93946322727us] [cache] texture put path="graph/logo_favo" size=461776 evicted=0 evicted_bytes=0 total=86047068/268435456
+[INFO] [probe] graph_load path="graph/logo_favo_view"
+[INFO] [diag t=93946323227us] [cache] bytes put size=10710 total=31988903/201326592
+[INFO] [diag t=93946323235us] graph decode path="graph/logo_favo_view" bytes=10710
+[INFO] [diag t=93946323727us] [cache] texture put path="graph/logo_favo_view" size=110768 evicted=0 evicted_bytes=0 total=86157836/268435456
+[INFO] [probe] graph_load path="graph/logo_favo_view_p1"
+[INFO] [diag t=93946324075us] [cache] bytes put size=432 total=31989335/201326592
+[INFO] [diag t=93946324080us] graph decode path="graph/logo_favo_view_p1" bytes=432
+[INFO] [diag t=93946324131us] [cache] texture put path="graph/logo_favo_view_p1" size=6624 evicted=0 evicted_bytes=0 total=86164460/268435456
+[INFO] [probe] graph_load path="graph/logo_favo_view_p2"
+[INFO] [diag t=93946324490us] [cache] bytes put size=433 total=31989768/201326592
+[INFO] [diag t=93946324501us] graph decode path="graph/logo_favo_view_p2" bytes=433
+[INFO] [diag t=93946324557us] [cache] texture put path="graph/logo_favo_view_p2" size=6808 evicted=0 evicted_bytes=0 total=86171268/268435456
+[INFO] [probe] graph_load path="graph/logo_favo_view_p3"
+[INFO] [diag t=93946324923us] [cache] bytes put size=434 total=31990202/201326592
+[INFO] [diag t=93946324929us] graph decode path="graph/logo_favo_view_p3" bytes=434
+[INFO] [diag t=93946324980us] [cache] texture put path="graph/logo_favo_view_p3" size=6624 evicted=0 evicted_bytes=0 total=86177892/268435456
+[INFO] movie h264: decoded frame=5 pts=166 ms 1920x1080 hw=0 decode_us=34943 stage_us=1924 nv12=1
+[INFO] movie h264: decoded frame=30 pts=1001 ms 1920x1080 hw=0 decode_us=18065 stage_us=1961 nv12=1
+[INFO] movie: presented frame=30 1920x1080 upload_us=5 nv12=1
+[INFO] movie h264: decoded frame=60 pts=2002 ms 1920x1080 hw=0 decode_us=29375 stage_us=1793 nv12=1
+[INFO] movie: presented frame=60 1920x1080 upload_us=5 nv12=1
+[INFO] movie h264: decoded frame=90 pts=3003 ms 1920x1080 hw=0 decode_us=16703 stage_us=1807 nv12=1
+[INFO] movie: presented frame=90 1920x1080 upload_us=6 nv12=1
+[INFO] movie h264: decoded frame=120 pts=4004 ms 1920x1080 hw=0 decode_us=36740 stage_us=1794 nv12=1
+[INFO] movie: presented frame=120 1920x1080 upload_us=4 nv12=1
+[INFO] [diag t=93950501819us] audio source id=1 path=Some("BGM2/201")
+[INFO] Playing BGM slot 1
+[INFO] movie h264: decoded frame=150 pts=5005 ms 1920x1080 hw=0 decode_us=26370 stage_us=1819 nv12=1
+[INFO] movie: presented frame=150 1920x1080 upload_us=4 nv12=1
+[INFO] movie h264: decoded frame=180 pts=6006 ms 1920x1080 hw=0 decode_us=24167 stage_us=1826 nv12=1
+[INFO] movie: presented frame=180 1920x1080 upload_us=5 nv12=1
+[INFO] movie h264: decoded frame=210 pts=7007 ms 1920x1080 hw=0 decode_us=35757 stage_us=1962 nv12=1
+[INFO] movie: presented frame=210 1920x1080 upload_us=4 nv12=1
+[INFO] movie h264: decoded frame=240 pts=8008 ms 1920x1080 hw=0 decode_us=46317 stage_us=2327 nv12=1
+[INFO] movie: presented frame=240 1920x1080 upload_us=10 nv12=1
+[INFO] [save] SaveCreate(3) value=Int(906)
+[INFO] [save] state total=401055B
+[INFO] [diag t=93956022890us] [save] materialize thumb=200x113 encode_ms=6.22 len=491476
+[INFO] [diag t=93956025883us] [save] commit slot=906 len=491476 write_ms=2.63 ok=true
+[INFO] movie h264: decoded frame=270 pts=9009 ms 1920x1080 hw=0 decode_us=28684 stage_us=1949 nv12=1
+[INFO] movie: presented frame=270 1920x1080 upload_us=5 nv12=1
+[INFO] movie h264: decoded frame=300 pts=10010 ms 1920x1080 hw=0 decode_us=38728 stage_us=2065 nv12=1
+[INFO] movie: presented frame=300 1920x1080 upload_us=5 nv12=1
+[INFO] movie h264: decoded frame=330 pts=11011 ms 1920x1080 hw=0 decode_us=34252 stage_us=1989 nv12=1
+[INFO] movie: presented frame=330 1920x1080 upload_us=5 nv12=1
+[INFO] movie h264: decoded frame=360 pts=12012 ms 1920x1080 hw=0 decode_us=28170 stage_us=1913 nv12=1
+[INFO] movie: presented frame=360 1920x1080 upload_us=8 nv12=1
+[INFO] movie h264: decoded frame=390 pts=13013 ms 1920x1080 hw=0 decode_us=76193 stage_us=2596 nv12=1
+[INFO] movie: presented frame=390 1920x1080 upload_us=9 nv12=1
+[INFO] movie h264: decoded frame=420 pts=14014 ms 1920x1080 hw=0 decode_us=26689 stage_us=2131 nv12=1
+[INFO] movie: presented frame=420 1920x1080 upload_us=7 nv12=1
+[INFO] movie h264: decoded frame=450 pts=15015 ms 1920x1080 hw=0 decode_us=22173 stage_us=2001 nv12=1
+[INFO] movie: presented frame=450 1920x1080 upload_us=4 nv12=1
+[INFO] movie h264: decoded frame=480 pts=16016 ms 1920x1080 hw=0 decode_us=33491 stage_us=1817 nv12=1
+[INFO] movie: presented frame=480 1920x1080 upload_us=3 nv12=1
+[INFO] movie h264: decoded frame=510 pts=17017 ms 1920x1080 hw=0 decode_us=25410 stage_us=1806 nv12=1
+[INFO] movie: presented frame=510 1920x1080 upload_us=6 nv12=1
+[INFO] movie h264: decoded frame=540 pts=18018 ms 1920x1080 hw=0 decode_us=26096 stage_us=1792 nv12=1
+[INFO] movie: presented frame=540 1920x1080 upload_us=3 nv12=1
+[INFO] movie h264: decoded frame=570 pts=19019 ms 1920x1080 hw=0 decode_us=21807 stage_us=2184 nv12=1
+[INFO] movie: presented frame=570 1920x1080 upload_us=8 nv12=1
+[INFO] movie h264: decoded frame=600 pts=20020 ms 1920x1080 hw=0 decode_us=23820 stage_us=2279 nv12=1
+[INFO] movie: presented frame=600 1920x1080 upload_us=6 nv12=1
+[INFO] movie h264: decoded frame=630 pts=21021 ms 1920x1080 hw=0 decode_us=17040 stage_us=1779 nv12=1
+[INFO] movie: presented frame=630 1920x1080 upload_us=4 nv12=1
+[INFO] movie h264: decoded frame=660 pts=22022 ms 1920x1080 hw=0 decode_us=24595 stage_us=1793 nv12=1
+[INFO] movie: presented frame=660 1920x1080 upload_us=4 nv12=1
+[INFO] movie h264: decoded frame=690 pts=23023 ms 1920x1080 hw=0 decode_us=23244 stage_us=2245 nv12=1
+[INFO] movie: presented frame=690 1920x1080 upload_us=3 nv12=1
+[INFO] movie h264: decoded frame=720 pts=24024 ms 1920x1080 hw=0 decode_us=32450 stage_us=2328 nv12=1
+[INFO] movie: presented frame=720 1920x1080 upload_us=5 nv12=1
+[INFO] movie h264: decoded frame=750 pts=25025 ms 1920x1080 hw=0 decode_us=40993 stage_us=2049 nv12=1
+[INFO] movie: presented frame=750 1920x1080 upload_us=4 nv12=1
+[INFO] movie h264: decoded frame=780 pts=26026 ms 1920x1080 hw=0 decode_us=23389 stage_us=2647 nv12=1
+[INFO] movie: presented frame=780 1920x1080 upload_us=6 nv12=1
+[INFO] movie h264: decoded frame=810 pts=27027 ms 1920x1080 hw=0 decode_us=44746 stage_us=2321 nv12=1
+[INFO] movie: presented frame=810 1920x1080 upload_us=7 nv12=1
+[INFO] movie h264: decoded frame=840 pts=28028 ms 1920x1080 hw=0 decode_us=32918 stage_us=1802 nv12=1
+[INFO] movie: presented frame=840 1920x1080 upload_us=5 nv12=1
+[INFO] movie h264: decoded frame=870 pts=29029 ms 1920x1080 hw=0 decode_us=18254 stage_us=1823 nv12=1
+[INFO] movie: presented frame=870 1920x1080 upload_us=5 nv12=1
+[INFO] movie h264: decoded frame=900 pts=30030 ms 1920x1080 hw=0 decode_us=18728 stage_us=1835 nv12=1
+[INFO] movie: presented frame=900 1920x1080 upload_us=5 nv12=1
+[INFO] movie h264: decoded frame=930 pts=31031 ms 1920x1080 hw=0 decode_us=25002 stage_us=1905 nv12=1
+[INFO] movie: presented frame=930 1920x1080 upload_us=4 nv12=1
+[INFO] movie h264: decoded frame=960 pts=32032 ms 1920x1080 hw=0 decode_us=23165 stage_us=1803 nv12=1
+[INFO] movie: presented frame=960 1920x1080 upload_us=3 nv12=1
+[INFO] movie h264: decoded frame=990 pts=33033 ms 1920x1080 hw=0 decode_us=20254 stage_us=1881 nv12=1
+[INFO] movie: presented frame=990 1920x1080 upload_us=4 nv12=1
+[INFO] movie h264: decoded frame=1020 pts=34034 ms 1920x1080 hw=0 decode_us=39811 stage_us=2290 nv12=1
+[INFO] movie: presented frame=1020 1920x1080 upload_us=7 nv12=1
+[INFO] movie h264: decoded frame=1050 pts=35035 ms 1920x1080 hw=0 decode_us=28595 stage_us=1813 nv12=1
+[INFO] movie: presented frame=1050 1920x1080 upload_us=4 nv12=1
+[INFO] movie h264: decoded frame=1080 pts=36036 ms 1920x1080 hw=0 decode_us=40411 stage_us=1804 nv12=1
+[INFO] movie: presented frame=1080 1920x1080 upload_us=4 nv12=1
+[INFO] movie h264: decoded frame=1110 pts=37037 ms 1920x1080 hw=0 decode_us=42685 stage_us=1868 nv12=1
+[INFO] movie: presented frame=1110 1920x1080 upload_us=4 nv12=1
+[INFO] movie h264: decoded frame=1140 pts=38038 ms 1920x1080 hw=0 decode_us=28215 stage_us=2278 nv12=1
+[INFO] movie: presented frame=1140 1920x1080 upload_us=4 nv12=1
+[INFO] movie h264: decoded frame=1170 pts=39039 ms 1920x1080 hw=0 decode_us=42606 stage_us=1885 nv12=1
+[INFO] movie: presented frame=1170 1920x1080 upload_us=3 nv12=1
+[INFO] movie h264: decoded frame=1200 pts=40040 ms 1920x1080 hw=0 decode_us=23609 stage_us=3081 nv12=1
+[INFO] movie: presented frame=1200 1920x1080 upload_us=4 nv12=1
+[INFO] movie h264: decoded frame=1230 pts=41041 ms 1920x1080 hw=0 decode_us=28105 stage_us=1808 nv12=1
+[INFO] movie: presented frame=1230 1920x1080 upload_us=4 nv12=1
+[INFO] movie h264: decoded frame=1260 pts=42042 ms 1920x1080 hw=0 decode_us=16310 stage_us=1796 nv12=1
+[INFO] movie: presented frame=1260 1920x1080 upload_us=5 nv12=1
+[INFO] movie h264: decoded frame=1290 pts=43043 ms 1920x1080 hw=0 decode_us=44200 stage_us=1781 nv12=1
+[INFO] movie: presented frame=1290 1920x1080 upload_us=4 nv12=1
+[INFO] movie h264: decoded frame=1320 pts=44044 ms 1920x1080 hw=0 decode_us=15287 stage_us=1799 nv12=1
+[INFO] movie: presented frame=1320 1920x1080 upload_us=4 nv12=1
+[INFO] movie h264: decoded frame=1350 pts=45045 ms 1920x1080 hw=0 decode_us=33368 stage_us=2966 nv12=1
+[INFO] movie: presented frame=1350 1920x1080 upload_us=6 nv12=1
+[INFO] movie h264: decoded frame=1380 pts=46046 ms 1920x1080 hw=0 decode_us=21069 stage_us=1826 nv12=1
+[INFO] movie: presented frame=1380 1920x1080 upload_us=3 nv12=1
+[INFO] movie h264: decoded frame=1410 pts=47047 ms 1920x1080 hw=0 decode_us=12221 stage_us=1868 nv12=1
+[INFO] movie: presented frame=1410 1920x1080 upload_us=6 nv12=1
+[INFO] movie h264: decoded frame=1440 pts=48048 ms 1920x1080 hw=0 decode_us=32298 stage_us=2221 nv12=1
+[INFO] movie: presented frame=1440 1920x1080 upload_us=7 nv12=1
+[INFO] movie h264: decoded frame=1470 pts=49049 ms 1920x1080 hw=0 decode_us=37970 stage_us=2889 nv12=1
+[INFO] movie: presented frame=1470 1920x1080 upload_us=4 nv12=1
+[INFO] movie h264: decoded frame=1500 pts=50050 ms 1920x1080 hw=0 decode_us=35761 stage_us=1772 nv12=1
+[INFO] movie: presented frame=1500 1920x1080 upload_us=4 nv12=1
+[INFO] movie h264: decoded frame=1530 pts=51051 ms 1920x1080 hw=0 decode_us=39889 stage_us=1755 nv12=1
+[INFO] movie: presented frame=1530 1920x1080 upload_us=5 nv12=1
+[INFO] movie h264: decoded frame=1560 pts=52052 ms 1920x1080 hw=0 decode_us=24936 stage_us=1789 nv12=1
+[INFO] movie: presented frame=1560 1920x1080 upload_us=2 nv12=1
+[INFO] movie h264: decoded frame=1590 pts=53053 ms 1920x1080 hw=0 decode_us=36574 stage_us=1813 nv12=1
+[INFO] movie: presented frame=1590 1920x1080 upload_us=3 nv12=1
+[INFO] movie h264: decoded frame=1620 pts=54054 ms 1920x1080 hw=0 decode_us=25892 stage_us=1905 nv12=1
+[INFO] movie: presented frame=1620 1920x1080 upload_us=3 nv12=1
+[INFO] movie h264: decoded frame=1650 pts=55055 ms 1920x1080 hw=0 decode_us=26802 stage_us=1766 nv12=1
+[INFO] movie: presented frame=1650 1920x1080 upload_us=3 nv12=1
+[INFO] movie h264: decoded frame=1680 pts=56056 ms 1920x1080 hw=0 decode_us=32998 stage_us=1779 nv12=1
+[INFO] movie: presented frame=1680 1920x1080 upload_us=4 nv12=1
+[INFO] movie h264: decoded frame=1710 pts=57057 ms 1920x1080 hw=0 decode_us=22699 stage_us=2199 nv12=1
+[INFO] movie: presented frame=1710 1920x1080 upload_us=4 nv12=1
+[INFO] movie h264: decoded frame=1740 pts=58058 ms 1920x1080 hw=0 decode_us=14753 stage_us=1784 nv12=1
+[INFO] movie: presented frame=1740 1920x1080 upload_us=3 nv12=1
+[INFO] movie h264: decoded frame=1770 pts=59059 ms 1920x1080 hw=0 decode_us=17574 stage_us=2156 nv12=1
+[INFO] movie: presented frame=1770 1920x1080 upload_us=5 nv12=1
+[INFO] movie h264: decoded frame=1800 pts=60060 ms 1920x1080 hw=0 decode_us=50374 stage_us=1870 nv12=1
+[INFO] movie: presented frame=1800 1920x1080 upload_us=4 nv12=1
+[INFO] movie h264: decoded frame=1830 pts=61061 ms 1920x1080 hw=0 decode_us=43350 stage_us=2301 nv12=1
+[INFO] movie: presented frame=1830 1920x1080 upload_us=5 nv12=1
+[INFO] movie h264: decoded frame=1860 pts=62062 ms 1920x1080 hw=0 decode_us=37938 stage_us=1874 nv12=1
+[INFO] movie: presented frame=1860 1920x1080 upload_us=5 nv12=1
+[INFO] movie h264: decoded frame=1890 pts=63063 ms 1920x1080 hw=0 decode_us=39841 stage_us=2413 nv12=1
+[INFO] movie: presented frame=1890 1920x1080 upload_us=3 nv12=1
+[INFO] movie h264: decoded frame=1920 pts=64064 ms 1920x1080 hw=0 decode_us=39171 stage_us=1929 nv12=1
+[INFO] movie: presented frame=1920 1920x1080 upload_us=4 nv12=1
+[INFO] movie h264: decoded frame=1950 pts=65065 ms 1920x1080 hw=0 decode_us=36166 stage_us=1994 nv12=1
+[INFO] movie: presented frame=1950 1920x1080 upload_us=4 nv12=1
+[INFO] movie h264: decoded frame=1980 pts=66066 ms 1920x1080 hw=0 decode_us=17554 stage_us=1819 nv12=1
+[INFO] movie: presented frame=1980 1920x1080 upload_us=4 nv12=1
+[INFO] movie h264: decoded frame=2010 pts=67067 ms 1920x1080 hw=0 decode_us=22378 stage_us=2657 nv12=1
+[INFO] movie: presented frame=2010 1920x1080 upload_us=9 nv12=1
+[INFO] movie h264: decoded frame=2040 pts=68068 ms 1920x1080 hw=0 decode_us=26456 stage_us=1878 nv12=1
+[INFO] movie: presented frame=2040 1920x1080 upload_us=4 nv12=1
+[INFO] movie h264: decoded frame=2070 pts=69069 ms 1920x1080 hw=0 decode_us=22056 stage_us=1833 nv12=1
+[INFO] movie: presented frame=2070 1920x1080 upload_us=3 nv12=1
+[INFO] movie h264: decoded frame=2100 pts=70070 ms 1920x1080 hw=0 decode_us=35361 stage_us=1850 nv12=1
+[INFO] movie: presented frame=2100 1920x1080 upload_us=3 nv12=1
+[INFO] movie h264: decoded frame=2130 pts=71071 ms 1920x1080 hw=0 decode_us=25741 stage_us=2148 nv12=1
+[INFO] movie: presented frame=2130 1920x1080 upload_us=4 nv12=1
+[INFO] movie h264: decoded frame=2160 pts=72072 ms 1920x1080 hw=0 decode_us=32214 stage_us=1920 nv12=1
+[INFO] movie: presented frame=2160 1920x1080 upload_us=4 nv12=1
+[INFO] movie h264: decoded frame=2190 pts=73073 ms 1920x1080 hw=0 decode_us=42938 stage_us=2557 nv12=1
+[INFO] movie: presented frame=2190 1920x1080 upload_us=6 nv12=1
+[INFO] movie h264: decoded frame=2220 pts=74074 ms 1920x1080 hw=0 decode_us=23955 stage_us=2303 nv12=1
+[INFO] movie: presented frame=2220 1920x1080 upload_us=3 nv12=1
+perf avg over 60 ticks: vm 0.19 ms, scene 0.10 ms, render 4.97 ms, total 5.26 ms
+host avg over 60 frames: begin 0.06 ms, upload 2.80 ms (60 calls), present 0.79 ms, thumb 0.00 ms (0 calls), draws 318.0, flushes 83.2

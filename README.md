@@ -117,13 +117,13 @@ src/galnx/            CLI 与框架（manifest / doctor / preflight / input / en
 schemas/              JSON Schema（game-manifest / engine / input-profile / payload / batch-report）
 examples/             清单、引擎 descriptor、试点图标与打包示例
 scripts/              构建与测试脚本（devkitPro 构建、NSP 打包、Citron harness、公开前素材隔离）
-docs/builds/          编号构建记录 001–050 + Switch 补丁栈（docs/builds/patches/）
+docs/builds/          编号构建记录 001–051 + Switch 补丁栈（docs/builds/patches/）
 docs/milestones/      里程碑记录与证据（M1–M6、P 系列）
 docs/pilot/           试点审计与验收（引擎、打包、真机 runbook、汉化）
 docs/audit/           工具链与上游审计
 docs/environment/     环境、工具链、harness 记录
 docs/assets/          各作品封面（展示用，不打包进 NSP）
-tests/                pytest（615 个用例 + 63 subtests）
+tests/                pytest（620 个用例 + 63 subtests）
 ```
 
 ## 文档地图
@@ -189,7 +189,7 @@ tests/                pytest（615 个用例 + 63 subtests）
 
 ```bash
 pip install -e .
-python -m pytest -q          # 615 个用例 + 63 subtests
+python -m pytest -q          # 620 个用例 + 63 subtests
 ```
 
 约定：

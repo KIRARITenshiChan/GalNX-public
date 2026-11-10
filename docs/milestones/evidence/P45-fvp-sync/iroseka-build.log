@@ -1,0 +1,54 @@
+PROVENANCE keyset=E:/Othergames/Nintendo Switch/Ryujinx-canary/portable/system/prod.keys size=12007 sha256=7bb3b6d2a2eedc83c9f244ee2ed2eaa4d59eb9ad95b66df575f7dfffa71a2a40 mtime=2026-03-19 07:25:45.902258500 +0800
+STEP 1/6 elf2nso -> exefs/main
+STEP 2/6 npdmtool -> exefs/main.npdm (title_id=0x010047420000a000)
+Failed to get system_resource_size (field not present).
+Failed to get version (field not present).
+Failed to get process_category (field not present).
+Failed to get optimize_memory_allocation (field not present).
+Failed to get disable_device_address_space_merge (field not present).
+Failed to get enable_alias_region_extra_size (field not present).
+Failed to get prevent_code_reads (field not present).
+Failed to get signature_key_generation (field not present).
+Failed to get program_id_range_min (field not present).
+Failed to get program_id_range_max (field not present).
+Failed to get program_id (field not present).
+STEP 3/6 nacptool -> control/control.nacp
+STEP 4/6 stage romfs/game (mode=hardlink)
+romfs/game staged: hardlinked=166 copied=0
+STEP 5/6 hacBrewPack
+hacBrewPack OK in 706s
+STEP 6/6 nstool structure check
+nstool exit=1 (see E:\galnx-build\p46\work-iroseka/hacbrewpack.log)
+
+===EXIT=0
+===ARTIFACTS
+IROSEKA_FHD-010047420000a000.nsp 10087541464 f686084205890638fda6bee97a5359774f5a8306beec9d161dc3f39093e815e8
+===ROMFS
+romfs_bytes=10038390763 game_entries=166
+===INPUTS
+main 6385492 536531738648db31fc466a1913a2d4607081b79cc302c9ff2a904eb25623ba11
+main.npdm 972 3cfb9877ba2b37018bbc66ec3c64c760c399ee80b4bc1bd6bee1d03b332ba565
+control.nacp 16384 f1ed1e742d6e0344a4ab4ce1055e10a203f78758c8596b9b523e402f2a4119a9
+icon_AmericanEnglish.dat 26706 f35ac15670f52122f67b1e50d184e5171cf4839c0e7090ca2d8a3e35d51dc4f5
+===LOG
+E:\galnx-build\p46\work-iroseka/hacbrewpack.log
+===LOGTAIL
+Removing created temp and nca directories
+
+
+Summary:
+
+Title ID: 010047420000a000
+SDK Version: 0.12.17.0
+Section Crypto Type: Regular Crypto
+Keygeneration: 1
+Program NCA RomFS Section: Yes
+Program NCA Logo Section: No
+HtmlDoc NCA: No
+LegalInfo NCA: No
+Created NSP: hacbrewpack_nsp\010047420000a000.nsp
+[tc::io::Path ERROR] Path literal has both forward ('/') and backward ('\') path separators.
+BUILD_EXIT=0
+total 9851115
+-rwxrwxrwx 1 Administrators None 10087541464 Nov 11 00:15 IROSEKA_FHD-010047420000a000.nsp
+f686084205890638fda6bee97a5359774f5a8306beec9d161dc3f39093e815e8  E:/galnx-build/p46/out/IROSEKA_FHD-010047420000a000.nsp

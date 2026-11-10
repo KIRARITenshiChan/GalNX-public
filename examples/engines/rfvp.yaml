@@ -9,7 +9,8 @@
 # Later feature lines: docs/builds/046-rfvp-h264-movie.md (H.264 + nvtegra
 # movie pipeline), 047-nv12-color.md (NEON colour conversion), 048 (OP story
 # trigger), 049-p41-snow-particles.md (snow particles), 050 (AKASEKA FD pilot,
-# zero extra engine patches).
+# zero extra engine patches), 051 (NV12 zero-copy movie upload) and 052 (P45:
+# the same engine rebuilt into the IROSEKA / MOYU pilots with user-cover icons).
 id: rfvp
 display_name: rfvp (FVP Rust re-implementation)
 upstream_url: https://github.com/xmoezzz/rfvp
@@ -194,7 +195,7 @@ status_reason: >-
   sha256 fc35fa98...) verifies 13 checks / 0 fail / 1 unsigned warn. The OP
   blur is the 480p upscale itself and is evaluated separately through the
   video.txt quality tiers.
-artifact_sha256: fc35fa9880ba9e38db737f2648bfa309b4e54ab0dd2571265af58d7156c4ee1d
+artifact_sha256: db31a312c745e46b73f11445168af94ad6790989d847f184a8d2cd6312190c8f
 evidence_urls:
   - docs/builds/008-rfvp-evaluation.md
   - docs/builds/016-rfvp-sdl2-backend.md
@@ -244,6 +245,20 @@ notes: >-
   romfs (docs/builds/018-rfvp-nsp.md); the current build (v1.0.8) is
   9,979,496,664 B and boots from romfs with zero game data on SD; a real-hardware install is still pending
   (9.98 GB needs an exFAT SD card or NAND).
+  P44 (docs/builds/051-rfvp-nv12-zerocopy.md, patch rfvp-nv12-zerocopy.patch) closes
+  the 1080p movie budget: the H.264 player now hands the decoder's NV12 planes
+  straight to GLES2 through SDL_UpdateNVTexture instead of converting to RGBA on the
+  CPU, so a 1920x1080 OP frame costs 3.11 MB of upload (1.5 B/px) and ~1.8 ms of
+  staging instead of 8.29 MB and ~9.25 ms. The NSP v1.4.1-test (6,738,209,496 B,
+  sha256 db31a312...) boots from romfs, logs "upload=nv12" and renders the Chinese
+  title plus the 1080p OP in Citron; a real-hardware run is the remaining step.
+  P45 (docs/builds/052-rfvp-p45-sync.md) rebuilds the other two pilots with this
+  engine: IROSEKA_FHD v1.2.5-test (10,087,541,464 B, sha256 f6860842...) and
+  SAKURA_MOYU_CN v1.3.3-test (8,116,841,176 B, sha256 965ee356...), both with the
+  same exefs/main (6,385,492 B) and the user-supplied 256x256 cover as NACP icon
+  (control icon dat 26,706 B f35ac156... / 25,886 B 12ea3a07...). Both verify with
+  0 failures and boot to their Chinese title screens in Citron; the game trees are
+  byte-identical to the P40/P41 builds, so only the engine and the icon changed.
 source:
   url: https://github.com/xmoezzz/rfvp
   commit: 9f07adef2eb5d559777f9bf59a67b756875cb24f
@@ -409,6 +424,20 @@ patches:
       (prim_set_texture_id(id, mode)) so both snow prims no longer share
       texture 0, and emit_snow falls back to base_tex when a variant graph has
       not been uploaded yet. Time-differential density 1.33 -> 5.52 -> 39.46.
+  - path: docs/builds/patches/rfvp-switch/rfvp-nv12-zerocopy.patch
+    notes: >-
+      P44 dual-plane zero copy on top of P41 (docs/builds/051-rfvp-nv12-zerocopy.md):
+      13 files / 785 lines / +446-24. sdl_video.c gains FormatNv12, a cached
+      NV12 soft-renderer probe (SDL_CreateTexture(SDL_PIXELFORMAT_NV12), forced off by
+      sdmc:/switch/rfvp/nv12_off.txt) and galnx_sdl_texture_create_nv12() which feeds
+      SDL_UpdateNVTexture so the GLES2 YUV->RGB shader runs on the GPU;
+      rfvp_movie_h264.c gains galnx_movie_stage_nv12() (tight Y plane + interleaved UV);
+      MovieFrame/GraphBuff carry an optional nv12 plane pair through
+      RfvpRenderer::create_texture_nv12 (default Unsupported, so every other platform
+      keeps the RGBA path); graph snapshots skip NV12 graphs because they are decoder
+      scratch. Citron A/B, 1080p H.264 OP: CPU convert 9.25 -> 1.81 ms, upload
+      6.75 -> 2.72 ms (8.29 -> 3.11 MB, 1.5 B/px), ~9.5 ms saved per frame; the NSP
+      smoke logs "upload=nv12" and 2.80 ms upload over 60 frames.
 portlibs:
   - name: sdl2
     version: "2.28.5-4"

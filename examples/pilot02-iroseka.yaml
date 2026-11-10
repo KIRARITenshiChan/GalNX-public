@@ -5,7 +5,7 @@
 # plus the GalNX Switch backend (docs/builds/016-rfvp-sdl2-backend.md) and romfs
 # self-containment patch (docs/builds/018-rfvp-nsp.md).
 #
-# Pipeline (P11):
+# Pipeline (P11, rebuilt P45 with NV12 zero-copy engine + user cover icon):
 #   bash scripts/build_nsp_game.sh --elf <rfvp-switch ELF> --game-dir <staged game dir> \
 #       --title-id 010047420000a000 --name "IROSEKA FHD" --author GalNX --version 1.0.8 \
 #       --icon <256x256 jpg> --keyset <prod.keys> --romfs-mode hardlink --out <nsp>
@@ -23,7 +23,7 @@ game:
   id: pilot02-iroseka
   title: 五彩斑斓的世界 HD Re:GENERATION
   publisher: Favorite
-  version: "1.2.4-test"
+  version: "1.2.5-test"
   source_dir: E:/Othergames/Galgame/IROSEKA_FHD
   notes: >-
     Pilot game P2 (rfvp / Rust FVP). Chinese scenario via the game's own GBK

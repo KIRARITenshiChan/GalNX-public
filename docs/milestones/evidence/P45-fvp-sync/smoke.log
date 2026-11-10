@@ -1,0 +1,7 @@
+=== iroseka start 2026-11-11T00:30:34+08:00 ===
+iroseka RD=E:\galnx-build\p46\smoke\iroseka\20261111-003036-IROSEKA_FHD-010047420000a000\
+{'status': 'loaded', 'elapsed_s': 11, 'window_title': 'citron Nightly | 0237a9b88 | IROSEKA FHD (64-bit) | 1.2.5-test | NVIDIA', 'boot_line': '[   3.099468] Frontend <Info> citron\\main.cpp:2475:BootGame: Booting game: 010047420000A000 | IROSEKA FHD (64-bit) | 1.2.5-test', 'steps_failed': None, 'steps_diff_ratio': None}
+=== moyu start 2026-11-11T00:31:29+08:00 ===
+moyu RD=E:\galnx-build\p46\smoke\moyu\20261111-003130-SAKURA_MOYU_CN-010047420000c200\
+{'status': 'loaded', 'elapsed_s': 10, 'window_title': 'citron Nightly | 0237a9b88 | SAKURA MOYU CN (64-bit) | 1.3.3-test | NVIDIA', 'boot_line': '[   2.364801] Frontend <Info> citron\\main.cpp:2475:BootGame: Booting game: 010047420000C200 | SAKURA MOYU CN (64-bit) | 1.3.3-test', 'steps_failed': None, 'steps_diff_ratio': None}
+=== SMOKE DONE 2026-11-11T00:32:19+08:00 ===

@@ -2,10 +2,10 @@
 
 This directory is a sanitized snapshot, not the full repository.
 
-- Source commit: 2c9a1e7
-- Generated (UTC): 2026-11-10T12:27:35Z
-- Kept tracked files: 967
-- Excluded game-art files: 351
+- Source commit: 15f6d91
+- Generated (UTC): 2026-11-10T16:56:30Z
+- Kept tracked files: 988
+- Excluded game-art files: 356
 - Markdown references rewritten: 0 in 0 files
 
 ## Why some files are missing
@@ -15,7 +15,7 @@ development evidence. They show commercial game art whose copyright belongs
 to the respective publishers, so they are excluded from the public tree:
 
 - docs/assets/: 4 files
-- docs/milestones/: 342 files
+- docs/milestones/: 347 files
 - examples/pilot: 5 files
 
 The full list is in PUBLIC_RELEASE_ART_EXCLUSIONS.txt. Those files remain in the private repository and can

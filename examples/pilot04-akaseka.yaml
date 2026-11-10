@@ -6,16 +6,18 @@
 #
 # Pipeline (P42):
 #   bash scripts/build_nsp_game.sh --elf <rfvp-switch ELF> --game-dir /e/galnx-build/p42/game \
-#       --title-id 010047420000d000 --name "AKASEKA HD" --author GalNX --version 1.4.0-test \
+#       --title-id 010047420000d000 --name "AKASEKA HD" --author GalNX --version 1.4.1-test \
 #       --icon examples/pilot04/icon-256.jpg --keyset <prod.keys> --romfs-mode hardlink --out <nsp>
 #
 # Content notes:
 #   * The Chinese patch ships a pre-built .akaseka.hcb (GBK text) plus a patched
 #     graph/ folder; both are copied verbatim into the staging root, so no bytecode
 #     surgery is needed for this title.
-#   * The original OP movie/01.wmv is VC-1 1920x1080; it was transcoded to 720p60
-#     H.264 + Vorbis OGG (movie/01_h264.mp4, movie/01.ogg) for the Switch movie
-#     pipeline (docs/builds/046-rfvp-movie-h264.md).
+#   * The original OP movie/01.wmv is VC-1 1920x1080; it ships as 1080p H.264
+#     (movie/01_h264.mp4, 121,601,536 B, 30000/1001) plus a Vorbis OGG track
+#     (movie/01.ogg) since v1.4.1-test: the NV12 dual-plane upload path
+#     (docs/builds/051-rfvp-nv12-zerocopy.md) keeps a 1080p frame inside the
+#     16.67 ms budget. v1.4.0-test used the 720p transcode (docs/builds/046).
 #   * movie/ (the unused 01.wmv in the misspelt movei/ directory) is not shipped.
 #   * saev/ is the PC save directory and is intentionally excluded.
 schema_version: 1
@@ -24,7 +26,7 @@ game:
   id: pilot04-akaseka
   title: 映入红瞳的世界 HD
   publisher: FAVORITE
-  version: "1.4.0-test"
+  version: "1.4.1-test"
   source_dir: E:/Othergames/Galgame/AKASEKA_HD
   notes: >-
     Pilot game P4 (rfvp / Rust FVP). Chinese scenario comes from the X'moe patch's

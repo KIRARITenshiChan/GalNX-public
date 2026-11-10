@@ -8,6 +8,7 @@
 #   - config.toml: hcb="SakuraGBK.hcb", nls="gbk"（必须 gbk，sjis 会乱码）。
 #   - 剧情/对白 100% 中文；标题 logo、菜单按钮等 UI 图仍在 patch.bin 内，rfvp
 #     不会覆盖 graph 贴图，故 UI 图仍为日文（第二阶段工作）。
+# P45 重建：引擎改用 NV12 零拷贝（docs/builds/051），图标换成用户自制封面。
 # 构建：
 #   bash /e/galnx-build/p23/build-sakura-cn-nsp.sh
 schema_version: 1
@@ -16,7 +17,7 @@ game:
   id: pilot03-sakura-cn
   title: さくら、もゆ。 HD Re:GENERATION 中文化测试版
   publisher: FAVORITE
-  version: "1.3.2-test"
+  version: "1.3.3-test"
   source_dir: E:/Othergames/Galgame/さくら、もゆ。v0.2.0_0222_fix1
   notes: >-
     Pilot game P3 的中文内容版（Pilot-03C）。英文/日文原文由 X'moe 汉化组的

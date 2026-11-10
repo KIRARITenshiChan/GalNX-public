@@ -275,12 +275,17 @@ docs/milestones/evidence/P43-op-story-trigger/citron-op.png
 docs/milestones/evidence/P43-op-story-trigger/citron-story.png
 docs/milestones/evidence/P43-op-story-trigger/nsp-romfs-after-skip.png
 docs/milestones/evidence/P43-op-story-trigger/nsp-romfs-op.png
+docs/milestones/evidence/P44-nv12-zerocopy/step-01-opA.png
+docs/milestones/evidence/P44-nv12-zerocopy/step-03-opB.png
+docs/milestones/evidence/P44-nv12-zerocopy/step-05-opC.png
 docs/milestones/evidence/P44-snow-particles/citron-title-clean.png
 docs/milestones/evidence/P44-snow-particles/citron-title-double.png
 docs/milestones/evidence/P44-snow-particles/citron-title-fallback.png
 docs/milestones/evidence/P44-snow-particles/citron-title-prefix.png
 docs/milestones/evidence/P44-snow-particles/nsp-smoke-title.png
 docs/milestones/evidence/P44-snow-particles/snow-compare-3up.png
+docs/milestones/evidence/P45-fvp-sync/iroseka-title.png
+docs/milestones/evidence/P45-fvp-sync/moyu-title.png
 docs/milestones/evidence/P4a-exit-01-dialog.png
 docs/milestones/evidence/P4a-exit-02-after-yes.png
 docs/milestones/evidence/P4b-a5-00-title.png

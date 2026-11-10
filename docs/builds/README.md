@@ -71,3 +71,5 @@
 | 048 | P40c：OP 改回剧情触发并可跳过（去掉启动自动播片钩子，v1.2.2-test） | 048-p40c-op-story-trigger.md |
 | 049 | P41：もゆ标题粒子三处修复（Snow arg10 / PrimSetSnow slot / 变体回退）+ 调试播片序号（v1.3.2-test / v1.2.4-test） | 049-p41-snow-particles.md |
 | 050 | AKASEKA HD 自包含 NSP（P42，v1.4.0-test，零新增引擎补丁；2026-11-10 真机验收 PASS） | 050-akaseka-fd-nsp.md |
+| 051 | P44：GLES2 双平面零拷贝（NV12 Y/UV 直传 + GPU YUV→RGB；1080p OP 单帧省 ~9.5 ms，v1.4.1-test） | `051-rfvp-nv12-zerocopy.md` |
+| 052 | P45：把 NV12 零拷贝引擎同步到 IROSEKA FHD（v1.2.5-test）与 SAKURA MOYU CN（v1.3.3-test）+ 用户封面图标；两包 verify PASS、Citron 首启中文标题 PASS | `052-rfvp-p45-sync.md` |
