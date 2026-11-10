@@ -1,0 +1,23 @@
+launch mode : runas-deelevated
+wrapper     : C:\Users\ACETaffy\AppData\Local\Temp\galnx-harness\launch-20261030-072607-K2NX-A1-selfcontained-010047410000b0b2.cmd
+cmdline     : "E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\web-02\citron\citron.exe" -g "C:\Users\ACETaffy\AppData\Roaming\citron\sdmc\switch\galnx-harness\K2NX-A1-selfcontained-010047410000b0b2.nsp"
+game type   : nsp
+game path   : /e/galnx-build/pilot-01/out/K2NX-A1-selfcontained-010047410000b0b2.nsp
+stage path  : /c/Users/ACETaffy/AppData/Roaming/citron/sdmc/switch/galnx-harness/K2NX-A1-selfcontained-010047410000b0b2.nsp
+status      : loaded
+game        : /e/galnx-build/pilot-01/out/K2NX-A1-selfcontained-010047410000b0b2.nsp (type nsp)
+window title: citron Nightly | 0237a9b88 | Kirikiroid2-NX (64-bit) | 1.0.1 | NVIDIA
+pid         : 2772
+elapsed_s   : 32
+boot line   : [   2.069236] Frontend <Info> citron\main.cpp:2475:BootGame: Booting game: 010047410000B0B2 | Kirikiroid2-NX (64-bit) | 1.0.1
+signals     : title_match=1 boot_line=1 app_output=1 (screenshot_nonblack)
+screenshot  : E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\citron-harness\runs\20261030-072607-K2NX-A1-selfcontained-010047410000b0b2\window.png (printwindow, 1101186 bytes, nonblack=0.9018)
+log         : E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\citron-harness\runs\20261030-072607-K2NX-A1-selfcontained-010047410000b0b2\citron_log.txt
+error       : 
+input       : injected=1 focus_ok= clicks=0 keys_sent=3 diff_ratio= region=1728x1016 y=70-950
+input shots : before= after=
+input error : 
+input steps : done=1 failed=0 diff_ratio=0.809225
+steps file  : E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\citron-harness\runs\20261030-072607-K2NX-A1-selfcontained-010047410000b0b2\input-steps.tsv
+steps final : E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\citron-harness\runs\20261030-072607-K2NX-A1-selfcontained-010047410000b0b2\window-steps-final.png
+steps error : 

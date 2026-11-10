@@ -1,0 +1,138 @@
+# M3-a 证据 E1/E3: nstool v1.9.2 结构校验记录（摘录）
+# 采集时间: 2026-10-30 02:16–02:17 (Asia/Shanghai)
+# 采集人: audit-package (task-19)
+# 原始输出: /e/galnx-build/m3-tools/evidence-raw/*.txt（每段末尾带 EXIT= 行）
+# 结论摘要: NSP 层只列 PFS0、不校验 NCA；NCA 层可解密并显示结构（需要与构建匹配的 header_key）；
+#          签名校验必然 FAIL（无任天堂私钥，预期）；Extract round-trip 与暂存输入逐字节一致。
+
+## 1. NSP 层（nstool -y -k <real keys> m0 构建）
+$ nstool -y -k <keyset> m0-hello-0100000000001000.nsp
+[WARNING] Failed to load "title.keys" keyfile.
+[PartitionFs]
+  Type:        PFS0
+  FileNum:     3
+NSP_VERIFY_EXIT=0
+
+判读: exit 0 只说明 NSP 是合法 PFS0 且含 3 个文件；nstool 不在此层展开/校验 NCA。
+      同一命令换成不匹配 keyset 也 exit 0（见 §4），说明 NSP 层校验与 keyset 无关。
+
+## 2. NCA 层（real-R 构建解出的 3 个 NCA，逐个 nstool -y -k <同一 keyset>）
+### Program NCA
+[WARNING] Failed to load "title.keys" keyfile.
+[WARNING] NCA Header Main Signature: FAIL
+[WARNING] ACID Signature: FAIL (Failed to verify Access Control Info Desc)
+[NCA Header]
+  Format Type:     NCA3
+  Dist. Type:      Download
+  Content Type:    Program
+  Key Generation:  0
+  Sig. Generation: 0
+  Kaek Index:      Application (0)
+  Size:            0x2dc00
+  ProgID:          0x0100000000001000
+  Content Index:   0
+  SdkAddon Ver.:   0.12.17 (v790784)
+NSTOOL_EXIT=0
+
+### Meta NCA（cnmt）
+[WARNING] Failed to load "title.keys" keyfile.
+[WARNING] NCA Header Main Signature: FAIL
+[NCA Header]
+  Format Type:     NCA3
+  Dist. Type:      Download
+  Content Type:    Meta
+  Key Generation:  0
+  Sig. Generation: 0
+  Kaek Index:      Application (0)
+  Size:            0x1000
+  ProgID:          0x0100000000001000
+  Content Index:   0
+  SdkAddon Ver.:   0.12.17 (v790784)
+NSTOOL_EXIT=0
+
+### Control NCA
+[WARNING] Failed to load "title.keys" keyfile.
+[WARNING] NCA Header Main Signature: FAIL
+[NCA Header]
+  Format Type:     NCA3
+  Dist. Type:      Download
+  Content Type:    Control
+  Key Generation:  0
+  Sig. Generation: 0
+  Kaek Index:      Application (0)
+  Size:            0x1cc00
+  ProgID:          0x0100000000001000
+  Content Index:   0
+  SdkAddon Ver.:   0.12.17 (v790784)
+NSTOOL_EXIT=0
+
+判读: 结构字段正确（三种 Content Type 齐全、ProgID=0x0100000000001000、NCA3/Download/AES 常规加密）。
+      「NCA Header Main Signature: FAIL / ACID Signature: FAIL」是预期结果：签名需要任天堂私钥，
+      本工具链无法产生有效签名；这不影响结构解析。
+
+## 3. Extract round-trip（real-R 构建；nstool -x）
+$ nstool -x <dir> -k <keyset> <program.nca>
+[ContentArchive/Extract]
+Saving .../romfs-prog/0/main...
+Saving .../romfs-prog/0/main.npdm...
+Saving .../romfs-prog/1/hello.txt...
+EXTRACT_PROG_RC=0
+
+$ nstool -x <dir> -k <keyset> <control.nca>
+[ContentArchive/Extract]
+Saving .../romfs-ctrl/0/control.nacp...
+Saving .../romfs-ctrl/0/icon_AmericanEnglish.dat...
+EXTRACT_CTRL_RC=0
+
+暂存输入 vs 提取结果（SHA-256 全部一致）:
+  exefs/main                       84,060 B  1d9e7568166f69f7dcbb4f4ca773698b6e8ae80d19ff1e280ff2fd54716f99db
+  exefs/main.npdm                     972 B  7296b4c97af1f90cc8556bf8b65cba5cb0cadfa6c5f4f2394da3cd2c35574d22
+  control/control.nacp             16,384 B  062e130ffb6f6727f43e947c7c772c210cf081280be9bb7d458d1dcdc52e9b48
+  control/icon_AmericanEnglish.dat   6,285 B  0b942950df9fb30f08336b681e24a3ceeeaa6f0915d7dd404d5ebb9bd4e15214
+  romfs/hello.txt                      31 B  03912248c2f59f77146b65b1f5f8c87774a3f7eb15902e06b9cbd28d9d09e7a7
+（原始记录 romfs-roundtrip.txt / roundtrip2.txt）
+
+## 4. NACP 解析（nstool -t nacp <control.nacp>，不带 keyset，exit 0）
+[ApplicationControlProperty]（节选）
+  Title.*.Name:  m0-hello
+  Title.*.Publisher: GalNX
+  StartupUserAccount: Required
+  SupportedLanguage: AmericanEnglish/BritishEnglish/Japanese/French/German/
+                     LatinAmericanSpanish/Spanish/Italian/Dutch/CanadianFrench/Russian（11 种）
+  DataLossConfirmation: Required
+  PresenceGroupId:        0x0100000000001000
+  RatingAge:              CERO 12 / ESRB 10 / USK 12 / PEGI 12 / PEGIPortugal 12 /
+                          PEGIBBFC 12 / Russian 12 / ACB 13 / OFLC 13（nacptool 默认值）
+  DisplayVersion:         1.0.0
+  AddOnContentBaseId:     0x0100000000002000
+  SaveDataOwnerId:        0x0100000000001000
+  UserAccountSaveDataSize: 62 MiB
+  UserAccountSaveDataJournalSize: 1 MiB
+  LocalCommunicationId:   0x0100000000001000
+  LogoType:               Nintendo
+NACP_NO_KEY_EXIT=0
+
+判读: nacptool 默认生成 62 MiB 存盘 + 1 MiB journal，并非 0；若 M3 需要「无存档 forwarder」
+      或自定义存档隔离策略，必须在 NACP 层显式处理（nacptool 无该选项，需后改二进制或换工具）。
+
+## 5. 跨 keyset 实验（证明 header_key 是 NCA 头解密的必要条件）
+(a) real keyset 读 synthetic 构建的 Program NCA
+[WARNING] Failed to load "title.keys" keyfile.
+[nstool::SettingsInitializer ERROR] Input file type was undetermined.
+REAL_KEYS_ON_SYNTH_NCA_EXIT=1
+
+(b) synthetic keyset 读 real 构建的 Program NCA
+[WARNING] Failed to load "title.keys" keyfile.
+[nstool::SettingsInitializer ERROR] Input file type was undetermined.
+SYNTH_KEYS_ON_REAL_NCA_EXIT=1
+
+(c) 对照：NSP 层（只列 PFS0）用不匹配 keyset 仍成功
+[WARNING] Failed to load "title.keys" keyfile.
+[PartitionFs]
+  Type:        PFS0
+  FileNum:     3
+REAL_ON_SYNTH_EXIT=0 / SYNTH_ON_REAL_EXIT=0
+
+判读: ①「nstool -y 校验 NSP」本身不等于校验内容，必须逐个 NCA 再验；
+      ② NCA 层解密/识别必须使用与构建完全一致的 header_key（synthetic 与 real 不通用）；
+      ③ 真实 keyset 的价值体现在能否读回 NCA 内容（以及真机安装时能否被系统解密）。

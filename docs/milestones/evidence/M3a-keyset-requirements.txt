@@ -1,0 +1,81 @@
+# M3-a 证据 E1: hacBrewPack keyset 需求实验（回答「是否需要 prod.keys」）
+# 采集时间: 2026-10-30（脚本实测）+ 更早手工实验
+# 采集人: audit-package (task-19)
+# 安全: 全部实验只使用合成假值或只传真实 keyset 路径；本文件不含任何 key 内容。
+
+## 1. 结论（先给答案）
+- 需要 keyset：hacBrewPack 不能在没有 keyset 的情况下产出 NSP。
+- 最小可用 keyset = header_key（32 字节 = 64 hex）+ key_area_key_application（16 字节 = 32 hex）；
+  默认 keygeneration=1 时只要求 key_area_key_application_00 存在。
+- 合成（假）keyset 能产出结构合法的 NSP，但 NCA 内容用假 key 加密，真机无法解密 → NOT INSTALLABLE。
+- 真机可安装必须使用与目标机同代的真实 prod.keys（来源与合规性由使用方负责；本仓库不保存、不传输）。
+
+## 2. 实验 A: 完全没有 keyset（-k 指向不存在的文件）
+$ cd <含 exefs/control/romfs 输入树的目录>
+$ hacbrewpack.exe --nologo -k /e/galnx-build/m3-tools/work/no-such-keyset.dat
+stderr 原文:
+  Error: Unable to open keyset file
+  Use -k or --keyset to specify your keyset file path or place your keyset in .\keys.dat
+  hacBrewPack v3.05 by The-4n
+
+  Removing existing temp and nca directories
+  Creating temp, nca, nsp and backup directories
+MISSING_KEYSET_RC=1
+
+补充: 加 --plaintext 参数同样 rc=1（不改变「必须先打开 keyset 文件」的前置检查）。
+
+## 3. 实验 B: 只有 header_key（32 字节假值，78 B 文件）
+$ hacbrewpack.exe --nologo -k <header-only-keyset.dat>
+stderr 原文:
+  Error: key_area_key_application for keygeneration 1 is not present in keyset file
+  hacBrewPack v3.05 by The-4n
+  ...
+  Loading '<...>/header-only-keyset.dat' keyset file
+HEADER_ONLY_RC=1
+
+## 4. 实验 C: 最小合成 keyset（header_key + key_area_key_application_00）
+文件: WORK/synthetic-test-keyset.dat（脚本 synthetic 模式自动生成；两行注释明示 fabricated）
+  header_key                      = 32 字节假值（0x00..0x1f）
+  key_area_key_application_00     = 16 字节假值（0x20..0x2f）
+$ hacbrewpack.exe --nologo -k <synthetic-test-keyset.dat>
+退出码 0；产物 m0-hello-0100000000001000.nsp 309,464 B
+  sha256 0441af687061312d19028e0a629664e60b9f8c8a8b008117fda3c75d973be219
+hacBrewPack 摘要（节选）:
+  Title ID: 0100000000001000
+  SDK Version: 0.12.17.0
+  Section Crypto Type: Regular Crypto
+  Keygeneration: 1
+  Key area key 2: <过滤，不记录>
+  Program NCA RomFS Section: Yes / Logo Section: No / HtmlDoc: No / LegalInfo: No
+注意: 该模式产物不可安装（真机需要匹配的真实 key_area_key_application_00 才能解密 NCA 内容）。
+
+## 5. 源码依据（hacBrewPack v3.05 / 745b16ec，main.c）
+- main.c:100         settings.keygeneration = 1;（默认 keygeneration=1）
+- main.c:320-344     若 key_area_key_application[keygeneration-1][0] 全 0 →
+                     "Error: key_area_key_application for keygeneration %i is not present in keyset file"
+                     若 header_key 全 0 → "Error: header_key is not present in keyset file"
+- main.c:410-414     打印 "Key area key %i: <hex>"（--keyareakey 的独立设置，默认 0x04×16，
+                     不是从 prod.keys 派生）→ 本仓库所有构建日志必须过滤该行。
+- 更早手工实验（16 字节 header_key）报错原文:
+                     "Key (000102030405060708090a0b0c0d0e0f) must be 64 hex digits!"
+  → 证实 header_key 必须 32 字节（64 hex，XTS）；key_area_key_application_xx 为 16 字节（32 hex）。
+
+## 6. 非确定性的源码依据（补充）
+- rsa.c rsa_sign(): mbedtls_rsa_set_padding(MBEDTLS_RSA_PKCS_V21, MBEDTLS_MD_SHA256) → RSA-PSS，
+  签名用 mbedtls_ctr_drbg_random 随机盐，因此同一输入每次签名不同。
+- nca.c:667-670: if (settings->nosignncasig2 == 0) { rsa_sign(&nca_header.magic, 0x200, ...); }
+  → 两次构建 Program/Meta NCA 的签名/哈希不同，NSP 整体 SHA-256 不同。
+
+## 7. 与 nstool 的关系（详见 M3a-nstool-verify.txt）
+- nstool 校验 NSP 层（PFS0）不需要 keyset；
+- nstool 读 NCA 内容/校验必须传入与构建一致的 header_key，否则:
+  "[nstool::SettingsInitializer ERROR] Input file type was undetermined."（exit 1）
+- 由此可见「出包成功」与「可被读回/可被系统解密」是两个不同门槛：
+  前者只要任意格式合法的 keyset，后者需要目标机可用的真实 keys。
+
+## 8. 本机实际可用 keyset 位置（只记路径/大小，不记内容；2026-10-30 核对）
+- E:\Othergames\Nintendo Switch\Ryujinx-canary\portable\system\prod.keys（12,007 B，mtime 2026-03-19 07:25:45 +0800；本任务实际使用）
+- 同目录 title.keys 11,492 B
+- C:\Users\ACETaffy\.switch\prod.keys：不存在（原计划首选路径，实测缺失）
+- %APPDATA%\citron\keys\ 下另有 prod.keys 12,007 B + title.keys 11,492 B（Citron 自带；本轮未使用）
+（以上只记文件路径与大小；未读取、未打印、未复制任何 key 内容。）

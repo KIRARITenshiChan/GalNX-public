@@ -1,0 +1,95 @@
+[INFO] [async] submit graph id=258 path="graph/title_bg1_A" bytes=2051578
+[INFO] [async] decoded "graph/title_bg1_A" id=258 bytes=2051578 us=373616 ok=true
+[INFO] [probe] restore path="graph/main_window_mask" cached=true
+[INFO] [probe] restore path="graph/fc_wincls_1" cached=true
+[INFO] [probe] restore path="graph/fc_wincls_2" cached=true
+[INFO] [probe] restore path="graph/fc_wincls_help" cached=true
+[INFO] [probe] restore path="graph/fc_qload_1" cached=true
+[INFO] [probe] restore path="graph/fc_qload_2" cached=true
+[INFO] [probe] restore path="graph/fc_qload_help" cached=true
+[INFO] [probe] restore path="graph/fc_qsave_1" cached=true
+[INFO] [probe] restore path="graph/fc_qsave_2" cached=true
+[INFO] [probe] restore path="graph/fc_qsave_help" cached=true
+[INFO] [probe] restore path="graph/fc_back_1" cached=true
+[INFO] [probe] restore path="graph/fc_back_2" cached=true
+[INFO] [probe] restore path="graph/fc_back_help" cached=true
+[INFO] [probe] restore path="graph/fc_play_1" cached=true
+[INFO] [probe] restore path="graph/fc_play_2" cached=true
+[INFO] [probe] restore path="graph/fc_play_help" cached=true
+[INFO] [probe] restore path="graph/fc_voice_1" cached=true
+[INFO] [probe] restore path="graph/fc_voice_2" cached=true
+[INFO] [probe] restore path="graph/fc_voice_help" cached=true
+[INFO] [probe] restore path="graph/fc_skip_1" cached=true
+[INFO] [probe] restore path="graph/fc_skip_2" cached=true
+[INFO] [probe] restore path="graph/fc_skip_help" cached=true
+[INFO] [probe] restore path="graph/fc_system_1" cached=true
+[INFO] [probe] restore path="graph/fc_system_2" cached=true
+[INFO] [probe] restore path="graph/fc_system_help" cached=true
+[INFO] [probe] restore path="graph/fc_lock_1" cached=true
+[INFO] [probe] restore path="graph/fc_lock_2" cached=true
+[INFO] [probe] restore path="graph/fc_lock_help" cached=true
+[INFO] [probe] restore path="graph/fc_load_1" cached=true
+[INFO] [probe] restore path="graph/fc_load_2" cached=true
+[INFO] [probe] restore path="graph/fc_load_help" cached=true
+[INFO] [probe] restore path="graph/fc_save_1" cached=true
+[INFO] [probe] restore path="graph/fc_save_2" cached=true
+[INFO] [probe] restore path="graph/fc_save_help" cached=true
+[INFO] [probe] restore path="graph/fc_play_3" cached=true
+[INFO] [probe] restore path="graph/fc_skip_3" cached=true
+[INFO] [probe] restore path="graph/fc_lock_3" cached=true
+[INFO] [probe] restore path="graph/fc_lock_4" cached=true
+[INFO] [probe] restore path="graph/icon_skip" cached=true
+[INFO] [probe] restore path="graph/icon_play_frame" cached=true
+[INFO] [probe] restore path="graph/icon_play_bar" cached=true
+[INFO] [probe] restore path="graph/icon_autoskip" cached=true
+[INFO] [async] submit graph id=186 path="graph_bg/BG043_000" bytes=3838866
+[INFO] [probe] restore path="graph_bg/BG043_000" queued=async bytes=3838866
+[INFO] [async] submit graph id=187 path="graph_bg/BG043_000b" bytes=2223174
+[INFO] [probe] restore path="graph_bg/BG043_000b" queued=async bytes=2223174
+[INFO] [probe] restore path="graph/prompt1" cached=true
+[INFO] [probe] restore path="graph/prompt1" cached=true
+[INFO] [probe] restore path="graph/prompt2" cached=true
+[INFO] [probe] restore path="graph/prompt3" cached=true
+[INFO] [probe] restore path="graph/prompt4" cached=true
+[INFO] [probe] restore path="graph/prompt5" cached=true
+[INFO] [probe] restore path="graph/prompt6" cached=true
+[INFO] [probe] restore path="graph/prompt7" cached=true
+[INFO] [probe] restore path="graph/prompt8" cached=true
+[INFO] [probe] restore path="graph/prompt9" cached=true
+[INFO] [probe] restore path="graph/prompt10" cached=true
+[INFO] [probe] restore path="graph/prompt11" cached=true
+[INFO] [probe] restore path="graph/prompt12" cached=true
+[INFO] [probe] restore path="graph/prompt13" cached=true
+[INFO] [probe] restore path="graph/prompt14" cached=true
+[INFO] [probe] restore path="graph/prompt15" cached=true
+[INFO] [probe] restore path="graph/prompt16" cached=true
+[INFO] [probe] restore path="graph/prompt17" cached=true
+[INFO] [probe] restore path="graph/prompt18" cached=true
+[INFO] [probe] restore path="graph/prompt19" cached=true
+[INFO] [probe] restore path="graph/prompt20" cached=true
+[INFO] [probe] restore path="graph/prompt21" cached=true
+[INFO] [probe] restore path="graph/prompt22" cached=true
+[INFO] [probe] restore path="graph/sidewindow" cached=true
+[INFO] [async] submit parts id=2 path="graph_bs/CHR_恀峠_斶_敀堖惂暈L_昞忣" bytes=1267387
+[INFO] [probe] restore parts path="graph_bs/CHR_恀峠_斶_敀堖惂暈L_昞忣" queued=async bytes=1267387
+[INFO] [probe] restore path="graph/gaiji_heart68" cached=false us=767
+[INFO] [probe] restore path="graph/gaiji_heart" cached=false us=152
+[INFO] [probe] restore path="graph/gaiji_heart156" cached=false us=270
+[INFO] [probe] restore path="graph/gaiji_ase68" cached=false us=68
+[INFO] [probe] restore path="graph/gaiji_ase" cached=false us=130
+[INFO] [probe] restore path="graph/gaiji_ase156" cached=false us=264
+[INFO] [probe] restore path="graph/gaiji_shiru68" cached=false us=68
+[INFO] [probe] restore path="graph/gaiji_shiru" cached=false us=124
+[INFO] [probe] restore path="graph/gaiji_shiru156" cached=false us=284
+[INFO] [probe] restore path="graph/gaiji_ikari68" cached=false us=70
+[INFO] [probe] restore path="graph/gaiji_ikari" cached=false us=133
+[INFO] [probe] restore path="graph/gaiji_ikari156" cached=false us=295
+[INFO] [probe] restore path="graph/diss00" cached=false us=7395
+[INFO] [async] decoded "graph_bg/BG043_000" id=186 bytes=3838866 us=228143 ok=true
+[INFO] [async] decoded "graph_bg/BG043_000b" id=187 bytes=2223174 us=134058 ok=true
+[INFO] [async] decoded "graph_bs/CHR_恀峠_斶_敀堖惂暈L_昞忣" id=2 bytes=1267387 us=81632 ok=true
+[INFO] [async] submit graph id=186 path="graph_bg/BG062_000" bytes=2972253
+[INFO] [async] submit graph id=187 path="graph_bg/BG062_000b" bytes=1809959
+[INFO] [async] decoded "graph_bg/BG062_000b" id=65535 bytes=1809959 us=60433 ok=true
+[INFO] [async] decoded "graph_bg/BG062_000" id=186 bytes=2972253 us=76181 ok=true
+[INFO] [async] decoded "graph_bg/BG062_000b" id=187 bytes=1809959 us=105360 ok=true

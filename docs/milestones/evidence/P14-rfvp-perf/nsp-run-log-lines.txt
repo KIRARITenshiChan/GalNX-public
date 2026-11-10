@@ -1,0 +1,8 @@
+[   3.512330] Frontend <Info> citron\main.cpp:2475:BootGame: Booting game: 010047420000A000 | IROSEKA FHD (64-bit) | 1.0.3
+[   5.931005] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp: game root: 
+[   5.931020] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: romfs:/game
+[   5.931028] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString:  (romfs mounted)
+[   5.954373] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp [info] config.toml: GameConfig { hcb: Some(".iroseka.hcb"), nls: Some(GBK) }
+[   6.700419] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp: the first frame was drawn
+[ 121.165403] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp: exit confirmed by the player, closing
+[ 121.165890] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp [info] quit requested by host event

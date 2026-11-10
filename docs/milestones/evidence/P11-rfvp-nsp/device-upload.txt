@@ -1,0 +1,12 @@
+P11 device upload log (IROSEKA_FHD self-contained NSP)
+date: 2026-10-31 (Asia/Shanghai)
+host: 192.168.31.254 port 5000 (DBI FTP, Switch reachable, ping ~36 ms)
+local: E:/galnx-build/p11/out/IROSEKA_FHD-010047420000a000.nsp
+size: 9,979,435,224 B
+sha256: 4592385c1c3e6b166172315a1c79c574b9241f6f8c57244b2e050e0292549189
+tool: E:/galnx-build/p11/ftp_upload_nsp.py (ftplib STOR, anonymous, 1 MiB blocks)
+server listing before upload: ['/Place NSP, NSZ, XCI, XCZ or MSP files here'] (DBI drop folder root)
+observed rate: 5.83-6.10 MiB/s over the first 1.9 GB (elapsed 307 s at 18.83%)
+ETA at that rate: ~27-29 min total
+result: UPLOAD_DONE 2026-10-31 06:32:59 (Asia/Shanghai) — 9,979,435,224 B in 1,579.1 s = 6.03 MiB/s; DBI accepted the whole file and the server listing returned to the drop placeholder afterwards (DBI consumes the file and installs it).
+rate trend: 5.82 -> 6.03 MiB/s, no stalls; U2 (upload time) closed.

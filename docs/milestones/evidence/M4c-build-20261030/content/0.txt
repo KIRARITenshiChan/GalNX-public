@@ -1,0 +1,34 @@
+*define
+game
+
+*start
+bg "bg.png",1
+`GALNX M4-c minimal test
+br
+`Self-authored content only.
+br
+`Press A or click to advance.
+click
+`Page 2: advance works.
+br
+`Pick one branch below.
+br
+select `Branch A`,*ca,`Branch B`,*cb
+
+*ca
+`You picked Branch A.
+br
+`Input mapping works.
+click
+goto *halt
+
+*cb
+`You picked Branch B.
+br
+`Input mapping works.
+click
+goto *halt
+
+*halt
+click
+goto *halt

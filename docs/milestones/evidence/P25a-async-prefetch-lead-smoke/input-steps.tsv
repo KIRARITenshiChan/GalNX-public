@@ -1,0 +1,26 @@
+0	wait	wait:16000	ok	waited 16000ms		16340
+1	capture	capture:f0-title	ok	bytes=1418862 nonblack=0.9018	E:\galnx-build\p25\run-lead-v111c\20261105-233226-IROSEKA_FHD-010047420000a000-v1.1.1-test\step-02-f0-title.png	1757
+2	click	click:1386,638	ok	focus_ok=1		1897
+3	wait	wait:6000	ok	waited 6000ms		6334
+4	capture	capture:f1-list	ok	bytes=1813828 nonblack=0.9018	E:\galnx-build\p25\run-lead-v111c\20261105-233226-IROSEKA_FHD-010047420000a000-v1.1.1-test\step-05-f1-list.png	1793
+5	click	click:420,300	ok	focus_ok=1		1874
+6	wait	wait:18000	ok	waited 18000ms		18338
+7	capture	capture:f2-cg	ok	bytes=1931065 nonblack=0.9018	E:\galnx-build\p25\run-lead-v111c\20261105-233226-IROSEKA_FHD-010047420000a000-v1.1.1-test\step-08-f2-cg.png	1808
+8	key	key:C	ok	keys_sent=1		1485
+9	wait	wait:3000	ok	waited 3000ms		3330
+10	capture	capture:f3	ok	bytes=1915587 nonblack=0.9018	E:\galnx-build\p25\run-lead-v111c\20261105-233226-IROSEKA_FHD-010047420000a000-v1.1.1-test\step-11-f3.png	1784
+11	key	key:C	ok	keys_sent=1		1473
+12	wait	wait:3000	ok	waited 3000ms		3350
+13	capture	capture:f4	ok	bytes=1917950 nonblack=0.9018	E:\galnx-build\p25\run-lead-v111c\20261105-233226-IROSEKA_FHD-010047420000a000-v1.1.1-test\step-14-f4.png	1786
+14	key	key:C	ok	keys_sent=1		1490
+15	wait	wait:3000	ok	waited 3000ms		3346
+16	capture	capture:f5	ok	bytes=1621738 nonblack=0.9018	E:\galnx-build\p25\run-lead-v111c\20261105-233226-IROSEKA_FHD-010047420000a000-v1.1.1-test\step-17-f5.png	1791
+17	key	key:C	ok	keys_sent=1		1476
+18	wait	wait:3000	ok	waited 3000ms		3347
+19	capture	capture:f6	ok	bytes=1627912 nonblack=0.9018	E:\galnx-build\p25\run-lead-v111c\20261105-233226-IROSEKA_FHD-010047420000a000-v1.1.1-test\step-20-f6.png	1737
+20	key	key:C	ok	keys_sent=1		1468
+21	wait	wait:3000	ok	waited 3000ms		3325
+22	capture	capture:f7	ok	bytes=1615902 nonblack=0.9018	E:\galnx-build\p25\run-lead-v111c\20261105-233226-IROSEKA_FHD-010047420000a000-v1.1.1-test\step-23-f7.png	1743
+23	key	key:C	ok	keys_sent=1		1457
+24	wait	wait:3000	ok	waited 3000ms		3332
+25	capture	capture:f8	ok	bytes=1621029 nonblack=0.9018	E:\galnx-build\p25\run-lead-v111c\20261105-233226-IROSEKA_FHD-010047420000a000-v1.1.1-test\step-26-f8.png	1820

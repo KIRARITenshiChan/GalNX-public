@@ -1,0 +1,580 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 2e72c49..45ce563 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -4898,7 +4898,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "rfvp-horizon"
+-version = "1.0.9"
++version = "1.1.0-test"
+ dependencies = [
+  "cc",
+  "rfvp",
+diff --git a/crates/rfvp/src/subsystem/resources/async_decode.rs b/crates/rfvp/src/subsystem/resources/async_decode.rs
+index eb56a3a..585c796 100644
+--- a/crates/rfvp/src/subsystem/resources/async_decode.rs
++++ b/crates/rfvp/src/subsystem/resources/async_decode.rs
+@@ -325,14 +325,21 @@ pub fn submit_prefetch_graph(
+     true
+ }
+ 
++/// GalNX P22: pack bytes are read in 1 MiB slices. A single fread of a 13 MB CG keeps the pack
++/// file lock (vfs.rs pack_lock) for the whole SD transfer; chunking keeps each critical section to
++/// about 1 MiB, so the frame thread's own pack reads are only parked for tens of milliseconds.
++const READ_CHUNK_BYTES: usize = 1024 * 1024;
++
+ fn read_bytes(job: &Job) -> Result<Vec<u8>> {
+     let size = usize::try_from(job.size).map_err(|_| anyhow!("entry too large"))?;
+     let mut out = vec![0u8; size];
+     let mut done = 0usize;
++    report_stage(2);
+     while done < out.len() {
++        let end = (done + READ_CHUNK_BYTES).min(out.len());
+         let n = job
+             .source
+-            .read_at(job.offset + done as u64, &mut out[done..])?;
++            .read_at(job.offset + done as u64, &mut out[done..end])?;
+         if n == 0 {
+             return Err(anyhow!("short read at {} of {}", done, out.len()));
+         }
+diff --git a/crates/rfvp/src/subsystem/resources/resource_cache.rs b/crates/rfvp/src/subsystem/resources/resource_cache.rs
+index d2338c7..8956705 100644
+--- a/crates/rfvp/src/subsystem/resources/resource_cache.rs
++++ b/crates/rfvp/src/subsystem/resources/resource_cache.rs
+@@ -65,18 +65,29 @@ impl<K: Ord + Clone, V> Lru<K, V> {
+     }
+ 
+     fn touch(&mut self, key: &K) {
++        // Re-using the entry that is already in the order avoids a String clone (and alloc) while
++        // the process-global cache lock is held.
+         if let Some(pos) = self.order.iter().position(|k| k == key) {
+-            self.order.remove(pos);
++            if let Some(existing) = self.order.remove(pos) {
++                self.order.push_back(existing);
++                return;
++            }
+         }
+         self.order.push_back(key.clone());
+     }
+ 
+-    fn put(&mut self, key: K, value: V, size: usize) {
++    /// Insert an entry and return everything the insert evicted (including a replaced value), so
++    /// the caller can drop those potentially multi-megabyte values after releasing the cache lock
++    /// (GalNX P22 / RCA H2: dropping a 13 MB Arc inside the lock parks the other thread for a GC
++    /// and was one of the ways the frame thread could stall behind the decode worker).
++    fn put(&mut self, key: K, value: V, size: usize) -> Vec<V> {
++        let mut evicted = Vec::new();
+         if size > MAX_ENTRY_BYTES {
+-            return;
++            return evicted;
+         }
+-        if let Some((_, old)) = self.map.remove(&key) {
+-            self.bytes = self.bytes.saturating_sub(old);
++        if let Some((old, old_size)) = self.map.remove(&key) {
++            self.bytes = self.bytes.saturating_sub(old_size);
++            evicted.push(old);
+         }
+         self.map.insert(key.clone(), (value, size));
+         self.bytes += size;
+@@ -85,10 +96,12 @@ impl<K: Ord + Clone, V> Lru<K, V> {
+             let Some(victim) = self.order.pop_front() else {
+                 break;
+             };
+-            if let Some((_, old)) = self.map.remove(&victim) {
+-                self.bytes = self.bytes.saturating_sub(old);
++            if let Some((old, old_size)) = self.map.remove(&victim) {
++                self.bytes = self.bytes.saturating_sub(old_size);
++                evicted.push(old);
+             }
+         }
++        evicted
+     }
+ 
+     fn clear(&mut self) {
+@@ -131,13 +144,16 @@ pub fn get_texture(path: &str) -> Option<DecodedTexture> {
+ 
+ pub fn put_texture(path: &str, entry: DecodedTexture, size: usize) {
+     let key = key(path);
+-    with_caches(|c| {
+-        c.textures.put(key, entry, size);
+-        if crate::perf::enabled() {
+-            let (bytes, budget) = (c.textures.bytes, c.textures.budget);
+-            crate::perf::event(format_args!("[cache] texture put size={size} total={bytes}/{budget}"));
+-        }
++    let (evicted, bytes, budget) = with_caches(|c| {
++        let evicted = c.textures.put(key, entry, size);
++        (evicted, c.textures.bytes, c.textures.budget)
+     });
++    // Evicted images and the perf log line can both block for milliseconds; keep them outside the
++    // cache lock (GalNX P22 / RCA H2).
++    drop(evicted);
++    if crate::perf::enabled() {
++        crate::perf::event(format_args!("[cache] texture put size={size} total={bytes}/{budget}"));
++    }
+ }
+ 
+ pub fn get_parts(path: &str) -> Option<Arc<NvsgTexture>> {
+@@ -147,13 +163,14 @@ pub fn get_parts(path: &str) -> Option<Arc<NvsgTexture>> {
+ 
+ pub fn put_parts(path: &str, texture: Arc<NvsgTexture>, size: usize) {
+     let key = key(path);
+-    with_caches(|c| {
+-        c.parts.put(key, texture, size);
+-        if crate::perf::enabled() {
+-            let (bytes, budget) = (c.parts.bytes, c.parts.budget);
+-            crate::perf::event(format_args!("[cache] parts put size={size} total={bytes}/{budget}"));
+-        }
++    let (evicted, bytes, budget) = with_caches(|c| {
++        let evicted = c.parts.put(key, texture, size);
++        (evicted, c.parts.bytes, c.parts.budget)
+     });
++    drop(evicted);
++    if crate::perf::enabled() {
++        crate::perf::event(format_args!("[cache] parts put size={size} total={bytes}/{budget}"));
++    }
+ }
+ 
+ pub fn get_bytes(path: &str) -> Option<Arc<[u8]>> {
+@@ -162,45 +179,60 @@ pub fn get_bytes(path: &str) -> Option<Arc<[u8]>> {
+ }
+ 
+ pub fn put_bytes(path: &str, bytes: &[u8]) {
++    let size = bytes.len();
++    if size > MAX_ENTRY_BYTES {
++        return;
++    }
+     let key = key(path);
+-    with_caches(|c| {
+-        let size = bytes.len();
+-        if size > MAX_ENTRY_BYTES {
+-            return;
+-        }
+-        c.bytes.put(key, Arc::from(bytes), size);
+-        if crate::perf::enabled() {
+-            let (total, budget) = (c.bytes.bytes, c.bytes.budget);
+-            crate::perf::event(format_args!("[cache] bytes put size={size} total={total}/{budget}"));
+-        }
++    // The Arc copy is outside the lock: a 16 MB memcpy while holding the global cache lock would
++    // be exactly the long critical section GalNX P22 is removing.
++    let value: Arc<[u8]> = Arc::from(bytes);
++    let (evicted, total, budget) = with_caches(|c| {
++        let evicted = c.bytes.put(key, value, size);
++        (evicted, c.bytes.bytes, c.bytes.budget)
+     });
++    drop(evicted);
++    if crate::perf::enabled() {
++        crate::perf::event(format_args!("[cache] bytes put size={size} total={total}/{budget}"));
++    }
+ }
+ 
+ /// Human readable sizes, used by the debug report.
+ pub fn report() -> String {
+-    with_caches(|c| {
+-        alloc::format!(
+-            "textures {}/{} B entries={} parts {}/{} B entries={} bytes {}/{} B entries={}",
+-            c.textures.bytes,
+-            c.textures.budget,
+-            c.textures.map.len(),
+-            c.parts.bytes,
+-            c.parts.budget,
+-            c.parts.map.len(),
+-            c.bytes.bytes,
+-            c.bytes.budget,
+-            c.bytes.map.len()
++    // Only numbers are read under the lock; the String allocation happens after it is released.
++    let (textures, parts, bytes) = with_caches(|c| {
++        (
++            (c.textures.bytes, c.textures.budget, c.textures.map.len()),
++            (c.parts.bytes, c.parts.budget, c.parts.map.len()),
++            (c.bytes.bytes, c.bytes.budget, c.bytes.map.len()),
+         )
+-    })
++    });
++    alloc::format!(
++        "textures {}/{} B entries={} parts {}/{} B entries={} bytes {}/{} B entries={}",
++        textures.0,
++        textures.1,
++        textures.2,
++        parts.0,
++        parts.1,
++        parts.2,
++        bytes.0,
++        bytes.1,
++        bytes.2
++    )
+ }
+ 
+ /// Drop every cache (used when a new game is loaded).
+ pub fn clear() {
+-    with_caches(|c| {
+-        c.textures.clear();
+-        c.parts.clear();
+-        c.bytes.clear();
++    // Swap the LRUs out under the lock and drop the old ones after releasing it: the drop can free
++    // hundreds of megabytes of decoded images.
++    let (textures, parts, bytes) = with_caches(|c| {
++        (
++            core::mem::replace(&mut c.textures, Lru::new(TEXTURE_BUDGET)),
++            core::mem::replace(&mut c.parts, Lru::new(PARTS_BUDGET)),
++            core::mem::replace(&mut c.bytes, Lru::new(BYTES_BUDGET)),
++        )
+     });
++    drop((textures, parts, bytes));
+ }
+ 
+ /// Decode every texture under `folders` whose name starts with one of `prefixes` and cache it.
+diff --git a/crates/rfvp/src/subsystem/resources/vfs.rs b/crates/rfvp/src/subsystem/resources/vfs.rs
+index 9277d93..82b172c 100644
+--- a/crates/rfvp/src/subsystem/resources/vfs.rs
++++ b/crates/rfvp/src/subsystem/resources/vfs.rs
+@@ -22,6 +22,89 @@ use std::io::{Cursor, Read, Seek, SeekFrom};
+ use std::path::PathBuf;
+ use std::sync::Mutex;
+ 
++/// GalNX P22: the lock that guards one pack file handle.
++///
++/// v1.0.8/v1.0.9 guarded the handle with the crate's Mutex, which is spin::Mutex in the no_std
++/// console build (crates/rfvp/src/lib.rs:975). The decode worker holds this lock across an SD-card
++/// read, and Horizon schedules threads strictly by priority inside one core: the frame thread
++/// (prio 0x2C) spinning in user space on the same ideal core (cpuid -2 resolves to core 0) never
++/// let the lower-priority worker (prio 0x30) run again, so the lock was never released and the
++/// whole process froze with no crash and no error log (GalNX P21 RCA).
++///
++/// The console build now guards the handle with libnx's Mutex, a kernel object: a waiter is parked
++/// by svcArbitrateLock instead of burning its core, and the kernel's priority inheritance keeps the
++/// holder runnable. The worker also moved to core 1 (platform/switch/runtime/main.c), so even the
++/// short spin-locked engine caches cannot stall it behind the frame thread.
++#[cfg(all(target_os = "horizon", feature = "no_std"))]
++mod pack_lock {
++    use core::cell::UnsafeCell;
++    use core::ops::{Deref, DerefMut};
++
++    /// libnx Mutex is newlib's _LOCK_T, a uint32_t (switch/kernel/mutex.h:12); 0 is the
++    /// statically-initialised unlocked state (mutexInit only stores INVALID_HANDLE, also 0).
++    extern "C" {
++        fn mutexLock(mutex: *mut u32);
++        fn mutexUnlock(mutex: *mut u32);
++    }
++
++    pub struct PackMutex<T> {
++        lock: UnsafeCell<u32>,
++        value: UnsafeCell<T>,
++    }
++
++    // SAFETY: the value is only reachable through the lock, and a guard is the only way to see it.
++    unsafe impl<T: Send> Send for PackMutex<T> {}
++    unsafe impl<T: Send> Sync for PackMutex<T> {}
++
++    impl<T> PackMutex<T> {
++        pub const fn new(value: T) -> Self {
++            Self {
++                lock: UnsafeCell::new(0),
++                value: UnsafeCell::new(value),
++            }
++        }
++
++        pub fn lock(&self) -> PackMutexGuard<'_, T> {
++            // SAFETY: lock points at a valid mutex word that lives as long as self.
++            unsafe { mutexLock(self.lock.get()) };
++            PackMutexGuard { mutex: self }
++        }
++    }
++
++    pub struct PackMutexGuard<'a, T> {
++        mutex: &'a PackMutex<T>,
++    }
++
++    impl<T> Deref for PackMutexGuard<'_, T> {
++        type Target = T;
++
++        fn deref(&self) -> &T {
++            // SAFETY: the guard holds the mutex, so no other reference is handed out.
++            unsafe { &*self.mutex.value.get() }
++        }
++    }
++
++    impl<T> DerefMut for PackMutexGuard<'_, T> {
++        fn deref_mut(&mut self) -> &mut T {
++            // SAFETY: the guard holds the mutex, so no other reference is handed out.
++            unsafe { &mut *self.mutex.value.get() }
++        }
++    }
++
++    impl<T> Drop for PackMutexGuard<'_, T> {
++        fn drop(&mut self) {
++            // SAFETY: the same mutex word that was locked in PackMutex::lock.
++            unsafe { mutexUnlock(self.mutex.lock.get()) };
++        }
++    }
++}
++
++#[cfg(all(target_os = "horizon", feature = "no_std"))]
++type PackFileLock<F> = pack_lock::PackMutex<F>;
++/// Every other host keeps the normal mutex: there is no kernel object to park on there.
++#[cfg(not(all(target_os = "horizon", feature = "no_std")))]
++type PackFileLock<F> = Mutex<F>;
++
+ pub trait ReadSeek: Read + Seek {}
+ impl<T: Read + Seek> ReadSeek for T {}
+ 
+@@ -65,7 +148,7 @@ impl PackSource for MemoryPack {
+ 
+ /// A pack read through a host file handle.
+ pub struct HostPackFile<F: RfvpFile> {
+-    file: Mutex<F>,
++    file: PackFileLock<F>,
+     len: u64,
+ }
+ 
+@@ -73,7 +156,7 @@ impl<F: RfvpFile> HostPackFile<F> {
+     pub fn new(mut file: F) -> RfvpResult<Self> {
+         let len = file.len()?;
+         Ok(Self {
+-            file: Mutex::new(file),
++            file: PackFileLock::<F>::new(file),
+             len,
+         })
+     }
+@@ -90,6 +173,10 @@ impl<F: RfvpFile> PackSource for HostPackFile<F> {
+     }
+ 
+     fn read_at(&self, offset: u64, buf: &mut [u8]) -> Result<usize> {
++        // The console lock parks a waiter in the kernel instead of spinning (see pack_lock).
++        #[cfg(all(target_os = "horizon", feature = "no_std"))]
++        let mut file = self.file.lock();
++        #[cfg(not(all(target_os = "horizon", feature = "no_std")))]
+         let mut file = self
+             .file
+             .lock()
+diff --git a/platform/switch/host/Cargo.toml b/platform/switch/host/Cargo.toml
+index 7ae14d1..3b44557 100644
+--- a/platform/switch/host/Cargo.toml
++++ b/platform/switch/host/Cargo.toml
+@@ -1,6 +1,6 @@
+ [package]
+ name = "rfvp-horizon"
+-version = "1.0.9"
++version = "1.1.0-test"
+ edition = "2021"
+ description = "Nintendo Horizon host crate for rfvp no_std core"
+ license = "MPL-2.0"
+diff --git a/platform/switch/runtime/main.c b/platform/switch/runtime/main.c
+index 7374d0b..da2f3c0 100644
+--- a/platform/switch/runtime/main.c
++++ b/platform/switch/runtime/main.c
+@@ -74,6 +74,14 @@ static volatile unsigned g_rfvp_async_heartbeat = 0;
+ /* GalNX P20: where the worker is, so a hang stays visible on the SD card after the fact.
+  * 0 idle, 1 popped a job, 2 reading pack bytes, 3 decoding, 4 publishing the result. */
+ static volatile int g_rfvp_async_stage = 0;
++/* GalNX P22: the core the worker actually got, the main-thread frame counter the independent
++ * watchdog samples, and the watchdog's own state. */
++static int g_rfvp_async_cpu = -2;
++static volatile unsigned g_rfvp_main_frame = 0;
++static volatile int g_rfvp_watchdog_alive = 0;
++static volatile int g_rfvp_watchdog_stalled = 0;
++static Thread g_rfvp_decode_thread;
++static Thread g_rfvp_watchdog_thread;
+ 
+ int rfvp_switch_async_enabled(void) {
+     return g_rfvp_async_enabled;
+@@ -88,12 +96,27 @@ void rfvp_switch_async_disable(void) {
+     g_rfvp_async_enabled = 0;
+ }
+ 
+-/* GalNX v1.0.9: the decode worker stays off on real hardware. v1.0.8 froze the whole process
+- * within the first frames whenever this returned 1 (async_status enabled=1 hb=3 stage=0), and the
+- * 3 s watchdog never ran because the frame thread itself stopped. The synchronous path is the one
+- * that boots reliably, so async.txt is ignored until the worker is redesigned. */
++/* GalNX P22: async decode is opt-in per run. A file sdmc:/switch/rfvp/async.txt holding the word
++ * "on" (or "1") starts the worker; no file means the synchronous path, so an installed NSP keeps
++ * booting exactly like v1.0.9 until someone enables the test. v1.0.9 ignored this file because
++ * v1.0.8 froze on real hardware; the P21 RCA traced that to a same-core priority inversion (the
++ * worker under the frame thread's priority while it held the pack lock across a blocking SD read),
++ * which this build removes with a kernel mutex (vfs.rs pack_lock) and a separate worker core. */
+ static int read_async_enabled(void) {
+-    return 0;
++    FILE* file = fopen("sdmc:/switch/rfvp/async.txt", "r");
++    if (file == NULL) return 0;
++    char line[64] = { 0 };
++    const bool got_line = fgets(line, sizeof(line), file) != NULL;
++    fclose(file);
++    if (!got_line) return 0;
++    char* start = line;
++    while (*start == ' ' || *start == '\t') ++start;
++    char* end = start + strlen(start);
++    while (end > start && (end[-1] == '\n' || end[-1] == '\r' || end[-1] == ' ' || end[-1] == '\t')) {
++        --end;
++    }
++    *end = '\0';
++    return strcmp(start, "on") == 0 || strcmp(start, "1") == 0;
+ }
+ 
+ /* Written at start-up and every ~1000 worker iterations, so a hung thread is visible from the SD
+@@ -101,9 +124,12 @@ static int read_async_enabled(void) {
+ static void write_async_status(void) {
+     FILE* file = fopen("sdmc:/switch/rfvp/async_status.txt", "w");
+     if (file == NULL) return;
+-    fprintf(file, "enabled=%d create=0x%x start=0x%x hb=%u stage=%d\n",
++    fprintf(file,
++            "enabled=%d create=0x%x start=0x%x hb=%u stage=%d cpu=%d wdt=%d main=%u stalled=%d\n",
+             g_rfvp_async_enabled, (unsigned) g_rfvp_async_create_rc,
+-            (unsigned) g_rfvp_async_start_rc, g_rfvp_async_heartbeat, g_rfvp_async_stage);
++            (unsigned) g_rfvp_async_start_rc, g_rfvp_async_heartbeat, g_rfvp_async_stage,
++            g_rfvp_async_cpu, g_rfvp_watchdog_alive, g_rfvp_main_frame,
++            g_rfvp_watchdog_stalled);
+     fclose(file);
+ }
+ /* GalNX v1.0.9: optional frame heartbeat. When sdmc:/switch/rfvp/debug.txt exists the frame
+@@ -123,6 +149,17 @@ static void write_frame_status(unsigned frame, int status) {
+     fclose(file);
+ }
+ 
++/* GalNX P22: written by the watchdog thread, not by the frame thread, so it is the evidence that
++ * survives a frame thread that stopped advancing (v1.0.9 only had a watchdog inside the frame
++ * tick, which structurally could never fire for a stopped frame thread). */
++static void write_watchdog_status(unsigned frame, int stalled_ms) {
++    FILE* file = fopen("sdmc:/switch/rfvp/watchdog_status.txt", "w");
++    if (file == NULL) return;
++    fprintf(file, "frame=%u stalled_ms=%d stage=%d hb=%u enabled=%d cpu=%d\n", frame, stalled_ms,
++            g_rfvp_async_stage, g_rfvp_async_heartbeat, g_rfvp_async_enabled, g_rfvp_async_cpu);
++    fclose(file);
++}
++
+ extern int rfvp_switch_frame(void* app, const RfvpSwitchInput* input, uint32_t* framebuffer,
+                              uint32_t stride_bytes);
+ extern void rfvp_switch_audio_render(void* app, int16_t* dst, size_t frames);
+@@ -309,6 +346,91 @@ static void rfvp_decode_thread(void* arg) {
+     }
+ }
+ 
++/* GalNX P22: start the decode worker on core 1.
++ *
++ * v1.0.8/v1.0.9 created it with cpuid -2 (the process default ideal core, i.e. core 0, the same
++ * core the frame thread runs on) and prio 0x30 under the frame thread's 0x2C. The P21 RCA proved
++ * the resulting inversion: the worker held the pack lock across a blocking SD read, the frame
++ * thread spun on that lock in user space, and Horizon's same-core strict priority scheduling never
++ * let the lower-priority worker run again. The kernel mutex in vfs.rs is the actual fix; core 1
++ * removes the coupling completely. If a specific core is refused (applet mode, emulator) fall back
++ * to the default core - with the kernel mutex that stays safe, it only loses the parallelism. */
++static void start_decode_worker(void) {
++    static const int cpus[] = { 1, -2 };
++    Result rc = 0;
++    for (unsigned i = 0; i < sizeof(cpus) / sizeof(cpus[0]); ++i) {
++        rc = threadCreate(&g_rfvp_decode_thread, rfvp_decode_thread, NULL, NULL, 0x100000, 0x30,
++                          cpus[i]);
++        if (R_FAILED(rc)) continue;
++        g_rfvp_async_cpu = cpus[i];
++        g_rfvp_async_create_rc = rc;
++        g_rfvp_async_start_rc = threadStart(&g_rfvp_decode_thread);
++        if (R_FAILED(g_rfvp_async_start_rc)) g_rfvp_async_enabled = 0;
++        return;
++    }
++    g_rfvp_async_create_rc = rc;
++    g_rfvp_async_enabled = 0;
++}
++
++/* GalNX P22: independent watchdog thread.
++ *
++ * The v1.0.9 watchdog was called from inside the frame tick, so a frame thread that stopped never
++ * reached it. This thread is scheduled on its own and samples the frame counter written by the
++ * main loop: 3 s without a new frame writes watchdog_status.txt and a debug log line, 10 s more
++ * turns async off so the frame thread uses the synchronous path if it ever resumes. It never
++ * blocks the frame thread: it only reads volatile counters and writes a small SD file. */
++static void rfvp_watchdog_thread(void* arg) {
++    (void) arg;
++    g_rfvp_watchdog_alive = 1;
++    unsigned last_frame = 0;
++    u64 last_change_us = rfvp_switch_ticks_us();
++    int reported = 0;
++    for (;;) {
++        svcSleepThread(500000000ULL); /* 500 ms */
++        const u64 now = rfvp_switch_ticks_us();
++        const unsigned frame = g_rfvp_main_frame;
++        if (frame != last_frame) {
++            last_frame = frame;
++            last_change_us = now;
++            reported = 0;
++            continue;
++        }
++        if (!g_rfvp_async_enabled) continue;
++        const u64 stalled_us = now - last_change_us;
++        if (stalled_us < 3000000ULL) continue; /* 3 s without a frame */
++        g_rfvp_watchdog_stalled = 1;
++        write_watchdog_status(frame, (int) (stalled_us / 1000));
++        if (!reported) {
++            reported = 1;
++            char message[128];
++            int len = snprintf(message, sizeof(message),
++                               "rfvp: watchdog stall frame=%u stage=%d hb=%u\n", frame,
++                               g_rfvp_async_stage, g_rfvp_async_heartbeat);
++            rfvp_switch_log(message, (size_t) len);
++        }
++        if (stalled_us >= 10000000ULL) {
++            /* If the frame thread resumes it now takes the synchronous path; the report stays. */
++            g_rfvp_async_enabled = 0;
++            write_watchdog_status(frame, (int) (stalled_us / 1000));
++        }
++    }
++}
++
++static void start_watchdog(void) {
++    static const int cpus[] = { 1, -2 };
++    Result rc = 0;
++    for (unsigned i = 0; i < sizeof(cpus) / sizeof(cpus[0]); ++i) {
++        rc = threadCreate(&g_rfvp_watchdog_thread, rfvp_watchdog_thread, NULL, NULL, 0x10000, 0x2F,
++                          cpus[i]);
++        if (R_FAILED(rc)) continue;
++        rc = threadStart(&g_rfvp_watchdog_thread);
++        if (R_SUCCEEDED(rc)) return;
++    }
++    /* A missing watchdog is not a reason to disable async: the kernel mutex is the actual fix. */
++    g_rfvp_watchdog_alive = 0;
++    log_result("watchdog thread", rc);
++}
++
+ int main(void) {
+     rfvp_switch_log("rfvp: starting\n", 15);
+ 
+@@ -344,19 +466,20 @@ int main(void) {
+         return 1;
+     }
+ 
+-    static Thread decode_thread;
+     g_rfvp_async_enabled = read_async_enabled();
+-    if (g_rfvp_async_enabled) {
+-        g_rfvp_async_create_rc = threadCreate(&decode_thread, rfvp_decode_thread, NULL, NULL, 0x100000, 0x30, -2);
+-        if (R_SUCCEEDED(g_rfvp_async_create_rc)) {
+-            g_rfvp_async_start_rc = threadStart(&decode_thread);
+-            if (R_FAILED(g_rfvp_async_start_rc)) g_rfvp_async_enabled = 0;
+-        } else {
+-            g_rfvp_async_enabled = 0;
+-        }
+-    }
++    if (g_rfvp_async_enabled) start_decode_worker();
++    start_watchdog();
+     write_async_status();
+-    log_text(g_rfvp_async_enabled ? "rfvp: async decode on\n" : "rfvp: async decode off\n");
++    {
++        char message[128];
++        int len = snprintf(message, sizeof(message),
++                           "rfvp: async decode %s create=0x%x start=0x%x cpu=%d wdt=%d\n",
++                           g_rfvp_async_enabled ? "on" : "off",
++                           (unsigned) g_rfvp_async_create_rc,
++                           (unsigned) g_rfvp_async_start_rc, g_rfvp_async_cpu,
++                           g_rfvp_watchdog_alive);
++        rfvp_switch_log(message, (size_t) len);
++    }
+ 
+     const int frame_probe = debug_probe_enabled();
+     const unsigned shot = screenshot_frame();
+@@ -385,6 +508,9 @@ int main(void) {
+ 
+         /* SDL owns the display, so the engine draws and presents inside this call. */
+         status = rfvp_switch_frame(app, &input, NULL, 0);
++        /* GalNX P22: sampled by the independent watchdog thread; a stale value means this loop
++         * (not just the worker) stopped. */
++        g_rfvp_main_frame = frame;
+         {
+             int32_t pointer_x = 0, pointer_y = 0, pointer_visible = 0, dialog_open = 0;
+             rfvp_switch_pointer(app, &pointer_x, &pointer_y, &pointer_visible, &dialog_open);

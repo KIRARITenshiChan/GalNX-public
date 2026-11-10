@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://galnx.local/schemas/payload.schema.json",
+  "title": "GalNX payload section",
+  "description": "Declarative description of the files a self-contained GalNX NSP must ship on its romfs and copy to the SD card on first run. Validated by src/galnx/payload/plan.py; the romfs layout is planned by build_plan() and written by materialize().",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "target", "startup", "marker"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$",
+      "description": "Payload generation id, written to game_files.txt. Bump it whenever include/exclude change so the engine re-extracts a stale install."
+    },
+    "target": {
+      "type": "string",
+      "pattern": "^/(?!.*//)[^\\x00-\\x20]+$",
+      "description": "Absolute SD-card directory the payload is copied to on first launch, e.g. /kirikiri/haruno. Must not be the card root."
+    },
+    "startup": {
+      "type": "string",
+      "pattern": "^/[^\\x00-\\x20]+$",
+      "description": "Absolute SD-card path of the file the engine starts after extraction, inside target (e.g. /kirikiri/haruno/data.xp3)."
+    },
+    "marker": {
+      "type": "string",
+      "pattern": "^(sdmc:)?/(?!.*//)[^\\x00-\\x20]+$",
+      "description": "Absolute SD-card path of the marker file the engine writes after a successful extraction, optionally prefixed with sdmc: (e.g. sdmc:/switch/kirikiroid2/.galnx_extracted)."
+    },
+    "source_dir": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Read-only game directory scanned for payload files. Relative paths resolve against the manifest directory. Only file names and sizes are read."
+    },
+    "ui_dir": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Engine romfs directory whose files are copied to the romfs root (UI assets, fonts, default cursor)."
+    },
+    "include": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1},
+      "description": "Glob patterns selecting payload files, anchored at source_dir. * and ? do not cross directory separators, ** matches zero or more directories. Default: *.xp3, *.cf, plugin/*.tpm."
+    },
+    "exclude": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "description": "Glob patterns removed after include is applied. Default: *.sig, **/*.sig (signatures are never copied). Chinese-patched archives are usually excluded with *_chs.xp3."
+    },
+    "keymap": {
+      "description": "Optional input keymap generated into the payload root. A string is shorthand for {profile: name}; the profile must be a built-in GalNX input profile and is only used to cross-check coverage, the emitted bindings come from the K2NX defaults.",
+      "oneOf": [
+        {"type": "string", "minLength": 1},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "profile": {"type": "string", "minLength": 1, "description": "Built-in input profile used for coverage checks (kb_mouse, generic-vn, krkr-ns, ...)."},
+            "template": {"type": "string", "minLength": 1, "description": "Alternative XML template path; the template pad set must match the bindings exactly and only value digits are rewritten."},
+            "bindings": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": {"type": "integer", "minimum": 0, "maximum": 255},
+              "description": "Pad virtual-key code (e.g. 448 for VK_PAD1) to Windows virtual-key code (e.g. 13 for VK_RETURN). Keys may be numbers, VK_PAD names or button names."
+            },
+            "file": {
+              "type": "string",
+              "pattern": "^[^/\\\\]+$",
+              "description": "File name the keymap is generated as, in the payload root. Default Kirikiroid2Preference.xml."
+            }
+          }
+        }
+      ]
+    },
+    "payload_dir": {
+      "type": "string",
+      "pattern": "^[^/\\\\]+$",
+      "description": "romfs sub-directory holding payload files. Default game; the engine reads romfs:/<payload_dir>/<file>."
+    },
+    "manifest_name": {
+      "type": "string",
+      "pattern": "^[^/\\\\]+$",
+      "description": "File name of the generated extraction manifest in the romfs root. Default game_files.txt."
+    },
+    "notes": {
+      "type": "string",
+      "description": "Free-form operator notes, not consumed by the tool."
+    }
+  }
+}

@@ -1,0 +1,7 @@
+# step: elf2nso
+# cwd: E:\galnx-build\pilot-01\p3\build\nsp
+# argv: ["D:\\devkitPro\\tools\\bin\\elf2nso.exe", "E:\\galnx-build\\pilot-01\\out\\K2NX-rebuilt-galnx-r2.elf", "E:\\galnx-build\\pilot-01\\p3\\build\\nsp\\exefs\\main"]
+# exit: 0
+# duration_s: 0.406
+--- stdout ---
+--- stderr ---

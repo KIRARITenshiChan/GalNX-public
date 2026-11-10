@@ -1,0 +1,61 @@
+# P1d A1 自包含 NSP 首启解包 Citron 验证（U11 关闭，Lead 执行；本文件为只读核对与证据归档）
+日期: 2026-10-30 06:53-07:03 (+08:00)
+执行者: Lead（audit-package 仅做只读核对/归档，未启动 Citron）
+运行目录: E:/Othergames/Nintendo Switch/Workspace/GalNX/workspaces/citron-harness/runs/20261030-065340-K2NX-A1-selfcontained-010047410000b0b2
+
+## 1. 运行参数（run.log）
+- 命令: scripts/citron_run.sh --game E:/galnx-build/pilot-01/out/K2NX-A1-selfcontained-010047410000b0b2.nsp --timeout 700 ...（input steps: wait 90s -> capture t90 -> wait 90s -> capture t180 -> wait 120s -> capture t300）
+- launch mode: runas-deelevated；cmdline: citron.exe -g <staged nsp>
+- stage path: C:/Users/ACETaffy/AppData/Roaming/citron/sdmc/switch/galnx-harness/K2NX-A1-selfcontained-010047410000b0b2.nsp
+- Citron build: main-0237a9b88（Development Build）
+- status: loaded；elapsed_s: 38；pid 35140；killed=true（harness 收尾关闭）
+- window title: citron Nightly | 0237a9b88 | Kirikiroid2-NX (64-bit) | 1.0.1 | NVIDIA
+- boot line: [   2.882285] Frontend <Info> citron\main.cpp:2475:BootGame: Booting game: 010047410000B0B2 | Kirikiroid2-NX (64-bit) | 1.0.1
+
+## 2. 窗口/画面证据（run dir，哈希本机实算）
+| 文件 | 大小 | sha256 | 说明 |
+| --- | --- | --- | --- |
+| window.png | 1,101,196 B | 497b057da85370d00861e9f07169b39669464d006e459211091c53969d248d07 | 06:54 首窗（CAUTION/18禁 提示画面），nonblack=0.9018（result.json printwindow） |
+| step-02-t90.png | 2,551,781 B | 3fa32cd3f75b0b794cd24335e48fcdd8f24a93981c930c5a7bda939dd20ba9ca | t=90s 标题画面 nonblack=0.9008 |
+| step-04-t180.png | 2,551,781 B | 3fa32cd3f75b0b794cd24335e48fcdd8f24a93981c930c5a7bda939dd20ba9ca | t=180s，同上 |
+| step-06-t300.png | 2,551,781 B | 3fa32cd3f75b0b794cd24335e48fcdd8f24a93981c930c5a7bda939dd20ba9ca | t=300s，同上 |
+| window-steps-final.png | 2,551,775 B | 840ba0903b081fbc28dc6d81b6a02199fc80138c1bb26cd8bc6a9c7db9cf6306 | harness 收尾前最终帧 |
+三张标题截图逐字节相同（sha256 相同）→ 标题画面稳定 3 分钟；CLI steps_diff_ratio=0.822835 为 CAUTION 首窗与标题画面的差异，非抖动。
+
+## 3. k2s_boot（拷贝原文: P1d-a1-k2s_boot.txt，234 B，sha256 2d3ca872b99976c451bf34941d1f75eac00a6bf452180ed3a9524e9180c2696a）
+0 build Oct 30 2026 06:28:53
+1 static-init start (image base 0x8000000, 305 init entries)
+2 prioritized static-init done (TU constructors next)
+3 main
+4 logging ready
+5 romfs ok
+5b galnx payload
+6 app delegate created, entering run()
+关键: "5 romfs ok"（NSP 内 RomFS 挂载成功）→ "5b galnx payload"（payload 解包/检测逻辑执行）→ "6 app delegate created"（进入运行）。
+
+## 4. k2s_log 首启解包（Lead 记录；首启日志随后被第二次/第三次运行覆盖，现存副本见 P1d-a1-k2s_log-second-run.txt / -latest.txt）
+- [GALNX] free space check ok: 27563 MiB free for a 2737 MiB payload
+- [GALNX] first boot: copying 22 payload file(s)
+- [GALNX] payload copy finished: 22 copied, 0 kept, 0 failed, 2737 MiB total（14 s，约 205 MB/s；audit-engines 独立核算）
+- [GALNX] autostarting game from /kirikiri/haruno/data.xp3
+- 06:54:43 Scenario loaded : title.ks（进入标题脚本）；0 exception / 0 error
+- 首次窗口先显示 CAUTION/18禁 提示，再由 autostart 进入 title.ks —— 属游戏自身启动序列，不是障碍。
+
+## 5. 现存日志副本（本机实算哈希）
+| 文件 | 大小 | sha256 | 说明 |
+| --- | --- | --- | --- |
+| P1d-a1-k2s_boot.txt（源 sdmc k2s_boot.txt） | 234 B | 2d3ca872b99976c451bf34941d1f75eac00a6bf452180ed3a9524e9180c2696a | 首启即写入，后续运行未变 |
+| P1d-a1-k2s_log-second-run.txt（源 k2s_log.prev.txt） | 7,143 B | afcbbe5d3b4c186bcad98078a1cfe5a6f3b57ed9f8c1834edda928c318d41b04 | 07:01 第二次运行；开头 "[GALNX] payload pilot01-r1 already extracted, starting game"（证明首启解包已完成）；07:01:39 Scenario loaded : title.ks |
+| P1d-a1-k2s_log-latest.txt（源 k2s_log.txt） | 7,366 B | a7720af087bfd744fb21e5feed929cfdf2f59d74e20593515f5c9c95899f7192 | 07:03 第三次运行（marker 已存在，直接启动） |
+
+## 6. sdmc 状态（harness 前缀: C:/Users/ACETaffy/AppData/Roaming/citron/sdmc）
+- sdmc:/kirikiri/haruno/：顶层 16 项（15 个文件 + plugin/ 子目录）；du -sb = 2,870,634,016 B（= game_files.txt 的 bytes=2870634016，精确一致）
+- plugin/：7 个 .tpm，mtime 06:54（首启拷贝时间戳）：csvParser 86,016 / extrans 237,568 / fstat 128,000 / layerExImage 126,976 / windowEx 229,376 / wumsadp 57,856 / wuvorbis 200,704 = 1,066,496 B
+- 顶层文件合计 = 2,870,634,016 - 1,066,496 = 2,869,567,520 B（= Lead 记录的 2,869,567,520 B，口径为不含 plugin 子目录的顶层文件；两口径可对账）
+- sdmc:/switch/kirikiroid2/.galnx_extracted 内容 = pilot01-r1（sha256 5a95de3a3d9b96a8861f1a22016f55f2d6065003eb5786b7aea9f96b759c728e）
+- sdmc:/switch/kirikiroid2/autostart.txt 内容 = /kirikiri/haruno/data.xp3（sha256 75b6df8004ab7c2831d6d6de844e124f173a8d10c2e2a58130c0cfda4377d966）
+- 首次拷贝 22 文件/2737 MiB 与 game_files.txt（27 行，bytes=2870634016，startup=/kirikiri/haruno/data.xp3）一致：22 个 file= 条目全部落盘、0 failed。
+
+## 7. 结论
+- U11（A1 首启解包）关闭：NSP 内 romfs 挂载（5 romfs ok）→ 首启检测 marker 缺失 → 空间检查 → 22 文件拷贝（14 s，0 failed）→ 写 marker → autostart data.xp3 → title.ks；Citron 上 status=loaded、窗口标题含 1.0.1、标题画面稳定 3 分钟。
+- 限定: 仅 Citron（模拟器）验证，非真机；free-space 检查值 27,563 MiB 说明 SD 空间充足；安装时长（DBI MTP）与真机装载仍未验证（U12/U13）。

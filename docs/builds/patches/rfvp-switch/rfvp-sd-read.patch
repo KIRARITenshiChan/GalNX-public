@@ -1,0 +1,343 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 0e5ee8a..a1145ce 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -4898,7 +4898,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "rfvp-horizon"
+-version = "1.1.1-test"
++version = "1.1.2-test"
+ dependencies = [
+  "cc",
+  "rfvp",
+diff --git a/crates/rfvp/src/subsystem/components/syscalls/graph.rs b/crates/rfvp/src/subsystem/components/syscalls/graph.rs
+index f3f8448..14938e4 100644
+--- a/crates/rfvp/src/subsystem/components/syscalls/graph.rs
++++ b/crates/rfvp/src/subsystem/components/syscalls/graph.rs
+@@ -994,6 +994,43 @@ fn prefetch_graph_siblings(game_data: &mut GameData, path: &str) {
+     if lower.starts_with("graph_bs/") && !path.ends_with("_昞忣") {
+         prefetch_sibling(game_data, &format!("{path}_昞忣"));
+     }
++    if lower.starts_with("graph_vis") {
++        prefetch_vis_sequence(game_data, path);
++    }
++}
++
++/// Warm the next Album differential picture of a CG (GalNX P26).
++///
++/// The album steps through one slot letter by letter (`graph_vis2/MIO_e01b`,
++/// `graph_vis2/MIO_e01c`, ...). Each one is a full 4K picture of 8 MB, so the frame that first
++/// shows it used to wait ~1.6 s: ~1.1 s to read the file from the SD card plus ~0.3 s to inflate
++/// it. While the current picture is decoded synchronously, decode the next one on the worker
++/// thread, so the next key press finds the texture already in the cache. A candidate that is not
++/// in the pack costs nothing but one index lookup, and a prefetch never changes what
++/// `graph_load` returns.
++///
++/// P26: only one picture ahead. A 4K differential occupies 3840x2160x4 = 33,177,600 bytes of the
++/// 256 MiB texture budget (measured on Citron); a two-entry lookahead plus the current picture
++/// would put ~99 MB into the budget on top of the menu textures and hasten LRU evictions.
++#[cfg(all(not(feature = "old_school"), feature = "switch-async"))]
++fn prefetch_vis_sequence(game_data: &mut GameData, path: &str) {
++    use crate::subsystem::resources::{async_decode, resource_cache};
++    let bytes = path.as_bytes();
++    let Some(&last) = bytes.last() else {
++        return;
++    };
++    if !last.is_ascii_alphabetic() || last == b'z' || last == b'Z' {
++        return;
++    }
++    let candidate = format!("{}{}", &path[..path.len() - 1], (last + 1) as char);
++    if resource_cache::get_texture(&candidate).is_some() {
++        log::info!("[probe] vis sibling cached cand={candidate:?}");
++        return;
++    }
++    if let Some((source, offset, size)) = game_data.vfs.pack_location(&candidate) {
++        let submitted = async_decode::submit_prefetch_graph(&candidate, source, offset, size);
++        log::info!("[probe] vis sibling cand={candidate:?} bytes={size} submitted={submitted}");
++    }
+ }
+ 
+ pub fn graph_load(game_data: &mut GameData, id: &Variant, path: &Variant) -> Result<Variant> {
+@@ -1036,6 +1073,12 @@ pub fn graph_load(game_data: &mut GameData, id: &Variant, path: &Variant) -> Res
+                     .motion_manager
+                     .load_graph_cached(id as u16, path, &entry)?;
+                 game_data.motion_manager.refresh_prims(id as u16);
++                // GalNX P26: chain the Album prefetch on a cache hit. Without this the worker only
++                // warms one picture while the *uncached* load runs synchronously; once a hit was
++                // served, the next differential had nothing prefetched and paid the full SD read
++                // again. Every hit now warms exactly one more picture (lookahead stays at 1).
++                #[cfg(feature = "switch-async")]
++                prefetch_vis_sequence(game_data, path);
+                 return Ok(Variant::Nil);
+             }
+             #[cfg(all(not(feature = "old_school"), feature = "switch-async"))]
+diff --git a/crates/rfvp/src/subsystem/resources/async_decode.rs b/crates/rfvp/src/subsystem/resources/async_decode.rs
+index 5752f87..4ba662f 100644
+--- a/crates/rfvp/src/subsystem/resources/async_decode.rs
++++ b/crates/rfvp/src/subsystem/resources/async_decode.rs
+@@ -457,6 +457,12 @@ fn decode(job: &Job, bytes: &[u8]) -> Result<()> {
+         KIND_GRAPH | KIND_GRAPH_PREFETCH => {
+             let entry = GraphBuff::decode_texture_image(&job.path, bytes)?;
+             let pixels = entry.width as usize * entry.height as usize * 4;
++            if crate::perf::enabled() {
++                crate::perf::event(format_args!(
++                    "[async] decoded texture path={:?} {}x{} px={pixels}",
++                    job.path, entry.width, entry.height
++                ));
++            }
+             resource_cache::put_texture(&job.path, entry, pixels);
+             Ok(())
+         }
+diff --git a/crates/rfvp/src/subsystem/resources/resource_cache.rs b/crates/rfvp/src/subsystem/resources/resource_cache.rs
+index 8956705..294b8e9 100644
+--- a/crates/rfvp/src/subsystem/resources/resource_cache.rs
++++ b/crates/rfvp/src/subsystem/resources/resource_cache.rs
+@@ -19,13 +19,23 @@ use image::DynamicImage;
+ use crate::subsystem::resources::texture::NvsgTexture;
+ 
+ /// Budget for decoded `GraphLoad` images (the largest single consumer).
+-const TEXTURE_BUDGET: usize = 160 * 1024 * 1024;
++///
++/// P26: raised from 160 MiB to 256 MiB for the Album differential case. One 4K CG differential is
++/// 33,177,600 bytes; with 160 MiB a current picture plus two prefetched neighbours (~99 MB) left
++/// too little room for the menu atlases and the LRU started dropping the picture on screen. The
++/// budget only bounds a cache, so this is a revertible tuning knob, not a correctness change.
++const TEXTURE_BUDGET: usize = 256 * 1024 * 1024;
+ /// Budget for decoded `PartsLoad` textures (CG expression sheets).
+ const PARTS_BUDGET: usize = 48 * 1024 * 1024;
+ /// Budget for raw file bytes (audio, scripts, and the bytes feed of the decoders above).
+ const BYTES_BUDGET: usize = 192 * 1024 * 1024;
+ /// Never cache a single entry larger than this (bytes).
+-const MAX_ENTRY_BYTES: usize = 16 * 1024 * 1024;
++///
++/// P26: a 4K CG differential decodes to 3840x2160 RGBA = 33,177,600 bytes. The old 16 MiB cap
++/// silently rejected every graph_vis picture, so an Album differential switch always paid the
++/// full SD read plus inflate again and the async prefetch result was thrown away. 64 MiB leaves
++/// room for the largest single texture while the 256 MiB texture budget still bounds the total.
++const MAX_ENTRY_BYTES: usize = 64 * 1024 * 1024;
+ 
+ /// A decoded `GraphLoad` texture plus the metadata `load_texture` would have set.
+ #[derive(Clone)]
+@@ -143,16 +153,29 @@ pub fn get_texture(path: &str) -> Option<DecodedTexture> {
+ }
+ 
+ pub fn put_texture(path: &str, entry: DecodedTexture, size: usize) {
++    if size > MAX_ENTRY_BYTES {
++        if crate::perf::enabled() {
++            crate::perf::event(format_args!(
++                "[cache] texture skip path={path:?} size={size} max={MAX_ENTRY_BYTES}"
++            ));
++        }
++        return;
++    }
+     let key = key(path);
+-    let (evicted, bytes, budget) = with_caches(|c| {
++    let (evicted, bytes, budget, evicted_bytes) = with_caches(|c| {
++        let before = c.textures.bytes;
+         let evicted = c.textures.put(key, entry, size);
+-        (evicted, c.textures.bytes, c.textures.budget)
++        let evicted_bytes = before.saturating_add(size).saturating_sub(c.textures.bytes);
++        (evicted, c.textures.bytes, c.textures.budget, evicted_bytes)
+     });
++    let evicted_count = evicted.len();
+     // Evicted images and the perf log line can both block for milliseconds; keep them outside the
+     // cache lock (GalNX P22 / RCA H2).
+     drop(evicted);
+     if crate::perf::enabled() {
+-        crate::perf::event(format_args!("[cache] texture put size={size} total={bytes}/{budget}"));
++        crate::perf::event(format_args!(
++            "[cache] texture put path={path:?} size={size} evicted={evicted_count} evicted_bytes={evicted_bytes} total={bytes}/{budget}"
++        ));
+     }
+ }
+ 
+diff --git a/crates/rfvp/src/subsystem/resources/vfs.rs b/crates/rfvp/src/subsystem/resources/vfs.rs
+index 82b172c..314f08e 100644
+--- a/crates/rfvp/src/subsystem/resources/vfs.rs
++++ b/crates/rfvp/src/subsystem/resources/vfs.rs
+@@ -417,7 +417,8 @@ impl VfsFile {
+         Ok((file_count, filename_table_size, entries))
+     }
+ 
+-    pub fn open_stream_with_len(&self, name: &str) -> Result<(VfsStream, Option<u64>)> {
++    /// Looks one name up in the pack, resolving the case-insensitive alias table when needed.
++    fn find_entry(&self, name: &str) -> Result<VfsEntry> {
+         #[cfg(feature = "psx")]
+         let found = {
+             let h = name_hash(name);
+@@ -452,6 +453,11 @@ impl VfsFile {
+                 self.pack.0.len()
+             );
+         }
++        Ok(ent)
++    }
++
++    pub fn open_stream_with_len(&self, name: &str) -> Result<(VfsStream, Option<u64>)> {
++        let ent = self.find_entry(name)?;
+         Ok((
+             Box::new(PackSlice {
+                 source: self.pack.0.clone(),
+@@ -467,11 +473,45 @@ impl VfsFile {
+         self.open_stream_with_len(name).map(|(stream, _)| stream)
+     }
+ 
++    /// Reads a whole pack entry in a handful of large host reads (GalNX P26).
++    ///
++    /// `Read::read_to_end` (crates/rfvp/src/lib.rs:551) fills through a fixed 4 KiB buffer, so an
++    /// 8 MB CG used to cost 2048 host reads; each of those is one `fsFileRead` on the console and
++    /// the picture took ~1.1 s to arrive. Reading the entry here in 4 MiB slices cuts that to a
++    /// few reads the SD card serves as one burst. The read count is returned so the caller can
++    /// put it in the device log.
++    fn read_entry(&self, name: &str) -> Result<(Vec<u8>, usize)> {
++        const READ_CHUNK_BYTES: usize = 4 * 1024 * 1024;
++        let ent = self.find_entry(name)?;
++        let size = usize::try_from(ent.size).map_err(|_| anyhow!("pack entry too large"))?;
++        let mut out = Vec::new();
++        out.resize(size, 0);
++        let mut pos = 0usize;
++        let mut reads = 0usize;
++        while pos < size {
++            let end = pos.saturating_add(READ_CHUNK_BYTES).min(size);
++            match self.pack.0.read_at(ent.offset + pos as u64, &mut out[pos..end]) {
++                Ok(0) => break,
++                Ok(n) => {
++                    pos += n;
++                    reads += 1;
++                }
++                Err(_) => break,
++            }
++        }
++        if pos == size {
++            return Ok((out, reads));
++        }
++        // A source that stopped early keeps the old stream path, which also reports its error
++        // the way it always did.
++        let (mut stream, _) = self.open_stream_with_len(name)?;
++        let mut fallback = Vec::new();
++        stream.read_to_end(&mut fallback)?;
++        Ok((fallback, reads))
++    }
++
+     pub fn read_file(&self, name: &str) -> Result<Vec<u8>> {
+-        let (mut stream, len) = self.open_stream_with_len(name)?;
+-        let mut out = Vec::with_capacity(len.and_then(|n| usize::try_from(n).ok()).unwrap_or(0));
+-        stream.read_to_end(&mut out)?;
+-        Ok(out)
++        self.read_entry(name).map(|(bytes, _reads)| bytes)
+     }
+ }
+ 
+@@ -654,7 +694,16 @@ impl Vfs {
+         }
+         let _timing = crate::perf::scope(crate::perf::VFS_READ);
+         let started = crate::perf::start();
++        let mut reads = 0usize;
+         let result = (|| {
++            // GalNX P26: a pack entry is read by `VfsFile::read_entry` in 4 MiB slices instead of
++            // through the 4 KiB `read_to_end` loop. Loose files (and a pack that has to fall back)
++            // keep the stream path below.
++            if let Some((file, inner)) = self.pack_file_for(path) {
++                let (bytes, n) = file.read_entry(&inner)?;
++                reads = n;
++                return Ok(bytes);
++            }
+             let (mut stream, len) = self.open_stream_with_len(path)?;
+             let mut out = Vec::with_capacity(len.and_then(|n| usize::try_from(n).ok()).unwrap_or(0));
+             stream.read_to_end(&mut out)?;
+@@ -666,7 +715,9 @@ impl Vfs {
+         if crate::perf::enabled() {
+             let us = crate::perf::start().saturating_sub(started);
+             match &result {
+-                Ok(bytes) if us >= 10_000 => crate::perf::event(format_args!("vfs path={path:?} bytes={} us={us}", bytes.len())),
++                Ok(bytes) if us >= 10_000 || bytes.len() >= 1_000_000 => crate::perf::event(
++                    format_args!("vfs path={path:?} bytes={} us={us} reads={reads}", bytes.len()),
++                ),
+                 Err(err) => crate::perf::event(format_args!("vfs FAILED path={path:?}: {err:?}")),
+                 _ => {}
+             }
+@@ -674,6 +725,25 @@ impl Vfs {
+         result
+     }
+ 
++    /// The pack file that serves `path`, unless a loose file shadows it.
++    fn pack_file_for(&self, path: &str) -> Option<(&VfsFile, String)> {
++        let key = normalize_vfs_key(path);
++        if self.loose_files.contains_key(&key) {
++            return None;
++        }
++        if let Some(dir) = &self.loose_dir {
++            let on_disk = path.trim_start_matches("./").replace('\\', "/");
++            let on_disk = on_disk.trim_start_matches('/');
++            if dir.find(on_disk).is_some() {
++                return None;
++            }
++        }
++        let (folder, inner) = key.split_once('/')?;
++        self.files
++            .get(&folder.to_ascii_lowercase())
++            .map(|file| (file, inner.to_string()))
++    }
++
+     /// Asset paths (`folder/inner`) whose inner name starts with one of `prefixes`, skipping
+     /// entries larger than `max_size` bytes. Used to pre-decode a whole asset family (the UI
+     /// atlases) during boot instead of on the frame that first shows it.
+diff --git a/platform/switch/host/Cargo.toml b/platform/switch/host/Cargo.toml
+index 0044279..6d17f85 100644
+--- a/platform/switch/host/Cargo.toml
++++ b/platform/switch/host/Cargo.toml
+@@ -1,6 +1,6 @@
+ [package]
+ name = "rfvp-horizon"
+-version = "1.1.1-test"
++version = "1.1.2-test"
+ edition = "2021"
+ description = "Nintendo Horizon host crate for rfvp no_std core"
+ license = "MPL-2.0"
+diff --git a/platform/switch/host/src/ffi.rs b/platform/switch/host/src/ffi.rs
+index 97906b4..e27a044 100644
+--- a/platform/switch/host/src/ffi.rs
++++ b/platform/switch/host/src/ffi.rs
+@@ -34,6 +34,8 @@ pub enum CFile {}
+ 
+ pub const SEEK_SET: c_int = 0;
+ pub const SEEK_END: c_int = 2;
++/// newlib's `_IONBF`: pass every read straight to the file system (stdio.h:120-122).
++pub const IONBF: c_int = 2;
+ 
+ extern "C" {
+     // main.c
+@@ -51,6 +53,7 @@ extern "C" {
+     pub fn fwrite(buf: *const c_void, size: usize, count: usize, file: *mut CFile) -> usize;
+     pub fn fseek(file: *mut CFile, offset: c_long, whence: c_int) -> c_int;
+     pub fn ftell(file: *mut CFile) -> c_long;
++    pub fn setvbuf(file: *mut CFile, buf: *mut c_char, mode: c_int, size: usize) -> c_int;
+     pub fn remove(path: *const c_char) -> c_int;
+     pub fn mkdir(path: *const c_char, mode: u32) -> c_int;
+     fn memalign(align: usize, size: usize) -> *mut c_void;
+diff --git a/platform/switch/host/src/fs.rs b/platform/switch/host/src/fs.rs
+index 1355650..5ca9ea6 100644
+--- a/platform/switch/host/src/fs.rs
++++ b/platform/switch/host/src/fs.rs
+@@ -54,6 +54,21 @@ impl HorizonFile {
+         if file.is_null() {
+             Err(RfvpError::NotFound)
+         } else {
++            // GalNX P26: newlib buffers a stream in BUFSIZ (1024) byte chunks unless told
++            // otherwise, so every 4 KiB engine read became four fsFileRead calls on the console
++            // (~134 us each). The engine now hands whole pack slices to one fread, so keep stdio
++            // out of the way and let a single read reach the SD card. `setvbuf` must run before
++            // any I/O, which is why it lives here instead of in `read_at`.
++            if mode == c"rb" {
++                let rc = unsafe { ffi::setvbuf(file, core::ptr::null_mut(), ffi::IONBF, 0) };
++                if rc != 0 {
++                    use core::sync::atomic::{AtomicBool, Ordering};
++                    static WARNED: AtomicBool = AtomicBool::new(false);
++                    if !WARNED.swap(true, Ordering::Relaxed) {
++                        ffi::log("rfvp: setvbuf(_IONBF) failed; stdio keeps its 1024 byte buffer");
++                    }
++                }
++            }
+             Ok(Self { file })
+         }
+     }

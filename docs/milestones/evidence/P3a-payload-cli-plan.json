@@ -1,0 +1,186 @@
+{
+  "version": "0.1.0",
+  "manifest_path": "examples\\payload\\manifest.pilot01.yaml",
+  "config": {
+    "version": "pilot01-r2",
+    "target": "/kirikiri/haruno",
+    "startup": "/kirikiri/haruno/data.xp3",
+    "marker": "sdmc:/switch/kirikiroid2/.galnx_extracted",
+    "source_dir": "E:\\Othergames\\Galgame\\晴霁之后定是菜花盛开的好天气",
+    "ui_dir": "E:\\galnx-build\\pilot-01\\k2nx-ws\\build\\romfs",
+    "include": [
+      "*.xp3",
+      "*.cf",
+      "plugin/*.tpm"
+    ],
+    "exclude": [
+      "*_chs.xp3",
+      "*.sig"
+    ],
+    "keymap_profile": "generic-vn",
+    "keymap_template": null,
+    "keymap_bindings": null,
+    "keymap_file": "Kirikiroid2Preference.xml",
+    "payload_dir": "game",
+    "manifest_name": "game_files.txt",
+    "notes": ""
+  },
+  "files": null,
+  "file_count": 22,
+  "total_file_count": 23,
+  "files_bytes": 2870634016,
+  "generated": [
+    {
+      "path": "Kirikiroid2Preference.xml",
+      "bytes": 1293,
+      "category": "other",
+      "symlink": false,
+      "sparse": false
+    }
+  ],
+  "generated_bytes": 1293,
+  "total_bytes": 2870635309,
+  "categories": {
+    "xp3": 14,
+    "config": 1,
+    "plugin": 7,
+    "other": 1
+  },
+  "ui_file_count": 85,
+  "ui_bytes": 7551013,
+  "romfs_total_bytes": 2878186922,
+  "max_rel_path_length": 25,
+  "max_device_path_length": 42,
+  "max_romfs_path_length": 37,
+  "manifest": {
+    "name": "game_files.txt",
+    "romfs_path": "romfs:/game_files.txt",
+    "lines": 28,
+    "bytes": 600,
+    "sha256": "0e6757d9901d4a4abb95a220f9d8e1714b0b858c421ec328e6802a10d4e3fd61"
+  },
+  "keymap": {
+    "file": "Kirikiroid2Preference.xml",
+    "bytes": 1293,
+    "sha256": "aa4fa8aab256f73c6d73111a62305f7078bd9c1eca3cd9d9128d0a51abef9543"
+  },
+  "link_mode": "copy",
+  "checks": [
+    {
+      "id": "payload-link-mode",
+      "name": "romfs link mode",
+      "status": "ok",
+      "detail": "materialize will use copy",
+      "hint": ""
+    },
+    {
+      "id": "payload-source",
+      "name": "payload source directory",
+      "status": "ok",
+      "detail": "E:\\Othergames\\Galgame\\晴霁之后定是菜花盛开的好天气",
+      "hint": ""
+    },
+    {
+      "id": "payload-files",
+      "name": "payload selection",
+      "status": "ok",
+      "detail": "22 files, 2870634016 bytes",
+      "hint": ""
+    },
+    {
+      "id": "payload-keymap",
+      "name": "generated keymap",
+      "status": "ok",
+      "detail": "Kirikiroid2Preference.xml, 1293 B, sha256 aa4fa8aab256f73c6d73111a62305f7078bd9c1eca3cd9d9128d0a51abef9543",
+      "hint": ""
+    },
+    {
+      "id": "payload-keymap-golden",
+      "name": "keymap matches pilot-01 golden sample",
+      "status": "ok",
+      "detail": "sha256 aa4fa8aab256f73c6d73111a62305f7078bd9c1eca3cd9d9128d0a51abef9543",
+      "hint": ""
+    },
+    {
+      "id": "payload-keymap-profile",
+      "name": "keymap vs input profile",
+      "status": "warn",
+      "detail": "advance_text=A; confirm_choice=A; back=B; open_menu=PLUS+X; show_history=MINUS+Y (unbound); auto_mode=R (unbound); skip_hold=L (unbound)",
+      "hint": "Unbound actions cannot be triggered from the controller; add bindings or use a profile whose buttons are covered."
+    },
+    {
+      "id": "payload-manifest",
+      "name": "game_files.txt",
+      "status": "ok",
+      "detail": "28 lines, 600 B, sha256 0e6757d9901d4a4abb95a220f9d8e1714b0b858c421ec328e6802a10d4e3fd61",
+      "hint": ""
+    },
+    {
+      "id": "payload-startup",
+      "name": "startup file in payload",
+      "status": "ok",
+      "detail": "data.xp3",
+      "hint": ""
+    },
+    {
+      "id": "payload-name-collision",
+      "name": "case-insensitive name collisions",
+      "status": "ok",
+      "detail": "23 selected names are unique",
+      "hint": "Rename one of the files; FAT32/exFAT are case-insensitive."
+    },
+    {
+      "id": "payload-path-length",
+      "name": "path length limit",
+      "status": "ok",
+      "detail": "longest 42 chars (Kirikiroid2Preference.xml)",
+      "hint": ""
+    },
+    {
+      "id": "payload-fat32-limit",
+      "name": "FAT32 per-file limit",
+      "status": "ok",
+      "detail": "all files fit FAT32",
+      "hint": ""
+    },
+    {
+      "id": "payload-symlink",
+      "name": "symlinked payload files",
+      "status": "ok",
+      "detail": "none",
+      "hint": ""
+    },
+    {
+      "id": "payload-sparse",
+      "name": "sparse payload files",
+      "status": "ok",
+      "detail": "none",
+      "hint": ""
+    },
+    {
+      "id": "payload-ui",
+      "name": "engine UI files",
+      "status": "ok",
+      "detail": "85 files, 7551013 bytes",
+      "hint": ""
+    },
+    {
+      "id": "payload-total",
+      "name": "payload total",
+      "status": "ok",
+      "detail": "23 payload files, 2870635309 bytes; ui 85 files, 7551013 bytes; manifest 600 B; romfs 2878186922 bytes",
+      "hint": ""
+    }
+  ],
+  "ok": true,
+  "errors": [],
+  "warnings": [
+    {
+      "id": "payload-keymap-profile",
+      "name": "keymap vs input profile",
+      "status": "warn",
+      "detail": "advance_text=A; confirm_choice=A; back=B; open_menu=PLUS+X; show_history=MINUS+Y (unbound); auto_mode=R (unbound); skip_hold=L (unbound)",
+      "hint": "Unbound actions cannot be triggered from the controller; add bindings or use a profile whose buttons are covered."
+    }
+  ]
+}

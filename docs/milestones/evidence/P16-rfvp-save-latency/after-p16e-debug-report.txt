@@ -1,0 +1,1161 @@
+frame 9660: 60.0 fps over the last 60 frames, slowest frame 17.4 ms
+stages (ms per frame): tree 0.06 submit 0.27 end_frame 14.89 vm 0.62 syscalls 0.17
+virtual frame 1920x1080
+
+log:
+[ERROR] id must be in range 0..256
+[INFO] [diag t=657123077254us] audio type_volume label=SE type=1 volume=0.9
+[INFO] [diag t=657123078542us] audio type_volume label=SE type=0 volume=1
+[INFO] [diag t=657123078629us] audio type_volume label=SE type=4 volume=0.7
+[INFO] [diag t=657123078634us] audio type_volume label=SE type=2 volume=0.7
+[INFO] [diag t=657123078638us] audio type_volume label=SE type=3 volume=0.65
+[INFO] [diag t=657123080442us] audio source id=4111 path=Some("se_sys/001")
+[INFO] [diag t=657123100147us] vfs path="se_sys/001" bytes=705688 us=16465
+[INFO] [diag t=657123100924us] audio source id=4112 path=Some("se_sys/002")
+[INFO] [diag t=657123107077us] audio source id=4113 path=Some("se_sys/003")
+[INFO] [diag t=657123113129us] audio source id=4114 path=Some("se_sys/004")
+[INFO] [diag t=657123114040us] audio source id=4115 path=Some("se_sys/005")
+[INFO] [diag t=657123115708us] audio source id=4116 path=Some("se_sys/006")
+[INFO] [diag t=657123122100us] audio source id=4117 path=Some("se_sys/007")
+[INFO] [diag t=657123125560us] audio source id=4118 path=Some("se_sys/008")
+[INFO] [diag t=657123128247us] audio source id=4119 path=Some("se_sys/009")
+[INFO] [diag t=657123138608us] vfs path="se_sys/009" bytes=385748 us=10342
+[INFO] [diag t=657123138648us] audio source id=4120 path=Some("se_sys/010")
+[INFO] [diag t=657123150775us] vfs path="se_sys/010" bytes=472720 us=12087
+[INFO] [diag t=657123150810us] audio source id=4121 path=Some("se_sys/011")
+[INFO] [diag t=657123160803us] audio source id=4122 path=Some("se_sys/012")
+[INFO] [diag t=657123162521us] audio source id=4123 path=Some("se_sys/013")
+[INFO] [diag t=657123625699us] vfs path="graph/main_window_mask" bytes=34483 us=457130
+[INFO] [diag t=657123625911us] graph decode path="graph/main_window_mask" bytes=34483
+[WARN] float_to_int: Invalid value type
+[INFO] [diag t=657123664341us] graph decode path="graph/sidewindow" bytes=31410
+[INFO] [diag t=657123666784us] graph decode path="graph/icon_skip" bytes=1316
+[INFO] [diag t=657123667393us] graph decode path="graph/icon_autoskip" bytes=2126
+[INFO] [diag t=657123668201us] graph decode path="graph/icon_play_frame" bytes=1461
+[INFO] [diag t=657123668854us] graph decode path="graph/icon_play_bar" bytes=543
+[INFO] [diag t=657123669883us] graph decode path="graph/fc_wincls_1" bytes=1091
+[INFO] [diag t=657123670479us] graph decode path="graph/fc_qload_1" bytes=1370
+[INFO] [diag t=657123671096us] graph decode path="graph/fc_qsave_1" bytes=1555
+[INFO] [diag t=657123671582us] graph decode path="graph/fc_back_1" bytes=1133
+[INFO] [diag t=657123672012us] graph decode path="graph/fc_play_1" bytes=775
+[INFO] [diag t=657123672405us] graph decode path="graph/fc_voice_1" bytes=1475
+[INFO] [diag t=657123672818us] graph decode path="graph/fc_skip_1" bytes=887
+[INFO] [diag t=657123673219us] graph decode path="graph/fc_system_1" bytes=1258
+[INFO] [diag t=657123673681us] graph decode path="graph/fc_lock_1" bytes=1040
+[INFO] [diag t=657123674239us] graph decode path="graph/fc_save_1" bytes=1095
+[INFO] [diag t=657123674881us] graph decode path="graph/fc_load_1" bytes=1136
+[INFO] [diag t=657123675550us] graph decode path="graph/fc_wincls_2" bytes=958
+[INFO] [diag t=657123676063us] graph decode path="graph/fc_qload_2" bytes=1191
+[INFO] [diag t=657123676690us] graph decode path="graph/fc_qsave_2" bytes=1399
+[INFO] [diag t=657123677286us] graph decode path="graph/fc_back_2" bytes=974
+[INFO] [diag t=657123678043us] graph decode path="graph/fc_play_2" bytes=616
+[INFO] [diag t=657123678474us] graph decode path="graph/fc_voice_2" bytes=1365
+[INFO] [diag t=657123678899us] graph decode path="graph/fc_skip_2" bytes=719
+[INFO] [diag t=657123679264us] graph decode path="graph/fc_system_2" bytes=1097
+[INFO] [diag t=657123679666us] graph decode path="graph/fc_lock_2" bytes=937
+[INFO] [diag t=657123680309us] graph decode path="graph/fc_save_2" bytes=904
+[INFO] [diag t=657123681001us] graph decode path="graph/fc_load_2" bytes=924
+[INFO] [diag t=657123681619us] graph decode path="graph/fc_play_3" bytes=592
+[INFO] [diag t=657123682074us] graph decode path="graph/fc_skip_3" bytes=576
+[INFO] [diag t=657123682533us] graph decode path="graph/fc_lock_3" bytes=1071
+[INFO] [diag t=657123682988us] graph decode path="graph/fc_lock_4" bytes=963
+[INFO] [diag t=657123687353us] graph decode path="graph/fc_wincls_help" bytes=4989
+[INFO] [diag t=657123691297us] graph decode path="graph/fc_qload_help" bytes=4856
+[INFO] [diag t=657123695818us] graph decode path="graph/fc_qsave_help" bytes=4775
+[INFO] [diag t=657123700193us] graph decode path="graph/fc_back_help" bytes=4895
+[INFO] [diag t=657123703606us] graph decode path="graph/fc_play_help" bytes=4801
+[INFO] [diag t=657123707745us] graph decode path="graph/fc_voice_help" bytes=4761
+[INFO] [diag t=657123710649us] graph decode path="graph/fc_skip_help" bytes=4562
+[INFO] [diag t=657123714611us] graph decode path="graph/fc_system_help" bytes=4822
+[INFO] [diag t=657123718316us] graph decode path="graph/fc_lock_help" bytes=4779
+[INFO] [diag t=657123721083us] graph decode path="graph/fc_load_help" bytes=4929
+[INFO] [diag t=657123724836us] graph decode path="graph/fc_save_help" bytes=4787
+[INFO] [diag t=657123726205us] graph decode path="graph/prompt1" bytes=1047
+[INFO] [diag t=657123726616us] graph decode path="graph/prompt1" bytes=1047
+[INFO] [diag t=657123726974us] graph decode path="graph/prompt2" bytes=967
+[INFO] [diag t=657123727281us] graph decode path="graph/prompt3" bytes=908
+[INFO] [diag t=657123727536us] graph decode path="graph/prompt4" bytes=851
+[INFO] [diag t=657123727753us] graph decode path="graph/prompt5" bytes=797
+[INFO] [diag t=657123727967us] graph decode path="graph/prompt6" bytes=488
+[INFO] [diag t=657123728156us] graph decode path="graph/prompt7" bytes=745
+[INFO] [diag t=657123728311us] graph decode path="graph/prompt8" bytes=831
+[INFO] [diag t=657123728539us] graph decode path="graph/prompt9" bytes=873
+[INFO] [diag t=657123728863us] graph decode path="graph/prompt10" bytes=947
+[INFO] [diag t=657123729126us] graph decode path="graph/prompt11" bytes=998
+[INFO] [diag t=657123729356us] graph decode path="graph/prompt12" bytes=1029
+[INFO] [diag t=657123729613us] graph decode path="graph/prompt13" bytes=1138
+[INFO] [diag t=657123729914us] graph decode path="graph/prompt14" bytes=1126
+[INFO] [diag t=657123730156us] graph decode path="graph/prompt15" bytes=1107
+[INFO] [diag t=657123730443us] graph decode path="graph/prompt16" bytes=1093
+[INFO] [diag t=657123730738us] graph decode path="graph/prompt17" bytes=1076
+[INFO] [diag t=657123730983us] graph decode path="graph/prompt18" bytes=1036
+[INFO] [diag t=657123731287us] graph decode path="graph/prompt19" bytes=1006
+[INFO] [diag t=657123731674us] graph decode path="graph/prompt20" bytes=952
+[INFO] [diag t=657123731991us] graph decode path="graph/prompt21" bytes=907
+[INFO] [diag t=657123732278us] graph decode path="graph/prompt22" bytes=729
+[INFO] [diag t=657123744375us] graph decode path="graph/main_window_mask" bytes=34483
+[WARN] float_to_int: Invalid value type
+[INFO] [diag t=657123765735us] graph decode path="graph/sidewindow" bytes=31410
+[INFO] [diag t=657123768598us] graph decode path="graph/icon_skip" bytes=1316
+[INFO] [diag t=657123769222us] graph decode path="graph/icon_autoskip" bytes=2126
+[INFO] [diag t=657123769806us] graph decode path="graph/icon_play_frame" bytes=1461
+[INFO] [diag t=657123770260us] graph decode path="graph/icon_play_bar" bytes=543
+[INFO] [diag t=657123770686us] graph decode path="graph/fc_wincls_1" bytes=1091
+[INFO] [diag t=657123771232us] graph decode path="graph/fc_qload_1" bytes=1370
+[INFO] [diag t=657123771719us] graph decode path="graph/fc_qsave_1" bytes=1555
+[INFO] [diag t=657123772187us] graph decode path="graph/fc_back_1" bytes=1133
+[INFO] [diag t=657123772626us] graph decode path="graph/fc_play_1" bytes=775
+[INFO] [diag t=657123773066us] graph decode path="graph/fc_voice_1" bytes=1475
+[INFO] [diag t=657123773486us] graph decode path="graph/fc_skip_1" bytes=887
+[INFO] [diag t=657123773936us] graph decode path="graph/fc_system_1" bytes=1258
+[INFO] [diag t=657123774379us] graph decode path="graph/fc_lock_1" bytes=1040
+[INFO] [diag t=657123774785us] graph decode path="graph/fc_save_1" bytes=1095
+[INFO] [diag t=657123775159us] graph decode path="graph/fc_load_1" bytes=1136
+[INFO] [diag t=657123775522us] graph decode path="graph/fc_wincls_2" bytes=958
+[INFO] [diag t=657123775914us] graph decode path="graph/fc_qload_2" bytes=1191
+[INFO] [diag t=657123776296us] graph decode path="graph/fc_qsave_2" bytes=1399
+[INFO] [diag t=657123776698us] graph decode path="graph/fc_back_2" bytes=974
+[INFO] [diag t=657123777209us] graph decode path="graph/fc_play_2" bytes=616
+[INFO] [diag t=657123777692us] graph decode path="graph/fc_voice_2" bytes=1365
+[INFO] [diag t=657123778123us] graph decode path="graph/fc_skip_2" bytes=719
+[INFO] [diag t=657123778620us] graph decode path="graph/fc_system_2" bytes=1097
+[INFO] [diag t=657123779026us] graph decode path="graph/fc_lock_2" bytes=937
+[INFO] [diag t=657123779467us] graph decode path="graph/fc_save_2" bytes=904
+[INFO] [diag t=657123779917us] graph decode path="graph/fc_load_2" bytes=924
+[INFO] [diag t=657123780309us] graph decode path="graph/fc_play_3" bytes=592
+[INFO] [diag t=657123780695us] graph decode path="graph/fc_skip_3" bytes=576
+[INFO] [diag t=657123781115us] graph decode path="graph/fc_lock_3" bytes=1071
+[INFO] [diag t=657123781537us] graph decode path="graph/fc_lock_4" bytes=963
+[INFO] [diag t=657123785336us] graph decode path="graph/fc_wincls_help" bytes=4989
+[INFO] [diag t=657123788378us] graph decode path="graph/fc_qload_help" bytes=4856
+[INFO] [diag t=657123792574us] graph decode path="graph/fc_qsave_help" bytes=4775
+[INFO] [diag t=657123795985us] graph decode path="graph/fc_back_help" bytes=4895
+[INFO] [diag t=657123799266us] graph decode path="graph/fc_play_help" bytes=4801
+[INFO] [diag t=657123803071us] graph decode path="graph/fc_voice_help" bytes=4761
+[INFO] [diag t=657123806280us] graph decode path="graph/fc_skip_help" bytes=4562
+[INFO] [diag t=657123809340us] graph decode path="graph/fc_system_help" bytes=4822
+[INFO] [diag t=657123812415us] graph decode path="graph/fc_lock_help" bytes=4779
+[INFO] [diag t=657123817163us] graph decode path="graph/fc_load_help" bytes=4929
+[INFO] [diag t=657123820984us] graph decode path="graph/fc_save_help" bytes=4787
+[INFO] [diag t=657123822388us] graph decode path="graph/prompt1" bytes=1047
+[INFO] [diag t=657123822839us] graph decode path="graph/prompt1" bytes=1047
+[INFO] [diag t=657123823093us] graph decode path="graph/prompt2" bytes=967
+[INFO] [diag t=657123823360us] graph decode path="graph/prompt3" bytes=908
+[INFO] [diag t=657123823565us] graph decode path="graph/prompt4" bytes=851
+[INFO] [diag t=657123823736us] graph decode path="graph/prompt5" bytes=797
+[INFO] [diag t=657123823959us] graph decode path="graph/prompt6" bytes=488
+[INFO] [diag t=657123824198us] graph decode path="graph/prompt7" bytes=745
+[INFO] [diag t=657123824388us] graph decode path="graph/prompt8" bytes=831
+[INFO] [diag t=657123824658us] graph decode path="graph/prompt9" bytes=873
+[INFO] [diag t=657123824946us] graph decode path="graph/prompt10" bytes=947
+[INFO] [diag t=657123825191us] graph decode path="graph/prompt11" bytes=998
+[INFO] [diag t=657123825425us] graph decode path="graph/prompt12" bytes=1029
+[INFO] [diag t=657123825720us] graph decode path="graph/prompt13" bytes=1138
+[INFO] [diag t=657123826058us] graph decode path="graph/prompt14" bytes=1126
+[INFO] [diag t=657123826350us] graph decode path="graph/prompt15" bytes=1107
+[INFO] [diag t=657123826635us] graph decode path="graph/prompt16" bytes=1093
+[INFO] [diag t=657123826908us] graph decode path="graph/prompt17" bytes=1076
+[INFO] [diag t=657123827156us] graph decode path="graph/prompt18" bytes=1036
+[INFO] [diag t=657123827427us] graph decode path="graph/prompt19" bytes=1006
+[INFO] [diag t=657123827787us] graph decode path="graph/prompt20" bytes=952
+[INFO] [diag t=657123828030us] graph decode path="graph/prompt21" bytes=907
+[INFO] [diag t=657123828256us] graph decode path="graph/prompt22" bytes=729
+[INFO] [save] SaveCreate(3) value=Int(901)
+[INFO] [save] state total=399110B
+[INFO] [diag t=657124095101us] [save] materialize thumb=200x113 encode_ms=17.61 len=489531
+[INFO] [diag t=657124103507us] [save] commit slot=901 len=489531 write_ms=6.47 ok=true
+[INFO] [diag t=657124170156us] vfs path="graph/title_bg1_A" bytes=2051578 us=49727
+[INFO] [diag t=657124170171us] graph decode path="graph/title_bg1_A" bytes=2051578
+[INFO] [diag t=657124338618us] graph decode path="graph/title_bg1_B" bytes=99247
+[INFO] [diag t=657124387020us] graph decode path="graph/title_bg1_C" bytes=163324
+[INFO] [diag t=657124527811us] graph decode path="graph/title_bg1_D" bytes=316939
+[INFO] [diag t=657124636188us] graph decode path="graph/title_logo1" bytes=323632
+[INFO] [diag t=657124656622us] graph decode path="graph/title_copyright" bytes=21390
+[INFO] [diag t=657124659057us] graph decode path="graph/title_start" bytes=19763
+[INFO] [diag t=657124664652us] graph decode path="graph/title_start1" bytes=29717
+[INFO] [diag t=657124667712us] graph decode path="graph/title_start2" bytes=18954
+[INFO] [diag t=657124670021us] graph decode path="graph/title_start3" bytes=16719
+[INFO] [diag t=657124671828us] graph decode path="graph/title_start4" bytes=14501
+[INFO] [diag t=657124673541us] graph decode path="graph/title_start5" bytes=11893
+[INFO] [diag t=657124675964us] graph decode path="graph/title_continue" bytes=17131
+[INFO] [diag t=657124681041us] graph decode path="graph/title_continue1" bytes=27446
+[INFO] [diag t=657124683341us] graph decode path="graph/title_continue2" bytes=16347
+[INFO] [diag t=657124685138us] graph decode path="graph/title_continue3" bytes=14417
+[INFO] [diag t=657124687012us] graph decode path="graph/title_continue4" bytes=12362
+[INFO] [diag t=657124688938us] graph decode path="graph/title_continue5" bytes=9822
+[INFO] [diag t=657124690431us] graph decode path="graph/title_album" bytes=12690
+[INFO] [diag t=657124696319us] graph decode path="graph/title_album1" bytes=20092
+[INFO] [diag t=657124698007us] graph decode path="graph/title_album2" bytes=12243
+[INFO] [diag t=657124700024us] graph decode path="graph/title_album3" bytes=10662
+[INFO] [diag t=657124701839us] graph decode path="graph/title_album4" bytes=9340
+[INFO] [diag t=657124703046us] graph decode path="graph/title_album5" bytes=7811
+[INFO] [diag t=657124704343us] graph decode path="graph/title_option" bytes=15194
+[INFO] [diag t=657124708684us] graph decode path="graph/title_option1" bytes=22589
+[INFO] [diag t=657124710377us] graph decode path="graph/title_option2" bytes=14345
+[INFO] [diag t=657124712038us] graph decode path="graph/title_option3" bytes=12425
+[INFO] [diag t=657124713684us] graph decode path="graph/title_option4" bytes=10444
+[INFO] [diag t=657124714905us] graph decode path="graph/title_option5" bytes=8352
+[INFO] [diag t=657124716099us] graph decode path="graph/title_end" bytes=9322
+[INFO] [diag t=657124720068us] graph decode path="graph/title_end1" bytes=14213
+[INFO] [diag t=657124721339us] graph decode path="graph/title_end2" bytes=8875
+[INFO] [diag t=657124722276us] graph decode path="graph/title_end3" bytes=7602
+[INFO] [diag t=657124723336us] graph decode path="graph/title_end4" bytes=6506
+[INFO] [diag t=657124724443us] graph decode path="graph/title_end5" bytes=5498
+[INFO] [diag t=657124726952us] graph decode path="graph/logo_bg" bytes=6107
+[INFO] [diag t=657124794428us] graph decode path="graph/logo_favo" bytes=36285
+[INFO] [diag t=657124799724us] graph decode path="graph/logo_favo_view" bytes=10710
+[INFO] [diag t=657124801324us] graph decode path="graph/logo_favo_view_p1" bytes=432
+[INFO] [diag t=657124801648us] graph decode path="graph/logo_favo_view_p2" bytes=433
+[INFO] [diag t=657124801992us] graph decode path="graph/logo_favo_view_p3" bytes=434
+[INFO] [diag t=657128582572us] audio source id=1 path=Some("BGM2/002")
+[INFO] Playing BGM slot 1
+[INFO] [save] SaveCreate(3) value=Int(906)
+[INFO] [save] state total=401063B
+[INFO] [diag t=657134559105us] [save] materialize thumb=200x113 encode_ms=6.84 len=491484
+[INFO] [diag t=657134561691us] [save] commit slot=906 len=491484 write_ms=2.25 ok=true
+[INFO] Playing SE slot 20
+[INFO] Playing SE slot 16
+[INFO] [diag t=657154329019us] graph decode path="graph/slf_prt_sheet" bytes=131079
+[INFO] [diag t=657154424915us] vfs path="graph/slf_load_bg" bytes=1653827 us=28481
+[INFO] [diag t=657154424939us] graph decode path="graph/slf_load_bg" bytes=1653827
+[INFO] Playing SE slot 17
+[INFO] [diag t=657168081802us] graph decode path="graph/main_window_mask" bytes=34483
+[INFO] [diag t=657168099209us] graph decode path="graph/fc_wincls_1" bytes=1091
+[INFO] [diag t=657168099500us] graph decode path="graph/fc_wincls_2" bytes=958
+[INFO] [diag t=657168102601us] graph decode path="graph/fc_wincls_help" bytes=4989
+[INFO] [diag t=657168103315us] graph decode path="graph/fc_qload_1" bytes=1370
+[INFO] [diag t=657168103523us] graph decode path="graph/fc_qload_2" bytes=1191
+[INFO] [diag t=657168106101us] graph decode path="graph/fc_qload_help" bytes=4856
+[INFO] [diag t=657168106610us] graph decode path="graph/fc_qsave_1" bytes=1555
+[INFO] [diag t=657168106801us] graph decode path="graph/fc_qsave_2" bytes=1399
+[INFO] [diag t=657168109536us] graph decode path="graph/fc_qsave_help" bytes=4775
+[INFO] [diag t=657168110055us] graph decode path="graph/fc_back_1" bytes=1133
+[INFO] [diag t=657168110242us] graph decode path="graph/fc_back_2" bytes=974
+[INFO] [diag t=657168112521us] graph decode path="graph/fc_back_help" bytes=4895
+[INFO] [diag t=657168112939us] graph decode path="graph/fc_play_1" bytes=775
+[INFO] [diag t=657168113099us] graph decode path="graph/fc_play_2" bytes=616
+[INFO] [diag t=657168116142us] graph decode path="graph/fc_play_help" bytes=4801
+[INFO] [diag t=657168116655us] graph decode path="graph/fc_voice_1" bytes=1475
+[INFO] [diag t=657168116857us] graph decode path="graph/fc_voice_2" bytes=1365
+[INFO] [diag t=657168119633us] graph decode path="graph/fc_voice_help" bytes=4761
+[INFO] [diag t=657168120186us] graph decode path="graph/fc_skip_1" bytes=887
+[INFO] [diag t=657168120337us] graph decode path="graph/fc_skip_2" bytes=719
+[INFO] [diag t=657168123430us] graph decode path="graph/fc_skip_help" bytes=4562
+[INFO] [diag t=657168123937us] graph decode path="graph/fc_system_1" bytes=1258
+[INFO] [diag t=657168124137us] graph decode path="graph/fc_system_2" bytes=1097
+[INFO] [diag t=657168126896us] graph decode path="graph/fc_system_help" bytes=4822
+[INFO] [diag t=657168127331us] graph decode path="graph/fc_lock_1" bytes=1040
+[INFO] [diag t=657168127480us] graph decode path="graph/fc_lock_2" bytes=937
+[INFO] [diag t=657168130123us] graph decode path="graph/fc_lock_help" bytes=4779
+[INFO] [diag t=657168130654us] graph decode path="graph/fc_load_1" bytes=1136
+[INFO] [diag t=657168130836us] graph decode path="graph/fc_load_2" bytes=924
+[INFO] [diag t=657168134797us] graph decode path="graph/fc_load_help" bytes=4929
+[INFO] [diag t=657168135291us] graph decode path="graph/fc_save_1" bytes=1095
+[INFO] [diag t=657168135474us] graph decode path="graph/fc_save_2" bytes=904
+[INFO] [diag t=657168138154us] graph decode path="graph/fc_save_help" bytes=4787
+[INFO] [diag t=657168138787us] graph decode path="graph/fc_play_3" bytes=592
+[INFO] [diag t=657168139059us] graph decode path="graph/fc_skip_3" bytes=576
+[INFO] [diag t=657168139252us] graph decode path="graph/fc_lock_3" bytes=1071
+[INFO] [diag t=657168139482us] graph decode path="graph/fc_lock_4" bytes=963
+[INFO] [diag t=657168139751us] graph decode path="graph/icon_skip" bytes=1316
+[INFO] [diag t=657168140039us] graph decode path="graph/icon_play_frame" bytes=1461
+[INFO] [diag t=657168140340us] graph decode path="graph/icon_play_bar" bytes=543
+[INFO] [diag t=657168140507us] graph decode path="graph/icon_autoskip" bytes=2126
+[INFO] [diag t=657168220733us] vfs path="graph_bg/BG043_000" bytes=3838866 us=80052
+[INFO] [diag t=657168220750us] graph decode path="graph_bg/BG043_000" bytes=3838866
+[INFO] [diag t=657168474946us] vfs path="graph_bg/BG043_000b" bytes=2223174 us=53444
+[INFO] [diag t=657168474963us] graph decode path="graph_bg/BG043_000b" bytes=2223174
+[INFO] [diag t=657168651719us] graph decode path="graph/prompt1" bytes=1047
+[INFO] [diag t=657168651951us] graph decode path="graph/prompt1" bytes=1047
+[INFO] [diag t=657168652182us] graph decode path="graph/prompt2" bytes=967
+[INFO] [diag t=657168652405us] graph decode path="graph/prompt3" bytes=908
+[INFO] [diag t=657168652573us] graph decode path="graph/prompt4" bytes=851
+[INFO] [diag t=657168652649us] graph decode path="graph/prompt5" bytes=797
+[INFO] [diag t=657168652737us] graph decode path="graph/prompt6" bytes=488
+[INFO] [diag t=657168652831us] graph decode path="graph/prompt7" bytes=745
+[INFO] [diag t=657168652904us] graph decode path="graph/prompt8" bytes=831
+[INFO] [diag t=657168653032us] graph decode path="graph/prompt9" bytes=873
+[INFO] [diag t=657168653163us] graph decode path="graph/prompt10" bytes=947
+[INFO] [diag t=657168653284us] graph decode path="graph/prompt11" bytes=998
+[INFO] [diag t=657168653689us] graph decode path="graph/prompt12" bytes=1029
+[INFO] [diag t=657168653976us] graph decode path="graph/prompt13" bytes=1138
+[INFO] [diag t=657168654257us] graph decode path="graph/prompt14" bytes=1126
+[INFO] [diag t=657168654489us] graph decode path="graph/prompt15" bytes=1107
+[INFO] [diag t=657168654726us] graph decode path="graph/prompt16" bytes=1093
+[INFO] [diag t=657168655018us] graph decode path="graph/prompt17" bytes=1076
+[INFO] [diag t=657168655261us] graph decode path="graph/prompt18" bytes=1036
+[INFO] [diag t=657168655478us] graph decode path="graph/prompt19" bytes=1006
+[INFO] [diag t=657168655808us] graph decode path="graph/prompt20" bytes=952
+[INFO] [diag t=657168655983us] graph decode path="graph/prompt21" bytes=907
+[INFO] [diag t=657168656228us] graph decode path="graph/prompt22" bytes=729
+[INFO] [diag t=657168659250us] graph decode path="graph/sidewindow" bytes=31410
+[INFO] [diag t=657168750211us] vfs path="graph_bs/CHR_郰_婎_壞惂暈L_昞忣" bytes=3447414 us=86562
+[INFO] [diag t=657168751056us] parts decode path="graph_bs/CHR_郰_婎_壞惂暈L_昞忣" bytes=3447414
+[INFO] [diag t=657168882503us] audio source id=0 path=Some("BGM2/005")
+[INFO] Playing BGM slot 0
+[INFO] [diag t=657168882662us] audio source id=1 path=Some("BGM2/025")
+[INFO] [diag t=657168882671us] audio source id=3 path=Some("voice/02000150")
+[INFO] [diag t=657168882770us] voice resource path="voice/02000150"
+[INFO] [diag t=657168883072us] voice resource path="voice/02000150"
+[INFO] [diag t=657168886043us] audio source id=4096 path=Some("se/050")
+[INFO] Playing SE slot 0
+[INFO] [diag t=657168890594us] audio source id=4097 path=Some("se/078")
+[INFO] Playing SE slot 1
+[INFO] [diag t=657168898534us] audio source id=4098 path=Some("se/134")
+[INFO] Playing SE slot 2
+[INFO] [diag t=657168900063us] audio source id=4099 path=Some("se/173")
+[INFO] Playing SE slot 3
+[INFO] [diag t=657168905781us] audio source id=4100 path=Some("se_env/021")
+[INFO] Playing SE slot 4
+[INFO] [diag t=657168906000us] audio source id=4101 path=Some("se_env/005")
+[INFO] [diag t=657168922937us] vfs path="se_env/005" bytes=766568 us=16924
+[INFO] Playing SE slot 5
+[INFO] [diag t=657168922962us] audio source id=4102 path=Some("se_env/051")
+[INFO] [diag t=657168940116us] vfs path="se_env/051" bytes=753552 us=17135
+[INFO] Playing SE slot 6
+[INFO] [diag t=657168940142us] audio source id=4111 path=Some("se_sys/001")
+[INFO] [diag t=657168955242us] vfs path="se_sys/001" bytes=705688 us=15069
+[INFO] Playing SE slot 15
+[INFO] [diag t=657168955266us] audio source id=4112 path=Some("se_sys/002")
+[INFO] Playing SE slot 16
+[INFO] [diag t=657168961457us] audio source id=4113 path=Some("se_sys/003")
+[INFO] Playing SE slot 17
+[INFO] [diag t=657168968262us] audio source id=4114 path=Some("se_sys/004")
+[INFO] [diag t=657168969958us] audio source id=4115 path=Some("se_sys/005")
+[INFO] [diag t=657168972024us] audio source id=4116 path=Some("se_sys/006")
+[INFO] Playing SE slot 20
+[INFO] [diag t=657168978369us] audio source id=4117 path=Some("se_sys/007")
+[INFO] Playing SE slot 21
+[INFO] [diag t=657168980877us] audio source id=4118 path=Some("se_sys/008")
+[INFO] [diag t=657168984271us] audio source id=4119 path=Some("se_sys/009")
+[INFO] [diag t=657168992053us] audio source id=4120 path=Some("se_sys/010")
+[INFO] [diag t=657169002089us] vfs path="se_sys/010" bytes=472720 us=10008
+[INFO] [diag t=657169002108us] audio source id=4121 path=Some("se_sys/011")
+[INFO] [diag t=657169010016us] audio source id=4122 path=Some("se_sys/012")
+[INFO] [diag t=657169012136us] audio source id=4123 path=Some("se_sys/013")
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[INFO] [diag t=657190400071us] audio source id=3 path=Some("voice/02000160")
+[INFO] [diag t=657190400085us] voice resource path="voice/02000160"
+[INFO] [diag t=657190400103us] voice resource path="voice/02000160"
+[INFO] Playing BGM slot 3
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [diag t=657190550831us] parts select id=5 entry=29
+[INFO] [diag t=657196291272us] vfs path="graph_bs/CHR_郰_婌_壞惂暈L" bytes=1237593 us=25126
+[INFO] [diag t=657196291294us] graph decode path="graph_bs/CHR_郰_婌_壞惂暈L" bytes=1237593
+[INFO] [diag t=657196468616us] vfs path="graph_bs/CHR_郰_婌_壞惂暈L_昞忣" bytes=3380169 us=68486
+[INFO] [diag t=657196468795us] parts decode path="graph_bs/CHR_郰_婌_壞惂暈L_昞忣" bytes=3380169
+[INFO] [diag t=657196576177us] parts select id=6 entry=3
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[INFO] [diag t=657196666938us] audio source id=3 path=Some("voice/02000170")
+[INFO] [diag t=657196666952us] voice resource path="voice/02000170"
+[INFO] [diag t=657196666971us] voice resource path="voice/02000170"
+[INFO] Playing BGM slot 3
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [diag t=657196849993us] parts select id=6 entry=3
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] history_set: unexpected value for set_voice : Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[INFO] [diag t=657208349899us] audio source id=3 path=Some("voice/02000180")
+[INFO] [diag t=657208349912us] voice resource path="voice/02000180"
+[INFO] [diag t=657208349929us] voice resource path="voice/02000180"
+[INFO] Playing BGM slot 3
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [diag t=657208500634us] parts select id=6 entry=27
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] history_set: unexpected value for set_voice : Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] history_set: unexpected value for set_name : Nil
+[ERROR] history_set: unexpected value for set_voice : Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[INFO] [diag t=657229150464us] audio source id=3 path=Some("voice/02000190")
+[INFO] [diag t=657229150477us] voice resource path="voice/02000190"
+[INFO] [diag t=657229150495us] voice resource path="voice/02000190"
+[INFO] [diag t=657229165554us] vfs path="voice/02000190" bytes=81653 us=15059
+[INFO] Playing BGM slot 3
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [diag t=657229299962us] parts select id=6 entry=7
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] history_set: unexpected value for set_voice : Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] history_set: unexpected value for set_name : Nil
+[ERROR] history_set: unexpected value for set_voice : Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] history_set: unexpected value for set_voice : Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [diag t=657256118229us] vfs path="graph_bs/CHR_郰_斶_壞惂暈L" bytes=1166612 us=84055
+[INFO] [diag t=657256118264us] graph decode path="graph_bs/CHR_郰_斶_壞惂暈L" bytes=1166612
+[INFO] [diag t=657256336599us] vfs path="graph_bs/CHR_郰_斶_壞惂暈L_昞忣" bytes=1813474 us=70238
+[INFO] [diag t=657256336625us] parts decode path="graph_bs/CHR_郰_斶_壞惂暈L_昞忣" bytes=1813474
+[INFO] [diag t=657256391717us] parts select id=5 entry=5
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[INFO] [diag t=657256483026us] audio source id=3 path=Some("voice/02000250")
+[INFO] [diag t=657256483039us] voice resource path="voice/02000250"
+[INFO] [diag t=657256483062us] voice resource path="voice/02000250"
+[INFO] Playing BGM slot 3
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [diag t=657256667197us] parts select id=5 entry=5
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] history_set: unexpected value for set_voice : Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+perf avg over 60 ticks: vm 0.62 ms, scene 0.02 ms, render 15.37 ms, total 16.01 ms
+host avg over 60 frames: begin 0.04 ms, upload 0.00 ms (0 calls), present 14.88 ms, thumb 0.00 ms (0 calls), draws 18.0, flushes 18.0

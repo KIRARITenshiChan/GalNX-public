@@ -1,0 +1,32 @@
+[pad] key=1013 virt=0 uiChildren=0 gamemenu=0x210d0d28a0 cursor=0x0
+[pad] key=1004 virt=0 uiChildren=0 gamemenu=0x210d0d28a0 cursor=0x0
+[pad] key=1004 virt=0 uiChildren=0 gamemenu=0x210d0d28a0 cursor=0x0
+[pad] key=1004 virt=0 uiChildren=0 gamemenu=0x210d0d28a0 cursor=0x0
+[pad] key=1007 virt=0 uiChildren=0 gamemenu=0x210d0d28a0 cursor=0x0
+[tjs] auto -> ok
+[pad] key=1007 virt=0 uiChildren=0 gamemenu=0x210d0d28a0 cursor=0x0
+[tjs] auto -> ok
+[pad] key=1008 virt=0 uiChildren=0 gamemenu=0x210d0d28a0 cursor=0x0
+[tjs] sl-replace -> ok
+[tjs] loadui-nodlg -> ok
+[tjs] loadui-open -> ok
+[pad] key=1005 virt=0 uiChildren=0 gamemenu=0x210d0d28a0 cursor=0x0
+[tjs] back -> 
+[pad] key=1021 virt=0 uiChildren=0 gamemenu=0x210d0d28a0 cursor=0x0
+[tjs] sl-replace -> ok
+[tjs] saveui-nodlg -> ok
+[tjs] saveui-open -> ok
+[pad] key=1005 virt=0 uiChildren=0 gamemenu=0x210d0d28a0 cursor=0x0
+[tjs] back -> 
+[pad] key=1018 virt=0 uiChildren=0 gamemenu=0x210d0d28a0 cursor=0x0
+[pad] click left
+[pad] key=1017 virt=1 uiChildren=0 gamemenu=0x210d0d28a0 cursor=0x210cfc81e0
+[pad] click right
+[pad] key=1005 virt=1 uiChildren=0 gamemenu=0x210d0d28a0 cursor=0x210cfc81e0
+[tjs] back -> 
+[pad] key=1008 virt=1 uiChildren=0 gamemenu=0x210d0d28a0 cursor=0x210cfc81e0
+[tjs] sl-replace -> ok
+[tjs] loadui-nodlg -> ok
+[tjs] loadui-open -> ok
+[pad] key=1005 virt=1 uiChildren=0 gamemenu=0x210d0d28a0 cursor=0x210cfc81e0
+[tjs] back -> 

@@ -1,0 +1,11 @@
+=== GalNX NVDEC probe3 (SDL playback) ===
+applet_type=0 application=1
+input=sdmc:/nvdec-poc.wmv
+info: 1920x1080 codec=vc1(70) pix_fmt=yuv420p fps=59.940 duration_ms=25130 frames_hint=-1 hw_requested=1
+renderer=opengles2 flags=0xe
+bmp: wrote sdmc:/nvdec-probe3-001.bmp (1920x1080)
+frame=1 pts=33ms dec=1.67ms xfer=20000.25ms conv=35.35ms hw=1 1920x1080
+progress: frames=1 fps=0.04 hw=1 sw=0
+progress: frames=3 fps=0.10 hw=3 sw=0
+progress: frames=5 fps=0.10 hw=5 sw=0
+progress: frames=7 fps=0.10 hw=7 sw=0

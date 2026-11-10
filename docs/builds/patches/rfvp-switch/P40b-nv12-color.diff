@@ -1,0 +1,226 @@
+diff --git a/platform/switch/runtime/rfvp_movie_color.c b/platform/switch/runtime/rfvp_movie_color.c
+index cc99925..64e3303 100644
+--- a/platform/switch/runtime/rfvp_movie_color.c
++++ b/platform/switch/runtime/rfvp_movie_color.c
+@@ -90,8 +90,15 @@ static void nv12_row_neon(const uint8_t *yr, const uint8_t *uvr, int width, uint
+         int16x8_t v0;
+         int16x8_t u1;
+         int16x8_t v1;
+-        chroma_dup(vld1_u8(uvr + (i >> 1)), &u0, &v0);
+-        chroma_dup(vld1_u8(uvr + (i >> 1) + 4), &u1, &v1);
++        /* NV12 chroma is interleaved and indexed by pixel pair: for output
++         * pixels i..i+15 the matching chroma bytes are i..i+15.  The first
++         * version used (i >> 1) and (+ 4), i.e. it read the chroma plane at
++         * half speed and stretched it 2x horizontally.  The scalar tail below
++         * was always correct, which is why only the NEON path (used on the
++         * real device) showed the colour smear while Citron's planar path
++         * looked fine (reported 2026-11-09, P40b). */
++        chroma_dup(vld1_u8(uvr + i), &u0, &v0);
++        chroma_dup(vld1_u8(uvr + i + 8), &u1, &v1);
+         store8(vreinterpretq_s16_u16(vmovl_u8(vget_low_u8(yb))), u0, v0, dst + i * 4);
+         store8(vreinterpretq_s16_u16(vmovl_u8(vget_high_u8(yb))), u1, v1, dst + i * 4 + 32);
+     }
+diff --git a/platform/switch/runtime/rfvp_movie_h264.c b/platform/switch/runtime/rfvp_movie_h264.c
+index 5e21083..829e2d4 100644
+--- a/platform/switch/runtime/rfvp_movie_h264.c
++++ b/platform/switch/runtime/rfvp_movie_h264.c
+@@ -74,6 +74,15 @@ static int g_force_soft = 0;
+ 
+ static const char *ForceSoftMarker = "sdmc:/switch/rfvp/h264_sw.txt";
+ 
++/* Shadow-test switch #2: Citron cannot run the NVDEC path, so the hardware
++ * NV12 conversion never gets exercised there.  When this file exists the Rust
++ * side additionally re-packs the planar software frame as NV12 and converts it
++ * with the exact kernel the hardware path uses, then compares the two outputs.
++ * Never present on a real device. */
++static int g_nv12_selftest = 0;
++
++static const char *Nv12SelftestMarker = "sdmc:/switch/rfvp/h264_nv12_selftest.txt";
++
+ /* ------------------------------------------------------------------ */
+ /* helpers                                                            */
+ /* ------------------------------------------------------------------ */
+@@ -198,6 +207,13 @@ int galnx_movie_init(const char *game_root)
+            g_force_soft ? "forced" : "allowed",
+            g_force_soft ? "marker present:" : "no marker:",
+            ForceSoftMarker);
++    FILE *selftest_marker = fopen(Nv12SelftestMarker, "rb");
++    if (selftest_marker != NULL) {
++        fclose(selftest_marker);
++        g_nv12_selftest = 1;
++    }
++    av_log(NULL, AV_LOG_INFO, "[galnx] movie h264: nv12 shadow test %s (%s)\n",
++           g_nv12_selftest ? "enabled" : "off", Nv12SelftestMarker);
+     return 0;
+ }
+ 
+@@ -414,3 +430,4 @@ int galnx_movie_uv_stride(void) { return g_ctx != NULL ? g_ctx->uv_stride : 0; }
+ double galnx_movie_pts_ms(void) { return g_ctx != NULL ? g_ctx->pts_ms : 0.0; }
+ int galnx_movie_is_hw(void) { return g_ctx != NULL ? g_ctx->used_hw : 0; }
+ int galnx_movie_frame_index(void) { return g_ctx != NULL ? (int)g_ctx->frame_index : 0; }
++int galnx_movie_nv12_selftest(void) { return g_nv12_selftest; }
+diff --git a/platform/switch/runtime/rfvp_movie_h264.h b/platform/switch/runtime/rfvp_movie_h264.h
+index 26052c7..a0901ba 100644
+--- a/platform/switch/runtime/rfvp_movie_h264.h
++++ b/platform/switch/runtime/rfvp_movie_h264.h
+@@ -28,6 +28,8 @@ double galnx_movie_pts_ms(void);
+ int galnx_movie_is_hw(void);
+ int galnx_movie_frame_index(void);
+ const char *galnx_movie_error(void);
++/* 1 when sdmc:/switch/rfvp/h264_nv12_selftest.txt exists (emulator shadow test). */
++int galnx_movie_nv12_selftest(void);
+ 
+ /* BT.709 limited-range YUV -> packed R,G,B,A. */
+ void galnx_nv12_to_rgba(const uint8_t *y, const uint8_t *uv, int width, int height,
+diff --git a/crates/rfvp/src/subsystem/resources/videoplayer/horizon_h264.rs b/crates/rfvp/src/subsystem/resources/videoplayer/horizon_h264.rs
+index 6a0017f..a89db28 100644
+--- a/crates/rfvp/src/subsystem/resources/videoplayer/horizon_h264.rs
++++ b/crates/rfvp/src/subsystem/resources/videoplayer/horizon_h264.rs
+@@ -48,6 +48,7 @@ extern "C" {
+     fn galnx_movie_pts_ms() -> f64;
+     fn galnx_movie_is_hw() -> c_int;
+     fn galnx_movie_error() -> *const c_char;
++    fn galnx_movie_nv12_selftest() -> c_int;
+ 
+     fn galnx_nv12_to_rgba(
+         y: *const u8,
+@@ -133,6 +134,10 @@ struct H264Playback {
+     last_convert_us: u32,
+     /// One recycled RGBA buffer, like the WMV backend's spare_buffer.
+     spare_buffer: Option<Vec<u8>>,
++    /// Shadow-test scratch buffers: only allocated when the emulator marker
++    /// sdmc:/switch/rfvp/h264_nv12_selftest.txt exists.
++    nv12_scratch: Option<Vec<u8>>,
++    shadow_rgba: Option<Vec<u8>>,
+     audio: Option<MovieAudio>,
+     closed: bool,
+ }
+@@ -152,6 +157,8 @@ impl H264Playback {
+             last_decode_us: 0,
+             last_convert_us: 0,
+             spare_buffer: None,
++            nv12_scratch: None,
++            shadow_rgba: None,
+             audio,
+             closed: false,
+         }
+@@ -176,6 +183,92 @@ impl H264Playback {
+         }
+     }
+ 
++    /// FNV-1a used by the emulator shadow test to fingerprint the two buffers.
++    fn fnv1a64(bytes: &[u8]) -> u64 {
++        let mut hash: u64 = 0xcbf2_9ce4_8422_2325;
++        for byte in bytes {
++            hash ^= u64::from(*byte);
++            hash = hash.wrapping_mul(0x0000_0100_0000_01b3);
++        }
++        hash
++    }
++
++    /// Emulator-only shadow test: re-pack the planar frame the way an NV12
++    /// hardware frame would look (Y rows, then interleaved UV rows) and run the
++    /// *hardware* NV12 -> RGBA kernel over it.  When the result matches the
++    /// planar conversion byte for byte, the NV12 kernel is proven correct even
++    /// though Citron never produces a real NVDEC surface.
++    fn nv12_shadow_compare(
++        &mut self,
++        width: u32,
++        height: u32,
++        y_stride: c_int,
++        uv_stride: c_int,
++        rgba: &[u8],
++    ) -> Option<(bool, usize, u64, u64)> {
++        let w = width as usize;
++        let h = height as usize;
++        let uv_w = w / 2;
++        let uv_h = h / 2;
++        if w == 0 || h == 0 || y_stride <= 0 || uv_stride <= 0 {
++            return None;
++        }
++        let mut nv12 = self.nv12_scratch.take().unwrap_or_default();
++        let needed = w * h + w * h / 2;
++        if nv12.len() != needed {
++            nv12.clear();
++            nv12.resize(needed, 0);
++        }
++        unsafe {
++            let y = galnx_movie_plane_y();
++            let u = galnx_movie_plane_u();
++            let v = galnx_movie_plane_v();
++            if y.is_null() || u.is_null() || v.is_null() {
++                self.nv12_scratch = Some(nv12);
++                return None;
++            }
++            for row in 0..h {
++                let src = core::slice::from_raw_parts(y.add(row * y_stride as usize), w);
++                nv12[row * w..row * w + w].copy_from_slice(src);
++            }
++            let uv_off = w * h;
++            for row in 0..uv_h {
++                let src_u = core::slice::from_raw_parts(u.add(row * uv_stride as usize), uv_w);
++                let src_v = core::slice::from_raw_parts(v.add(row * uv_stride as usize), uv_w);
++                let dst = &mut nv12[uv_off + row * w..uv_off + (row + 1) * w];
++                for i in 0..uv_w {
++                    dst[i * 2] = src_u[i];
++                    dst[i * 2 + 1] = src_v[i];
++                }
++            }
++        }
++        let mut shadow = self.shadow_rgba.take().unwrap_or_default();
++        if shadow.len() != rgba.len() {
++            shadow.clear();
++            shadow.resize(rgba.len(), 0);
++        }
++        unsafe {
++            galnx_nv12_to_rgba(
++                nv12.as_ptr(),
++                nv12.as_ptr().add(w * h),
++                width as c_int,
++                height as c_int,
++                w as c_int,
++                w as c_int,
++                shadow.as_mut_ptr(),
++            );
++        }
++        let mut diff = 0usize;
++        for (want, got) in rgba.iter().zip(shadow.iter()) {
++            if want != got {
++                diff += 1;
++            }
++        }
++        self.nv12_scratch = Some(nv12);
++        self.shadow_rgba = Some(shadow);
++        Some((diff == 0, diff, Self::fnv1a64(rgba), Self::fnv1a64(&self.shadow_rgba.as_ref().unwrap())))
++    }
++
+     fn decode_one(&mut self) -> Result<bool> {
+         if self.eof {
+             return Ok(false);
+@@ -258,6 +351,26 @@ impl H264Playback {
+             .saturating_sub(convert_t0)
+             .min(u32::MAX as u64) as u32;
+ 
++        // Emulator-only regression proof for the hardware NV12 kernel: the
++        // marker sdmc:/switch/rfvp/h264_nv12_selftest.txt enables it.
++        if planar != 0 && unsafe { galnx_movie_nv12_selftest() } != 0 {
++            if let Some((matches, diff, crc_planar, crc_nv12)) =
++                self.nv12_shadow_compare(width, height, y_stride, uv_stride, &rgba)
++            {
++                let frame_no = self.decoded_frames + 1;
++                if frame_no <= 5 || frame_no % 30 == 0 {
++                    log::info!(
++                        "movie h264: nv12 shadow frame={} match={} diff_bytes={} planar_crc={:016x} nv12_crc={:016x}",
++                        frame_no,
++                        if matches { 1 } else { 0 },
++                        diff,
++                        crc_planar,
++                        crc_nv12
++                    );
++                }
++            }
++        }
++
+         self.decoded_frames = self.decoded_frames.saturating_add(1);
+         if hw != 0 {
+             self.hw_frames = self.hw_frames.saturating_add(1);

@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://galnx.local/schemas/input-profile.schema.json",
+  "title": "GalNX input profile",
+  "description": "Portable mapping from physical Switch inputs and adapter-level engine events onto GalNX semantic actions. See docs/input/README.md for field semantics.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["name"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_-]{1,63}$",
+      "description": "Stable profile id; also the name referenced from a game manifest."
+    },
+    "description": {
+      "type": "string",
+      "description": "Half-sentence purpose and tested context of this profile."
+    },
+    "adapter_defaults": {
+      "type": "object",
+      "description": "adapter name -> semantic action -> engine event names. The reserved adapter name generic is used as the fallback layer.",
+      "propertyNames": { "pattern": "^[a-z0-9][a-z0-9_-]{1,63}$" },
+      "additionalProperties": {
+        "type": "object",
+        "propertyNames": { "$ref": "#/$defs/semantic_action" },
+        "additionalProperties": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{0,63}$" }
+        }
+      }
+    },
+    "button_map": {
+      "type": "object",
+      "description": "semantic action -> physical Switch buttons (libnx HID names).",
+      "propertyNames": { "$ref": "#/$defs/semantic_action" },
+      "additionalProperties": { "$ref": "#/$defs/button_list" }
+    },
+    "hotkeys": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "toggle_mode": { "$ref": "#/$defs/combo" },
+        "soft_reset": { "$ref": "#/$defs/combo" }
+      }
+    },
+    "mouse": {
+      "type": "object",
+      "description": "Virtual mouse functions of keyboard/mouse simulation mode.",
+      "additionalProperties": false,
+      "properties": {
+        "pointer": { "$ref": "#/$defs/switch_button" },
+        "left_click": { "$ref": "#/$defs/switch_button" },
+        "right_click": { "$ref": "#/$defs/switch_button" },
+        "middle_click": { "$ref": "#/$defs/switch_button" },
+        "wheel_up": { "$ref": "#/$defs/switch_button" },
+        "wheel_down": { "$ref": "#/$defs/switch_button" }
+      }
+    },
+    "analog": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "deadzone": { "type": "number", "minimum": 0, "maximum": 0.9, "default": 0.25 },
+        "pointer_speed": { "type": "number", "minimum": 0.1, "maximum": 10, "default": 1.0 },
+        "invert_y": { "type": "boolean", "default": false }
+      }
+    }
+  },
+  "$defs": {
+    "semantic_action": {
+      "type": "string",
+      "enum": [
+        "advance_text",
+        "confirm_choice",
+        "back",
+        "open_menu",
+        "show_history",
+        "auto_mode",
+        "skip_hold"
+      ]
+    },
+    "switch_button": {
+      "type": "string",
+      "enum": [
+        "A", "B", "X", "Y",
+        "L", "R", "ZL", "ZR",
+        "PLUS", "MINUS", "HOME", "CAPTURE",
+        "DUP", "DDOWN", "DLEFT", "DRIGHT",
+        "LSTICK", "RSTICK",
+        "LUP", "LDOWN", "LLEFT", "LRIGHT",
+        "RUP", "RDOWN", "RLEFT", "RRIGHT",
+        "SL", "SR"
+      ]
+    },
+    "button_list": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/switch_button" }
+    },
+    "combo": {
+      "description": "Button combo: string like L+R+PLUS or a list of at least two buttons.",
+      "oneOf": [
+        { "type": "string", "pattern": "^[A-Za-z0-9_+ -]+$" },
+        {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/switch_button" }
+        }
+      ]
+    }
+  }
+}

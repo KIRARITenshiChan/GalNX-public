@@ -1,0 +1,1 @@
+mode=jit driver=1 thread=1 alive=1 cpu=2 pages=5879 rendered_ms=125418 uptime_ms=125317 lag_ms=-101 underrun=0 max_refill_gap_ms=44 stalls=3 stall_ms=1200

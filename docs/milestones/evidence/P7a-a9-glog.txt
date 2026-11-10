@@ -1,0 +1,17 @@
+[pad] key=1013 virt=0 uiChildren=0 gamemenu=0x20af0b5c0 cursor=0x0
+[pad] key=1004 virt=0 uiChildren=0 gamemenu=0x20af0b5c0 cursor=0x0
+[pad] key=1016 virt=0 uiChildren=0 gamemenu=0x20af0b5c0 cursor=0x0
+[pad] ctrl down
+[pad] ctrl up
+[pad] wheel 120
+[pad] key=1005 virt=0 uiChildren=0 gamemenu=0x20af0b5c0 cursor=0x0
+[tjs] back -> 
+[pad] key=1022 virt=0 uiChildren=0 gamemenu=0x20af0b5c0 cursor=0x0
+[tjs] exit -> ok
+[touch] began id=0x20dd364c0 loc=(439.6,276.0) virt=0 uiChildren=0
+[touch] ended id=0x20dd364c0 loc=(439.6,276.0) virt=0
+[touch] began id=0x212c02ce0 loc=(439.6,276.0) virt=0 uiChildren=0
+[touch] ended id=0x212c02ce0 loc=(439.6,276.0) virt=0
+[touch] began id=0x20ad52200 loc=(439.6,276.0) virt=0 uiChildren=0
+[touch] ended id=0x20ad52200 loc=(439.6,276.0) virt=0
+[close] main window close confirmed; terminating application

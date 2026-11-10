@@ -1,0 +1,1238 @@
+diff --git a/platform/switch/build_switch.sh b/platform/switch/build_switch.sh
+index 5e16b95..c45c27f 100755
+--- a/platform/switch/build_switch.sh
++++ b/platform/switch/build_switch.sh
+@@ -28,8 +28,8 @@ VERSION="$(sed -n 's/^version *= *"\(.*\)"/\1/p' "$ROOT_DIR/platform/switch/host
+ 
+ CC="$DEVKITA64/bin/aarch64-none-elf-gcc"
+ for tool in "$DEVKITPRO/tools/bin/elf2nro" "$DEVKITPRO/tools/bin/nacptool" "$CC" \
+-            "$DEVKITPRO/libnx/lib/libnx.a"; do
+-  [[ -e "$tool" ]] || { echo "ERROR: missing $tool (install devkitPro with devkitA64 and libnx)" >&2; exit 1; }
++            "$DEVKITPRO/libnx/lib/libnx.a" "$DEVKITPRO/portlibs/switch/lib/libSDL2.a"; do
++  [[ -e "$tool" ]] || { echo "ERROR: missing $tool (install devkitPro with devkitA64, libnx and SDL2)" >&2; exit 1; }
+ done
+ command -v rustup >/dev/null 2>&1 || { echo "ERROR: rustup not found" >&2; exit 1; }
+ rustup toolchain install "$TOOLCHAIN" --profile minimal --component rust-src --no-self-update
+@@ -44,14 +44,23 @@ LIB="$TARGET_DIR/$TARGET_NAME/release/librfvp_horizon.a"
+ [[ -f "$LIB" ]] || { echo "ERROR: build produced no $LIB" >&2; exit 1; }
+ 
+ ARCH_FLAGS=(-march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE)
++# SDL2 (switch-sdl2) supplies the OpenGL ES2 renderer the engine draws with. Its flags are spelled
++# out here rather than taken from sdl2-config, whose output assumes an /opt/devkitpro sysroot.
++SDL_CFLAGS=(-I"$DEVKITPRO/portlibs/switch/include/SDL2" -D__SWITCH__ -D_REENTRANT
++            -ftls-model=local-exec)
++CFLAGS=("${ARCH_FLAGS[@]}" "${SDL_CFLAGS[@]}" -std=gnu17 -O2 -g -Wall -Wextra
++        -ffunction-sections -fdata-sections -I"$DEVKITPRO/libnx/include")
+ mkdir -p "$BUILD_DIR" "$OUT_DIR"
+-"$CC" "${ARCH_FLAGS[@]}" -std=gnu17 -O2 -g -Wall -Wextra -ffunction-sections -fdata-sections \
+-  -I"$DEVKITPRO/libnx/include" -c "$ROOT_DIR/platform/switch/runtime/main.c" \
+-  -o "$BUILD_DIR/main.o"
++for source in main sdl_video; do
++  "$CC" "${CFLAGS[@]}" -c "$ROOT_DIR/platform/switch/runtime/$source.c" \
++    -o "$BUILD_DIR/$source.o"
++done
++# libSDL2.a pulls in the devkitPro EGL/GLESv2 stack, and that stack's shader compiler needs libm.
+ "$CC" "${ARCH_FLAGS[@]}" -specs="$DEVKITPRO/libnx/switch.specs" -g -Wl,--gc-sections \
+-  -Wl,-Map,"$BUILD_DIR/rfvp.map" "$BUILD_DIR/main.o" "$LIB" \
+-  -L"$DEVKITPRO/libnx/lib" -lnx -lm -o "$BUILD_DIR/rfvp.elf"
++  -Wl,-Map,"$BUILD_DIR/rfvp.map" "$BUILD_DIR/main.o" "$BUILD_DIR/sdl_video.o" "$LIB" \
++  -L"$DEVKITPRO/portlibs/switch/lib" -lSDL2 -lEGL -lglapi -ldrm_nouveau -lpthread \
++  -lstdc++ -L"$DEVKITPRO/libnx/lib" -lnx -lm -o "$BUILD_DIR/rfvp.elf"
+ 
+ "$DEVKITPRO/tools/bin/nacptool" --create "rfvp" "rfvp" "${VERSION:-0.1.0}" "$BUILD_DIR/rfvp.nacp"
+ "$DEVKITPRO/tools/bin/elf2nro" "$BUILD_DIR/rfvp.elf" "$OUT_DIR/rfvp.nro" --nacp="$BUILD_DIR/rfvp.nacp"
+-echo "[switch] $OUT_DIR/rfvp.nro"
++echo "[switch] $OUT_DIR/rfvp.nro"
+\ No newline at end of file
+diff --git a/platform/switch/host/build.rs b/platform/switch/host/build.rs
+index b810291..4fed5bb 100644
+--- a/platform/switch/host/build.rs
++++ b/platform/switch/host/build.rs
+@@ -12,8 +12,15 @@ fn main() {
+     // version, which changes between releases: use the newest one that is there.
+     let gcc_dir = newest_subdir(&devkitpro.join("devkitA64/lib/gcc/aarch64-none-elf"))
+         .unwrap_or_else(|| devkitpro.join("devkitA64/lib/gcc/aarch64-none-elf/15.2.0"));
+-    let compiler = devkitpro.join("devkitA64/bin/aarch64-none-elf-gcc");
+-    let archiver = devkitpro.join("devkitA64/bin/aarch64-none-elf-ar");
++    // [GalNX local patch, M5-a] On Windows the devkitPro tools carry a .exe suffix, so the
++    // extensionless paths never exist and cc silently fell back to the host compiler
++    // (producing x86-64 COFF objects the AArch64 linker rejects). Probe both spellings.
++    fn tool(devkitpro: &std::path::Path, rel: &str) -> PathBuf {
++        let base = devkitpro.join(rel);
++        if base.exists() { base } else { base.with_extension("exe") }
++    }
++    let compiler = tool(&devkitpro, "devkitA64/bin/aarch64-none-elf-gcc");
++    let archiver = tool(&devkitpro, "devkitA64/bin/aarch64-none-elf-ar");
+     println!(
+         "cargo:rustc-link-search=native={}",
+         devkitpro.join("devkitA64/aarch64-none-elf/lib").display()
+diff --git a/platform/switch/host/src/ffi.rs b/platform/switch/host/src/ffi.rs
+index 1cb2355..083362f 100644
+--- a/platform/switch/host/src/ffi.rs
++++ b/platform/switch/host/src/ffi.rs
+@@ -148,6 +148,10 @@ pub struct Session {
+     window_started_us: u64,
+     last_frame_us: u64,
+     worst_us: u64,
++    sum_vm_us: u64,
++    sum_scene_us: u64,
++    sum_render_us: u64,
++    sum_ticks: u64,
+ }
+ 
+ impl Session {
+@@ -189,6 +193,20 @@ impl Session {
+             self.app.core().config().virtual_height,
+             rfvp::ring_log::dump()
+         );
++        let ticks = self.sum_ticks.max(1) as f64;
++        let text = format!(
++            "{}perf avg over {} ticks: vm {:.2} ms, scene {:.2} ms, render {:.2} ms, total {:.2} ms\n",
++            text,
++            self.sum_ticks,
++            self.sum_vm_us as f64 / 1000.0 / ticks,
++            self.sum_scene_us as f64 / 1000.0 / ticks,
++            self.sum_render_us as f64 / 1000.0 / ticks,
++            (self.sum_vm_us + self.sum_scene_us + self.sum_render_us) as f64 / 1000.0 / ticks,
++        );
++        self.sum_vm_us = 0;
++        self.sum_scene_us = 0;
++        self.sum_render_us = 0;
++        self.sum_ticks = 0;
+         write_file(DEBUG_REPORT_FILE, text.as_bytes());
+         if self.frames % DEBUG_SCREEN_EVERY == 0 {
+             write_file(DEBUG_SCREEN_FILE, &self.app.host().renderer_ref().screen_bmp());
+@@ -232,6 +250,10 @@ pub unsafe extern "C" fn rfvp_switch_start(game_root: *const c_char) -> *mut Ses
+         window_started_us: now,
+         last_frame_us: now,
+         worst_us: 0,
++        sum_vm_us: 0,
++        sum_scene_us: 0,
++        sum_render_us: 0,
++        sum_ticks: 0,
+     });
+     log("rfvp: booting the game\n");
+     let boot = RfvpBootConfig {
+@@ -265,10 +287,17 @@ pub unsafe extern "C" fn rfvp_switch_frame(
+         .set_target(framebuffer, stride_bytes as usize / 4);
+     let result = session.app.run_frame(input);
+     session.app.host().renderer().set_target(core::ptr::null_mut(), 0);
+-    if let Err(err) = result {
+-        session.report_error("the game stopped with an error", Some(err));
+-        return -1;
+-    }
++    let tick = match result {
++        Ok(tick) => tick,
++        Err(err) => {
++            session.report_error("the game stopped with an error", Some(err));
++            return -1;
++        }
++    };
++    session.sum_vm_us += tick.vm_us;
++    session.sum_scene_us += tick.scene_us;
++    session.sum_render_us += tick.render_us;
++    session.sum_ticks += 1;
+     if session.app.quit_requested() {
+         return 1;
+     }
+diff --git a/platform/switch/host/src/render.rs b/platform/switch/host/src/render.rs
+index a537d1b..d93dff7 100644
+--- a/platform/switch/host/src/render.rs
++++ b/platform/switch/host/src/render.rs
+@@ -1,34 +1,188 @@
++//! The Switch renderer: SDL2's OpenGL ES2 backend draws the engine's 2D commands.
++//!
++//! The CPU soft rasterizer this port started with spent almost the whole frame budget in
++//! Rust. Stage two of the port moved the same draw list onto the Tegra GPU through
++//! platform/switch/runtime/sdl_video.c, which owns the window, the textures and the
++//! letterbox transform from virtual (script) coordinates to the 1280x720 display.
++
++use alloc::vec::Vec;
++use core::ffi::{c_float, c_int, c_uchar, c_uint, c_ulong};
++
+ use rfvp::host_api::{
+-    ColorRgba, DrawSolidCommand, DrawSpriteCommand, RfvpRenderer, RfvpResult, SoftRaster,
+-    TextureDesc, TextureId, TextureRect,
++    BlendMode, ColorRgba, DrawSolidCommand, DrawSpriteCommand, PixelFormat, RfvpRenderer,
++    RfvpResult, TextureDesc, TextureFilter, TextureId, TextureRect,
+ };
+ 
+ const DISPLAY_WIDTH: u32 = 1280;
+ const DISPLAY_HEIGHT: u32 = 720;
+ 
+-/// Draws the game with the shared software rasterizer straight into a display-sized frame (the
+-/// virtual frame is scaled and letterboxed as it is drawn), then copies that into the
+-/// framebuffer libnx lends for the frame (see `rfvp_switch_frame`).
++/// The renderer side of platform/switch/runtime/sdl_video.c.
++mod sdl {
++    use super::*;
++
++    extern "C" {
++        pub fn galnx_sdl_video_init() -> c_int;
++        pub fn galnx_sdl_video_shutdown();
++        pub fn galnx_sdl_texture_create(
++            id: c_uint,
++            width: c_int,
++            height: c_int,
++            format: c_int,
++            pixels: *const c_uchar,
++            length: c_ulong,
++        ) -> c_int;
++        pub fn galnx_sdl_texture_update(
++            id: c_uint,
++            x: c_int,
++            y: c_int,
++            width: c_int,
++            height: c_int,
++            format: c_int,
++            pixels: *const c_uchar,
++            length: c_ulong,
++        ) -> c_int;
++        pub fn galnx_sdl_texture_destroy(id: c_uint);
++        pub fn galnx_sdl_begin(
++            virtual_width: c_int,
++            virtual_height: c_int,
++            clear_enabled: c_int,
++            clear_rgba: c_uint,
++        ) -> c_int;
++        pub fn galnx_sdl_draw_quad(
++            id: c_uint,
++            xy: *const c_float,
++            uv: *const c_float,
++            colors: *const c_uint,
++            blend: c_int,
++            filter: c_int,
++            scissor_valid: c_int,
++            scissor_x: c_int,
++            scissor_y: c_int,
++            scissor_width: c_int,
++            scissor_height: c_int,
++        ) -> c_int;
++        pub fn galnx_sdl_draw_solid(
++            x: c_int,
++            y: c_int,
++            width: c_int,
++            height: c_int,
++            rgba: c_uint,
++            blend: c_int,
++            scissor_valid: c_int,
++            scissor_x: c_int,
++            scissor_y: c_int,
++            scissor_width: c_int,
++            scissor_height: c_int,
++        ) -> c_int;
++        pub fn galnx_sdl_present();
++        pub fn galnx_sdl_read_pixels_scaled(
++            width: c_int,
++            height: c_int,
++            out: *mut c_uchar,
++        ) -> c_int;
++    }
++
++    pub fn log(message: &str) {
++        extern "C" {
++            fn rfvp_switch_log(message: *const u8, len: usize);
++        }
++        unsafe { rfvp_switch_log(message.as_ptr(), message.len()) };
++    }
++}
++
++fn pixel_format_code(format: PixelFormat) -> c_int {
++    match format {
++        PixelFormat::Rgba8 => 0,
++        PixelFormat::Bgra8 => 1,
++        PixelFormat::Rgb8 => 2,
++        PixelFormat::Luma8 => 3,
++        PixelFormat::LumaA8 => 4,
++        PixelFormat::Alpha8 => 5,
++        #[allow(unreachable_patterns)]
++        _ => 0,
++    }
++}
++
++fn blend_mode_code(blend: BlendMode) -> c_int {
++    match blend {
++        BlendMode::Opaque => 0,
++        BlendMode::Alpha => 1,
++        BlendMode::Add => 2,
++        BlendMode::Multiply => 3,
++        BlendMode::Screen => 4,
++    }
++}
++
++fn filter_code(filter: TextureFilter) -> c_int {
++    match filter {
++        TextureFilter::Nearest => 0,
++        TextureFilter::Linear => 1,
++    }
++}
++
++/// A colour as the shim packs it: R in the low byte, then G, B and A.
++fn pack_color(color: ColorRgba) -> c_uint {
++    let channel = |value: f32| -> c_uint {
++        let scaled = value * 255.0;
++        let rounded = if scaled <= 0.0 {
++            0.0
++        } else if scaled >= 255.0 {
++            255.0
++        } else {
++            scaled + 0.5
++        };
++        rounded as c_uint
++    };
++    channel(color.r) | (channel(color.g) << 8) | (channel(color.b) << 16) | (channel(color.a) << 24)
++}
++
++/// Draws the game through SDL2 (OpenGL ES2) onto the Switch display.
+ pub struct HorizonRenderer {
+-    raster: SoftRaster,
+     virtual_size: (u32, u32),
+     frame_index: u64,
+-    /// The framebuffer of the frame being drawn, and its row length in pixels.
+-    target: *mut u32,
+-    target_stride: usize,
++    video_ready: bool,
++    video_failed: bool,
++    /// Pixel format of every live texture, so updates can convert their rows.
++    formats: Vec<(u32, c_int)>,
+ }
+ 
+ impl HorizonRenderer {
+     pub fn new() -> Self {
+         Self {
+-            raster: SoftRaster::new(DISPLAY_WIDTH, DISPLAY_HEIGHT),
+             virtual_size: (0, 0),
+             frame_index: 0,
+-            target: core::ptr::null_mut(),
+-            target_stride: 0,
++            video_ready: false,
++            video_failed: false,
++            formats: Vec::new(),
+         }
+     }
+ 
++    fn ensure_video(&mut self) -> bool {
++        if self.video_ready {
++            return true;
++        }
++        if self.video_failed {
++            return false;
++        }
++        let rc = unsafe { sdl::galnx_sdl_video_init() };
++        if rc != 0 {
++            self.video_failed = true;
++            sdl::log(&alloc::format!("rfvp: sdl video init failed: {rc}\n"));
++            return false;
++        }
++        self.video_ready = true;
++        true
++    }
++
++    fn format_of(&self, id: u32) -> c_int {
++        for (texture, format) in &self.formats {
++            if *texture == id {
++                return *format;
++            }
++        }
++        0
++    }
++
+     /// Size of the game frame in virtual (script) coordinates.
+     pub const fn frame_width(&self) -> u32 {
+         self.virtual_size.0
+@@ -42,14 +196,19 @@ impl HorizonRenderer {
+         self.frame_index
+     }
+ 
+-    /// Map a point on the screen to the game's virtual coordinates.
+     /// The last composed screen as a 32-bit BMP, for the debug report.
+-    pub fn screen_bmp(&self) -> alloc::vec::Vec<u8> {
++    pub fn screen_bmp(&self) -> Vec<u8> {
+         let (width, height) = (DISPLAY_WIDTH as usize, DISPLAY_HEIGHT as usize);
+-        let image_size = width * height * 4;
+-        let mut bmp = alloc::vec::Vec::with_capacity(54 + image_size);
++        let mut pixels = alloc::vec![0u8; width * height * 4];
++        let rc = unsafe {
++            sdl::galnx_sdl_read_pixels_scaled(width as c_int, height as c_int, pixels.as_mut_ptr())
++        };
++        let mut bmp = Vec::with_capacity(54 + pixels.len());
++        if rc != 0 {
++            return bmp;
++        }
+         bmp.extend_from_slice(b"BM");
+-        bmp.extend_from_slice(&((54 + image_size) as u32).to_le_bytes());
++        bmp.extend_from_slice(&((54 + pixels.len()) as u32).to_le_bytes());
+         bmp.extend_from_slice(&0u32.to_le_bytes());
+         bmp.extend_from_slice(&54u32.to_le_bytes());
+         bmp.extend_from_slice(&40u32.to_le_bytes());
+@@ -59,22 +218,29 @@ impl HorizonRenderer {
+         bmp.extend_from_slice(&1u16.to_le_bytes());
+         bmp.extend_from_slice(&32u16.to_le_bytes());
+         bmp.extend_from_slice(&[0; 24]);
+-        for pixel in self.raster.frame() {
+-            let [r, g, b, a] = pixel.to_ne_bytes();
+-            bmp.extend_from_slice(&[b, g, r, a]);
++        for pixel in pixels.chunks_exact(4) {
++            bmp.extend_from_slice(&[pixel[2], pixel[1], pixel[0], pixel[3]]);
+         }
+         bmp
+     }
+ 
++    /// Map a point on the display to the game's virtual coordinates.
+     pub fn screen_to_virtual(&self, x: f32, y: f32) -> (f32, f32) {
+-        self.raster.output_to_virtual(x, y)
++        let (width, height) = self.virtual_size;
++        if width == 0 || height == 0 {
++            return (x, y);
++        }
++        let scale_x = DISPLAY_WIDTH as f32 / width as f32;
++        let scale_y = DISPLAY_HEIGHT as f32 / height as f32;
++        let scale = if scale_x < scale_y { scale_x } else { scale_y };
++        let offset_x = (DISPLAY_WIDTH as f32 - width as f32 * scale) * 0.5;
++        let offset_y = (DISPLAY_HEIGHT as f32 - height as f32 * scale) * 0.5;
++        ((x - offset_x) / scale, (y - offset_y) / scale)
+     }
+ 
+-    /// Where `present` copies the frame to; null outside a frame.
+-    pub fn set_target(&mut self, target: *mut u32, stride: usize) {
+-        self.target = target;
+-        self.target_stride = stride;
+-    }
++    /// The libnx framebuffer this used to draw into; SDL now owns the display, so only the
++    /// frame boundary is tracked.
++    pub fn set_target(&mut self, _target: *mut u32, _stride: usize) {}
+ }
+ 
+ impl Default for HorizonRenderer {
+@@ -90,7 +256,37 @@ impl RfvpRenderer for HorizonRenderer {
+         desc: TextureDesc,
+         pixels: Option<&[u8]>,
+     ) -> RfvpResult<()> {
+-        self.raster.create_texture(id, desc, pixels)
++        if !self.ensure_video() {
++            return Ok(());
++        }
++        let format = pixel_format_code(desc.format);
++        let (source, length) = match pixels {
++            Some(data) => (data.as_ptr(), data.len() as c_ulong),
++            None => (core::ptr::null(), 0),
++        };
++        let rc = unsafe {
++            sdl::galnx_sdl_texture_create(
++                id.0 as c_uint,
++                desc.width as c_int,
++                desc.height as c_int,
++                format,
++                source as *const c_uchar,
++                length,
++            )
++        };
++        if rc != 0 {
++            sdl::log(&alloc::format!(
++                "rfvp: texture create failed: id={} {}x{} rc={}\n",
++                id.0,
++                desc.width,
++                desc.height,
++                rc
++            ));
++            return Ok(());
++        }
++        self.formats.retain(|(texture, _)| *texture != id.0);
++        self.formats.push((id.0, format));
++        Ok(())
+     }
+ 
+     fn update_texture(
+@@ -99,49 +295,131 @@ impl RfvpRenderer for HorizonRenderer {
+         rect: TextureRect,
+         pixels: &[u8],
+     ) -> RfvpResult<()> {
+-        self.raster.update_texture(id, rect, pixels)
++        if !self.ensure_video() {
++            return Ok(());
++        }
++        let format = self.format_of(id.0);
++        unsafe {
++            sdl::galnx_sdl_texture_update(
++                id.0 as c_uint,
++                rect.x as c_int,
++                rect.y as c_int,
++                rect.width as c_int,
++                rect.height as c_int,
++                format,
++                pixels.as_ptr() as *const c_uchar,
++                pixels.len() as c_ulong,
++            );
++        }
++        Ok(())
+     }
+ 
+     fn destroy_texture(&mut self, id: TextureId) {
+-        self.raster.destroy_texture(id);
++        self.formats.retain(|(texture, _)| *texture != id.0);
++        if self.video_ready {
++            unsafe { sdl::galnx_sdl_texture_destroy(id.0 as c_uint) };
++        }
+     }
+ 
+     fn begin_frame(&mut self, width: u32, height: u32, clear: Option<ColorRgba>) -> RfvpResult<()> {
+         self.virtual_size = (width, height);
+-        self.raster.begin_frame(width, height, clear)
++        if !self.ensure_video() {
++            return Ok(());
++        }
++        let (clear_enabled, clear_rgba) = match clear {
++            Some(color) => (1, pack_color(color)),
++            None => (0, 0),
++        };
++        unsafe {
++            sdl::galnx_sdl_begin(width as c_int, height as c_int, clear_enabled, clear_rgba);
++        }
++        Ok(())
+     }
+ 
+     fn draw_sprite(&mut self, command: &DrawSpriteCommand) -> RfvpResult<()> {
+-        self.raster.draw_sprite(command)
++        if !self.video_ready {
++            return Ok(());
++        }
++        let mut xy = [0.0f32; 8];
++        let mut uv = [0.0f32; 8];
++        let mut colors = [0u32; 4];
++        for (index, vertex) in command.vertices.iter().enumerate() {
++            xy[index * 2] = vertex.position[0];
++            xy[index * 2 + 1] = vertex.position[1];
++            uv[index * 2] = vertex.tex_coord[0];
++            uv[index * 2 + 1] = vertex.tex_coord[1];
++            colors[index] = pack_color(vertex.color);
++        }
++        let (valid, x, y, width, height) = match command.scissor {
++            Some(rect) => (1, rect.x, rect.y, rect.width, rect.height),
++            None => (0, 0, 0, 0, 0),
++        };
++        unsafe {
++            sdl::galnx_sdl_draw_quad(
++                command.texture.0 as c_uint,
++                xy.as_ptr(),
++                uv.as_ptr(),
++                colors.as_ptr(),
++                blend_mode_code(command.blend),
++                filter_code(command.filter),
++                valid,
++                x,
++                y,
++                width,
++                height,
++            );
++        }
++        Ok(())
+     }
+ 
+     fn draw_solid(&mut self, command: &DrawSolidCommand) -> RfvpResult<()> {
+-        self.raster.draw_solid(command)
++        if !self.video_ready {
++            return Ok(());
++        }
++        let (valid, sx, sy, sw, sh) = match command.scissor {
++            Some(rect) => (1, rect.x, rect.y, rect.width, rect.height),
++            None => (0, 0, 0, 0, 0),
++        };
++        unsafe {
++            sdl::galnx_sdl_draw_solid(
++                command.rect.x,
++                command.rect.y,
++                command.rect.width,
++                command.rect.height,
++                pack_color(command.color),
++                blend_mode_code(command.blend),
++                valid,
++                sx,
++                sy,
++                sw,
++                sh,
++            );
++        }
++        Ok(())
+     }
+ 
+     fn end_frame(&mut self) -> RfvpResult<()> {
+         self.frame_index = self.frame_index.wrapping_add(1);
+-        self.raster.end_frame()
++        Ok(())
+     }
+ 
+-    fn capture_thumbnail(&mut self, width: u32, height: u32) -> Option<alloc::vec::Vec<u8>> {
+-        Some(self.raster.thumbnail(width, height))
++    fn capture_thumbnail(&mut self, width: u32, height: u32) -> Option<Vec<u8>> {
++        if width == 0 || height == 0 || !self.video_ready {
++            return None;
++        }
++        let mut pixels = alloc::vec![0u8; width as usize * height as usize * 4];
++        let rc = unsafe {
++            sdl::galnx_sdl_read_pixels_scaled(width as c_int, height as c_int, pixels.as_mut_ptr())
++        };
++        if rc != 0 {
++            return None;
++        }
++        Some(pixels)
+     }
+ 
+     fn present(&mut self) -> RfvpResult<()> {
+-        if self.target.is_null() {
+-            return Ok(());
+-        }
+-        let width = DISPLAY_WIDTH as usize;
+-        // The rasterizer's pixels are `r, g, b, a` bytes, as RGBA_8888 wants them.
+-        for (y, row) in self.raster.frame().chunks_exact(width).enumerate() {
+-            unsafe {
+-                core::ptr::copy_nonoverlapping(
+-                    row.as_ptr(),
+-                    self.target.add(y * self.target_stride),
+-                    width,
+-                );
+-            }
++        if self.video_ready {
++            unsafe { sdl::galnx_sdl_present() };
+         }
+         Ok(())
+     }
+diff --git a/platform/switch/runtime/main.c b/platform/switch/runtime/main.c
+index 9f59703..8752790 100644
+--- a/platform/switch/runtime/main.c
++++ b/platform/switch/runtime/main.c
+@@ -1,6 +1,6 @@
+-/* The Switch runtime: libnx owns the process, input, audio and the display; the rfvp engine
+- * (Rust, linked in as librfvp_horizon.a) runs one frame per call and draws it into the
+- * framebuffer handed to it. */
++/* The Switch runtime: libnx owns the process, the controller, the touch screen and the audio
++ * driver; SDL2 (platform/switch/runtime/sdl_video.c) owns the display and draws each frame the
++ * rfvp engine (Rust, linked in as librfvp_horizon.a) submits through the RfvpRenderer trait. */
+ 
+ #include <dirent.h>
+ #include <stdio.h>
+@@ -10,10 +10,8 @@
+ 
+ #include <switch.h>
+ 
+-#define SCREEN_WIDTH 1280
+-#define SCREEN_HEIGHT 720
+-
+ static const char* const GameRoot = "sdmc:/switch/rfvp/game";
++static const char* const ScreenshotFile = "sdmc:/switch/rfvp/debug_screen.bmp";
+ 
+ typedef struct {
+     uint64_t buttons;
+@@ -41,6 +39,12 @@ extern int rfvp_switch_frame(void* app, const RfvpSwitchInput* input, uint32_t*
+ extern void rfvp_switch_audio_render(void* app, int16_t* dst, size_t frames);
+ extern void rfvp_switch_stop(void* app);
+ 
++/* The SDL video backend (platform/switch/runtime/sdl_video.c). */
++extern int galnx_sdl_video_init(void);
++extern void galnx_sdl_video_shutdown(void);
++extern int galnx_sdl_pump_events(void);
++extern int galnx_sdl_write_screen_bmp(const char* path);
++
+ /* ---- Services for the engine ---------------------------------------------------------------- */
+ 
+ void rfvp_switch_log(const char* message, size_t len) {
+@@ -183,7 +187,8 @@ static void audio_exit(void) {
+ 
+ /* ---- Main loop ------------------------------------------------------------------------------ */
+ 
+-/* Optional framebuffer capture, using the same debug.txt convention as other ports. */
++/* Optional screenshot, using the same debug.txt convention as the other ports: write
++ * shot=N and frame N of the run is saved as debug_screen.bmp. */
+ static unsigned screenshot_frame(void) {
+     FILE* file = fopen("sdmc:/switch/rfvp/debug.txt", "r");
+     if (file == NULL) return UINT32_MAX;
+@@ -197,46 +202,14 @@ static unsigned screenshot_frame(void) {
+     return frame;
+ }
+ 
+-static void save_screenshot(const uint8_t* pixels, uint32_t stride) {
+-    FILE* file = fopen("sdmc:/switch/rfvp/debug_screen.bmp", "wb");
+-    if (file == NULL) return;
+-    uint8_t header[54] = { 'B', 'M' };
+-    const uint32_t fields[][2] = {
+-        { 2, 54 + SCREEN_WIDTH * SCREEN_HEIGHT * 4 }, { 10, 54 }, { 14, 40 },
+-        { 18, SCREEN_WIDTH }, { 22, SCREEN_HEIGHT },
+-    };
+-    for (unsigned field = 0; field < sizeof(fields) / sizeof(fields[0]); field++) {
+-        for (unsigned byte = 0; byte < 4; byte++)
+-            header[fields[field][0] + byte] = (uint8_t) (fields[field][1] >> (byte * 8));
+-    }
+-    header[26] = 1;
+-    header[28] = 32;
+-    fwrite(header, 1, sizeof(header), file);
+-    uint8_t row[SCREEN_WIDTH * 4];
+-    for (int y = SCREEN_HEIGHT - 1; y >= 0; y--) {
+-        const uint8_t* source = pixels + (size_t) y * stride;
+-        for (unsigned x = 0; x < SCREEN_WIDTH; x++) {
+-            row[x * 4] = source[x * 4 + 2];
+-            row[x * 4 + 1] = source[x * 4 + 1];
+-            row[x * 4 + 2] = source[x * 4];
+-            row[x * 4 + 3] = 255;
+-        }
+-        fwrite(row, 1, sizeof(row), file);
+-    }
+-    fclose(file);
+-}
+-
+ int main(void) {
+     rfvp_switch_log("rfvp: starting\n", 15);
+ 
+-    Framebuffer fb;
+-    /* Double buffered; presenting waits for vsync, which paces the loop at 60 fps. */
+-    Result rc = framebufferCreate(&fb, nwindowGetDefault(), SCREEN_WIDTH, SCREEN_HEIGHT,
+-                                  PIXEL_FORMAT_RGBA_8888, 2);
+-    if (R_FAILED(rc)) { log_result("framebufferCreate", rc); return 1; }
+-    /* The engine writes rows of RGBA; libnx swizzles them to the GPU layout on present. */
+-    rc = framebufferMakeLinear(&fb);
+-    if (R_FAILED(rc)) { log_result("framebufferMakeLinear", rc); framebufferClose(&fb); return 1; }
++    /* SDL opens the window and creates the GLES2 renderer. */
++    if (galnx_sdl_video_init() != 0) {
++        rfvp_switch_log("rfvp: sdl video init failed\n", 28);
++        return 1;
++    }
+ 
+     audio_init();
+ 
+@@ -249,13 +222,17 @@ int main(void) {
+     if (app == NULL) {
+         /* The reason is in sdmc:/switch/rfvp/last_error.txt. */
+         audio_exit();
+-        framebufferClose(&fb);
++        galnx_sdl_video_shutdown();
+         return 1;
+     }
+ 
+     const unsigned shot = screenshot_frame();
+     unsigned frame = 0;
+-    while (appletMainLoop()) {
++    int status = 0;
++    for (;;) {
++        /* The Switch video driver ticks the applet loop here and reports a quit request. */
++        if (galnx_sdl_pump_events() != 0) break;
++
+         padUpdate(&pad);
+         RfvpSwitchInput input = { 0 };
+         input.buttons = padGetButtons(&pad);
+@@ -270,17 +247,15 @@ int main(void) {
+             input.touch_y = (int32_t) touch.touches[0].y;
+         }
+ 
+-        u32 stride = 0;
+-        uint32_t* pixels = (uint32_t*) framebufferBegin(&fb, &stride);
+-        int status = rfvp_switch_frame(app, &input, pixels, stride);
+-        if (frame++ == shot) save_screenshot((const uint8_t*) pixels, stride);
+-        framebufferEnd(&fb);
++        /* SDL owns the display, so the engine draws and presents inside this call. */
++        status = rfvp_switch_frame(app, &input, NULL, 0);
++        if (frame++ == shot) galnx_sdl_write_screen_bmp(ScreenshotFile);
+         audio_pump(app);
+         if (status != 0) break;
+     }
+ 
+     rfvp_switch_stop(app);
+     audio_exit();
+-    framebufferClose(&fb);
++    galnx_sdl_video_shutdown();
+     return 0;
+ }
+diff --git a/platform/switch/runtime/sdl_video.c b/platform/switch/runtime/sdl_video.c
+new file mode 100644
+index 0000000..65d3b23
+--- /dev/null
++++ b/platform/switch/runtime/sdl_video.c
+@@ -0,0 +1,491 @@
++/* SDL2 (OpenGL ES2) video backend for the rfvp Switch port.
++ *
++ * The engine (Rust) renders game frames as 2D quads and solid rectangles through this shim.
++ * The previous backend was a CPU soft rasterizer that alone cost ~38 ms of a 39 ms frame;
++ * SDL2 hands the same work to the Tegra GPU.
++ *
++ * Coordinates handed in by the engine are virtual (script) coordinates; this shim scales and
++ * letterboxes them onto the 1280x720 display, mirroring the old soft rasterizer mapping.
++ */
++
++#include <stdarg.h>
++#include <stdint.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++
++#include <SDL.h>
++
++#define OUT_WIDTH 1280
++#define OUT_HEIGHT 720
++
++/* Engine PixelFormat codes (crates/rfvp/src/host_api/render.rs). */
++enum {
++    FormatRgba8 = 0,
++    FormatBgra8 = 1,
++    FormatRgb8 = 2,
++    FormatLuma8 = 3,
++    FormatLumaA8 = 4,
++    FormatAlpha8 = 5,
++};
++
++/* Engine BlendMode codes. */
++enum {
++    BlendOpaque = 0,
++    BlendAlpha = 1,
++    BlendAdd = 2,
++    BlendMultiply = 3,
++    BlendScreen = 4,
++};
++
++enum { MaxTextures = 4096 };
++
++typedef struct {
++    int id;
++    SDL_Texture* texture;
++    int width;
++    int height;
++} TextureEntry;
++
++static SDL_Window* window;
++static SDL_Renderer* renderer;
++static TextureEntry textures[MaxTextures];
++static int texture_count;
++static int ready;
++static int virtual_width = 1920;
++static int virtual_height = 1080;
++static float map_scale = 1.0f;
++static float map_offset_x;
++static float map_offset_y;
++
++static int format_bytes(int format) {
++    switch (format) {
++        case FormatRgba8:
++        case FormatBgra8: return 4;
++        case FormatRgb8: return 3;
++        case FormatLuma8:
++        case FormatAlpha8: return 1;
++        case FormatLumaA8: return 2;
++        default: return 4;
++    }
++}
++
++/* Convert pixels of the engine format to RGBA bytes (R, G, B, A). */
++static void convert_to_rgba(const uint8_t* src, int format, int pixels, uint8_t* dst) {
++    int i;
++    switch (format) {
++        case FormatRgba8:
++            memcpy(dst, src, (size_t) pixels * 4);
++            return;
++        case FormatBgra8:
++            for (i = 0; i < pixels; ++i) {
++                dst[i * 4 + 0] = src[i * 4 + 2];
++                dst[i * 4 + 1] = src[i * 4 + 1];
++                dst[i * 4 + 2] = src[i * 4 + 0];
++                dst[i * 4 + 3] = src[i * 4 + 3];
++            }
++            return;
++        case FormatRgb8:
++            for (i = 0; i < pixels; ++i) {
++                dst[i * 4 + 0] = src[i * 3 + 0];
++                dst[i * 4 + 1] = src[i * 3 + 1];
++                dst[i * 4 + 2] = src[i * 3 + 2];
++                dst[i * 4 + 3] = 255;
++            }
++            return;
++        case FormatLuma8:
++            for (i = 0; i < pixels; ++i) {
++                dst[i * 4 + 0] = src[i];
++                dst[i * 4 + 1] = src[i];
++                dst[i * 4 + 2] = src[i];
++                dst[i * 4 + 3] = 255;
++            }
++            return;
++        case FormatLumaA8:
++            for (i = 0; i < pixels; ++i) {
++                dst[i * 4 + 0] = src[i * 2];
++                dst[i * 4 + 1] = src[i * 2];
++                dst[i * 4 + 2] = src[i * 2];
++                dst[i * 4 + 3] = src[i * 2 + 1];
++            }
++            return;
++        case FormatAlpha8:
++            for (i = 0; i < pixels; ++i) {
++                dst[i * 4 + 0] = 255;
++                dst[i * 4 + 1] = 255;
++                dst[i * 4 + 2] = 255;
++                dst[i * 4 + 3] = src[i];
++            }
++            return;
++        default:
++            memcpy(dst, src, (size_t) pixels * 4);
++            return;
++    }
++}
++
++static void galnx_log(const char* fmt, ...) {
++    extern void rfvp_switch_log(const char* message, unsigned long length);
++    char line[320];
++    va_list ap;
++    int len;
++    va_start(ap, fmt);
++    len = vsnprintf(line, sizeof(line), fmt, ap);
++    va_end(ap);
++    if (len > 0) rfvp_switch_log(line, (unsigned long) len);
++}
++
++static TextureEntry* find_texture(unsigned id) {
++    int i;
++    for (i = 0; i < texture_count; ++i) {
++        if (textures[i].id == (int) id) return &textures[i];
++    }
++    return NULL;
++}
++
++static void update_mapping(int vw, int vh) {
++    float sx, sy;
++    if (vw <= 0 || vh <= 0) return;
++    virtual_width = vw;
++    virtual_height = vh;
++    sx = (float) OUT_WIDTH / (float) vw;
++    sy = (float) OUT_HEIGHT / (float) vh;
++    map_scale = sx < sy ? sx : sy;
++    map_offset_x = ((float) OUT_WIDTH - (float) vw * map_scale) * 0.5f;
++    map_offset_y = ((float) OUT_HEIGHT - (float) vh * map_scale) * 0.5f;
++}
++
++static void base_clip(SDL_Rect* out) {
++    out->x = (int) (map_offset_x + 0.5f);
++    out->y = (int) (map_offset_y + 0.5f);
++    out->w = (int) ((float) virtual_width * map_scale + 0.5f);
++    out->h = (int) ((float) virtual_height * map_scale + 0.5f);
++}
++
++static SDL_BlendMode blend_mode(int blend) {
++    switch (blend) {
++        case BlendOpaque: return SDL_BLENDMODE_NONE;
++        case BlendAdd: return SDL_BLENDMODE_ADD;
++        case BlendMultiply:
++            return SDL_ComposeCustomBlendMode(SDL_BLENDFACTOR_DST_COLOR, SDL_BLENDFACTOR_ZERO,
++                                              SDL_BLENDOPERATION_ADD, SDL_BLENDFACTOR_ZERO,
++                                              SDL_BLENDFACTOR_ONE, SDL_BLENDOPERATION_ADD);
++        case BlendScreen:
++            return SDL_ComposeCustomBlendMode(SDL_BLENDFACTOR_ONE,
++                                              SDL_BLENDFACTOR_ONE_MINUS_SRC_COLOR,
++                                              SDL_BLENDOPERATION_ADD, SDL_BLENDFACTOR_ONE,
++                                              SDL_BLENDFACTOR_ONE_MINUS_SRC_ALPHA,
++                                              SDL_BLENDOPERATION_ADD);
++        case BlendAlpha:
++        default: return SDL_BLENDMODE_BLEND;
++    }
++}
++
++static void apply_clip(int scissor_valid, int sx, int sy, int sw, int sh) {
++    SDL_Rect clip;
++    base_clip(&clip);
++    if (scissor_valid) {
++        SDL_Rect extra;
++        int x0, y0, x1, y1;
++        extra.x = (int) (map_offset_x + (float) sx * map_scale + 0.5f);
++        extra.y = (int) (map_offset_y + (float) sy * map_scale + 0.5f);
++        extra.w = (int) ((float) sw * map_scale + 0.5f);
++        extra.h = (int) ((float) sh * map_scale + 0.5f);
++        x0 = clip.x > extra.x ? clip.x : extra.x;
++        y0 = clip.y > extra.y ? clip.y : extra.y;
++        x1 = (clip.x + clip.w) < (extra.x + extra.w) ? (clip.x + clip.w) : (extra.x + extra.w);
++        y1 = (clip.y + clip.h) < (extra.y + extra.h) ? (clip.y + clip.h) : (extra.y + extra.h);
++        clip.x = x0;
++        clip.y = y0;
++        clip.w = x1 - x0;
++        clip.h = y1 - y0;
++        if (clip.w < 0) clip.w = 0;
++        if (clip.h < 0) clip.h = 0;
++    }
++    SDL_RenderSetClipRect(renderer, &clip);
++}
++
++int galnx_sdl_video_init(void) {
++    SDL_RendererInfo info;
++    if (ready) return 0;
++    if (SDL_Init(SDL_INIT_VIDEO) != 0) return -1;
++    window = SDL_CreateWindow("rfvp", 0, 0, OUT_WIDTH, OUT_HEIGHT, SDL_WINDOW_FULLSCREEN);
++    if (window == NULL) return -2;
++    renderer = SDL_CreateRenderer(window, 0, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
++    if (renderer == NULL) return -3;
++    if (SDL_GetRendererInfo(renderer, &info) == 0 && info.name != NULL) {
++        galnx_log("rfvp: sdl video renderer: %s", info.name);
++    }
++    ready = 1;
++    return 0;
++}
++
++void galnx_sdl_video_shutdown(void) {
++    int i;
++    if (!ready) return;
++    for (i = 0; i < texture_count; ++i) {
++        if (textures[i].texture != NULL) SDL_DestroyTexture(textures[i].texture);
++    }
++    texture_count = 0;
++    if (renderer != NULL) SDL_DestroyRenderer(renderer);
++    if (window != NULL) SDL_DestroyWindow(window);
++    renderer = NULL;
++    window = NULL;
++    SDL_Quit();
++    ready = 0;
++}
++
++int galnx_sdl_texture_create(unsigned id, int width, int height, int format,
++                             const unsigned char* pixels, long length) {
++    TextureEntry* entry;
++    SDL_Texture* texture;
++    uint8_t* rgba = NULL;
++    int bpp = format_bytes(format);
++    if (!ready || width <= 0 || height <= 0) return -1;
++    entry = find_texture(id);
++    if (entry == NULL && texture_count >= MaxTextures) return -2;
++    texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING,
++                                width, height);
++    if (texture == NULL) return -4;
++    SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
++    rgba = (uint8_t*) calloc((size_t) width * height, 4);
++    if (rgba == NULL) {
++        SDL_DestroyTexture(texture);
++        return -5;
++    }
++    if (pixels != NULL && length >= (long) width * height * bpp) {
++        convert_to_rgba(pixels, format, width * height, rgba);
++    }
++    SDL_UpdateTexture(texture, NULL, rgba, width * 4);
++    free(rgba);
++    if (entry == NULL) {
++        entry = &textures[texture_count++];
++    } else {
++        SDL_DestroyTexture(entry->texture);
++    }
++    entry->id = (int) id;
++    entry->texture = texture;
++    entry->width = width;
++    entry->height = height;
++    return 0;
++}
++
++int galnx_sdl_texture_update(unsigned id, int x, int y, int width, int height, int format,
++                             const unsigned char* pixels, long length) {
++    TextureEntry* entry = find_texture(id);
++    SDL_Rect rect;
++    uint8_t* rgba;
++    int bpp = format_bytes(format);
++    if (entry == NULL || pixels == NULL || width <= 0 || height <= 0) return -1;
++    if (length < (long) width * height * bpp) return -2;
++    rect.x = x;
++    rect.y = y;
++    rect.w = width;
++    rect.h = height;
++    if (format == FormatRgba8) {
++        SDL_UpdateTexture(entry->texture, &rect, pixels, width * 4);
++        return 0;
++    }
++    rgba = (uint8_t*) malloc((size_t) width * height * 4);
++    if (rgba == NULL) return -3;
++    convert_to_rgba(pixels, format, width * height, rgba);
++    SDL_UpdateTexture(entry->texture, &rect, rgba, width * 4);
++    free(rgba);
++    return 0;
++}
++
++void galnx_sdl_texture_destroy(unsigned id) {
++    int i;
++    for (i = 0; i < texture_count; ++i) {
++        if (textures[i].id == (int) id) {
++            SDL_DestroyTexture(textures[i].texture);
++            textures[i] = textures[texture_count - 1];
++            texture_count--;
++            return;
++        }
++    }
++}
++
++int galnx_sdl_begin(int vw, int vh, int clear_enabled, unsigned clear_rgba) {
++    SDL_Rect clip;
++    if (!ready) return -1;
++    update_mapping(vw, vh);
++    SDL_RenderSetClipRect(renderer, NULL);
++    if (clear_enabled) {
++        SDL_SetRenderDrawColor(renderer, (uint8_t) (clear_rgba & 0xff),
++                               (uint8_t) ((clear_rgba >> 8) & 0xff),
++                               (uint8_t) ((clear_rgba >> 16) & 0xff),
++                               (uint8_t) ((clear_rgba >> 24) & 0xff));
++        SDL_RenderClear(renderer);
++    }
++    base_clip(&clip);
++    SDL_RenderSetClipRect(renderer, &clip);
++    return 0;
++}
++
++int galnx_sdl_draw_quad(unsigned id, const float* xy, const float* uv, const unsigned* colors,
++                        int blend, int filter, int scissor_valid, int sx, int sy, int sw,
++                        int sh) {
++    TextureEntry* entry = find_texture(id);
++    SDL_Vertex vertices[4];
++    int indices[6];
++    int i;
++    if (!ready) return -1;
++    if (entry == NULL) return -1;
++    if (xy == NULL || uv == NULL || colors == NULL) return -1;
++    apply_clip(scissor_valid, sx, sy, sw, sh);
++    SDL_SetTextureScaleMode(entry->texture,
++                            filter == 0 ? SDL_ScaleModeNearest : SDL_ScaleModeLinear);
++    SDL_SetTextureBlendMode(entry->texture, blend_mode(blend));
++    for (i = 0; i < 4; ++i) {
++        unsigned c = colors[i];
++        vertices[i].position.x = map_offset_x + xy[i * 2 + 0] * map_scale;
++        vertices[i].position.y = map_offset_y + xy[i * 2 + 1] * map_scale;
++        vertices[i].tex_coord.x = uv[i * 2 + 0];
++        vertices[i].tex_coord.y = uv[i * 2 + 1];
++        vertices[i].color.r = (uint8_t) (c & 0xff);
++        vertices[i].color.g = (uint8_t) ((c >> 8) & 0xff);
++        vertices[i].color.b = (uint8_t) ((c >> 16) & 0xff);
++        vertices[i].color.a = (uint8_t) ((c >> 24) & 0xff);
++    }
++    indices[0] = 0;
++    indices[1] = 1;
++    indices[2] = 2;
++    indices[3] = 2;
++    indices[4] = 1;
++    indices[5] = 3;
++    SDL_RenderGeometry(renderer, entry->texture, vertices, 4, indices, 6);
++    return 0;
++}
++
++int galnx_sdl_draw_solid(int x, int y, int width, int height, unsigned rgba, int blend,
++                         int scissor_valid, int sx, int sy, int sw, int sh) {
++    SDL_Rect rect;
++    if (!ready) return -1;
++    apply_clip(scissor_valid, sx, sy, sw, sh);
++    rect.x = (int) (map_offset_x + (float) x * map_scale + 0.5f);
++    rect.y = (int) (map_offset_y + (float) y * map_scale + 0.5f);
++    rect.w = (int) ((float) width * map_scale + 0.5f);
++    rect.h = (int) ((float) height * map_scale + 0.5f);
++    SDL_SetRenderDrawBlendMode(renderer, blend_mode(blend));
++    SDL_SetRenderDrawColor(renderer, (uint8_t) (rgba & 0xff), (uint8_t) ((rgba >> 8) & 0xff),
++                           (uint8_t) ((rgba >> 16) & 0xff), (uint8_t) ((rgba >> 24) & 0xff));
++    SDL_RenderFillRect(renderer, &rect);
++    return 0;
++}
++
++void galnx_sdl_present(void) {
++    if (!ready) return;
++    SDL_RenderSetClipRect(renderer, NULL);
++    SDL_RenderPresent(renderer);
++}
++
++/* Copy the render target (the frame last presented: the renderer swaps buffers, so the new back
++ * buffer holds the previous frame) into out as RGBA, box-filtered to width x height. */
++/* Pump SDL's events (the Switch video driver ticks the applet loop from here) and report
++ * whether the user asked to leave. */
++int galnx_sdl_pump_events(void) {
++    SDL_Event event;
++    if (!ready) return 0;
++    while (SDL_PollEvent(&event)) {
++        if (event.type == SDL_QUIT) return 1;
++    }
++    return 0;
++}
++
++int galnx_sdl_read_pixels_scaled(int width, int height, unsigned char* out) {
++    unsigned char* full;
++    uint32_t* buffer;
++    int x, y;
++    if (!ready || out == NULL || width <= 0 || height <= 0) return -1;
++    full = (unsigned char*) malloc((size_t) OUT_WIDTH * OUT_HEIGHT * 4);
++    if (full == NULL) return -2;
++    if (SDL_RenderReadPixels(renderer, NULL, SDL_PIXELFORMAT_ABGR8888, full,
++                             OUT_WIDTH * 4) != 0) {
++        free(full);
++        return -3;
++    }
++    buffer = (uint32_t*) full;
++    for (y = 0; y < height; ++y) {
++        int sy0 = (int) ((long) y * OUT_HEIGHT / height);
++        int sy1 = (int) ((long) (y + 1) * OUT_HEIGHT / height);
++        if (sy1 <= sy0) sy1 = sy0 + 1;
++        for (x = 0; x < width; ++x) {
++            int sx0 = (int) ((long) x * OUT_WIDTH / width);
++            int sx1 = (int) ((long) (x + 1) * OUT_WIDTH / width);
++            unsigned rs = 0, gs = 0, bs = 0, as = 0, n = 0;
++            int px, py;
++            if (sx1 <= sx0) sx1 = sx0 + 1;
++            for (py = sy0; py < sy1; ++py) {
++                for (px = sx0; px < sx1; ++px) {
++                    uint32_t value = buffer[py * OUT_WIDTH + px];
++                    rs += value & 0xff;
++                    gs += (value >> 8) & 0xff;
++                    bs += (value >> 16) & 0xff;
++                    as += (value >> 24) & 0xff;
++                    n++;
++                }
++            }
++            if (n == 0) n = 1;
++            out[(y * width + x) * 4 + 0] = (unsigned char) (rs / n);
++            out[(y * width + x) * 4 + 1] = (unsigned char) (gs / n);
++            out[(y * width + x) * 4 + 2] = (unsigned char) (bs / n);
++            out[(y * width + x) * 4 + 3] = (unsigned char) (as / n);
++        }
++    }
++    free(full);
++    return 0;
++}
++
++int galnx_sdl_write_screen_bmp(const char* path) {
++    unsigned char* pixels;
++    FILE* file;
++    uint8_t header[54];
++    int y;
++    if (!ready || path == NULL) return -1;
++    pixels = (unsigned char*) malloc((size_t) OUT_WIDTH * OUT_HEIGHT * 4);
++    if (pixels == NULL) return -2;
++    if (SDL_RenderReadPixels(renderer, NULL, SDL_PIXELFORMAT_ABGR8888, pixels,
++                             OUT_WIDTH * 4) != 0) {
++        free(pixels);
++        return -3;
++    }
++    file = fopen(path, "wb");
++    if (file == NULL) {
++        free(pixels);
++        return -4;
++    }
++    memset(header, 0, sizeof(header));
++    header[0] = 'B';
++    header[1] = 'M';
++    {
++        uint32_t size = 54u + (uint32_t) OUT_WIDTH * (uint32_t) OUT_HEIGHT * 4u;
++        header[2] = (uint8_t) (size & 0xff);
++        header[3] = (uint8_t) ((size >> 8) & 0xff);
++        header[4] = (uint8_t) ((size >> 16) & 0xff);
++        header[5] = (uint8_t) ((size >> 24) & 0xff);
++    }
++    header[10] = 54;
++    header[14] = 40;
++    header[18] = (uint8_t) (OUT_WIDTH & 0xff);
++    header[19] = (uint8_t) ((OUT_WIDTH >> 8) & 0xff);
++    header[22] = (uint8_t) (OUT_HEIGHT & 0xff);
++    header[23] = (uint8_t) ((OUT_HEIGHT >> 8) & 0xff);
++    header[26] = 1;
++    header[28] = 32;
++    fwrite(header, 1, sizeof(header), file);
++    for (y = OUT_HEIGHT - 1; y >= 0; --y) {
++        const unsigned char* row = pixels + (size_t) y * OUT_WIDTH * 4;
++        int x;
++        for (x = 0; x < OUT_WIDTH; ++x) {
++            unsigned char bgr[4];
++            bgr[0] = row[x * 4 + 2];
++            bgr[1] = row[x * 4 + 1];
++            bgr[2] = row[x * 4 + 0];
++            bgr[3] = 255;
++            fwrite(bgr, 1, 4, file);
++        }
++    }
++    fclose(file);
++    free(pixels);
++    return 0;
++}

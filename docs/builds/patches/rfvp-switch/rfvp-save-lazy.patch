@@ -1,0 +1,357 @@
+diff --git a/crates/rfvp/src/app.rs b/crates/rfvp/src/app.rs
+index e787846..1d3238e 100644
+--- a/crates/rfvp/src/app.rs
++++ b/crates/rfvp/src/app.rs
+@@ -1262,11 +1262,10 @@ impl App {
+             if slot == u32::MAX {
+                 // SaveCreate(3, nil/int): prepare local_saved payload in memory.
+                 gd.save_manager.finalize_local_savedata_prepare(
+-                    nls.clone(),
+                     thumb_w,
+                     thumb_h,
+-                    &thumb_rgba,
+-                    Some(&state_snap),
++                    thumb_rgba,
++                    state_snap,
+                 )?;
+ 
+                 // If a SaveWrite was already requested (SaveCreate(3, slot) form), commit now.
+diff --git a/crates/rfvp/src/no_std_core.rs b/crates/rfvp/src/no_std_core.rs
+index 75e2581..7d88339 100644
+--- a/crates/rfvp/src/no_std_core.rs
++++ b/crates/rfvp/src/no_std_core.rs
+@@ -739,6 +739,7 @@ impl RfvpCore {
+         else {
+             return;
+         };
++        let thumb_started = host.clock().ticks_us();
+         let expected = thumb_w as usize * thumb_h as usize * 4;
+         let thumb = match host.renderer().capture_thumbnail(thumb_w, thumb_h) {
+             Some(thumb) if thumb.len() == expected => thumb,
+@@ -752,6 +753,17 @@ impl RfvpCore {
+         self.game_data
+             .save_manager
+             .set_wall_time(host.clock().wall_time());
++        let thumb_us = host.clock().ticks_us().saturating_sub(thumb_started);
++        host.log(
++            RfvpLogLevel::Info,
++            &format!(
++                "[save] capture slot={} thumb={}x{} thumb_ms={:.2}",
++                slot,
++                thumb_w,
++                thumb_h,
++                thumb_us as f64 / 1000.0
++            ),
++        );
+         let nls = self.game_data.get_nls();
+         #[cfg(feature = "psx")]
+         let result = self
+@@ -789,7 +801,7 @@ impl RfvpCore {
+                 // has already named a slot.
+                 self.game_data
+                     .save_manager
+-                    .finalize_local_savedata_prepare(nls.clone(), thumb_w, thumb_h, &thumb, Some(&snap))
++                    .finalize_local_savedata_prepare(thumb_w, thumb_h, thumb, snap)
+                     .and_then(|()| {
+                         if self.game_data.save_manager.try_commit_local_savedata(nls)? {
+                             self.game_data.save_manager.consume_save_write_result();
+@@ -807,6 +819,18 @@ impl RfvpCore {
+                     })
+             }
+         };
++        #[cfg(not(feature = "psx"))]
++        if result.is_ok() {
++            host.log(
++                RfvpLogLevel::Info,
++                &format!(
++                    "[save] prepared bytes={:?} pending={} slot={}",
++                    self.game_data.save_manager.local_saved_len(),
++                    self.game_data.save_manager.has_pending_prepare(),
++                    slot
++                ),
++            );
++        }
+         if let Err(err) = result {
+             host.log(RfvpLogLevel::Error, &format!("could not save: {err:#}"));
+             self.game_data.save_manager.consume_save_write_result();
+diff --git a/crates/rfvp/src/ring_log.rs b/crates/rfvp/src/ring_log.rs
+index 37fde8d..01ef509 100644
+--- a/crates/rfvp/src/ring_log.rs
++++ b/crates/rfvp/src/ring_log.rs
+@@ -12,7 +12,7 @@ use core::fmt::Write;
+ use log::{LevelFilter, Log, Metadata, Record};
+ 
+ /// How many lines are kept; older ones are dropped.
+-const CAPACITY: usize = 400;
++const CAPACITY: usize = 1200;
+ /// Longer lines are cut, so a runaway message cannot use up the memory.
+ const MAX_LINE: usize = 400;
+ 
+diff --git a/crates/rfvp/src/subsystem/resources/save_manager.rs b/crates/rfvp/src/subsystem/resources/save_manager.rs
+index a11f12e..30782a6 100644
+--- a/crates/rfvp/src/subsystem/resources/save_manager.rs
++++ b/crates/rfvp/src/subsystem/resources/save_manager.rs
+@@ -183,6 +183,18 @@ impl fmt::Debug for StorageHandle {
+     }
+ }
+ 
++/// A prepared (captured, not yet serialized) local_saved payload.
++///
++/// Serializing a scene snapshot costs about 100 ms on the console, so it is deferred until a
++/// SaveWrite actually needs the bytes; SaveCreate(3) alone only has to capture the snapshot.
++#[derive(Debug)]
++struct PendingPrepare {
++    thumb_w: u32,
++    thumb_h: u32,
++    thumb_rgba: Box<[u8]>,
++    state: Box<crate::subsystem::save_state::SaveStateSnapshotV1>,
++}
++
+ #[derive(Debug)]
+ pub struct SaveManager {
+     thumb_width: u32,
+@@ -200,6 +212,8 @@ pub struct SaveManager {
+     pending_vm_snapshot: Option<ThreadManagerSnapshotV1>,
+     /// Request to prepare an in-memory save payload (original engine: local_saved).
+     need_save_prepare: bool,
++    /// Captured snapshot and thumbnail of a prepared payload, serialized only on demand.
++    pending_prepare: Option<PendingPrepare>,
+     /// Prepared save bytes (header + thumbnail + optional state chunk) for SaveWrite.
+     local_saved_bytes: Option<Box<[u8]>>,
+     storage: Option<StorageHandle>,
+@@ -234,6 +248,7 @@ impl SaveManager {
+             slots: vec![None; SLOT_COUNT],
+             pending_vm_snapshot: None,
+             need_save_prepare: false,
++            pending_prepare: None,
+             local_saved_bytes: None,
+             storage: None,
+             present: vec![false; SLOT_COUNT],
+@@ -313,7 +328,10 @@ impl SaveManager {
+ 
+     pub fn wants_vm_snapshot_capture(&self) -> bool {
+         (self.need_save_prepare && self.local_saved_bytes.is_none())
+-            || (self.save_requested && !self.savedata_prepared && self.local_saved_bytes.is_none())
++            || (self.save_requested
++                && !self.savedata_prepared
++                && self.local_saved_bytes.is_none()
++                && self.pending_prepare.is_none())
+     }
+ 
+     pub fn set_pending_vm_snapshot(&mut self, snap: ThreadManagerSnapshotV1) {
+@@ -572,8 +590,11 @@ impl SaveManager {
+             return Some((u32::MAX, w, h));
+         }
+ 
+-        // If we already have a prepared local_saved buffer, SaveWrite can commit without a capture.
+-        if self.save_requested && self.local_saved_bytes.is_some() {
++        // If a payload was prepared (even lazily, as an unencoded snapshot), SaveWrite can commit
++        // without another capture.
++        if self.save_requested
++            && (self.local_saved_bytes.is_some() || self.pending_prepare.is_some())
++        {
+             return None;
+         }
+ 
+@@ -597,22 +618,34 @@ impl SaveManager {
+     /// so subsequent `SaveWrite(slot)` can commit without capturing the menu overlay.
+     pub fn request_prepare_local_savedata(&mut self) {
+         self.need_save_prepare = true;
++        self.pending_prepare = None;
+         self.local_saved_bytes = None;
+     }
+ 
+     /// True if an in-memory save payload has been prepared (local_saved).
+     pub fn has_local_saved(&self) -> bool {
+-        self.local_saved_bytes.is_some()
++        self.local_saved_bytes.is_some() || self.pending_prepare.is_some()
+     }
+ 
+-    /// Finalize preparation of `local_saved_bytes` from the captured thumbnail and optional state.
++    /// True if a payload was captured but not yet serialized.
++    pub fn has_pending_prepare(&self) -> bool {
++        self.pending_prepare.is_some()
++    }
++
++    /// Diagnostic: byte length of the prepared payload, if any.
++    pub fn local_saved_len(&self) -> Option<usize> {
++        self.local_saved_bytes.as_ref().map(|bytes| bytes.len())
++    }
++
++    /// Keep a captured thumbnail and state snapshot as a prepared payload (original engine:
++    /// local_saved). Serialization is deferred to the materializer: encoding a 10 MB scene state
++    /// costs about 100 ms, and most SaveCreate(3) calls are never followed by a SaveWrite.
+     pub fn finalize_local_savedata_prepare(
+         &mut self,
+-        nls: Nls,
+         thumb_w: u32,
+         thumb_h: u32,
+-        thumb_rgba: &[u8],
+-        state: Option<&crate::subsystem::save_state::SaveStateSnapshotV1>,
++        thumb_rgba: Vec<u8>,
++        state: crate::subsystem::save_state::SaveStateSnapshotV1,
+     ) -> Result<()> {
+         let expected = (thumb_w as usize)
+             .saturating_mul(thumb_h as usize)
+@@ -625,16 +658,40 @@ impl SaveManager {
+             );
+         }
+ 
+-        let mut bytes = self.build_save_file_bytes(nls, thumb_rgba)?;
+-        if let Some(snap) = state {
+-            crate::subsystem::save_state::append_state_chunk_v1(&mut bytes, snap)?;
+-        }
+-
+-        self.local_saved_bytes = Some(bytes.into_boxed_slice());
++        self.pending_prepare = Some(PendingPrepare {
++            thumb_w,
++            thumb_h,
++            thumb_rgba: thumb_rgba.into_boxed_slice(),
++            state: Box::new(state),
++        });
++        self.local_saved_bytes = None;
+         self.need_save_prepare = false;
+         Ok(())
+     }
+ 
++    /// Serialize a prepared payload into local_saved_bytes; only a commit needs the bytes.
++    fn materialize_pending_local_savedata(&mut self, nls: Nls) -> Result<Option<usize>> {
++        let Some(pending) = self.pending_prepare.take() else {
++            return Ok(None);
++        };
++        let timing = crate::perf::enabled();
++        let t_encode = crate::perf::start();
++        let mut bytes = self.build_save_file_bytes(nls, &pending.thumb_rgba)?;
++        crate::subsystem::save_state::append_state_chunk_v1(&mut bytes, &pending.state)?;
++        if timing {
++            let t_done = crate::perf::start();
++            crate::perf::event(format_args!(
++                "[save] materialize thumb={}x{} encode_ms={:.2} len={}",
++                pending.thumb_w,
++                pending.thumb_h,
++                (t_done.saturating_sub(t_encode)) as f64 / 1000.0,
++                bytes.len(),
++            ));
++        }
++        self.local_saved_bytes = Some(bytes.into_boxed_slice());
++        Ok(self.local_saved_len())
++    }
++
+     /// The header and thumbnail of a slot file; the PlayStation appends the state itself
+     /// (`save_state::append_state_chunk_streamed`) and hands the result to
+     /// [`Self::finish_prepare`] or [`Self::finish_write`].
+@@ -687,10 +744,25 @@ impl SaveManager {
+         if self.current_save_slot >= SLOT_COUNT as u32 {
+             return Ok(false);
+         }
++        if self.local_saved_bytes.is_none() {
++            self.materialize_pending_local_savedata(nls.clone())?;
++        }
+         let Some(bytes) = self.local_saved_bytes.take() else {
+             return Ok(false);
+         };
++        let timing = crate::perf::enabled();
++        let t_write = crate::perf::start();
+         let result = self.write_current_slot(&bytes, nls);
++        if timing {
++            let t_done = crate::perf::start();
++            crate::perf::event(format_args!(
++                "[save] commit slot={} len={} write_ms={:.2} ok={}",
++                self.current_save_slot,
++                bytes.len(),
++                (t_done.saturating_sub(t_write)) as f64 / 1000.0,
++                result.is_ok(),
++            ));
++        }
+         self.local_saved_bytes = Some(bytes);
+         result?;
+         self.savedata_prepared = true;
+@@ -722,11 +794,24 @@ impl SaveManager {
+             );
+         }
+ 
++        let timing = crate::perf::enabled();
++        let t_encode = crate::perf::start();
+         let mut bytes = self.build_save_file_bytes(nls.clone(), thumb_rgba)?;
+         if let Some(snap) = state {
+             crate::subsystem::save_state::append_state_chunk_v1(&mut bytes, snap)?;
+         }
++        let t_write = crate::perf::start();
+         self.write_current_slot(&bytes, nls)?;
++        if timing {
++            let t_done = crate::perf::start();
++            crate::perf::event(format_args!(
++                "[save] finalize slot={} len={} encode_ms={:.2} write_ms={:.2}",
++                self.current_save_slot,
++                bytes.len(),
++                (t_write.saturating_sub(t_encode)) as f64 / 1000.0,
++                (t_done.saturating_sub(t_write)) as f64 / 1000.0,
++            ));
++        }
+         self.savedata_prepared = true;
+         Ok(())
+     }
+diff --git a/crates/rfvp/src/subsystem/save_state.rs b/crates/rfvp/src/subsystem/save_state.rs
+index 1442ba8..b742727 100644
+--- a/crates/rfvp/src/subsystem/save_state.rs
++++ b/crates/rfvp/src/subsystem/save_state.rs
+@@ -93,6 +93,10 @@ impl SaveStateSnapshotV1 {
+ 
+ pub fn append_state_chunk_v1(out: &mut Vec<u8>, snap: &SaveStateSnapshotV1) -> Result<()> {
+     let payload = snapshot_codec::encode(snap).context("serialize SaveStateSnapshotV1")?;
++    // Only the total length is logged: measuring the parts would serialize the whole state once
++    // more per part (five encodes per save), which dominated the frame time on the console.
++    #[cfg(feature = "no_std")]
++    log::info!("[save] state total={}B", payload.len());
+     snapshot_codec::append_chunk(
+         out,
+         &payload,
+diff --git a/platform/switch/runtime/sdl_video.c b/platform/switch/runtime/sdl_video.c
+index 22bb459..8e68305 100644
+--- a/platform/switch/runtime/sdl_video.c
++++ b/platform/switch/runtime/sdl_video.c
+@@ -263,6 +263,11 @@ static int frame_targets_ready;
+ static int frame_current;
+ static int frame_previous;
+ 
++/* Small render target used to downsample the previous frame for save thumbnails on the GPU. */
++static SDL_Texture* thumb_target;
++static int thumb_target_w;
++static int thumb_target_h;
++
+ static int ensure_frame_targets(void) {
+     int i;
+     if (frame_targets_ready) return 1;
+@@ -813,6 +818,32 @@ int galnx_sdl_read_pixels_scaled(int width, int height, unsigned char* out) {
+     started = stat_now();
+     /* Queued quads have not reached the target yet, so a read-back would miss them. */
+     batch_flush();
++
++    /* Fast path: downsample on the GPU into a small render target and read back only that
++     * (a small read instead of a full OUT_WIDTH*OUT_HEIGHT one, and no CPU box filter). */
++    if (frame_targets_ready && frame_previous != frame_current) {
++        SDL_Texture* source = frame_targets[frame_previous];
++        if (thumb_target == NULL || thumb_target_w != width || thumb_target_h != height) {
++            if (thumb_target != NULL) SDL_DestroyTexture(thumb_target);
++            thumb_target = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ABGR8888,
++                                             SDL_TEXTUREACCESS_TARGET, width, height);
++            thumb_target_w = width;
++            thumb_target_h = height;
++        }
++        if (thumb_target != NULL) {
++            SDL_Texture* saved_target = SDL_GetRenderTarget(renderer);
++            SDL_SetRenderTarget(renderer, thumb_target);
++            SDL_RenderCopy(renderer, source, NULL, NULL);
++            if (SDL_RenderReadPixels(renderer, NULL, SDL_PIXELFORMAT_ABGR8888, out,
++                                     width * 4) == 0) {
++                SDL_SetRenderTarget(renderer, saved_target);
++                stat_thumb_calls++;
++                stat_thumb_us += stat_now() - started;
++                return 0;
++            }
++            SDL_SetRenderTarget(renderer, saved_target);
++        }
++    }
+     full = (unsigned char*) malloc((size_t) OUT_WIDTH * OUT_HEIGHT * 4);
+     if (full == NULL) return -2;
+     {

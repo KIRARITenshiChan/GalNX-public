@@ -1,0 +1,71 @@
+# GalNX P11 pilot manifest - rfvp (Rust FVP) IROSEKA_FHD self-contained NSP.
+#
+# Game: 五彩斑斓的世界 HD Re:GENERATION (IROSEKA_FHD), Favorite, 2022 HD remaster.
+# Engine: rfvp (Rust FVP reimplementation, MPL-2.0, upstream tauri-no-kuni/rfvp)
+# plus the GalNX Switch backend (docs/builds/016-rfvp-sdl2-backend.md) and romfs
+# self-containment patch (docs/builds/018-rfvp-nsp.md).
+#
+# Pipeline (P11):
+#   bash scripts/build_nsp_game.sh --elf <rfvp-switch ELF> --game-dir <staged game dir> \
+#       --title-id 010047420000a000 --name "IROSEKA FHD" --author GalNX --version 1.0.8 \
+#       --icon <256x256 jpg> --keyset <prod.keys> --romfs-mode hardlink --out <nsp>
+#   galnx package nsp verify --nsp <nsp> --manifest examples/pilot02-iroseka.yaml
+#
+# TitleID: GalNX pilot block 0x01004742...; 010047420000a000 is 0x2000-aligned
+# (a base application id, not a patch/DLC id).
+#
+# The game data (~9.2 GiB of .hcb/.bin archives plus a movie/ directory) is
+# linked read-only from the original PC install; only relative names/sizes are
+# recorded here. Source files stay read-only per the GalNX workbench contract.
+schema_version: 1
+
+game:
+  id: pilot02-iroseka
+  title: 五彩斑斓的世界 HD Re:GENERATION
+  publisher: Favorite
+  version: "1.2.4-test"
+  source_dir: E:/Othergames/Galgame/IROSEKA_FHD
+  notes: >-
+    Pilot game P2 (rfvp / Rust FVP). Chinese scenario via the game's own GBK
+    script (nls = GBK in config.toml); rendering uses SDL2 + GLES2 on Switch.
+
+engine:
+  adapter: rfvp
+  adapter_version: "0.7.0 (9f07ade) + GalNX Switch backend"
+  profile: switch
+  entry: .iroseka.hcb
+  descriptor: engines/rfvp.yaml
+  options:
+    config: config.toml
+    nls: gbk
+
+switch:
+  title_id: "010047420000A000"
+  title: IROSEKA FHD
+  author: GalNX
+  icon: pilot02/icon-256.jpg
+  target: nsp
+  display_mode: handheld
+  save_policy: per-title-isolated
+
+input:
+  default_mode: controller
+  toggle_combo: "L+R+PLUS"
+  profile: generic-vn
+
+build:
+  output_dir: E:/galnx-build/p20
+  reproducible: true
+  clean_workspace_before_build: false
+  keys_env: GALNX_PROD_KEYS
+  romfs_mode: embedded
+
+package:
+  type: self_contained_nsp
+  startup_user_account: 1
+  romfs_dir: E:/galnx-build/p20/work/romfs
+  icon: pilot02/icon-256.jpg
+  notes: >-
+    RomFS is assembled by scripts/build_nsp_game.sh (hardlink staging, 9.93 GB);
+    the game root becomes romfs:/game at runtime when the SD copy is absent.
+    Saves are written to sdmc:/switch/rfvp/saves, independent of the game root.

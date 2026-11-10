@@ -1,0 +1,257 @@
+# Engine descriptor for the Kirikiroid2-NX adapter (docs/engines/README.md).
+# First self-contained-NSP engine: a pinned upstream checkout is patched with
+# nine GalNX patches (A/B/C packaging, D/E controller + save/load, F clean exit,
+# G mapping v2, H input tweaks, I exit-save + held mouse) and built against
+# seven self-built Switch portlibs.
+# Chains: docs/builds/009-k2nx-selfcontained-build.md (A/B/C),
+#         docs/builds/010-k2nx-controller-saveload.md (D/E, A4 NSP),
+#         docs/builds/011-k2nx-exit-crash-fix.md (F, exit crash),
+#         docs/builds/012-k2nx-cn-content.md (CN content packs + A6 NSP),
+#         docs/builds/014-k2nx-input-tweaks.md (H, A9 NSP),
+#         docs/builds/015-k2nx-save-exit-drag.md (I, A10 NSP).
+id: kirikiroid2-nx
+display_name: Kirikiroid2-NX
+upstream_url: https://github.com/Erige005/Kirikiroid2-NX
+pinned_commit: e96b6034c292c6ccdb099823ab6a0a6b505f77f3
+pinned_version: "v1.0.1 (e96b6034, 2026-10-18)"
+license_spdx: NOASSERTION
+license_url: https://github.com/Erige005/Kirikiroid2-NX/blob/main/LICENSE
+license_notes: >-
+  LICENSE (44184 bytes) is the KiriKiri BSD-style text, which is not a recognised
+  SPDX identifier, so license_spdx stays NOASSERTION. The repo root
+  THIRD_PARTY_NOTICES.md records the bundled components (FFmpeg LGPL-2.1,
+  OpenCV BSD-3-Clause, cocos2d-x MIT, UnRAR redistribution restrictions), and
+  docs/builds/patches/k2nx-switch/LICENSE keeps the upstream license text
+  next to the GalNX patch stack. A redistributed NSP must carry all of those
+  notices.
+target_kind: self_contained_nsp
+build_backend: cmake-switch
+capabilities:
+  video:
+    supported: true
+    note: cocos2d-x 3.11.1 renderer on Switch EGL; Citron Nightly 0237a9b88 renders the title screen and the script at 60 FPS.
+  audio:
+    supported: false
+    note: The FFmpeg/audio path is linked in but was not exercised in the Citron runs.
+  input:
+    supported: true
+    note: Switch pad buttons map to VK_* through the Kirikiroid2Preference.xml KeyMap; verified with RIGHT+C in Citron.
+  save:
+    supported: true
+    note: >-
+      Pad-only save/load works through patches D+E: Y toggles the virtual mouse
+      cursor, D-Pad moves it in 24 px steps, A/B are left/right click, L quick
+      saves, R opens this game's native LOAD screen, PLUS opens SAVE, ZR loads
+      slot 10 and ZL forces the system save. Verified both as NRO and inside the
+      A4 self-contained NSP: save wrote savedata010.bmp, restart -> LOAD -> slot
+      01 01 -> back to the save point and normal advancing. See
+      docs/pilot/saveload-acceptance.md; Nintendo Switch hardware still unverified.
+  touch:
+    supported: false
+    note: Citron mouse input is the first-touch path; touch was not exercised.
+default_input_profile: krkr-ns
+artifact_naming: "{id}-{version}.nsp"
+content_layout:
+  mode: romfs
+  entry: game_files.txt
+  destination: /kirikiri/haruno
+  notes: >-
+    The self-contained NSP embeds the game payload in its RomFS; on first boot
+    the patch copies the files listed in romfs:/game_files.txt to
+    sdmc:/kirikiri/haruno, writes the .galnx_extracted marker and autostarts
+    /kirikiri/haruno/data.xp3. Mounting the additional xp3 archives stays in the
+    game Init.tjs (Storages.addAutoPath), so the engine needs no change.
+status: ready
+status_reason: >-
+  Self-contained NSP verified in Citron only (A3/A4; A2 independent rerun, P2
+  acceptance). Pad-only save/load (U20) verified in Citron as NRO and as A4 NSP.
+  Nintendo Switch hardware is still unverified. The CN localization (P5) is
+  simulator-level PASS as well: data/scenario/image00.xp3 were repacked from the
+  public X'moe source repository and the A6 NSP boots the Chinese title menu and
+  script in Citron; A7 additionally swaps movie.xp3 for the Chinese-subtitled
+  opening, so the whole CN pilot (title, script, OP) is simulator-level PASS;
+  hardware unverified. Patch G (P6) is simulator-level PASS as well: the v2 pad
+  mapping, the MINUS quit path and the K2S drawer power-button quit all exit
+  cleanly in Citron; hardware unverified. Patch H (P7) adds a hold-R Ctrl skip
+  and fixes the left-stick wheel direction; the A9 NSP (1.0.8, cover icon) is
+  simulator-level PASS; hardware unverified.
+artifact_sha256: 0efc23f66f57a016c15ea3944cdb8ce5b396f03f6bef3b8f5ddc1794d03186f2
+evidence_urls:
+  - docs/builds/009-k2nx-selfcontained-build.md
+  - docs/builds/010-k2nx-controller-saveload.md
+  - docs/builds/011-k2nx-exit-crash-fix.md
+  - docs/builds/012-k2nx-cn-content.md
+  - docs/builds/013-k2nx-controller-input-v2.md
+  - docs/builds/014-k2nx-input-tweaks.md
+  - docs/builds/015-k2nx-save-exit-drag.md
+  - docs/pilot/P5-localization-feasibility.md
+  - docs/builds/patches/k2nx-switch/README.md
+  - docs/pilot/P1-engine-k2nx.md
+  - docs/pilot/P2-acceptance.md
+  - docs/pilot/saveload-acceptance.md
+notes: >-
+  Pin v1.0.1. GalNX applies nine patches: A/B/C add autostart, first-boot
+  payload extraction and a plugin alias; D/E add the controller-driven virtual
+  mouse cursor and a pad-reachable save/load entry (hand-written TJS expressions
+  evaluated with TVPExecuteExpression, no touch required); F turns a confirmed
+  main-window close into a clean application exit and adds the Win32
+  minimized/maximized compatibility members; G rewrites the pad layer into the
+  v2 mapping (native back / auto / save / load / quit hotkeys, right-stick
+  virtual cursor at half speed, left-stick wheel steps) and closes the
+  ProgramClosing teardown path that the K2S drawer power button used; H adds a
+  hold-R Ctrl skip (the game polls System.getKeyState) and flips the left-stick
+  wheel direction to match the game's backlog/next-line convention; I makes the
+  close path persist system/trace data (TraceSave + SystemSave then a 1 s
+  delayed TVPExitApplication) so settings, save metadata and the continue marker
+  survive, turns ZR/ZL into held left/right mouse buttons that re-show the faded
+  virtual cursor, and moves the PrimaryLayerArea early-return behind the Switch
+  block so sticks work on title/config/save screens. Order matters: apply A, B,
+  C, then D, then E, then F, then G, then H, then I (each was generated on top
+  of its predecessor). The engine is built
+  with seven portlibs, all recorded below. Build time also needs the upstream
+  APK 1.3.9 UI assets and cocos2d-x 3.11.1, fetched by the pinned upstream
+  scripts.
+  Localization: the CN payload is built from https://github.com/t-satoru-Studio/haruno_script
+  (X'moe, main branch) by repacking data.xp3/scenario.xp3/image00.xp3; no engine
+  change is needed (scripts set Scripts.textEncoding="utf8" and register the JP-layout
+  archive auto-paths in startup.tjs). Three artifacts exist for this pilot: A5 (JP,
+  version 1.0.4) sha256 f179f0a2..., A6 (CN, version 1.0.5) sha256 1941a317... and
+  A7 (CN + Chinese-subtitled opening, version 1.0.6) sha256 c23a519a... and
+  A8 (CN + patch G controller mapping v2, version 1.0.7) sha256 ec74b0b4...,
+  A9 (CN + patch H input tweaks + cover icon, version 1.0.8) sha256 ee0603b4...
+  and A10 (CN + patch I exit save / held mouse, version 1.0.9) sha256 0efc23f6...;
+  artifact_sha256 records the current one (A10). Build docs: 012 sections 7-8,
+  013 for the controller layer, 014 for patch H, 015 for patch I.
+source:
+  url: https://github.com/Erige005/Kirikiroid2-NX
+  commit: e96b6034c292c6ccdb099823ab6a0a6b505f77f3
+patches:
+  - path: docs/builds/patches/k2nx-switch/A-autostart.patch
+    notes: >-
+      src/core/environ/switch/SwitchUtils.cpp: reads
+      sdmc:/switch/kirikiroid2/autostart.txt and calls startupFrom() so the
+      engine boots straight into a game instead of the file picker.
+  - path: docs/builds/patches/k2nx-switch/B-extract-v2.patch
+    notes: >-
+      src/core/environ/switch/main.cpp: GalNX_MaybeExtractGame() copies the
+      RomFS payload listed in game_files.txt to sdmc on first boot, with a
+      statvfs free-space precheck, MkDirs, marker versioning and stat checks.
+  - path: docs/builds/patches/k2nx-switch/C-plugin-alias.patch
+    notes: >-
+      src/plugins/InternalPlugins.cpp: retries plugin names ending in .tpm as
+      .dll so the built-in NCB modules register (windowEx and friends).
+  - path: docs/builds/patches/k2nx-switch/D-virtual-mouse-dpad.patch
+    notes: >-
+      src/core/environ/cocos2d/MainScene.cpp: BUTTON_START toggles the virtual
+      mouse cursor and the D-Pad moves it 24 px per press (clamped to the game
+      node) instead of relying on large joystick axis values, which never fire
+      on this engine port because onAxisEvent bails out when the TJS layer has
+      no PrimaryLayerArea area.
+  - path: docs/builds/patches/k2nx-switch/E-controller-ui-saveload.patch
+    notes: >-
+      Applies on top of D. Adds a GalNX_QuickSaveLoad() hotkey block that calls
+      this title's own TJS API through TVPExecuteExpression (MainObj.SaveAction,
+      MainObj.SystemSave, constructing a _SAVELOADOBJECT in nSAVE_SC/nLOAD_SC
+      mode for the native SAVE/LOAD screens, MainObj.DataLoadAction for a slot),
+      plus keyboard navigation for K2S' TVPInGameMenuForm and a highlighted
+      selection in PreferenceForm. Touches MainScene.cpp, InGameMenuForm.{h,cpp}
+      and PreferenceForm.{h,cpp}; GalNXLog() instrumentation writes
+      sdmc:/galnx-input.log (strip it for a release build).
+  - path: docs/builds/patches/k2nx-switch/F-close-exit.patch
+    notes: >-
+      Applies on top of E. src/core/environ/cocos2d/MainScene.cpp: a confirmed
+      close of the main window on Switch calls TVPExitApplication(0) instead of
+      invalidating the script object, so the TJS world is not torn down in an
+      arbitrary order (the reported crash was Member "SystemObj" does not exist
+      @line(365) checkdialog.tjs while leaving via the K2S drawer power button).
+      src/core/visual/WindowIntf.cpp: adds read-only minimized/maximized
+      properties plus no-op minimize/maximize/restore so this game's
+      MainWindow.EscapeWork (MainWindow.tjs:3417) stops raising
+      Member "minimized" does not exist. Verified in Citron (exit3): dialog ->
+      yes -> log "[close] main window confirmed; terminating application" ->
+      clean exit; hardware still unverified.
+  - path: docs/builds/patches/k2nx-switch/G-controller-input-v2.patch
+    notes: >-
+      Applies on top of F. MainScene.cpp: pad mapping v2 (B = native back via
+      ActiveObj.RightMouseUpAction, X = auto mode, Y / + = game save-load panel
+      after popping the K2S forms, - = game quit confirm, ZR / ZL = virtual
+      mouse left / right click, right stick moves the cursor at half the patch E
+      speed, left stick sends one wheel step per push); OnCloseQuery() now
+      refuses a program close until the game confirms, and OnClose() terminates
+      the application for the main window instead of invalidating the script
+      object (K2S drawer power button, the 2-0000 SystemObj crash path).
+      CCController-switch.cpp: Minus is delivered as Controller::BUTTON_SELECT
+      instead of an EventKeyboard KEY_MENU, so patch E/G hotkeys can see it.
+      Verified in Citron (g1/g2/g3): 11 mapping actions, MINUS quit and drawer
+      power quit all end in "[close]" with zero exceptions; hardware unverified.
+  - path: docs/builds/patches/k2nx-switch/H-input-tweaks.patch
+    notes: >-
+      Applies on top of G. src/core/environ/cocos2d/MainScene.cpp: BUTTON_R now
+      sets _scancode[VK_CONTROL]=0x11 on press and clears it on release, so the
+      game's SkipCheck() (which polls System.getKeyState(VK_CONTROL)) sees Ctrl
+      held and fast-forwards; the left-stick wheel delta flips to v < 0 ? 120 :
+      -120 so pushing up opens the backlog (delta > 0) and pulling down advances
+      one line (delta < 0). Verified in Citron (h1): ctrl down/up, wheel 120 /
+      -120, skip crossed @0000A_Z01 -> @0000A_Z02 with zero exceptions; A9 first
+      boot smoke also PASS; hardware unverified.
+  - path: docs/builds/patches/k2nx-switch/I-save-exit-mouse.patch
+    notes: >-
+      Applies on top of H. src/core/environ/cocos2d/MainScene.cpp: the confirmed
+      close paths now call the game's own TraceSave + SystemSave (through
+      TVPExecuteExpression) and then terminate 1 s later, so settings, save
+      thumbnails/text/timestamps and the trace marker survive a quit (the
+      immediate TVPExitApplication added by patches F/G skipped
+      MainWindow.finalize(), which was the only SystemSave call site); ZR/ZL
+      send onMouseMove + onMouseDown/onMouseUp instead of a single click and
+      re-show the faded virtual cursor; the PrimaryLayerArea early-return in
+      onAxisEvent moves behind the Switch block so right-stick cursor and
+      left-stick wheel work on title/config/SAVE screens. Verified in Citron
+      (i6/i8) and with the A10 NSP first-boot smoke runs A-D: close log
+      "[close] persisted system data (TraceSave + SystemSave)", system/trace
+      rewritten on every quit, LOAD panel renders the persisted thumbnail, text
+      and timestamp; hardware unverified.
+portlibs:
+  - name: libiconv
+    version: "1.17"
+    source_url: https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.17.tar.gz
+    recipe: platforms/switch/tools/portlibs/build_libiconv.sh
+    notes: newlib has no iconv; --host=aarch64-none-elf, static, --disable-nls.
+  - name: ffmpeg
+    version: "3.2.19"
+    source_url: https://ffmpeg.org/releases/ffmpeg-3.2.19.tar.xz
+    recipe: platforms/switch/tools/portlibs/build_ffmpeg.sh
+    notes: K2 1.3.9 uses pre-5.0 FFmpeg APIs, so devkitPro FFmpeg 7.1 is not a substitute; NEON asm needs relocate=1 for PIE.
+  - name: opencv
+    version: "3.4.20"
+    source_url: https://github.com/opencv/opencv/archive/refs/tags/3.4.20.tar.gz
+    recipe: platforms/switch/tools/portlibs/build_opencv.sh
+    notes: BUILD_LIST=core,imgproc; CV_CPU_NEON/FP16 are patched on for __SWITCH__.
+  - name: unrar
+    version: "5.6.5"
+    source_url: https://www.rarlab.com/rar/unrarsrc-5.6.5.tar.gz
+    recipe: platforms/switch/tools/portlibs/build_unrar.sh
+    notes: Static RARDLL build with a newlib utimensat fix; the UnRAR license restricts redistribution.
+  - name: libbpg
+    version: "0.9.8"
+    source_url: https://bellard.org/bpg/libbpg-0.9.8.tar.gz
+    recipe: platforms/switch/tools/portlibs/build_libbpg.sh
+    notes: Decoder only, plus the gray-line fix patch.
+  - name: jxrlib
+    version: master
+    source_url: https://github.com/4creators/jxrlib/archive/refs/heads/master.tar.gz
+    recipe: platforms/switch/tools/portlibs/build_jxrlib.sh
+    notes: UNPINNED upstream master; rebuilds may drift, tracked as a reproducibility risk.
+  - name: blend2d
+    version: d2027ebfd6aaf53b190b6b3b497425fc85f14251
+    source_url: https://github.com/blend2d/blend2d
+    recipe: platforms/switch/tools/portlibs/build_blend2d.sh
+    notes: The recipe clones and checks out this commit; __SWITCH__ takes the Apple 64-bit off_t branch.
+build:
+  workdir: "."
+  commands:
+    - bash platforms/switch/tools/setup_wsl_devkitpro.sh
+    - bash platforms/switch/tools/fetch_cocos.sh
+    - bash platforms/switch/tools/fetch_lzma_sdk.sh
+    - for s in libiconv ffmpeg opencv unrar libbpg jxrlib blend2d; do bash platforms/switch/tools/portlibs/build_$s.sh; done
+    - bash platforms/switch/tools/extract_apk_assets.sh
+    - bash platforms/switch/tools/build_k2.sh all Release

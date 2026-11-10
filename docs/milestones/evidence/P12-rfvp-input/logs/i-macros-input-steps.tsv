@@ -1,0 +1,29 @@
+0	wait	wait:9000	ok	waited 9000ms		9826
+1	click	click:1386,560	ok	focus_ok=1		2132
+2	wait	wait:50000	ok	waited 50000ms		50844
+3	capture	capture:i0-story	ok	bytes=94970 nonblack=0.9018	E:\galnx-build\m5-rfvp-run\p12-i\20261031-161019-rfvp\step-04-i0-story.png	2393
+4	key	key:V	ok	keys_sent=1		1733
+5	wait	wait:1200	ok	waited 1200ms		2011
+6	key	key:V	ok	keys_sent=1		1705
+7	wait	wait:1500	ok	waited 1500ms		2320
+8	capture	capture:i1-text	ok	bytes=1252125 nonblack=0.9018	E:\galnx-build\m5-rfvp-run\p12-i\20261031-161019-rfvp\step-09-i1-text.png	2427
+9	key	key:M	ok	keys_sent=1		1792
+10	wait	wait:6000	ok	waited 6000ms		6780
+11	capture	capture:i2-save	ok	bytes=1589082 nonblack=0.9018	E:\galnx-build\m5-rfvp-run\p12-i\20261031-161019-rfvp\step-12-i2-save.png	2440
+12	key	key:X	ok	keys_sent=1		1733
+13	wait	wait:2500	ok	waited 2500ms		3310
+14	key	key:R	ok	keys_sent=1		1744
+15	wait	wait:1500	ok	waited 1500ms		2336
+16	key	key:Z	ok	keys_sent=1		1737
+17	wait	wait:6000	ok	waited 6000ms		6847
+18	capture	capture:i3-load	ok	bytes=1689423 nonblack=0.9018	E:\galnx-build\m5-rfvp-run\p12-i\20261031-161019-rfvp\step-19-i3-load.png	2426
+19	key	key:X	ok	keys_sent=1		1819
+20	wait	wait:1500	ok	waited 1500ms		2360
+21	key	key:R	ok	keys_sent=1		1860
+22	wait	wait:2000	ok	waited 2000ms		2814
+23	capture	capture:i4-back	ok	bytes=1654031 nonblack=0.9018	E:\galnx-build\m5-rfvp-run\p12-i\20261031-161019-rfvp\step-24-i4-back.png	2578
+24	key	key:N	ok	keys_sent=1		1743
+25	wait	wait:7000	ok	waited 7000ms		7803
+26	capture	capture:i5-exit-dialog	ok	bytes=70697 nonblack=0.1788	E:\galnx-build\m5-rfvp-run\p12-i\20261031-161019-rfvp\step-27-i5-exit-dialog.png	2360
+27	wait	wait:5000	ok	waited 5000ms		5795
+28	capture	capture:i6-after	ok	bytes=70697 nonblack=0.1788	E:\galnx-build\m5-rfvp-run\p12-i\20261031-161019-rfvp\step-29-i6-after.png	2364

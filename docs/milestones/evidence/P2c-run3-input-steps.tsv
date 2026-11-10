@@ -1,0 +1,10 @@
+0	wait	wait:120000	ok	waited 120000ms		120379
+1	capture	capture:title	ok	bytes=2377792 nonblack=0.9018	E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\citron-harness\runs\20261030-074626-Kirikiroid2-NX-010047410000b0b4\step-02-title.png	2130
+2	key	key:RIGHT	ok	keys_sent=1		1860
+3	wait	wait:2500	ok	waited 2500ms		2902
+4	key	key:C	ok	keys_sent=1		1746
+5	wait	wait:15000	ok	waited 15000ms		15396
+6	capture	capture:started	ok	bytes=884524 nonblack=0.9018	E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\citron-harness\runs\20261030-074626-Kirikiroid2-NX-010047410000b0b4\step-07-started.png	2068
+7	key	key:C	ok	keys_sent=1		1653
+8	wait	wait:5000	ok	waited 5000ms		5400
+9	capture	capture:adv1	ok	bytes=924034 nonblack=0.9017	E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\citron-harness\runs\20261030-074626-Kirikiroid2-NX-010047410000b0b4\step-10-adv1.png	2091

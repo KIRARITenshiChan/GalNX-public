@@ -1,0 +1,808 @@
+diff --git a/crates/rfvp/src/host_api/render.rs b/crates/rfvp/src/host_api/render.rs
+index 9dfde96..1e8534f 100644
+--- a/crates/rfvp/src/host_api/render.rs
++++ b/crates/rfvp/src/host_api/render.rs
+@@ -145,6 +145,12 @@ pub trait RfvpRenderer {
+ 
+     fn present(&mut self) -> RfvpResult<()>;
+ 
++    /// Whether the renderer keeps the frame it showed last in a texture of its own, so a Sprt with
++    /// texture id -1 can be drawn from it without reading pixels back on the CPU.
++    fn supports_gpu_prev_frame(&self) -> bool {
++        false
++    }
++
+     /// The game frame drawn last, scaled to `width` x `height` and returned as RGBA8, for the
+     /// thumbnail of a save. A renderer that cannot read its frame back returns `None` and the
+     /// thumbnail is left blank.
+diff --git a/crates/rfvp/src/no_std_core.rs b/crates/rfvp/src/no_std_core.rs
+index 92e1ed6..75e2581 100644
+--- a/crates/rfvp/src/no_std_core.rs
++++ b/crates/rfvp/src/no_std_core.rs
+@@ -859,14 +859,22 @@ impl RfvpCore {
+         #[cfg(not(feature = "psx"))]
+         if self.render_cache.wants_prev_frame() {
+             let (w, h) = (self.config.virtual_width, self.config.virtual_height);
+-            let rgba = host.renderer().capture_thumbnail(w, h);
+-            let frame = match (&rgba, u16::try_from(w), u16::try_from(h)) {
+-                (Some(rgba), Ok(fw), Ok(fh)) if rgba.len() == w as usize * h as usize * 4 => {
+-                    Some((fw, fh, rgba.as_slice()))
++            if host.renderer().supports_gpu_prev_frame() {
++                // The host still holds the frame it showed last: mark it, no pixels move.
++                match (u16::try_from(w), u16::try_from(h)) {
++                    (Ok(fw), Ok(fh)) => self.render_cache.set_prev_frame_gpu(fw, fh),
++                    _ => self.render_cache.set_prev_frame(host.renderer(), None)?,
+                 }
+-                _ => None,
+-            };
+-            self.render_cache.set_prev_frame(host.renderer(), frame)?;
++            } else {
++                let rgba = host.renderer().capture_thumbnail(w, h);
++                let frame = match (&rgba, u16::try_from(w), u16::try_from(h)) {
++                    (Some(rgba), Ok(fw), Ok(fh)) if rgba.len() == w as usize * h as usize * 4 => {
++                        Some((fw, fh, rgba.as_slice()))
++                    }
++                    _ => None,
++                };
++                self.render_cache.set_prev_frame(host.renderer(), frame)?;
++            }
+         } else {
+             self.render_cache.set_prev_frame(host.renderer(), None)?;
+         }
+diff --git a/crates/rfvp/src/rendering/prim_commands.rs b/crates/rfvp/src/rendering/prim_commands.rs
+index 2349957..402f4b7 100644
+--- a/crates/rfvp/src/rendering/prim_commands.rs
++++ b/crates/rfvp/src/rendering/prim_commands.rs
+@@ -97,6 +97,14 @@ impl HostPrimRenderCache {
+         Ok(())
+     }
+ 
++    /// Note that the host keeps the frame it showed last itself (`supports_gpu_prev_frame`): the
++    /// sprite for texture id -1 then samples that frame, so nothing is read back here.
++    #[cfg(not(feature = "psx"))]
++    pub fn set_prev_frame_gpu(&mut self, width: u16, height: u16) {
++        self.prev_frame = Some((width, height));
++        self.wants_prev_frame = false;
++    }
++
+     /// Whether the host holds `graph_id` at `generation` (so its CPU copy may be evicted).
+     pub fn is_graph_uploaded(&self, graph_id: u16, generation: u64) -> bool {
+         self.graph_generation(graph_id) == Some(generation)
+diff --git a/platform/switch/host/src/ffi.rs b/platform/switch/host/src/ffi.rs
+index 2856eed..97906b4 100644
+--- a/platform/switch/host/src/ffi.rs
++++ b/platform/switch/host/src/ffi.rs
+@@ -39,6 +39,7 @@ extern "C" {
+     // main.c
+     fn rfvp_switch_log(message: *const u8, len: usize);
+     fn rfvp_switch_ticks_us() -> u64;
++    fn galnx_sdl_take_stats(out: *mut u64);
+     fn rfvp_switch_wall_time(out: *mut CWallTime) -> bool;
+     pub fn rfvp_switch_list_dir(path: *const c_char, visit: DirVisitor, ctx: *mut c_void) -> c_int;
+     pub fn rfvp_switch_path_kind(path: *const c_char, size: *mut u64) -> c_int;
+@@ -127,6 +128,16 @@ const DEBUG_REPORT_EVERY: u32 = 60;
+ /// The debug report also saves the screen here, every `DEBUG_SCREEN_EVERY` frames.
+ const DEBUG_SCREEN_FILE: &str = "sdmc:/switch/rfvp/debug_screen.bmp";
+ const DEBUG_SCREEN_EVERY: u32 = 300;
++/// Reading the frame back for that BMP costs ~40 ms, a visible stall every 300 frames, so it only
++/// runs when a build is being diagnosed on purpose.
++const DEBUG_SCREEN_ENABLED: bool = false;
++/// A frame slower than this is written to `PERF_SLOW_FILE` with the stages that took the time:
++/// waiting for the next one-second report would lose it.
++const SLOW_FRAME_US: u64 = 25_000;
++const PERF_SLOW_FILE: &str = "sdmc:/switch/rfvp/perf_slow.log";
++/// The number of stages `rfvp::perf` measures.
++const STAGES_LEN: usize = rfvp::perf::STAGES.len();
++
+ 
+ fn write_file(path: &str, bytes: &[u8]) {
+     let Some(path) = c_path(path) else { return };
+@@ -139,6 +150,18 @@ fn write_file(path: &str, bytes: &[u8]) {
+     }
+ }
+ 
++/// Append `bytes` to `path`, creating it (and leaving older lines) as needed.
++fn append_file(path: &str, bytes: &[u8]) {
++    let Some(path) = c_path(path) else { return };
++    unsafe {
++        let file = fopen(path.as_ptr() as *const c_char, c"ab".as_ptr());
++        if !file.is_null() {
++            fwrite(bytes.as_ptr() as *const c_void, 1, bytes.len(), file);
++            fclose(file);
++        }
++    }
++}
++
+ /// The running game and what the debug report needs between frames.
+ pub struct Session {
+     app: HorizonApp,
+@@ -152,6 +175,17 @@ pub struct Session {
+     sum_scene_us: u64,
+     sum_render_us: u64,
+     sum_ticks: u64,
++    /// Stage totals since the last report (see `rfvp::perf`).
++    stage_sums: [u64; STAGES_LEN],
++    /// SDL-side counters from the video shim, accumulated until the next report.
++    host_begin_us: u64,
++    host_upload_us: u64,
++    host_present_us: u64,
++    host_thumb_us: u64,
++    host_draw_calls: u64,
++    host_upload_calls: u64,
++    host_flush_calls: u64,
++    host_thumb_calls: u64,
+ }
+ 
+ impl Session {
+@@ -174,21 +208,64 @@ impl Session {
+         write_file(ERROR_FILE, text.as_bytes());
+     }
+ 
+-    fn debug_report(&mut self) {
++    fn debug_report(
++        &mut self,
++        vm_us: u64,
++        scene_us: u64,
++        render_us: u64,
++        ops: u32,
++        stages: &[u32; STAGES_LEN],
++        host: &[u64; 8],
++    ) {
+         let now = ticks_us();
+-        self.worst_us = self.worst_us.max(now.saturating_sub(self.last_frame_us));
++        let frame_us = now.saturating_sub(self.last_frame_us);
+         self.last_frame_us = now;
++        self.worst_us = self.worst_us.max(frame_us);
++        self.host_begin_us += host[0];
++        self.host_upload_us += host[2];
++        self.host_present_us += host[5];
++        self.host_thumb_us += host[6];
++        self.host_draw_calls += host[1];
++        self.host_upload_calls += host[3];
++        self.host_flush_calls += host[4];
++        self.host_thumb_calls += host[7];
++        for (sum, us) in self.stage_sums.iter_mut().zip(stages.iter()) {
++            *sum += *us as u64;
++        }
++        // A one-off stall must not be lost between the one-second reports.
++        if frame_us >= SLOW_FRAME_US {
++            let mut frame_stages = [0u64; STAGES_LEN];
++            for (dst, src) in frame_stages.iter_mut().zip(stages.iter()) {
++                *dst = *src as u64;
++            }
++            let line = format!(
++                "frame {} slow {:.1} ms | vm {:.2} scene {:.2} render {:.2} ms | ops {} | mark {} | stages(ms):{} | host(ms):{}\n",
++                self.app.core().frame_index(),
++                frame_us as f64 / 1000.0,
++                vm_us as f64 / 1000.0,
++                scene_us as f64 / 1000.0,
++                render_us as f64 / 1000.0,
++                ops,
++                rfvp::perf::last_mark(),
++                stages_text(&frame_stages, 1),
++                host_line_text(host),
++            );
++            append_file(PERF_SLOW_FILE, line.as_bytes());
++            log(&format!("rfvp: {}", line));
++        }
+         if self.frames % DEBUG_REPORT_EVERY != 0 {
+             return;
+         }
+         let window_us = now.saturating_sub(self.window_started_us).max(1);
+         let text = format!(
+             "frame {}: {:.1} fps over the last {} frames, slowest frame {:.1} ms\n\
++             stages (ms per frame):{}\n\
+              virtual frame {}x{}\n\nlog:\n{}",
+             self.app.core().frame_index(),
+             DEBUG_REPORT_EVERY as f64 * 1_000_000.0 / window_us as f64,
+             DEBUG_REPORT_EVERY,
+             self.worst_us as f64 / 1000.0,
++            stages_text(&self.stage_sums, DEBUG_REPORT_EVERY),
+             self.app.core().config().virtual_width,
+             self.app.core().config().virtual_height,
+             rfvp::ring_log::dump()
+@@ -207,8 +284,30 @@ impl Session {
+         self.sum_scene_us = 0;
+         self.sum_render_us = 0;
+         self.sum_ticks = 0;
++        self.stage_sums = [0; STAGES_LEN];
++        let host_text = format!(
++            "host avg over {} frames: begin {:.2} ms, upload {:.2} ms ({} calls), present {:.2} ms, thumb {:.2} ms ({} calls), draws {:.1}, flushes {:.1}\n",
++            DEBUG_REPORT_EVERY,
++            self.host_begin_us as f64 / 1000.0 / DEBUG_REPORT_EVERY as f64,
++            self.host_upload_us as f64 / 1000.0 / DEBUG_REPORT_EVERY as f64,
++            self.host_upload_calls,
++            self.host_present_us as f64 / 1000.0 / DEBUG_REPORT_EVERY as f64,
++            self.host_thumb_us as f64 / 1000.0 / DEBUG_REPORT_EVERY as f64,
++            self.host_thumb_calls,
++            self.host_draw_calls as f64 / DEBUG_REPORT_EVERY as f64,
++            self.host_flush_calls as f64 / DEBUG_REPORT_EVERY as f64,
++        );
++        let text = format!("{}{}", text, host_text);
++        self.host_begin_us = 0;
++        self.host_upload_us = 0;
++        self.host_present_us = 0;
++        self.host_thumb_us = 0;
++        self.host_draw_calls = 0;
++        self.host_upload_calls = 0;
++        self.host_flush_calls = 0;
++        self.host_thumb_calls = 0;
+         write_file(DEBUG_REPORT_FILE, text.as_bytes());
+-        if self.frames % DEBUG_SCREEN_EVERY == 0 {
++        if DEBUG_SCREEN_ENABLED && self.frames % DEBUG_SCREEN_EVERY == 0 {
+             write_file(DEBUG_SCREEN_FILE, &self.app.host().renderer_ref().screen_bmp());
+         }
+         self.window_started_us = now;
+@@ -216,6 +315,34 @@ impl Session {
+     }
+ }
+ 
++/// The per-frame SDL counters handed to the runtime, as " begin ms upload ms/calls ...".
++fn host_line_text(host: &[u64; 8]) -> String {
++    format!(
++        " begin {:.2} upload {:.2}/{} present {:.2} thumb {:.2}/{} draws {} flush {}",
++        host[0] as f64 / 1000.0,
++        host[2] as f64 / 1000.0,
++        host[3],
++        host[5] as f64 / 1000.0,
++        host[6] as f64 / 1000.0,
++        host[7],
++        host[1],
++        host[4],
++    )
++}
++
++/// The stages that took a measurable time in `frames` frames, as " name ms" pairs.
++fn stages_text(stages: &[u64], frames: u32) -> String {
++    let frames = frames.max(1);
++    let mut text = String::new();
++    for (name, us) in rfvp::perf::STAGES.iter().zip(stages.iter()) {
++        let ms = *us as f64 / 1000.0 / frames as f64;
++        if ms >= 0.01 {
++            text += &format!(" {} {:.2}", name, ms);
++        }
++    }
++    text
++}
++
+ fn read_nls(app: &mut HorizonApp) -> Nls {
+     let Ok(mut file) = app.host().fs().open(NLS_FILE) else {
+         return Nls::ShiftJIS;
+@@ -241,6 +368,9 @@ pub unsafe extern "C" fn rfvp_switch_start(game_root: *const c_char) -> *mut Ses
+     let mut app = HorizonApp::new(RfvpCoreConfig::default(), 256, game_root);
+     let nls = read_nls(&mut app);
+     let debug = app.host().fs().exists(DEBUG_FLAG_FILE);
++    if debug {
++        rfvp::perf::set_clock(ticks_us);
++    }
+     let now = ticks_us();
+     let mut session = Box::new(Session {
+         app,
+@@ -254,6 +384,15 @@ pub unsafe extern "C" fn rfvp_switch_start(game_root: *const c_char) -> *mut Ses
+         sum_scene_us: 0,
+         sum_render_us: 0,
+         sum_ticks: 0,
++        stage_sums: [0; STAGES_LEN],
++        host_begin_us: 0,
++        host_upload_us: 0,
++        host_present_us: 0,
++        host_thumb_us: 0,
++        host_draw_calls: 0,
++        host_upload_calls: 0,
++        host_flush_calls: 0,
++        host_thumb_calls: 0,
+     });
+     log("rfvp: booting the game\n");
+     let boot = RfvpBootConfig {
+@@ -303,6 +442,12 @@ pub unsafe extern "C" fn rfvp_switch_frame(
+             return -1;
+         }
+     }
++    let stages = rfvp::perf::take();
++    let ops = rfvp::perf::take_ops();
++    // The video shim times the SDL calls (present, uploads, read-backs) that the engine's own
++    // stage timers cannot see.
++    let mut host_stats = [0u64; 8];
++    unsafe { galnx_sdl_take_stats(host_stats.as_mut_ptr()) };
+     session.sum_vm_us += tick.vm_us;
+     session.sum_scene_us += tick.scene_us;
+     session.sum_render_us += tick.render_us;
+@@ -315,7 +460,7 @@ pub unsafe extern "C" fn rfvp_switch_frame(
+         log("rfvp: the first frame was drawn\n");
+     }
+     if session.debug {
+-        session.debug_report();
++        session.debug_report(tick.vm_us, tick.scene_us, tick.render_us, ops, &stages, &host_stats);
+     }
+     0
+ }
+diff --git a/platform/switch/host/src/render.rs b/platform/switch/host/src/render.rs
+index d93dff7..2914ee9 100644
+--- a/platform/switch/host/src/render.rs
++++ b/platform/switch/host/src/render.rs
+@@ -403,6 +403,10 @@ impl RfvpRenderer for HorizonRenderer {
+         Ok(())
+     }
+ 
++    fn supports_gpu_prev_frame(&self) -> bool {
++        true
++    }
++
+     fn capture_thumbnail(&mut self, width: u32, height: u32) -> Option<Vec<u8>> {
+         if width == 0 || height == 0 || !self.video_ready {
+             return None;
+diff --git a/platform/switch/runtime/sdl_video.c b/platform/switch/runtime/sdl_video.c
+index c56a91f..22bb459 100644
+--- a/platform/switch/runtime/sdl_video.c
++++ b/platform/switch/runtime/sdl_video.c
+@@ -58,6 +58,25 @@ static float map_scale = 1.0f;
+ static float map_offset_x;
+ static float map_offset_y;
+ 
++/* ---- Host-side timing counters -----------------------------------------------------------------
++ * RenderPresent / render-target read-back work never shows up in the engine's own stage timers, so
++ * the shim times the SDL calls it makes on the engine's behalf. The runtime takes the counters once
++ * per frame (galnx_sdl_take_stats) and the Rust side logs them with the perf report. */
++extern uint64_t rfvp_switch_ticks_us(void);
++
++static uint64_t stat_begin_us;
++static uint64_t stat_upload_us;
++static uint64_t stat_present_us;
++static uint64_t stat_thumb_us;
++static uint32_t stat_draw_calls;
++static uint32_t stat_upload_calls;
++static uint32_t stat_flush_calls;
++static uint32_t stat_thumb_calls;
++
++static uint64_t stat_now(void) {
++    return rfvp_switch_ticks_us();
++}
++
+ static int format_bytes(int format) {
+     switch (format) {
+         case FormatRgba8:
+@@ -180,7 +199,7 @@ static SDL_BlendMode blend_mode(int blend) {
+     }
+ }
+ 
+-static void apply_clip(int scissor_valid, int sx, int sy, int sw, int sh) {
++static SDL_Rect compute_clip(int scissor_valid, int sx, int sy, int sw, int sh) {
+     SDL_Rect clip;
+     base_clip(&clip);
+     if (scissor_valid) {
+@@ -201,9 +220,146 @@ static void apply_clip(int scissor_valid, int sx, int sy, int sw, int sh) {
+         if (clip.w < 0) clip.w = 0;
+         if (clip.h < 0) clip.h = 0;
+     }
++    return clip;
++}
++
++static void apply_clip(int scissor_valid, int sx, int sy, int sw, int sh) {
++    SDL_Rect clip = compute_clip(scissor_valid, sx, sy, sw, sh);
+     SDL_RenderSetClipRect(renderer, &clip);
+ }
+ 
++/* ---- Draw batching -----------------------------------------------------------------------------
++ * One frame is several hundred quads that mostly share a texture, blend mode and clip rectangle
++ * (all the glyphs of one line, one character's parts, the letterbox bars). Handing each quad to
++ * SDL_RenderGeometry separately makes the GLES2 driver redo its state setup per draw, which was the
++ * bulk of the ~15 ms submit stage. Runs of quads with identical state are collected here and
++ * flushed in one call; ordering is preserved because a new batch only starts when the state
++ * changes. */
++enum { BatchMaxVertices = 8192, BatchMaxIndices = 12288 };
++
++typedef struct {
++    int active;
++    int textured;
++    unsigned texture;
++    int blend;
++    int filter;
++    SDL_Rect clip;
++    int vertex_count;
++    int index_count;
++    SDL_Vertex vertices[BatchMaxVertices];
++    int indices[BatchMaxIndices];
++} DrawBatch;
++
++static DrawBatch batch;
++
++/* ---- Previous frame as a texture -----------------------------------------------------------------
++ * Sprt texture id -1 draws the frame last shown. Reading it back through the CPU costs a full
++ * 1920x1080 read (and was ~45-66 ms per fade frame); instead the scene is drawn into one of two
++ * off-screen targets and the other one (the frame presented last) is sampled directly on the GPU. */
++#define PREV_FRAME_TEXTURE_ID 0xFFFFFFFDu
++
++static SDL_Texture* frame_targets[2];
++static int frame_targets_ready;
++static int frame_current;
++static int frame_previous;
++
++static int ensure_frame_targets(void) {
++    int i;
++    if (frame_targets_ready) return 1;
++    for (i = 0; i < 2; ++i) {
++        frame_targets[i] = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ABGR8888,
++                                             SDL_TEXTUREACCESS_TARGET, OUT_WIDTH, OUT_HEIGHT);
++        if (frame_targets[i] == NULL) {
++            int j;
++            for (j = 0; j < i; ++j) SDL_DestroyTexture(frame_targets[j]);
++            frame_targets[0] = NULL;
++            frame_targets[1] = NULL;
++            return 0;
++        }
++    }
++    frame_current = 0;
++    frame_previous = 1;
++    frame_targets_ready = 1;
++    return 1;
++}
++
++static void batch_reset(void) {
++    batch.active = 0;
++    batch.vertex_count = 0;
++    batch.index_count = 0;
++}
++
++static void batch_flush(void) {
++    SDL_Texture* texture = NULL;
++    if (!batch.active) return;
++    if (batch.vertex_count > 0) {
++        SDL_RenderSetClipRect(renderer, &batch.clip);
++        if (batch.textured) {
++            if (batch.texture == PREV_FRAME_TEXTURE_ID) {
++                texture = frame_targets_ready ? frame_targets[frame_previous] : NULL;
++                if (texture != NULL) {
++                    SDL_SetTextureBlendMode(texture, blend_mode(batch.blend));
++                }
++            } else {
++                TextureEntry* entry = find_texture(batch.texture);
++                if (entry != NULL) {
++                    texture = entry->texture;
++                    SDL_SetTextureScaleMode(texture,
++                                            batch.filter == 0 ? SDL_ScaleModeNearest
++                                                              : SDL_ScaleModeLinear);
++                    SDL_SetTextureBlendMode(texture, blend_mode(batch.blend));
++                }
++            }
++        } else {
++            SDL_SetRenderDrawBlendMode(renderer, blend_mode(batch.blend));
++        }
++        SDL_RenderGeometry(renderer, texture, batch.vertices, batch.vertex_count, batch.indices,
++                           batch.index_count);
++        stat_flush_calls++;
++    }
++    batch.active = 0;
++    batch.vertex_count = 0;
++    batch.index_count = 0;
++}
++
++static void batch_begin(int textured, unsigned texture, int blend, int filter,
++                        const SDL_Rect* clip) {
++    if (batch.active && batch.textured == textured && batch.texture == texture &&
++        batch.blend == blend && batch.filter == filter && batch.clip.x == clip->x &&
++        batch.clip.y == clip->y && batch.clip.w == clip->w && batch.clip.h == clip->h) {
++        return;
++    }
++    batch_flush();
++    batch.active = 1;
++    batch.textured = textured;
++    batch.texture = texture;
++    batch.blend = blend;
++    batch.filter = filter;
++    batch.clip = *clip;
++    batch.vertex_count = 0;
++    batch.index_count = 0;
++}
++
++static int batch_append(const SDL_Vertex v[4]) {
++    int base;
++    if (batch.vertex_count + 4 > BatchMaxVertices || batch.index_count + 6 > BatchMaxIndices) {
++        /* Flushing keeps the batch key, so the next quads keep merging into a fresh run. */
++        batch_flush();
++        batch.active = 1;
++    }
++    base = batch.vertex_count;
++    memcpy(&batch.vertices[base], v, sizeof(SDL_Vertex) * 4);
++    batch.indices[batch.index_count + 0] = base + 0;
++    batch.indices[batch.index_count + 1] = base + 1;
++    batch.indices[batch.index_count + 2] = base + 2;
++    batch.indices[batch.index_count + 3] = base + 2;
++    batch.indices[batch.index_count + 4] = base + 1;
++    batch.indices[batch.index_count + 5] = base + 3;
++    batch.vertex_count += 4;
++    batch.index_count += 6;
++    return 0;
++}
++
+ int galnx_sdl_video_init(void) {
+     SDL_RendererInfo info;
+     if (ready) return 0;
+@@ -226,6 +382,13 @@ void galnx_sdl_video_shutdown(void) {
+         if (textures[i].texture != NULL) SDL_DestroyTexture(textures[i].texture);
+     }
+     texture_count = 0;
++    if (frame_targets_ready) {
++        SDL_DestroyTexture(frame_targets[0]);
++        SDL_DestroyTexture(frame_targets[1]);
++        frame_targets[0] = NULL;
++        frame_targets[1] = NULL;
++        frame_targets_ready = 0;
++    }
+     if (renderer != NULL) SDL_DestroyRenderer(renderer);
+     if (window != NULL) SDL_DestroyWindow(window);
+     renderer = NULL;
+@@ -248,8 +411,8 @@ static uint8_t* scratch_reserve(size_t bytes) {
+     return scratch;
+ }
+ 
+-int galnx_sdl_texture_create(unsigned id, int width, int height, int format,
+-                             const unsigned char* pixels, long length) {
++static int sdl_texture_create_impl(unsigned id, int width, int height, int format,
++                                   const unsigned char* pixels, long length) {
+     TextureEntry* entry;
+     SDL_Texture* texture;
+     int reused = 0;
+@@ -306,8 +469,8 @@ int galnx_sdl_texture_create(unsigned id, int width, int height, int format,
+     return 0;
+ }
+ 
+-int galnx_sdl_texture_update(unsigned id, int x, int y, int width, int height, int format,
+-                             const unsigned char* pixels, long length) {
++static int sdl_texture_update_impl(unsigned id, int x, int y, int width, int height, int format,
++                                   const unsigned char* pixels, long length) {
+     TextureEntry* entry = find_texture(id);
+     SDL_Rect rect;
+     int bpp = format_bytes(format);
+@@ -330,7 +493,31 @@ int galnx_sdl_texture_update(unsigned id, int x, int y, int width, int height, i
+     return 0;
+ }
+ 
++int galnx_sdl_texture_create(unsigned id, int width, int height, int format,
++                             const unsigned char* pixels, long length) {
++    uint64_t started = stat_now();
++    int rc;
++    /* Any queued quad may reference the texture being replaced, so draw them first. */
++    batch_flush();
++    rc = sdl_texture_create_impl(id, width, height, format, pixels, length);
++    stat_upload_calls++;
++    stat_upload_us += stat_now() - started;
++    return rc;
++}
++
++int galnx_sdl_texture_update(unsigned id, int x, int y, int width, int height, int format,
++                             const unsigned char* pixels, long length) {
++    uint64_t started = stat_now();
++    int rc;
++    batch_flush();
++    rc = sdl_texture_update_impl(id, x, y, width, height, format, pixels, length);
++    stat_upload_calls++;
++    stat_upload_us += stat_now() - started;
++    return rc;
++}
++
+ void galnx_sdl_texture_destroy(unsigned id) {
++    batch_flush();
+     int i;
+     for (i = 0; i < texture_count; ++i) {
+         if (textures[i].id == (int) id) {
+@@ -344,8 +531,12 @@ void galnx_sdl_texture_destroy(unsigned id) {
+ 
+ int galnx_sdl_begin(int vw, int vh, int clear_enabled, unsigned clear_rgba) {
+     SDL_Rect clip;
++    uint64_t started;
+     if (!ready) return -1;
++    started = stat_now();
++    batch_reset();
+     update_mapping(vw, vh);
++    SDL_SetRenderTarget(renderer, ensure_frame_targets() ? frame_targets[frame_current] : NULL);
+     SDL_RenderSetClipRect(renderer, NULL);
+     if (clear_enabled) {
+         SDL_SetRenderDrawColor(renderer, (uint8_t) (clear_rgba & 0xff),
+@@ -356,23 +547,25 @@ int galnx_sdl_begin(int vw, int vh, int clear_enabled, unsigned clear_rgba) {
+     }
+     base_clip(&clip);
+     SDL_RenderSetClipRect(renderer, &clip);
++    stat_begin_us += stat_now() - started;
+     return 0;
+ }
+ 
+ int galnx_sdl_draw_quad(unsigned id, const float* xy, const float* uv, const unsigned* colors,
+                         int blend, int filter, int scissor_valid, int sx, int sy, int sw,
+                         int sh) {
+-    TextureEntry* entry = find_texture(id);
+     SDL_Vertex vertices[4];
+-    int indices[6];
++    SDL_Rect clip;
+     int i;
+     if (!ready) return -1;
+-    if (entry == NULL) return -1;
++    if (id == PREV_FRAME_TEXTURE_ID) {
++        if (!frame_targets_ready) return -1;
++    } else if (find_texture(id) == NULL) {
++        return -1;
++    }
+     if (xy == NULL || uv == NULL || colors == NULL) return -1;
+-    apply_clip(scissor_valid, sx, sy, sw, sh);
+-    SDL_SetTextureScaleMode(entry->texture,
+-                            filter == 0 ? SDL_ScaleModeNearest : SDL_ScaleModeLinear);
+-    SDL_SetTextureBlendMode(entry->texture, blend_mode(blend));
++    clip = compute_clip(scissor_valid, sx, sy, sw, sh);
++    batch_begin(1, id, blend, filter, &clip);
+     for (i = 0; i < 4; ++i) {
+         unsigned c = colors[i];
+         vertices[i].position.x = map_offset_x + xy[i * 2 + 0] * map_scale;
+@@ -384,30 +577,39 @@ int galnx_sdl_draw_quad(unsigned id, const float* xy, const float* uv, const uns
+         vertices[i].color.b = (uint8_t) ((c >> 16) & 0xff);
+         vertices[i].color.a = (uint8_t) ((c >> 24) & 0xff);
+     }
+-    indices[0] = 0;
+-    indices[1] = 1;
+-    indices[2] = 2;
+-    indices[3] = 2;
+-    indices[4] = 1;
+-    indices[5] = 3;
+-    SDL_RenderGeometry(renderer, entry->texture, vertices, 4, indices, 6);
+-    return 0;
++    stat_draw_calls++;
++    return batch_append(vertices);
+ }
+ 
+ int galnx_sdl_draw_solid(int x, int y, int width, int height, unsigned rgba, int blend,
+                          int scissor_valid, int sx, int sy, int sw, int sh) {
+-    SDL_Rect rect;
++    SDL_Vertex vertices[4];
++    SDL_Rect clip;
++    SDL_Color color;
++    float fx, fy, fw, fh;
++    int i;
+     if (!ready) return -1;
+-    apply_clip(scissor_valid, sx, sy, sw, sh);
+-    rect.x = (int) (map_offset_x + (float) x * map_scale + 0.5f);
+-    rect.y = (int) (map_offset_y + (float) y * map_scale + 0.5f);
+-    rect.w = (int) ((float) width * map_scale + 0.5f);
+-    rect.h = (int) ((float) height * map_scale + 0.5f);
+-    SDL_SetRenderDrawBlendMode(renderer, blend_mode(blend));
+-    SDL_SetRenderDrawColor(renderer, (uint8_t) (rgba & 0xff), (uint8_t) ((rgba >> 8) & 0xff),
+-                           (uint8_t) ((rgba >> 16) & 0xff), (uint8_t) ((rgba >> 24) & 0xff));
+-    SDL_RenderFillRect(renderer, &rect);
+-    return 0;
++    clip = compute_clip(scissor_valid, sx, sy, sw, sh);
++    batch_begin(0, 0, blend, 0, &clip);
++    /* Keep the integer rounding of the old SDL_RenderFillRect path so the batching does not shift
++     * pixels. */
++    fx = (float) (int) (map_offset_x + (float) x * map_scale + 0.5f);
++    fy = (float) (int) (map_offset_y + (float) y * map_scale + 0.5f);
++    fw = (float) (int) ((float) width * map_scale + 0.5f);
++    fh = (float) (int) ((float) height * map_scale + 0.5f);
++    color.r = (uint8_t) (rgba & 0xff);
++    color.g = (uint8_t) ((rgba >> 8) & 0xff);
++    color.b = (uint8_t) ((rgba >> 16) & 0xff);
++    color.a = (uint8_t) ((rgba >> 24) & 0xff);
++    for (i = 0; i < 4; ++i) {
++        vertices[i].position.x = fx + ((i == 1 || i == 3) ? fw : 0.0f);
++        vertices[i].position.y = fy + ((i >= 2) ? fh : 0.0f);
++        vertices[i].tex_coord.x = 0.0f;
++        vertices[i].tex_coord.y = 0.0f;
++        vertices[i].color = color;
++    }
++    stat_draw_calls++;
++    return batch_append(vertices);
+ }
+ 
+ 
+@@ -573,10 +775,20 @@ static void overlay_draw(void) {
+ }
+ 
+ void galnx_sdl_present(void) {
++    uint64_t started;
+     if (!ready) return;
++    started = stat_now();
++    batch_flush();
++    if (frame_targets_ready) {
++        SDL_SetRenderTarget(renderer, NULL);
++        SDL_RenderCopy(renderer, frame_targets[frame_current], NULL, NULL);
++        frame_previous = frame_current;
++        frame_current ^= 1;
++    }
+     overlay_draw();
+     SDL_RenderSetClipRect(renderer, NULL);
+     SDL_RenderPresent(renderer);
++    stat_present_us += stat_now() - started;
+ }
+ 
+ /* Copy the render target (the frame last presented: the renderer swaps buffers, so the new back
+@@ -595,14 +807,29 @@ int galnx_sdl_pump_events(void) {
+ int galnx_sdl_read_pixels_scaled(int width, int height, unsigned char* out) {
+     unsigned char* full;
+     uint32_t* buffer;
++    uint64_t started;
+     int x, y;
+     if (!ready || out == NULL || width <= 0 || height <= 0) return -1;
++    started = stat_now();
++    /* Queued quads have not reached the target yet, so a read-back would miss them. */
++    batch_flush();
+     full = (unsigned char*) malloc((size_t) OUT_WIDTH * OUT_HEIGHT * 4);
+     if (full == NULL) return -2;
+-    if (SDL_RenderReadPixels(renderer, NULL, SDL_PIXELFORMAT_ABGR8888, full,
+-                             OUT_WIDTH * 4) != 0) {
+-        free(full);
+-        return -3;
++    {
++        /* Read the frame presented last, like the old back buffer did: the scene is drawn into an
++         * off-screen target now, so the window holds the same picture but only after present(). */
++        SDL_Texture* saved_target = SDL_GetRenderTarget(renderer);
++        SDL_Texture* source = (frame_targets_ready && frame_previous != frame_current)
++                                  ? frame_targets[frame_previous]
++                                  : NULL;
++        if (source != NULL) SDL_SetRenderTarget(renderer, source);
++        if (SDL_RenderReadPixels(renderer, NULL, SDL_PIXELFORMAT_ABGR8888, full,
++                                 OUT_WIDTH * 4) != 0) {
++            if (source != NULL) SDL_SetRenderTarget(renderer, saved_target);
++            free(full);
++            return -3;
++        }
++        if (source != NULL) SDL_SetRenderTarget(renderer, saved_target);
+     }
+     buffer = (uint32_t*) full;
+     for (y = 0; y < height; ++y) {
+@@ -633,6 +860,8 @@ int galnx_sdl_read_pixels_scaled(int width, int height, unsigned char* out) {
+         }
+     }
+     free(full);
++    stat_thumb_calls++;
++    stat_thumb_us += stat_now() - started;
+     return 0;
+ }
+ 
+@@ -642,12 +871,22 @@ int galnx_sdl_write_screen_bmp(const char* path) {
+     uint8_t header[54];
+     int y;
+     if (!ready || path == NULL) return -1;
++    batch_flush();
+     pixels = (unsigned char*) malloc((size_t) OUT_WIDTH * OUT_HEIGHT * 4);
+     if (pixels == NULL) return -2;
+-    if (SDL_RenderReadPixels(renderer, NULL, SDL_PIXELFORMAT_ABGR8888, pixels,
+-                             OUT_WIDTH * 4) != 0) {
+-        free(pixels);
+-        return -3;
++    {
++        SDL_Texture* saved_target = SDL_GetRenderTarget(renderer);
++        SDL_Texture* source = (frame_targets_ready && frame_previous != frame_current)
++                                  ? frame_targets[frame_previous]
++                                  : NULL;
++        if (source != NULL) SDL_SetRenderTarget(renderer, source);
++        if (SDL_RenderReadPixels(renderer, NULL, SDL_PIXELFORMAT_ABGR8888, pixels,
++                                 OUT_WIDTH * 4) != 0) {
++            if (source != NULL) SDL_SetRenderTarget(renderer, saved_target);
++            free(pixels);
++            return -3;
++        }
++        if (source != NULL) SDL_SetRenderTarget(renderer, saved_target);
+     }
+     file = fopen(path, "wb");
+     if (file == NULL) {
+@@ -689,3 +928,24 @@ int galnx_sdl_write_screen_bmp(const char* path) {
+     free(pixels);
+     return 0;
+ }
++
++/* Hand the per-frame SDL counters to the runtime and start a new frame's totals. */
++void galnx_sdl_take_stats(uint64_t* out) {
++    if (out == NULL) return;
++    out[0] = stat_begin_us;
++    stat_begin_us = 0;
++    out[1] = (uint64_t) stat_draw_calls;
++    stat_draw_calls = 0;
++    out[2] = stat_upload_us;
++    stat_upload_us = 0;
++    out[3] = (uint64_t) stat_upload_calls;
++    stat_upload_calls = 0;
++    out[4] = (uint64_t) stat_flush_calls;
++    stat_flush_calls = 0;
++    out[5] = stat_present_us;
++    stat_present_us = 0;
++    out[6] = stat_thumb_us;
++    stat_thumb_us = 0;
++    out[7] = (uint64_t) stat_thumb_calls;
++    stat_thumb_calls = 0;
++}

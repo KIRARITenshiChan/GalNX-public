@@ -1,0 +1,125 @@
+Kirikiroid2-Switch log (build Oct 30 2026 06:30:15)
+applicationDidFinishLaunching
+GL_VERSION: OpenGL ES 3.2 Mesa 20.1.0-rc3
+GL ext: VAO=yes mapbuffer=yes
+[GALNX] autostarting game from /kirikiri/haruno/data.xp3
+06:40:47 (info) Data path : file://./kirikiri/haruno/savedata/
+06:40:47 Program started on Linux (Linux)
+06:40:47 (info) Rebuilding Auto Path Table ...
+06:40:47 (info) Total 0 file(s) found, 0 file(s) activated. (1ms)
+06:40:47 (info) Loading csvParser.tpm
+[GalNX] internal plugin loaded via .tpm alias: csvParser.tpm -> csvParser.dll
+06:40:47 (info) Loading extrans.tpm
+[GalNX] internal plugin loaded via .tpm alias: extrans.tpm -> extrans.dll
+06:40:47 (info) Loading fstat.tpm
+[GalNX] internal plugin loaded via .tpm alias: fstat.tpm -> fstat.dll
+06:40:47 (info) Loading layerExImage.tpm
+[GalNX] internal plugin loaded via .tpm alias: layerExImage.tpm -> layerExImage.dll
+06:40:47 (info) Loading windowEx.tpm
+[GalNX] internal plugin loaded via .tpm alias: windowEx.tpm -> windowEx.dll
+06:40:47 (info) Loading wumsadp.tpm
+[GalNX] no built-in module for game plugin: wumsadp.tpm
+06:40:47 (info) Loading wuvorbis.tpm
+[GalNX] no built-in module for game plugin: wuvorbis.tpm
+06:40:47 (info) Total physical memory : 2907701248
+06:40:47 (info) Specified option(s) (earlier item has more priority) : (none)
+[K2S] NEON blend routines: on
+[K2S] OpenCV threads: 1
+[K2S] CPU boost: on (rc=0x0)
+06:40:47 (info) Trying to read XP3 virtual file system information from : file://./kirikiri/haruno/data.xp3
+06:40:47 (info) Done. (contains 37 file(s), 37 segment(s))
+06:40:47 (info) Loading startup script : file://./kirikiri/haruno/data.xp3>startup.tjs
+06:40:47 haruno.cf
+06:40:47 (info) Rebuilding Auto Path Table ...
+06:40:47 (info) Total 81 file(s) found, 81 file(s) activated. (54ms)
+06:40:47 (info) Rebuilding Auto Path Table ...
+06:40:48 (info) Total 81 file(s) found, 81 file(s) activated. (159ms)
+06:40:48 (info) Rebuilding Auto Path Table ...
+06:40:48 (info) Trying to read XP3 virtual file system information from : file://./kirikiri/haruno/scenario.xp3
+06:40:48 (info) Done. (contains 237 file(s), 237 segment(s))
+06:40:48 (info) Trying to read XP3 virtual file system information from : file://./kirikiri/haruno/image01.xp3
+06:40:48 (info) Done. (contains 221 file(s), 221 segment(s))
+06:40:48 (info) Trying to read XP3 virtual file system information from : file://./kirikiri/haruno/image02.xp3
+06:40:48 (info) Done. (contains 703 file(s), 703 segment(s))
+06:40:48 (info) Trying to read XP3 virtual file system information from : file://./kirikiri/haruno/image02_2.xp3
+06:40:48 (info) Done. (contains 124 file(s), 124 segment(s))
+06:40:48 (info) Trying to read XP3 virtual file system information from : file://./kirikiri/haruno/image03.xp3
+06:40:48 (info) Done. (contains 123 file(s), 123 segment(s))
+06:40:48 (info) Trying to read XP3 virtual file system information from : file://./kirikiri/haruno/image04.xp3
+06:40:48 (info) Done. (contains 1755 file(s), 1755 segment(s))
+06:40:48 (info) Total 3244 file(s) found, 3239 file(s) activated. (218ms)
+06:40:48 (info) Rebuilding Auto Path Table ...
+06:40:48 (info) Trying to read XP3 virtual file system information from : file://./kirikiri/haruno/media.xp3
+06:40:48 (info) Done. (contains 222 file(s), 624 segment(s))
+06:40:48 (info) Trying to read XP3 virtual file system information from : file://./kirikiri/haruno/movie.xp3
+06:40:48 (info) Done. (contains 3 file(s), 3 segment(s))
+06:40:48 (info) Trying to read XP3 virtual file system information from : file://./kirikiri/haruno/voice01.xp3
+06:40:48 (info) Done. (contains 382 file(s), 1142 segment(s))
+06:40:48 (info) Trying to read XP3 virtual file system information from : file://./kirikiri/haruno/voice02.xp3
+06:40:48 (info) Done. (contains 14027 file(s), 42049 segment(s))
+06:40:48 (info) Trying to read XP3 virtual file system information from : file://./kirikiri/haruno/voice02_2.xp3
+06:40:48 (info) Done. (contains 1113 file(s), 3335 segment(s))
+06:40:48 (info) Trying to read XP3 virtual file system information from : file://./kirikiri/haruno/image00.xp3
+06:40:48 (info) Done. (contains 141 file(s), 141 segment(s))
+06:40:48 (info) Trying to read XP3 virtual file system information from : file://./kirikiri/haruno/image06.xp3
+06:40:48 (info) Done. (contains 51 file(s), 51 segment(s))
+06:40:48 (info) Total 19183 file(s) found, 19171 file(s) activated. (305ms)
+06:40:48 (info) Use malloc for Bitmap
+06:40:48 Detected CPU core(s): 3
+06:40:49 ================================================================================
+06:40:49 Scenario loaded : startup.soc
+06:40:49 ================================================================================
+06:40:49 Scenario loaded : userMacro.ks
+06:40:49 ================================================================================
+06:40:49 Scenario loaded : startup.soc
+06:40:49 startup.soc : returned to : (start) line offset 1
+06:40:49 ================================================================================
+06:40:49 Scenario loaded : eyecatch.ks
+06:40:49 ================================================================================
+06:40:49 Scenario loaded : startup.soc
+06:40:49 startup.soc : returned to : (start) line offset 3
+06:40:49 ================================================================================
+06:40:49 Scenario loaded : logo.ks
+06:40:49 (info) Startup script ended.
+"romfs:/img/exit_icon.png" rc=4 id=12 64 x 64 @ 32 bpp => 16 KB
+"romfs:/img/touch_icon.png" rc=4 id=9 64 x 64 @ 32 bpp => 16 KB
+"romfs:/img/windows_icon.png" rc=4 id=8 80 x 80 @ 32 bpp => 25 KB
+"romfs:/img/white.png" rc=26 id=6 1 x 1 @ 32 bpp => 0 KB
+"romfs:/img/keyboard_icon.png" rc=4 id=11 64 x 45 @ 32 bpp => 11 KB
+"romfs:/img/mouse_icon.png" rc=4 id=10 64 x 64 @ 32 bpp => 16 KB
+"romfs:/img/menu_icon.png" rc=4 id=7 64 x 64 @ 32 bpp => 16 KB
+"romfs:/img/empty.png" rc=51 id=5 1 x 1 @ 32 bpp => 0 KB
+"romfs:/img/menu_handler.png" rc=4 id=4 48 x 48 @ 32 bpp => 9 KB
+"/cc_2x2_white_image" rc=51 id=2 2 x 2 @ 32 bpp => 0 KB
+TextureCache dumpDebugInfo: 10 textures, for 109 KB (0.11 MB)
+
+
+06:40:50 (info) Sound Driver/Device found : OpenAL Soft
+[K2S] slow tick 189 ms
+[K2S]   AlphaBlend_d                   7333 us x2
+[K2S]   CopyColor                      4618 us x2
+[K2S]   AlphaBlend                     3912 us x1
+Input #0, mpeg, from 'logo.mpg':
+  Duration: 00:00:03.50, start: 0.153122, bitrate: 4044 kb/s
+    Stream #0:0[0x1e0]: Video: mpeg1video, yuv420p(tv), 1280x720 [SAR 1:1 DAR 16:9], 104857 kb/s, 30 fps, 30 tbr, 90k tbn, 30 tbc
+    Stream #0:1[0x1c0]: Audio: mp2, 44100 Hz, stereo, s16p, 192 kb/s
+[swscaler @ 0x210f448ff0] No accelerated colorspace conversion found from yuv420p to rgba.
+[K2S] slow tick 180 ms
+[K2S]   AlphaBlend_d                   8101 us x2
+[K2S]   AlphaBlend                     4080 us x1
+[K2S]   CopyOpaqueImage                3795 us x1
+[K2S]   CopyColor                      2163 us x1
+[K2S]   FillARGB                       1106 us x3
+06:41:25 ================================================================================
+06:41:25 Scenario loaded : title.ks
+[K2S] slow tick 279 ms
+[K2S]   AlphaBlend_d                  24816 us x5
+[K2S]   AlphaBlend                     5812 us x1
+[K2S]   CopyColor                      5798 us x2
+[K2S]   FillARGB                        707 us x1
+[K2S] slow tick 201 ms
+[K2S] slow tick 202 ms
+06:50:17 ================================================================================
+06:50:17 Scenario loaded : start.ks
+06:50:21 ================================================================================
+06:50:21 Scenario loaded : @0000A_Z01.ks

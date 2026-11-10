@@ -1,0 +1,6 @@
+pre stall=0 ms=1200 ring=147456 underrun=0 min_water=6144 t_us=187674175813
+post stall=1 ms=1200 ring=90112 underrun=0 min_water=90112 t_us=187675377352
+pre stall=1 ms=1200 ring=147456 underrun=0 min_water=90112 t_us=187685324843
+post stall=2 ms=1200 ring=90112 underrun=0 min_water=90112 t_us=187686526193
+pre stall=2 ms=1200 ring=147456 underrun=0 min_water=90112 t_us=187696625463
+post stall=3 ms=1200 ring=89088 underrun=0 min_water=89088 t_us=187697826520

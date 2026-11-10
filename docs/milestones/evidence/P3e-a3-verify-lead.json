@@ -1,0 +1,308 @@
+{
+  "tool": "package nsp",
+  "mode": "verify",
+  "manifest": "E:\\Othergames\\Nintendo Switch\\Workspace\\GalNX\\examples\\pilot01-haruno.yaml",
+  "nsp": "E:\\galnx-build\\pilot-01\\p3\\out\\Kirikiroid2-NX-010047410000A000.nsp",
+  "expected_title_id": "010047410000A000",
+  "nstool": {
+    "path": "E:\\galnx-build\\m3-tools\\nstool.exe",
+    "source": "explicit"
+  },
+  "keyset": {
+    "mode": "real",
+    "path": "E:\\Othergames\\Nintendo Switch\\Ryujinx-canary\\portable\\system\\prod.keys",
+    "size": 12007,
+    "sha256": "7bb3b6d2a2eedc83c9f244ee2ed2eaa4d59eb9ad95b66df575f7dfffa71a2a40",
+    "note": "explicitly supplied keyset; contents intentionally not recorded"
+  },
+  "work_dir": "C:\\Users\\ACETaffy\\AppData\\Local\\Temp\\galnx-nsp-verify-_1ehts91",
+  "provenance": {
+    "path": "E:\\galnx-build\\pilot-01\\p3\\out\\Kirikiroid2-NX-010047410000A000.nsp.PROVENANCE.json",
+    "checks": [
+      {
+        "id": "verify.provenance.schema",
+        "name": "provenance",
+        "status": "ok",
+        "detail": "schema galnx-nsp-provenance v1",
+        "hint": ""
+      },
+      {
+        "id": "verify.provenance.dry_run",
+        "name": "provenance",
+        "status": "ok",
+        "detail": "recorded from a real build (dry_run=false)",
+        "hint": ""
+      },
+      {
+        "id": "verify.provenance.title_id",
+        "name": "provenance",
+        "status": "ok",
+        "detail": "010047410000A000",
+        "hint": ""
+      },
+      {
+        "id": "verify.provenance.artifact",
+        "name": "provenance",
+        "status": "ok",
+        "detail": "2906131672 bytes, sha256 1f54bdf105fdfc0e88a81e5aaec954ffd4c349132fe7bbadcf394948cde994d4 (matches the NSP)",
+        "hint": ""
+      },
+      {
+        "id": "verify.provenance.keyset",
+        "name": "provenance",
+        "status": "ok",
+        "detail": "12007 bytes, sha256 7bb3b6d2a2eedc83c9f244ee2ed2eaa4d59eb9ad95b66df575f7dfffa71a2a40 (matches --keyset)",
+        "hint": ""
+      },
+      {
+        "id": "verify.provenance.no_secret",
+        "name": "provenance",
+        "status": "ok",
+        "detail": "no key-material markers in provenance text",
+        "hint": ""
+      }
+    ]
+  },
+  "verify": {
+    "ok": true,
+    "nsp": "E:\\galnx-build\\pilot-01\\p3\\out\\Kirikiroid2-NX-010047410000A000.nsp",
+    "nstool": "E:\\galnx-build\\m3-tools\\nstool.exe",
+    "ncas": 3,
+    "error": "",
+    "artifact": {
+      "path": "E:\\galnx-build\\pilot-01\\p3\\out\\Kirikiroid2-NX-010047410000A000.nsp",
+      "size": 2906131672,
+      "sha256": "1f54bdf105fdfc0e88a81e5aaec954ffd4c349132fe7bbadcf394948cde994d4"
+    },
+    "checks": [
+      {
+        "id": "verify.nstool.nsp",
+        "name": "nstool NSP layer",
+        "status": "ok",
+        "detail": "nstool parsed the NSP container",
+        "hint": ""
+      },
+      {
+        "id": "nstool.partition.type",
+        "name": "PFS0 type",
+        "status": "ok",
+        "detail": "Type: PFS0",
+        "hint": ""
+      },
+      {
+        "id": "nstool.partition.files",
+        "name": "PFS0 files",
+        "status": "ok",
+        "detail": "FileNum: 3",
+        "hint": ""
+      },
+      {
+        "id": "nstool.nca.0",
+        "name": "NCA 0",
+        "status": "ok",
+        "detail": "Meta, ProgID 0x010047410000a000, Size 0x1000",
+        "hint": ""
+      },
+      {
+        "id": "nstool.nca.1",
+        "name": "NCA 1",
+        "status": "ok",
+        "detail": "Program, ProgID 0x010047410000a000, Size 0xad363000",
+        "hint": ""
+      },
+      {
+        "id": "nstool.nca.2",
+        "name": "NCA 2",
+        "status": "ok",
+        "detail": "Control, ProgID 0x010047410000a000, Size 0x1cc00",
+        "hint": ""
+      },
+      {
+        "id": "nstool.nca.type.program",
+        "name": "NCA type Program",
+        "status": "ok",
+        "detail": "Program NCA present",
+        "hint": ""
+      },
+      {
+        "id": "nstool.nca.type.control",
+        "name": "NCA type Control",
+        "status": "ok",
+        "detail": "Control NCA present",
+        "hint": ""
+      },
+      {
+        "id": "nstool.nca.type.meta",
+        "name": "NCA type Meta",
+        "status": "ok",
+        "detail": "Meta NCA present",
+        "hint": ""
+      },
+      {
+        "id": "nstool.progid.consistent",
+        "name": "NCA ProgID consistency",
+        "status": "ok",
+        "detail": "all 3 NCAs share ProgID 0x010047410000A000",
+        "hint": ""
+      },
+      {
+        "id": "nstool.progid.expected",
+        "name": "expected ProgID",
+        "status": "ok",
+        "detail": "ProgID matches 0x010047410000A000",
+        "hint": ""
+      },
+      {
+        "id": "verify.signature",
+        "name": "NCA signature",
+        "status": "warn",
+        "detail": "4 'Signature: FAIL' line(s): expected for unsigned homebrew NSP; hacBrewPack's RSA key is not Nintendo's, so signatures cannot validate",
+        "hint": ""
+      },
+      {
+        "id": "verify.summary",
+        "name": "nstool verify",
+        "status": "ok",
+        "detail": "12 checks: 0 fail, 1 warn, 3 NCAs",
+        "hint": ""
+      }
+    ]
+  },
+  "checks": [
+    {
+      "id": "verify.nstool.nsp",
+      "name": "nstool NSP layer",
+      "status": "ok",
+      "detail": "nstool parsed the NSP container",
+      "hint": ""
+    },
+    {
+      "id": "nstool.partition.type",
+      "name": "PFS0 type",
+      "status": "ok",
+      "detail": "Type: PFS0",
+      "hint": ""
+    },
+    {
+      "id": "nstool.partition.files",
+      "name": "PFS0 files",
+      "status": "ok",
+      "detail": "FileNum: 3",
+      "hint": ""
+    },
+    {
+      "id": "nstool.nca.0",
+      "name": "NCA 0",
+      "status": "ok",
+      "detail": "Meta, ProgID 0x010047410000a000, Size 0x1000",
+      "hint": ""
+    },
+    {
+      "id": "nstool.nca.1",
+      "name": "NCA 1",
+      "status": "ok",
+      "detail": "Program, ProgID 0x010047410000a000, Size 0xad363000",
+      "hint": ""
+    },
+    {
+      "id": "nstool.nca.2",
+      "name": "NCA 2",
+      "status": "ok",
+      "detail": "Control, ProgID 0x010047410000a000, Size 0x1cc00",
+      "hint": ""
+    },
+    {
+      "id": "nstool.nca.type.program",
+      "name": "NCA type Program",
+      "status": "ok",
+      "detail": "Program NCA present",
+      "hint": ""
+    },
+    {
+      "id": "nstool.nca.type.control",
+      "name": "NCA type Control",
+      "status": "ok",
+      "detail": "Control NCA present",
+      "hint": ""
+    },
+    {
+      "id": "nstool.nca.type.meta",
+      "name": "NCA type Meta",
+      "status": "ok",
+      "detail": "Meta NCA present",
+      "hint": ""
+    },
+    {
+      "id": "nstool.progid.consistent",
+      "name": "NCA ProgID consistency",
+      "status": "ok",
+      "detail": "all 3 NCAs share ProgID 0x010047410000A000",
+      "hint": ""
+    },
+    {
+      "id": "nstool.progid.expected",
+      "name": "expected ProgID",
+      "status": "ok",
+      "detail": "ProgID matches 0x010047410000A000",
+      "hint": ""
+    },
+    {
+      "id": "verify.signature",
+      "name": "NCA signature",
+      "status": "warn",
+      "detail": "4 'Signature: FAIL' line(s): expected for unsigned homebrew NSP; hacBrewPack's RSA key is not Nintendo's, so signatures cannot validate",
+      "hint": ""
+    },
+    {
+      "id": "verify.summary",
+      "name": "nstool verify",
+      "status": "ok",
+      "detail": "12 checks: 0 fail, 1 warn, 3 NCAs",
+      "hint": ""
+    },
+    {
+      "id": "verify.provenance.schema",
+      "name": "provenance",
+      "status": "ok",
+      "detail": "schema galnx-nsp-provenance v1",
+      "hint": ""
+    },
+    {
+      "id": "verify.provenance.dry_run",
+      "name": "provenance",
+      "status": "ok",
+      "detail": "recorded from a real build (dry_run=false)",
+      "hint": ""
+    },
+    {
+      "id": "verify.provenance.title_id",
+      "name": "provenance",
+      "status": "ok",
+      "detail": "010047410000A000",
+      "hint": ""
+    },
+    {
+      "id": "verify.provenance.artifact",
+      "name": "provenance",
+      "status": "ok",
+      "detail": "2906131672 bytes, sha256 1f54bdf105fdfc0e88a81e5aaec954ffd4c349132fe7bbadcf394948cde994d4 (matches the NSP)",
+      "hint": ""
+    },
+    {
+      "id": "verify.provenance.keyset",
+      "name": "provenance",
+      "status": "ok",
+      "detail": "12007 bytes, sha256 7bb3b6d2a2eedc83c9f244ee2ed2eaa4d59eb9ad95b66df575f7dfffa71a2a40 (matches --keyset)",
+      "hint": ""
+    },
+    {
+      "id": "verify.provenance.no_secret",
+      "name": "provenance",
+      "status": "ok",
+      "detail": "no key-material markers in provenance text",
+      "hint": ""
+    }
+  ],
+  "ok": true,
+  "errors": []
+}

@@ -1,0 +1,47 @@
+# GalNX game manifest example - self-contained NSP packaging shape.
+# Derived from examples/manifest.krkr.yaml; only switch.target and the optional
+# package section differ. No packing is performed by this example:
+#   python -m galnx package plan --manifest examples/manifest.packaged.yaml
+schema_version: 1
+
+game:
+  id: sample-kirikiri-game
+  title: "Sample KiriKiri game"
+  publisher: "Example Publisher"
+  version: "1.0.0"
+  source_dir: "E:/Othergames/Galgame/SampleGame"
+  notes: "Replace with a game directory you legally own."
+
+engine:
+  adapter: krkrsdl2
+  adapter_version: "krkrsdl2@124bdf84 (2026-10-01)"
+  profile: default
+  entry: data.xp3
+
+switch:
+  title_id: "0100A1B2C3D4E000"
+  title: "SampleGame"
+  author: "GalNX"
+  icon: artifacts/icon.jpg
+  target: nsp
+  display_mode: both
+  save_policy: per-title-isolated
+
+input:
+  default_mode: keyboard_mouse
+  toggle_combo: "L+R+PLUS"
+  profile: generic-vn
+
+build:
+  output_dir: "E:/galnx-build/sample-kirikiri-game"
+  reproducible: true
+  clean_workspace_before_build: true
+  # compatibility hint only; NSP scripts take explicit --keyset
+  keys_env: GALNX_PROD_KEYS
+  romfs_mode: embedded
+
+package:
+  type: self_contained_nsp
+  startup_user_account: 1
+  romfs_dir: romfs
+  notes: "Example packaging metadata; the icon file is not shipped with this repo."

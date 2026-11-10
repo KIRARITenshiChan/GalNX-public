@@ -1,0 +1,18 @@
+# step: npdm
+# cwd: E:\galnx-build\pilot-01\p3\build\nsp
+# argv: ["D:\\devkitPro\\tools\\bin\\npdmtool.exe", "E:\\galnx-build\\pilot-01\\p3\\build\\nsp\\npdm.json", "E:\\galnx-build\\pilot-01\\p3\\build\\nsp\\exefs\\main.npdm"]
+# exit: 0
+# duration_s: 0.156
+--- stdout ---
+--- stderr ---
+Failed to get system_resource_size (field not present).
+Failed to get version (field not present).
+Failed to get process_category (field not present).
+Failed to get optimize_memory_allocation (field not present).
+Failed to get disable_device_address_space_merge (field not present).
+Failed to get enable_alias_region_extra_size (field not present).
+Failed to get prevent_code_reads (field not present).
+Failed to get signature_key_generation (field not present).
+Failed to get program_id_range_min (field not present).
+Failed to get program_id_range_max (field not present).
+Failed to get program_id (field not present).

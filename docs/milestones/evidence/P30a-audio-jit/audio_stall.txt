@@ -1,0 +1,6 @@
+pre stall=0 ms=1200 pages=3041 rendered_ms=64874 uptime_ms=64780 lag_ms=-94 underrun=0 gap_ms=44 t_us=193292898237
+post stall=1 ms=1200 pages=3097 rendered_ms=66069 uptime_ms=65982 lag_ms=-87 underrun=0 gap_ms=44 t_us=193294099833
+pre stall=1 ms=1200 pages=3564 rendered_ms=76032 uptime_ms=75930 lag_ms=-102 underrun=0 gap_ms=44 t_us=193304047694
+post stall=2 ms=1200 pages=3620 rendered_ms=77226 uptime_ms=77131 lag_ms=-95 underrun=0 gap_ms=44 t_us=193305249102
+pre stall=2 ms=1200 pages=4088 rendered_ms=87210 uptime_ms=87113 lag_ms=-97 underrun=0 gap_ms=44 t_us=193315230562
+post stall=3 ms=1200 pages=4144 rendered_ms=88405 uptime_ms=88314 lag_ms=-91 underrun=0 gap_ms=44 t_us=193316431949

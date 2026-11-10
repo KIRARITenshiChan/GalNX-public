@@ -1,0 +1,19 @@
+schema_version: 1
+game:
+  id: batch-demo-b
+  title: "Batch Demo B"
+  source_dir: examples/batch/games/demo-b
+engine:
+  adapter: brewser
+  adapter_version: "brewser@8040580e (2026-10-01)"
+  profile: kb_mouse
+  entry: index.html
+switch:
+  title_id: "010047410000A002"
+  target: nro
+  display_mode: both
+build:
+  output_dir: "E:/galnx-build/batch-examples/demo-b"
+  clean_workspace_before_build: true
+  reproducible: true
+  keys_env: GALNX_PROD_KEYS

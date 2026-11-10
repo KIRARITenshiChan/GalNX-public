@@ -1,0 +1,14 @@
+[citron_run] input steps: 7 step(s) parsed
+[citron_run] shell elevated: 1
+[citron_run] game file: /e/galnx-build/pilot-01/out/Kirikiroid2-NX-010047410000b0b4.nsp (type=nsp) staged at /c/Users/ACETaffy/AppData/Roaming/citron/sdmc/switch/galnx-harness/Kirikiroid2-NX-010047410000b0b4.nsp
+[citron_run] launched via schtasks-limited; polling up to 300 s for boot evidence
+[citron_run] input steps: waiting 1500 ms before running 7 step(s)
+[citron_run] input step 1/1 wait: ok (waited 120000ms)
+[citron_run] input step 2/2 capture: ok (bytes=2377784 nonblack=0.9018)
+[citron_run] input step 3/3 key: ok (keys_sent=1)
+[citron_run] input step 4/4 wait: ok (waited 2500ms)
+[citron_run] input step 5/5 key: ok (keys_sent=1)
+[citron_run] input step 6/6 wait: ok (waited 15000ms)
+[citron_run] input step 7/7 capture: ok (bytes=884572 nonblack=0.9018)
+[citron_run] input steps done: ok=7 failed=0 diff_ratio=0.809225 final=E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\citron-harness\runs\20261030-083721-Kirikiroid2-NX-010047410000b0b4\window-steps-final.png
+[citron_run] stopped citron pid(s) 31704

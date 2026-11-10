@@ -1,0 +1,64 @@
+diff --git a/platform/switch/runtime/main.c b/platform/switch/runtime/main.c
+index 8ee5f05..0e37f85 100644
+--- a/platform/switch/runtime/main.c
++++ b/platform/switch/runtime/main.c
+@@ -10,7 +10,32 @@
+ 
+ #include <switch.h>
+ 
++/* A plain NRO reads the game data from the SD card; a self-contained NSP ships it inside
++ * romfs:/game. Saves always live on the SD card (platform/switch/host/src/fs.rs), so both
++ * layouts keep their save data. */
+ static const char* const GameRoot = "sdmc:/switch/rfvp/game";
++static const char* const RomfsGameRoot = "romfs:/game";
++
++/* True when a directory holds at least one KiriKiri script archive (*.hcb). */
++static bool dir_has_game_script(const char* path) {
++    DIR* dir = opendir(path);
++    if (dir == NULL) return false;
++    bool found = false;
++    struct dirent* entry;
++    while (!found && (entry = readdir(dir)) != NULL) {
++        const size_t len = strlen(entry->d_name);
++        if (len >= 4 && strcmp(entry->d_name + len - 4, ".hcb") == 0) found = true;
++    }
++    closedir(dir);
++    return found;
++}
++
++/* Defined below; declared here so the game-root logging above can use it. */
++void rfvp_switch_log(const char* message, size_t len);
++
++static void log_text(const char* text) {
++    rfvp_switch_log(text, strlen(text));
++}
+ static const char* const ScreenshotFile = "sdmc:/switch/rfvp/debug_screen.bmp";
+ 
+ typedef struct {
+@@ -220,7 +245,18 @@ int main(void) {
+     padInitializeDefault(&pad);
+     hidInitializeTouchScreen();
+ 
+-    void* app = rfvp_switch_start(GameRoot);
++    /* Prefer the SD card when it holds a game (development); otherwise use the romfs copy
++     * embedded in an NSP build. romfsInit() failing is expected for SD-card NRO builds. */
++    const bool romfs_mounted = R_SUCCEEDED(romfsInit());
++    const char* game_root = GameRoot;
++    if (romfs_mounted && !dir_has_game_script(GameRoot) && dir_has_game_script(RomfsGameRoot)) {
++        game_root = RomfsGameRoot;
++    }
++    log_text("rfvp: game root: ");
++    log_text(game_root);
++    log_text(romfs_mounted ? " (romfs mounted)\n" : " (no romfs)\n");
++
++    void* app = rfvp_switch_start(game_root);
+     if (app == NULL) {
+         /* The reason is in sdmc:/switch/rfvp/last_error.txt. */
+         audio_exit();
+@@ -262,5 +298,6 @@ int main(void) {
+     rfvp_switch_stop(app);
+     audio_exit();
+     galnx_sdl_video_shutdown();
++    if (romfs_mounted) romfsExit();
+     return 0;
+ }

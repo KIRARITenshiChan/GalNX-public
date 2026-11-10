@@ -1,0 +1,24 @@
+{
+  "file_bytes": 10449140,
+  "nro_body_size": 10366976,
+  "aset_offset": 10366976,
+  "asset_blob_bytes": 82164,
+  "icon": {
+    "off": 10367032,
+    "size": 42448
+  },
+  "nacp": {
+    "off": 10409480,
+    "size": 16384
+  },
+  "romfs": {
+    "off": 10425864,
+    "size": 23276
+  },
+  "romfs_contains": {
+    "*define": 512,
+    "GALNX M4-c minimal test": 553,
+    "Page 2: advance works": 655,
+    "Branch A": 720
+  }
+}

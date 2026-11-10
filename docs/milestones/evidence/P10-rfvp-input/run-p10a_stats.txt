@@ -1,0 +1,11 @@
+step-02-t0 1728x1016 white=0.042 dark=0.033 uniq=12322 sha=3dde72246d03b2f1
+step-05-e1 1728x1016 white=0.042 dark=0.033 uniq=12322 sha=3dde72246d03b2f1
+step-08-e2 1728x1016 white=0.042 dark=0.033 uniq=12322 sha=1e285823ee09ab61
+step-11-e3 1728x1016 white=0.042 dark=0.033 uniq=12322 sha=3dde72246d03b2f1
+step-32-e4 1728x1016 white=0.041 dark=0.033 uniq=12366 sha=3650c304fbf118d3
+step-35-e5 1728x1016 white=0.966 dark=0.033 uniq=3 sha=a26a25eb49d6696e
+step-37-e6 1728x1016 white=0.963 dark=0.033 uniq=73 sha=80f3df2b236d3857
+step-39-e7 1728x1016 white=0.963 dark=0.033 uniq=71 sha=713fd79935bf84cd
+step-42-e8 1728x1016 white=0.966 dark=0.033 uniq=3 sha=a26a25eb49d6696e
+step-45-e9 1728x1016 white=0.963 dark=0.033 uniq=71 sha=6c3209c300446d46
+step-48-e10 1728x1016 white=0.000 dark=1.000 uniq=6 sha=caf7c763f8522d9d

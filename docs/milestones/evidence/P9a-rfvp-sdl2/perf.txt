@@ -1,0 +1,3 @@
+frame 8340: 60.0 fps over the last 60 frames, slowest frame 17.2 ms
+perf avg over 60 ticks: vm 0.56 ms, scene 0.23 ms, render 15.57 ms, total 16.37 ms
+virtual frame 1920x1080

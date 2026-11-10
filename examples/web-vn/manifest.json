@@ -1,0 +1,24 @@
+{
+  "id": "org.galnx.webvn",
+  "name": "GALNX Web VN Demo",
+  "version": "0.1.0",
+  "description": "Minimal MIT-licensed web visual novel used by the GalNX M4-b Brewser adapter smoke test.",
+  "logo": "assets/banner.png",
+  "entry": "index.html",
+  "categories": [
+    "Demos",
+    "Games"
+  ],
+  "permissions": [
+    "Storage"
+  ],
+  "compatibility": [
+    "switch",
+    "web"
+  ],
+  "allowed_origins": [],
+  "developer": "GalNX Project",
+  "license": "MIT",
+  "exitGame": "PLUS",
+  "fullscreen": false
+}

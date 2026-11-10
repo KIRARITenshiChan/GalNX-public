@@ -1,0 +1,29 @@
+# P1-a (task-32) evidence manifest — audit-web, 2026-10-30
+# format: <sha256>  <bytes>  <path-in-this-dir>  | origin
+91dd7e907e99d467b14bfaacc7a7874ec4b2861ea0b3e1a73567e70dc170b333  92221  P1a-01-k2nx-picker-root.png
+930d7f43158a930e0cc8cd00f59369157359c5168dd4f5e7cc3d397730d6ffb3  174993  P1a-02-k2nx-picker-haruno.png
+d6b26b5157c206186649af92e5078e357dc2d1bbd71724c2a98f5992a9317b6f  144967  P1a-03-k2nx-input-overlay-blocking.png
+8314432e7f2708dd94fdb4f276db55071ec9b32620828ff5fb4e3e931df976e5  427927  P1a-04-k2nx-tjs-exception.png
+7ec824bbb2b46d8f77c396dc6a295f73b6f819720a7bc13dc9216a088cd3312e  428429  P1a-05-k2nx-repro-exception-console.png
+564c38518af1ef4437caedd05b3be9e5affd9ebc93286ba526c095b3b96fe6a7  4061  P1a-06-k2nx-repro-result.json
+762e9a7c2870e019ffead66e72ed8b48f96e33935f8df35a736f4dc7a08738a9  3455  P1a-07-k2nx-picker-gamepad-key-noeffect.json
+4cd19f470ef133a2c8b8b078d09ceb9f696d450ccd2a456b7ffc15b967e677fe  198722  P1a-08-k2nx-picker-after-keys.png
+b97fccb30f2add1ae8b7353c3db5935e787ec975ec4ec2b9d2d231da4e34b549  4604  P1a-k2s_log-run1.txt
+891e90ca1bab38afdf6bf9c9e040128d3a68a1b3bf161af40e4fd36c108fb945  4604  P1a-k2s_log-run5-repro.txt
+e1519c61697b75ed2241e50be0040d0826027e441e1f76cf25bed58f10026816  218  P1a-k2s_boot.txt
+ab3e11c002ae98d875519675c71c03937604a6dfea2a2aba2608cb1a9ffab7ac  3644  P1a-run1-result.json
+755d62ad417cd8a6ac3572579703a7013458fbcc854ca281cfe9342675a8cc78  2587  P1a-k2nx-nsp-result.json
+4b9f5ba18302c1d2c4c6ec419ca215c23a8c7e6e749e67d7edb57dbf01ad8acc  197824  P1a-k2nx-nsp-picker.png
+341274bb4a2daaa622477cda33ddec14634bbe296048c13c2a294fc53b8e3afa  217  P1a-k2nx-nsp-k2s_boot.txt
+0e4115a5715ed9bb6d626147f6ebb32d8911163552de23906402dd0c7d27d365  154  P1a-k2nx-nsp-k2s_log.txt
+4cd19f470ef133a2c8b8b078d09ceb9f696d450ccd2a456b7ffc15b967e677fe  198722  P1a-k2nx-cjk-ab-nro.png
+bc7f4b34c30f27d71bc50384b5d920ebb3c3fd3afb2482bf3e8b4e9183fb3be1  2560  P1a-k2nx-cjk-ab-nro-result.json
+2855feba1aaabdb29b72cb9a8d138f702be4eb20464812ebf75dddd4c07eb628  21651  P1a-k2nx-cjk-ab-crop.png
+78029ba910ecd0b496e16cf2f1edcf9e448f8b667de73e2fa25ae4bb1e20a9b0  199174  P1a-k2nx-nsp-fixed-picker.png
+9921feec51f8888d958a53f1ef5e9b1f23b7097e27dc5bdecfb2679595dd6dba  2641  P1a-k2nx-nsp-fixed-result.json
+0e4115a5715ed9bb6d626147f6ebb32d8911163552de23906402dd0c7d27d365  154  P1a-k2nx-nsp-fixed-k2s_log.txt
+341274bb4a2daaa622477cda33ddec14634bbe296048c13c2a294fc53b8e3afa  217  P1a-k2nx-nsp-fixed-k2s_boot.txt
+936504352c3fd5fe27d95621f83c4846494fbb9874440c915530c7c5bb484686  428261  P1a-k2nx-nsp-fixed-game-console.png
+75542be73dbb239189ee38dafb4bd1a7e25585b86091489fb92ead652699a972  4190  P1a-k2nx-nsp-fixed-game-result.json
+0d95c51770ed311faf30e01c5c91a359d39babf437bf24f4e171cc13ac4999fe  4597  P1a-k2nx-nsp-fixed-game-k2s_log.txt
+341274bb4a2daaa622477cda33ddec14634bbe296048c13c2a294fc53b8e3afa  217  P1a-k2nx-nsp-fixed-game-k2s_boot.txt

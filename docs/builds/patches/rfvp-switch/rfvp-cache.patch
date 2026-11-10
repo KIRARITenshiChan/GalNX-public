@@ -1,0 +1,849 @@
+diff --git a/crates/rfvp/Cargo.toml b/crates/rfvp/Cargo.toml
+index 17396c7..3adad4a 100644
+--- a/crates/rfvp/Cargo.toml
++++ b/crates/rfvp/Cargo.toml
+@@ -267,6 +267,8 @@ cursor-ani = ["dep:ico", "dep:riff"]
+ 
+ # Zlib decompression backend for normal OS builds.
+ zlib-flate2 = ["dep:flate2"]
++# devkitPro zlib (C) inflate backend for the Nintendo Switch port: much faster than miniz_oxide.
++switch-zlib = []
+ 
+ # Pure Rust zlib decompression backend used by rfvp-os/UEFI builds.
+ # This avoids flate2/miniz_oxide default SIMD dependency paths on UEFI.
+diff --git a/crates/rfvp/src/no_std_core.rs b/crates/rfvp/src/no_std_core.rs
+index 7d88339..03c3a47 100644
+--- a/crates/rfvp/src/no_std_core.rs
++++ b/crates/rfvp/src/no_std_core.rs
+@@ -493,6 +493,24 @@ impl RfvpCore {
+         #[cfg(not(feature = "psx"))]
+         {
+             self.game_data = game_data;
++            // Pre-decode the UI atlases and the transition masks while the loading screen is still
++            // up. The game loads them from script the first time a panel opens; doing it here keeps
++            // that frame cheap (P17).
++            let (decoded, skipped, bytes, us) =
++                crate::subsystem::resources::resource_cache::prefetch_graph_textures(
++                    &self.game_data.vfs,
++                    &["graph"],
++                    &[
++                        "sys_", "menu_", "config_", "slf_", "btn_", "cursor", "diss", "prompt",
++                        "mouse",
++                    ],
++                    4 * 1024 * 1024,
++                    96 * 1024 * 1024,
++                );
++            host.log(
++                RfvpLogLevel::Info,
++                &format!("prefetch: {decoded} textures, {bytes} bytes, {skipped} skipped, {us} us"),
++            );
+         }
+         self.vm_runner = Some(vm_runner);
+         self.parser = Some(parser);
+diff --git a/crates/rfvp/src/ring_log.rs b/crates/rfvp/src/ring_log.rs
+index 01ef509..d4f520b 100644
+--- a/crates/rfvp/src/ring_log.rs
++++ b/crates/rfvp/src/ring_log.rs
+@@ -12,7 +12,7 @@ use core::fmt::Write;
+ use log::{LevelFilter, Log, Metadata, Record};
+ 
+ /// How many lines are kept; older ones are dropped.
+-const CAPACITY: usize = 1200;
++const CAPACITY: usize = 4000;
+ /// Longer lines are cut, so a runaway message cannot use up the memory.
+ const MAX_LINE: usize = 400;
+ 
+diff --git a/crates/rfvp/src/subsystem/components/syscalls/graph.rs b/crates/rfvp/src/subsystem/components/syscalls/graph.rs
+index b9563df..0952af9 100644
+--- a/crates/rfvp/src/subsystem/components/syscalls/graph.rs
++++ b/crates/rfvp/src/subsystem/components/syscalls/graph.rs
+@@ -985,6 +985,17 @@ pub fn graph_load(game_data: &mut GameData, id: &Variant, path: &Variant) -> Res
+                     return Ok(Variant::Nil);
+                 }
+             }
++            #[cfg(not(feature = "old_school"))]
++            if let Some(entry) = crate::subsystem::resources::resource_cache::get_texture(path) {
++                if crate::perf::enabled() {
++                    crate::perf::event(format_args!("graph cache hit path={path:?}"));
++                }
++                game_data
++                    .motion_manager
++                    .load_graph_cached(id as u16, path, &entry)?;
++                game_data.motion_manager.refresh_prims(id as u16);
++                return Ok(Variant::Nil);
++            }
+             let buff = game_data.vfs_load_file(path)?;
+             #[cfg(feature = "old_school")]
+             {
+diff --git a/crates/rfvp/src/subsystem/components/syscalls/parts.rs b/crates/rfvp/src/subsystem/components/syscalls/parts.rs
+index b89f9e2..24de49d 100644
+--- a/crates/rfvp/src/subsystem/components/syscalls/parts.rs
++++ b/crates/rfvp/src/subsystem/components/syscalls/parts.rs
+@@ -36,13 +36,23 @@ pub fn parts_load(game_data: &mut GameData, id: &Variant, path: &Variant) -> Res
+ 
+     let action = match path {
+         Variant::Nil => Action::Unload,
+-        Variant::String(p) | Variant::ConstString(p, _) => match game_data.vfs_load_file(p) {
+-            Ok(buff) => Action::Load {
+-                path: p.to_string(),
+-                buff,
+-            },
+-            Err(_) => Action::Noop,
+-        },
++        Variant::String(p) | Variant::ConstString(p, _) => {
++            // A cached parts texture needs no VFS read: the decode below hits the cache.
++            if crate::subsystem::resources::resource_cache::get_parts(p).is_some() {
++                Action::Load {
++                    path: p.to_string(),
++                    buff: Vec::new(),
++                }
++            } else {
++                match game_data.vfs_load_file(p) {
++                    Ok(buff) => Action::Load {
++                        path: p.to_string(),
++                        buff,
++                    },
++                    Err(_) => Action::Noop,
++                }
++            }
++        }
+         _ => Action::Noop,
+     };
+ 
+diff --git a/crates/rfvp/src/subsystem/resources/graph_buff.rs b/crates/rfvp/src/subsystem/resources/graph_buff.rs
+index b94708d..76ef7a0 100644
+--- a/crates/rfvp/src/subsystem/resources/graph_buff.rs
++++ b/crates/rfvp/src/subsystem/resources/graph_buff.rs
+@@ -12,6 +12,7 @@ use core_maths::CoreFloat;
+ use image::{DynamicImage, GenericImageView, ImageBuffer};
+ use serde::{Deserialize, Serialize};
+ 
++use super::resource_cache;
+ use super::texture::NvsgTexture;
+ use super::vfs::Vfs;
+ 
+@@ -543,8 +544,50 @@ impl GraphBuff {
+         }
+     }
+ 
++    /// Decode a `GraphLoad` payload into the cached representation.
++    ///
++    /// Kept separate from [`GraphBuff::load_texture`] so the boot-time prefetcher can decode a
++    /// texture that no [`GraphBuff`] slot owns yet. The mapping mirrors what `load_texture`
++    /// applies to its slot.
++    #[cfg(not(feature = "psx"))]
++    pub fn decode_texture_image(
++        file_name: &str,
++        buff: &[u8],
++    ) -> Result<resource_cache::DecodedTexture> {
++        let mut nvsg_texture = NvsgTexture::new(file_name);
++        let timing = crate::perf::enabled();
++        let t_inflate = crate::perf::start();
++        nvsg_texture.read_texture(buff, |typ| super::texture::TextureType::is_picture(typ))?;
++        let inflate_us = crate::perf::start().saturating_sub(t_inflate);
++        let t_convert = crate::perf::start();
++        let image = nvsg_texture.get_texture(0)?;
++        if timing {
++            let convert_us = crate::perf::start().saturating_sub(t_convert);
++            crate::perf::event(format_args!(
++                "graph decode split path={file_name:?} inflate_us={inflate_us} convert_us={convert_us}"
++            ));
++        }
++        Ok(resource_cache::DecodedTexture {
++            image: alloc::sync::Arc::new(image),
++            width: nvsg_texture.get_width(),
++            height: nvsg_texture.get_height(),
++            offset_x: nvsg_texture.get_offset_x(),
++            offset_y: nvsg_texture.get_offset_y(),
++            u: nvsg_texture.get_u(),
++            v: nvsg_texture.get_v(),
++        })
++    }
++
+     pub fn load_texture(&mut self, file_name: &str, buff: Vec<u8>) -> Result<()> {
++        if let Some(entry) = resource_cache::get_texture(file_name) {
++            if crate::perf::enabled() {
++                crate::perf::event(format_args!("graph cache hit path={file_name:?}"));
++            }
++            self.apply_cached_texture(file_name, &entry);
++            return Ok(());
++        }
+         let _timing = crate::perf::scope(crate::perf::GRAPH_DECODE);
++        let decode_started = crate::perf::start();
+         crate::perf::event(format_args!("graph decode path={file_name:?} bytes={}", buff.len()));
+         let mut nvsg_texture = NvsgTexture::new(file_name);
+         // The PlayStation makes a one-frame CLUT file into its picture in place: a picture is
+@@ -563,6 +606,7 @@ impl GraphBuff {
+             nvsg_texture.get_texture(0)?
+         };
+ 
++        let cached_image = image.clone();
+         self.unload();
+         // we don't need to split the texture into multiple 256x256 textures
+         self.texture = Some(image);
+@@ -583,9 +627,63 @@ impl GraphBuff {
+         self.cpu_pristine = true;
+         self.mark_dirty();
+ 
++        resource_cache::put_texture(
++            file_name,
++            resource_cache::DecodedTexture {
++                image: alloc::sync::Arc::new(cached_image),
++                width: self.width,
++                height: self.height,
++                offset_x: self.offset_x,
++                offset_y: self.offset_y,
++                u: self.u,
++                v: self.v,
++            },
++            self.width as usize * self.height as usize * 4,
++        );
++
++        if crate::perf::enabled() {
++            let us = crate::perf::start().saturating_sub(decode_started);
++            if us >= 4_000 {
++                crate::perf::event(format_args!(
++                    "graph decoded path={file_name:?} {}x{} us={us}",
++                    self.width, self.height
++                ));
++            }
++        }
++
+         Ok(())
+     }
+ 
++    /// Apply a texture that was already decoded for `file_name` (see [`resource_cache`]).
++    ///
++    /// This is the second half of `load_texture` with the VFS read and NVSG decode skipped.
++    pub fn apply_cached_texture(
++        &mut self,
++        file_name: &str,
++        entry: &resource_cache::DecodedTexture,
++    ) {
++        self.unload();
++        self.texture = Some((*entry.image).clone());
++        self.r_value = 100;
++        self.g_value = 100;
++        self.b_value = 100;
++        self.texture_ready = true;
++        self.offset_x = entry.offset_x;
++        self.offset_y = entry.offset_y;
++        self.width = entry.width;
++        self.height = entry.height;
++        self.display_width = self.width;
++        self.display_height = self.height;
++        self.u = entry.u;
++        self.v = entry.v;
++        self.texture_path = file_name.to_string();
++        self.load_kind = GraphBuffLoadKind::Texture;
++        self.cpu_pristine = true;
++        self.cpu_overlaid = false;
++        self.cpu_evicted = false;
++        self.mark_dirty();
++    }
++
+     #[cfg(feature = "old_school")]
+     pub fn load_texture_old_school(
+         &mut self,
+diff --git a/crates/rfvp/src/subsystem/resources/mod.rs b/crates/rfvp/src/subsystem/resources/mod.rs
+index bf925e5..0be03f3 100644
+--- a/crates/rfvp/src/subsystem/resources/mod.rs
++++ b/crates/rfvp/src/subsystem/resources/mod.rs
+@@ -15,6 +15,7 @@ pub mod input_manager;
+ pub mod motion_manager;
+ pub mod parts_manager;
+ pub mod prim;
++pub mod resource_cache;
+ pub mod save_manager;
+ pub mod text_manager;
+ pub mod texture;
+diff --git a/crates/rfvp/src/subsystem/resources/motion_manager/mod.rs b/crates/rfvp/src/subsystem/resources/motion_manager/mod.rs
+index 5bfbe46..39d433c 100644
+--- a/crates/rfvp/src/subsystem/resources/motion_manager/mod.rs
++++ b/crates/rfvp/src/subsystem/resources/motion_manager/mod.rs
+@@ -768,6 +768,18 @@ impl MotionManager {
+         false
+     }
+ 
++    /// Apply a graph texture decoded earlier for the same path (see [`resource_cache`]).
++    pub fn load_graph_cached(
++        &mut self,
++        id: u16,
++        file_name: &str,
++        entry: &crate::subsystem::resources::resource_cache::DecodedTexture,
++    ) -> Result<()> {
++        let graph = &mut self.textures[id as usize];
++        graph.apply_cached_texture(file_name, entry);
++        Ok(())
++    }
++
+     pub fn load_graph(&mut self, id: u16, file_name: &str, buff: Vec<u8>) -> Result<()> {
+         let graph = &mut self.textures[id as usize];
+         graph.load_texture(file_name, buff)
+diff --git a/crates/rfvp/src/subsystem/resources/parts_manager.rs b/crates/rfvp/src/subsystem/resources/parts_manager.rs
+index 756eafb..5665f49 100644
+--- a/crates/rfvp/src/subsystem/resources/parts_manager.rs
++++ b/crates/rfvp/src/subsystem/resources/parts_manager.rs
+@@ -40,6 +40,19 @@ impl PartsItem {
+     }
+ 
+     pub fn load_texture(&mut self, file_name: &str, buff: Vec<u8>) -> Result<()> {
++        if let Some(texture) = crate::subsystem::resources::resource_cache::get_parts(file_name) {
++            if crate::perf::enabled() {
++                crate::perf::event(format_args!("parts cache hit path={file_name:?}"));
++            }
++            self.texture = (*texture).clone();
++            self.texture_name = file_name.to_string();
++            self.r_value = 100;
++            self.g_value = 100;
++            self.b_value = 100;
++            self.running = false;
++            self.loaded = true;
++            return Ok(());
++        }
+         let _timing = crate::perf::scope(crate::perf::PARTS_DECODE);
+         crate::perf::event(format_args!("parts decode path={file_name:?} bytes={}", buff.len()));
+         self.texture
+@@ -54,6 +67,13 @@ impl PartsItem {
+         self.running = false;
+         self.loaded = true;
+ 
++        let bytes = self.texture.cache_size_hint();
++        crate::subsystem::resources::resource_cache::put_parts(
++            file_name,
++            alloc::sync::Arc::new(self.texture.clone()),
++            bytes,
++        );
++
+         Ok(())
+     }
+ 
+diff --git a/crates/rfvp/src/subsystem/resources/resource_cache.rs b/crates/rfvp/src/subsystem/resources/resource_cache.rs
+new file mode 100644
+index 0000000..d2338c7
+--- /dev/null
++++ b/crates/rfvp/src/subsystem/resources/resource_cache.rs
+@@ -0,0 +1,255 @@
++//! Runtime caches for decoded textures and raw file bytes (GalNX P17).
++//!
++//! The game re-loads the same assets constantly: every time the pause/save/backlog UI opens it
++//! re-executes `GraphLoad` for the whole menu atlas, CG expression switches re-load the same
++//! `graph_bs/CHR_*` files, and every sound play re-reads the `.wav`/`.ogg` payload. Without a
++//! cache each of those pays the full SD read plus NVSG/zlib decode, which showed up as 150-1400 ms
++//! stalls on the Switch.
++//!
++//! The caches are process-global, bounded by byte budget, and use a simple LRU order. They are
++//! purely derived data: evicting an entry only costs a re-read/re-decode, never correctness.
++
++use alloc::collections::{BTreeMap, VecDeque};
++use alloc::string::{String, ToString};
++use alloc::sync::Arc;
++use alloc::vec::Vec;
++
++use image::DynamicImage;
++
++use crate::subsystem::resources::texture::NvsgTexture;
++
++/// Budget for decoded `GraphLoad` images (the largest single consumer).
++const TEXTURE_BUDGET: usize = 160 * 1024 * 1024;
++/// Budget for decoded `PartsLoad` textures (CG expression sheets).
++const PARTS_BUDGET: usize = 48 * 1024 * 1024;
++/// Budget for raw file bytes (audio, scripts, and the bytes feed of the decoders above).
++const BYTES_BUDGET: usize = 192 * 1024 * 1024;
++/// Never cache a single entry larger than this (bytes).
++const MAX_ENTRY_BYTES: usize = 16 * 1024 * 1024;
++
++/// A decoded `GraphLoad` texture plus the metadata `load_texture` would have set.
++#[derive(Clone)]
++pub struct DecodedTexture {
++    pub image: Arc<DynamicImage>,
++    pub width: u16,
++    pub height: u16,
++    pub offset_x: u16,
++    pub offset_y: u16,
++    pub u: u16,
++    pub v: u16,
++}
++
++struct Lru<K, V> {
++    map: BTreeMap<K, (V, usize)>,
++    order: VecDeque<K>,
++    bytes: usize,
++    budget: usize,
++}
++
++impl<K: Ord + Clone, V> Lru<K, V> {
++    const fn new(budget: usize) -> Self {
++        Self {
++            map: BTreeMap::new(),
++            order: VecDeque::new(),
++            bytes: 0,
++            budget,
++        }
++    }
++
++    fn get(&mut self, key: &K) -> Option<&V> {
++        if !self.map.contains_key(key) {
++            return None;
++        }
++        self.touch(key);
++        self.map.get(key).map(|(value, _)| value)
++    }
++
++    fn touch(&mut self, key: &K) {
++        if let Some(pos) = self.order.iter().position(|k| k == key) {
++            self.order.remove(pos);
++        }
++        self.order.push_back(key.clone());
++    }
++
++    fn put(&mut self, key: K, value: V, size: usize) {
++        if size > MAX_ENTRY_BYTES {
++            return;
++        }
++        if let Some((_, old)) = self.map.remove(&key) {
++            self.bytes = self.bytes.saturating_sub(old);
++        }
++        self.map.insert(key.clone(), (value, size));
++        self.bytes += size;
++        self.touch(&key);
++        while self.bytes > self.budget {
++            let Some(victim) = self.order.pop_front() else {
++                break;
++            };
++            if let Some((_, old)) = self.map.remove(&victim) {
++                self.bytes = self.bytes.saturating_sub(old);
++            }
++        }
++    }
++
++    fn clear(&mut self) {
++        self.map.clear();
++        self.order.clear();
++        self.bytes = 0;
++    }
++}
++
++struct Caches {
++    textures: Lru<String, DecodedTexture>,
++    parts: Lru<String, Arc<NvsgTexture>>,
++    bytes: Lru<String, Arc<[u8]>>,
++}
++
++static CACHES: spin::Mutex<Option<Caches>> = spin::Mutex::new(None);
++
++fn with_caches<R>(f: impl FnOnce(&mut Caches) -> R) -> R {
++    let mut guard = CACHES.lock();
++    if guard.is_none() {
++        *guard = Some(Caches {
++            textures: Lru::new(TEXTURE_BUDGET),
++            parts: Lru::new(PARTS_BUDGET),
++            bytes: Lru::new(BYTES_BUDGET),
++        });
++    }
++    f(guard.as_mut().expect("caches initialized"))
++}
++
++/// Cache key: the game addresses assets case-insensitively with either slash.
++pub fn key(path: &str) -> String {
++    let trimmed = path.trim_start_matches("./").replace('\\', "/");
++    trimmed.trim_start_matches('/').to_ascii_lowercase()
++}
++
++pub fn get_texture(path: &str) -> Option<DecodedTexture> {
++    let key = key(path);
++    with_caches(|c| c.textures.get(&key).cloned())
++}
++
++pub fn put_texture(path: &str, entry: DecodedTexture, size: usize) {
++    let key = key(path);
++    with_caches(|c| {
++        c.textures.put(key, entry, size);
++        if crate::perf::enabled() {
++            let (bytes, budget) = (c.textures.bytes, c.textures.budget);
++            crate::perf::event(format_args!("[cache] texture put size={size} total={bytes}/{budget}"));
++        }
++    });
++}
++
++pub fn get_parts(path: &str) -> Option<Arc<NvsgTexture>> {
++    let key = key(path);
++    with_caches(|c| c.parts.get(&key).cloned())
++}
++
++pub fn put_parts(path: &str, texture: Arc<NvsgTexture>, size: usize) {
++    let key = key(path);
++    with_caches(|c| {
++        c.parts.put(key, texture, size);
++        if crate::perf::enabled() {
++            let (bytes, budget) = (c.parts.bytes, c.parts.budget);
++            crate::perf::event(format_args!("[cache] parts put size={size} total={bytes}/{budget}"));
++        }
++    });
++}
++
++pub fn get_bytes(path: &str) -> Option<Arc<[u8]>> {
++    let key = key(path);
++    with_caches(|c| c.bytes.get(&key).cloned())
++}
++
++pub fn put_bytes(path: &str, bytes: &[u8]) {
++    let key = key(path);
++    with_caches(|c| {
++        let size = bytes.len();
++        if size > MAX_ENTRY_BYTES {
++            return;
++        }
++        c.bytes.put(key, Arc::from(bytes), size);
++        if crate::perf::enabled() {
++            let (total, budget) = (c.bytes.bytes, c.bytes.budget);
++            crate::perf::event(format_args!("[cache] bytes put size={size} total={total}/{budget}"));
++        }
++    });
++}
++
++/// Human readable sizes, used by the debug report.
++pub fn report() -> String {
++    with_caches(|c| {
++        alloc::format!(
++            "textures {}/{} B entries={} parts {}/{} B entries={} bytes {}/{} B entries={}",
++            c.textures.bytes,
++            c.textures.budget,
++            c.textures.map.len(),
++            c.parts.bytes,
++            c.parts.budget,
++            c.parts.map.len(),
++            c.bytes.bytes,
++            c.bytes.budget,
++            c.bytes.map.len()
++        )
++    })
++}
++
++/// Drop every cache (used when a new game is loaded).
++pub fn clear() {
++    with_caches(|c| {
++        c.textures.clear();
++        c.parts.clear();
++        c.bytes.clear();
++    });
++}
++
++/// Decode every texture under `folders` whose name starts with one of `prefixes` and cache it.
++///
++/// Returns `(decoded, skipped, decoded_bytes, elapsed_us)`. The boot path calls this for the UI
++/// atlases: opening the pause/save/backlog panel re-executes `GraphLoad` for the whole menu, and a
++/// cold decode inside that frame was a 150-400 ms hitch on the Switch. Pre-decoding during boot
++/// moves that work to the loading screen, where nothing is being drawn yet.
++#[cfg(not(feature = "psx"))]
++pub fn prefetch_graph_textures(
++    vfs: &super::vfs::Vfs,
++    folders: &[&str],
++    prefixes: &[&str],
++    max_entry_bytes: u64,
++    budget_bytes: usize,
++) -> (usize, usize, usize, u64) {
++    let started = crate::perf::start();
++    let paths = vfs.list_by_prefix(folders, prefixes, max_entry_bytes);
++    let mut decoded = 0usize;
++    let mut skipped = 0usize;
++    let mut bytes = 0usize;
++    for path in paths {
++        if bytes >= budget_bytes {
++            break;
++        }
++        if get_texture(&path).is_some() {
++            skipped += 1;
++            continue;
++        }
++        // Reading through the VFS keeps the raw bytes cached too, so a later re-decode is cheap.
++        let Ok(buff) = vfs.read_file(&path) else {
++            skipped += 1;
++            continue;
++        };
++        match super::graph_buff::GraphBuff::decode_texture_image(&path, &buff) {
++            Ok(texture) => {
++                let size = texture.width as usize * texture.height as usize * 4;
++                bytes += size;
++                put_texture(&path, texture, size);
++                decoded += 1;
++            }
++            Err(err) => {
++                skipped += 1;
++                if crate::perf::enabled() {
++                    crate::perf::event(format_args!("[cache] prefetch skip path={path:?}: {err:?}"));
++                }
++            }
++        }
++    }
++    let us = crate::perf::start().saturating_sub(started);
++    (decoded, skipped, bytes, us)
++}
+diff --git a/crates/rfvp/src/subsystem/resources/texture.rs b/crates/rfvp/src/subsystem/resources/texture.rs
+index 72982d7..4f10863 100644
+--- a/crates/rfvp/src/subsystem/resources/texture.rs
++++ b/crates/rfvp/src/subsystem/resources/texture.rs
+@@ -126,6 +126,11 @@ impl NvsgTexture {
+     ///
+     /// This matches the original engine behavior for `PartsLoad(id, nil)`: the pixel buffer
+     /// is released, but header fields and the name pointer are left untouched.
++    /// Approximate decoded size in bytes, used by the runtime caches.
++    pub fn cache_size_hint(&self) -> usize {
++        self.slices.iter().map(|s| s.len()).sum()
++    }
++
+     pub fn clear_slices_keep_header(&mut self) {
+         self.slices.clear();
+         self.outlen = None;
+@@ -263,9 +268,45 @@ impl NvsgTexture {
+             out_buff
+         };
+ 
++        // Nintendo Switch: the devkitPro zlib C implementation inflates 2-4x faster than
++        // miniz_oxide, which dominates level/scene loading time on the console.
++        #[cfg(feature = "switch-zlib")]
++        let mut out_buff = {
++            extern "C" {
++                fn uncompress(
++                    dest: *mut u8,
++                    dest_len: *mut u64,
++                    source: *const u8,
++                    source_len: u64,
++                ) -> i32;
++            }
++            let mut out_buff = vec![0u8; out_len];
++            let mut dest_len: u64 = out_len as u64;
++            let rc = unsafe {
++                uncompress(
++                    out_buff.as_mut_ptr(),
++                    &mut dest_len,
++                    data_buff.as_ptr(),
++                    data_buff.len() as u64,
++                )
++            };
++            if rc != 0 {
++                bail!("zlib decompress failed: {}", rc);
++            }
++            if dest_len as usize != out_len {
++                bail!(
++                    "zlib output length mismatch: expected {}, got {}",
++                    out_len,
++                    dest_len
++                );
++            }
++            out_buff
++        };
++
+         #[cfg(all(
+             not(feature = "zlib-flate2"),
+-            any(feature = "uefi-zlib", feature = "no_std")
++            any(feature = "uefi-zlib", feature = "no_std"),
++            not(feature = "switch-zlib")
+         ))]
+         let mut out_buff = {
+             let decoded = miniz_oxide::inflate::decompress_to_vec_zlib(data_buff)
+@@ -295,14 +336,23 @@ impl NvsgTexture {
+         self.slices.clear();
+         self.outlen = Some(out_len);
+         let frame_len = self.width as u64 * self.height as u64 * depth;
++        let entry_count = self.entry_count as usize;
+ 
+-        for i in 0..self.entry_count as u64 {
+-            let frame = out_buff
+-                .get(i as usize * frame_len as usize..(i as usize + 1) * frame_len as usize);
+-
+-            if let Some(frame) = frame {
++        if entry_count <= 1 {
++            // Single frame: keep the decoded buffer instead of copying several megabytes.
++            if frame_len as usize == out_buff.len() {
++                self.slices.push(out_buff);
++            } else if let Some(frame) = out_buff.get(0..frame_len as usize) {
+                 self.slices.push(frame.to_vec());
+             }
++        } else {
++            let frame_len = frame_len as usize;
++            for i in 0..entry_count {
++                let start = i * frame_len;
++                if let Some(frame) = out_buff.get(start..start + frame_len) {
++                    self.slices.push(frame.to_vec());
++                }
++            }
+         }
+ 
+         Ok(())
+@@ -480,15 +530,18 @@ impl NvsgTexture {
+ 
+     fn as_8bit_texture(&self, index: usize) -> Result<GrayAlphaImage> {
+         let slice = &self.slices[index];
+-        let mut img = GrayAlphaImage::new(self.width as u32, self.height as u32);
++        let (width, height) = (self.width as u32, self.height as u32);
++        let mut out = vec![0u8; width as usize * height as usize * 2];
+ 
+-        for (x, y, mut pixel) in img.enumerate_pixels_mut() {
+-            let index = (y * self.width as u32 + x) as usize;
+-            let alpha_value = slice[index];
+-            *pixel = image::LumaA([0xff, alpha_value]);
++        for (src, dst) in slice.iter().zip(out.chunks_exact_mut(2)) {
++            dst[0] = 0xff;
++            dst[1] = *src;
+         }
+ 
+-        Ok(img)
++        match ImageBuffer::from_raw(width, height, out) {
++            Some(img) => Ok(img),
++            None => bail!("texture buffer too small for {}x{}", width, height),
++        }
+     }
+ 
+     #[cfg(not(feature = "no_std"))]
+@@ -528,17 +581,21 @@ impl NvsgTexture {
+         index: usize,
+     ) -> Result<ImageBuffer<image::Rgba<u8>, Vec<u8>>> {
+         let slice = &self.slices[index];
+-        let mut img = ImageBuffer::new(self.width as u32, self.height as u32);
++        let (width, height) = (self.width as u32, self.height as u32);
++        let mut out = vec![0u8; width as usize * height as usize * 4];
+ 
+-        for (x, y, mut pixel) in img.enumerate_pixels_mut() {
+-            let index = (y * self.width as u32 + x) as usize * 3;
+-            let r = slice[index + 2];
+-            let g = slice[index + 1];
+-            let b = slice[index + 0];
+-            *pixel = image::Rgba([r, g, b, 0xff]);
++        // BGR -> RGBA in one pass with fixed-size chunks.
++        for (src, dst) in slice.chunks_exact(3).zip(out.chunks_exact_mut(4)) {
++            dst[0] = src[2];
++            dst[1] = src[1];
++            dst[2] = src[0];
++            dst[3] = 0xff;
+         }
+ 
+-        Ok(img)
++        match ImageBuffer::from_raw(width, height, out) {
++            Some(img) => Ok(img),
++            None => bail!("texture buffer too small for {}x{}", width, height),
++        }
+     }
+ 
+     #[cfg(not(feature = "no_std"))]
+@@ -561,18 +618,21 @@ impl NvsgTexture {
+ 
+     fn as_32bit_texture(&self, index: usize) -> Result<ImageBuffer<image::Rgba<u8>, Vec<u8>>> {
+         let slice = &self.slices[index];
+-        let mut img = ImageBuffer::new(self.width as u32, self.height as u32);
++        let (width, height) = (self.width as u32, self.height as u32);
++        let mut out = vec![0u8; width as usize * height as usize * 4];
+ 
+-        for (x, y, mut pixel) in img.enumerate_pixels_mut() {
+-            let index = (y * self.width as u32 + x) as usize * 4;
+-            let r = slice[index + 2];
+-            let g = slice[index + 1];
+-            let b = slice[index + 0];
+-            let a = slice[index + 3];
+-            *pixel = image::Rgba([r, g, b, a]);
++        // BGRA -> RGBA in one pass with fixed-size chunks; per-pixel indexing here is the
++        // hottest loop of level loading (several megapixels per background).
++        for (src, dst) in slice.chunks_exact(4).zip(out.chunks_exact_mut(4)) {
++            let w = u32::from_le_bytes([src[0], src[1], src[2], src[3]]);
++            let swapped = (w & 0xFF00_FF00) | ((w & 0x00FF_0000) >> 16) | ((w & 0x0000_00FF) << 16);
++            dst.copy_from_slice(&swapped.to_le_bytes());
+         }
+ 
+-        Ok(img)
++        match ImageBuffer::from_raw(width, height, out) {
++            Some(img) => Ok(img),
++            None => bail!("texture buffer too small for {}x{}", width, height),
++        }
+     }
+ 
+     #[cfg(not(feature = "no_std"))]
+diff --git a/crates/rfvp/src/subsystem/resources/vfs.rs b/crates/rfvp/src/subsystem/resources/vfs.rs
+index f0dca50..a9d79f5 100644
+--- a/crates/rfvp/src/subsystem/resources/vfs.rs
++++ b/crates/rfvp/src/subsystem/resources/vfs.rs
+@@ -555,6 +555,16 @@ impl Vfs {
+     }
+ 
+     pub fn read_file(&self, path: &str) -> Result<Vec<u8>> {
++        let cache_key = normalize_vfs_key(path);
++        if let Some(bytes) = crate::subsystem::resources::resource_cache::get_bytes(&cache_key) {
++            if crate::perf::enabled() {
++                crate::perf::event(format_args!(
++                    "vfs cache hit path={path:?} bytes={}",
++                    bytes.len()
++                ));
++            }
++            return Ok(bytes.to_vec());
++        }
+         let _timing = crate::perf::scope(crate::perf::VFS_READ);
+         let started = crate::perf::start();
+         let result = (|| {
+@@ -563,6 +573,9 @@ impl Vfs {
+             stream.read_to_end(&mut out)?;
+             Ok(out)
+         })();
++        if let Ok(bytes) = result.as_ref() {
++            crate::subsystem::resources::resource_cache::put_bytes(&cache_key, bytes);
++        }
+         if crate::perf::enabled() {
+             let us = crate::perf::start().saturating_sub(started);
+             match &result {
+@@ -573,8 +586,31 @@ impl Vfs {
+         }
+         result
+     }
+-}
+ 
++    /// Asset paths (`folder/inner`) whose inner name starts with one of `prefixes`, skipping
++    /// entries larger than `max_size` bytes. Used to pre-decode a whole asset family (the UI
++    /// atlases) during boot instead of on the frame that first shows it.
++    #[cfg(not(feature = "psx"))]
++    pub fn list_by_prefix(&self, folders: &[&str], prefixes: &[&str], max_size: u64) -> Vec<String> {
++        let mut out = Vec::new();
++        for (folder, file) in self.files.iter() {
++            if !folders.is_empty() && !folders.iter().any(|f| folder.eq_ignore_ascii_case(f)) {
++                continue;
++            }
++            for (name, entry) in file.entries.iter() {
++                if entry.size > max_size {
++                    continue;
++                }
++                let lower = name.to_ascii_lowercase();
++                if prefixes.iter().any(|p| lower.starts_with(p)) {
++                    out.push(format!("{folder}/{name}"));
++                }
++            }
++        }
++        out.sort();
++        out
++    }
++}
+ /// A file of `dir` as a pack source: streamed when the host can open files, read whole otherwise.
+ fn open_pack(dir: &dyn RfvpStorage, path: &str) -> Result<Arc<dyn PackSource>> {
+     match dir.open(path) {
+diff --git a/platform/switch/build_switch.sh b/platform/switch/build_switch.sh
+index c45c27f..4a88268 100755
+--- a/platform/switch/build_switch.sh
++++ b/platform/switch/build_switch.sh
+@@ -58,7 +58,7 @@ done
+ # libSDL2.a pulls in the devkitPro EGL/GLESv2 stack, and that stack's shader compiler needs libm.
+ "$CC" "${ARCH_FLAGS[@]}" -specs="$DEVKITPRO/libnx/switch.specs" -g -Wl,--gc-sections \
+   -Wl,-Map,"$BUILD_DIR/rfvp.map" "$BUILD_DIR/main.o" "$BUILD_DIR/sdl_video.o" "$LIB" \
+-  -L"$DEVKITPRO/portlibs/switch/lib" -lSDL2 -lEGL -lglapi -ldrm_nouveau -lpthread \
++  -L"$DEVKITPRO/portlibs/switch/lib" -lSDL2 -lEGL -lglapi -ldrm_nouveau -lz -lpthread \
+   -lstdc++ -L"$DEVKITPRO/libnx/lib" -lnx -lm -o "$BUILD_DIR/rfvp.elf"
+ 
+ "$DEVKITPRO/tools/bin/nacptool" --create "rfvp" "rfvp" "${VERSION:-0.1.0}" "$BUILD_DIR/rfvp.nacp"
+diff --git a/platform/switch/host/Cargo.toml b/platform/switch/host/Cargo.toml
+index f89ac4f..361ce18 100644
+--- a/platform/switch/host/Cargo.toml
++++ b/platform/switch/host/Cargo.toml
+@@ -14,7 +14,7 @@ path = "src/lib.rs"
+ crate-type = ["staticlib"]
+ 
+ [dependencies]
+-rfvp = { path = "../../../crates/rfvp", default-features = false, features = ["no_std"] }
++rfvp = { path = "../../../crates/rfvp", default-features = false, features = ["no_std", "switch-zlib"] }
+ 
+ [build-dependencies]
+ cc = "1"

@@ -1,0 +1,64 @@
+# GalNX P22 pilot manifest - rfvp さくら、もゆ。 HD Re:GENERATION 中文副标题（Sakura CN）
+#
+# 与 examples/pilot03-sakura.yaml 同源，仅内容包不同：
+#   - Sakura.hcb 替换为字节码级重打包的 SakuraGBK.hcb（4,283,683 B，
+#     sha256 4d4fd72933c2342841765b27d3be0522dff8ea055ba6f510d5b0fe25f248e7d7），
+#     由 E:/galnx-build/p23/l10n/ 的 hcb_tool.py 在原版字节码上原地替换 push_string
+#     载荷并重定位 ThreadStart 绝对代码指针（phase2b）而成；roundtrip 原版字节一致。
+#   - config.toml: hcb="SakuraGBK.hcb", nls="gbk"（必须 gbk，sjis 会乱码）。
+#   - 剧情/对白 100% 中文；标题 logo、菜单按钮等 UI 图仍在 patch.bin 内，rfvp
+#     不会覆盖 graph 贴图，故 UI 图仍为日文（第二阶段工作）。
+# 构建：
+#   bash /e/galnx-build/p23/build-sakura-cn-nsp.sh
+schema_version: 1
+
+game:
+  id: pilot03-sakura-cn
+  title: さくら、もゆ。 HD Re:GENERATION 中文化测试版
+  publisher: FAVORITE
+  version: "1.3.2-test"
+  source_dir: E:/Othergames/Galgame/さくら、もゆ。v0.2.0_0222_fix1
+  notes: >-
+    Pilot game P3 的中文内容版（Pilot-03C）。英文/日文原文由 X'moe 汉化组的
+    patch.bin 提供（Windows 注入式，rfvp 不加载）；本清单改用其脚本翻译文本经
+    字节码重打包得到的 SakuraGBK.hcb。
+
+engine:
+  adapter: rfvp
+  adapter_version: "0.7.0 (9f07ade) + GalNX Switch backend (v1.0.9)"
+  profile: switch
+  entry: SakuraGBK.hcb
+  descriptor: engines/rfvp.yaml
+  options:
+    config: config.toml
+    nls: gbk
+
+switch:
+  title_id: "010047420000C200"
+  title: SAKURA MOYU CN
+  author: GalNX
+  icon: pilot03/icon-256.jpg
+  target: nsp
+  display_mode: handheld
+  save_policy: per-title-isolated
+
+input:
+  default_mode: controller
+  toggle_combo: "L+R+PLUS"
+  profile: generic-vn
+
+build:
+  output_dir: E:/galnx-build/p23
+  reproducible: true
+  clean_workspace_before_build: false
+  keys_env: GALNX_PROD_KEYS
+  romfs_mode: embedded
+
+package:
+  type: self_contained_nsp
+  startup_user_account: 1
+  romfs_dir: E:/galnx-build/p23/cn-work/romfs
+  icon: pilot03/icon-256.jpg
+  notes: >-
+    romfs hardlink staging（~7.5 GB）；title id 010047420000C200 与日文版
+    010047420000C000 不同，可并存安装。

@@ -1,0 +1,159 @@
+diff --git a/platform/switch/host/src/audio.rs b/platform/switch/host/src/audio.rs
+index 52da0d3..0b1a883 100644
+--- a/platform/switch/host/src/audio.rs
++++ b/platform/switch/host/src/audio.rs
+@@ -1,11 +1,14 @@
+ //! Audio: the shared software mixer, pulled by the runtime's audio driver
+ //! (`audio_pump` in main.c) one buffer at a time.
+ 
++use alloc::boxed::Box;
+ use alloc::vec::Vec;
++use core::ffi::c_void;
+ 
+ use rfvp::host_api::{
+-    AudioParams, AudioSampleFormat, AudioStreamDesc, AudioStreamId, EncodedAudioKind, RfvpAudio,
+-    RfvpError, RfvpResult, SoftAudioConfig, SoftAudioMixer, SoftAudioVorbis,
++    AudioByteStream, AudioParams, AudioSampleFormat, AudioStreamDesc, AudioStreamId,
++    EncodedAudioKind, RfvpAudio, RfvpError, RfvpResult, SoftAudioConfig, SoftAudioMixer,
++    SoftAudioVorbis,
+ };
+ 
+ const OUTPUT_SAMPLE_RATE: u32 = 48_000;
+@@ -32,6 +35,12 @@ extern "C" {
+         out_samples: *mut i16,
+         max_interleaved_samples: i32,
+     ) -> i32;
++    fn rfvp_ogg_open_stream(
++        read: unsafe extern "C" fn(*mut c_void, u64, *mut u8, i32) -> i32,
++        user: *mut c_void,
++        out_info: *mut RfvpOggVorbisInfo,
++        out_decoder: *mut *mut RfvpOggVorbis,
++    ) -> i32;
+     fn rfvp_ogg_seek_start(decoder: *mut RfvpOggVorbis) -> i32;
+     fn rfvp_ogg_close(decoder: *mut RfvpOggVorbis);
+ }
+@@ -91,6 +100,18 @@ impl RfvpAudio for HorizonAudio {
+         self.mixer.load_encoded(id, kind, bytes)
+     }
+ 
++    /// GalNX P24: music and long voices are read from the SD card as they play. Without this the
++    /// core falls back to reading the whole sound and decoding it on the frame thread, which is
++    /// the multi-hundred-millisecond stall seen on hardware when a BGM or a long voice starts.
++    fn load_stream(
++        &mut self,
++        id: AudioStreamId,
++        kind: EncodedAudioKind,
++        stream: AudioByteStream,
++    ) -> RfvpResult<()> {
++        self.mixer.load_stream(id, kind, stream)
++    }
++
+     fn create_stream(&mut self, id: AudioStreamId, desc: AudioStreamDesc) -> RfvpResult<()> {
+         self.mixer.create_stream(id, desc)
+     }
+@@ -141,6 +162,20 @@ struct HorizonVorbisBackend;
+ 
+ struct HorizonVorbisDecoder {
+     ptr: *mut RfvpOggVorbis,
++    /// What a streamed decoder reads from: only the C side reads it (its address is `user`),
++    /// it is kept here so it lives as long as the decoder.
++    #[allow(dead_code)]
++    stream: Option<Box<AudioByteStream>>,
++}
++
++/// The C decoder's read callback for a streamed sound.
++unsafe extern "C" fn read_stream(user: *mut c_void, offset: u64, buf: *mut u8, len: i32) -> i32 {
++    let stream = unsafe { &*user.cast::<AudioByteStream>() };
++    let buf = unsafe { core::slice::from_raw_parts_mut(buf, len.max(0) as usize) };
++    match stream.read_at(offset, buf) {
++        Ok(n) => n as i32,
++        Err(_) => -1,
++    }
+ }
+ 
+ impl SoftAudioVorbis for HorizonVorbisBackend {
+@@ -161,7 +196,38 @@ impl SoftAudioVorbis for HorizonVorbisBackend {
+             return Err(RfvpError::InvalidData);
+         }
+         Ok((
+-            HorizonVorbisDecoder { ptr: decoder },
++            HorizonVorbisDecoder {
++                ptr: decoder,
++                stream: None,
++            },
++            AudioStreamDesc {
++                sample_rate: info.sample_rate,
++                channels: info.channels,
++                sample_format: AudioSampleFormat::I16,
++            },
++        ))
++    }
++
++    fn open_stream(
++        &mut self,
++        stream: AudioByteStream,
++    ) -> RfvpResult<(Self::Decoder, AudioStreamDesc)> {
++        let stream = Box::new(stream);
++        let mut info = RfvpOggVorbisInfo {
++            sample_rate: 0,
++            channels: 0,
++        };
++        let mut decoder = core::ptr::null_mut();
++        let user = &*stream as *const AudioByteStream as *mut c_void;
++        let status = unsafe { rfvp_ogg_open_stream(read_stream, user, &mut info, &mut decoder) };
++        if status != 0 || decoder.is_null() || info.sample_rate == 0 || info.channels == 0 {
++            return Err(RfvpError::InvalidData);
++        }
++        Ok((
++            HorizonVorbisDecoder {
++                ptr: decoder,
++                stream: Some(stream),
++            },
+             AudioStreamDesc {
+                 sample_rate: info.sample_rate,
+                 channels: info.channels,
+diff --git a/platform/switch/host/Cargo.toml b/platform/switch/host/Cargo.toml
+index 7ae14d1..33d5444 100644
+--- a/platform/switch/host/Cargo.toml
++++ b/platform/switch/host/Cargo.toml
+@@ -1,6 +1,6 @@
+ [package]
+ name = "rfvp-horizon"
+-version = "1.0.9"
++version = "1.0.10-test2"
+ edition = "2021"
+ description = "Nintendo Horizon host crate for rfvp no_std core"
+ license = "MPL-2.0"
+diff --git a/Cargo.lock b/Cargo.lock
+index 2e72c49..562c88f 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -4898,7 +4898,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "rfvp-horizon"
+-version = "1.0.9"
++version = "1.0.10-test2"
+ dependencies = [
+  "cc",
+  "rfvp",
+diff --git a/crates/rfvp/src/subsystem/resources/resource_cache.rs b/crates/rfvp/src/subsystem/resources/resource_cache.rs
+index d2338c7..2f56e2d 100644
+--- a/crates/rfvp/src/subsystem/resources/resource_cache.rs
++++ b/crates/rfvp/src/subsystem/resources/resource_cache.rs
+@@ -19,13 +19,13 @@ use image::DynamicImage;
+ use crate::subsystem::resources::texture::NvsgTexture;
+ 
+ /// Budget for decoded `GraphLoad` images (the largest single consumer).
+-const TEXTURE_BUDGET: usize = 160 * 1024 * 1024;
++const TEXTURE_BUDGET: usize = 256 * 1024 * 1024;
+ /// Budget for decoded `PartsLoad` textures (CG expression sheets).
+ const PARTS_BUDGET: usize = 48 * 1024 * 1024;
+ /// Budget for raw file bytes (audio, scripts, and the bytes feed of the decoders above).
+ const BYTES_BUDGET: usize = 192 * 1024 * 1024;
+ /// Never cache a single entry larger than this (bytes).
+-const MAX_ENTRY_BYTES: usize = 16 * 1024 * 1024;
++const MAX_ENTRY_BYTES: usize = 48 * 1024 * 1024;
+ 
+ /// A decoded `GraphLoad` texture plus the metadata `load_texture` would have set.
+ #[derive(Clone)]

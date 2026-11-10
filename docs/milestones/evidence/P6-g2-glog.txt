@@ -1,0 +1,8 @@
+[pad] key=1013 virt=0 uiChildren=0 gamemenu=0x210cf744a0 cursor=0x0
+[pad] key=1004 virt=0 uiChildren=0 gamemenu=0x210cf744a0 cursor=0x0
+[pad] key=1004 virt=0 uiChildren=0 gamemenu=0x210cf744a0 cursor=0x0
+[pad] key=1004 virt=0 uiChildren=0 gamemenu=0x210cf744a0 cursor=0x0
+[pad] key=1022 virt=1 uiChildren=0 gamemenu=0x210cf744a0 cursor=0x2111fec040
+[tjs] exit -> ok
+[touch] began id=0x210cf46780 loc=(385.7,287.2) virt=1 uiChildren=0
+[touch] ended id=0x210cf46780 loc=(385.7,287.2) virt=0

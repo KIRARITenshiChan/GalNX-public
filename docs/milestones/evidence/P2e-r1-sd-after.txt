@@ -1,0 +1,10 @@
+postrun_at=2026-10-29T23:58:49Z
+total 27
+drwxr-xr-x 1 ACETaffy 197121    0 10月 30 07:55 .
+drwxr-xr-x 1 ACETaffy 197121    0 10月 30 05:32 ..
+-rw-r--r-- 1 ACETaffy 197121   11 10月 30 07:55 .galnx_extracted
+drwxr-xr-x 1 ACETaffy 197121    0 10月 30 05:46 .preference
+-rw-r--r-- 1 ACETaffy 197121   26 10月 30 07:55 autostart.txt
+-rw-r--r-- 1 ACETaffy 197121  234 10月 30 07:55 k2s_boot.txt
+-rw-r--r-- 1 ACETaffy 197121 7143 10月 30 07:51 k2s_log.prev.txt
+-rw-r--r-- 1 ACETaffy 197121 7994 10月 30 07:58 k2s_log.txt

@@ -1,0 +1,224 @@
+[INFO] movie audio: loaded movie/01.ogg (Ogg Vorbis, 2343033 bytes); queued for the audio thread
+[INFO] Movie: opened (Switch WMV video-only, streaming) name=movie/01.wmv bytes=124386038
+[INFO] movie: decoded frame=1 pts=0 ms 1920x1080 decode_us=0
+[INFO] movie audio: playing movie/01.ogg (Ogg Vorbis, 2343033 bytes)
+[INFO] movie: presented frame=1 1920x1080
+[ERROR] id must be in range 0..256
+[WARN] float_to_int: Invalid value type
+[WARN] float_to_int: Invalid value type
+[INFO] movie: decoded frame=30 pts=968 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=30 1920x1080
+[INFO] movie: decoded frame=60 pts=1969 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=60 1920x1080
+[INFO] movie: decoded frame=90 pts=2970 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=90 1920x1080
+[INFO] movie: decoded frame=120 pts=3971 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=120 1920x1080
+[INFO] movie: decoded frame=150 pts=4972 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=150 1920x1080
+[INFO] movie: decoded frame=180 pts=5973 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=180 1920x1080
+[INFO] movie: decoded frame=210 pts=6974 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=210 1920x1080
+[INFO] movie: decoded frame=240 pts=7975 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=240 1920x1080
+[INFO] movie: decoded frame=270 pts=8976 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=270 1920x1080
+[INFO] movie: decoded frame=300 pts=9977 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=300 1920x1080
+[INFO] movie: decoded frame=330 pts=10978 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=330 1920x1080
+[INFO] movie: decoded frame=360 pts=11979 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=360 1920x1080
+[INFO] movie: decoded frame=390 pts=12980 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=390 1920x1080
+[INFO] movie: decoded frame=420 pts=13981 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=420 1920x1080
+[INFO] movie: decoded frame=450 pts=14982 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=450 1920x1080
+[INFO] movie: decoded frame=480 pts=15983 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=480 1920x1080
+[INFO] movie: decoded frame=510 pts=16984 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=510 1920x1080
+[INFO] movie: decoded frame=540 pts=17985 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=540 1920x1080
+[INFO] movie: decoded frame=570 pts=18986 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=570 1920x1080
+[INFO] movie: decoded frame=600 pts=19987 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=600 1920x1080
+[INFO] movie: decoded frame=630 pts=20988 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=630 1920x1080
+[INFO] movie: decoded frame=660 pts=21989 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=660 1920x1080
+[INFO] movie: decoded frame=690 pts=22990 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=690 1920x1080
+[INFO] movie: decoded frame=720 pts=23991 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=720 1920x1080
+[INFO] movie: decoded frame=750 pts=24992 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=750 1920x1080
+[INFO] movie: decoded frame=780 pts=25993 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=780 1920x1080
+[INFO] movie: decoded frame=810 pts=26994 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=810 1920x1080
+[INFO] movie: decoded frame=840 pts=27995 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=840 1920x1080
+[INFO] movie: decoded frame=870 pts=28996 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=870 1920x1080
+[INFO] movie: decoded frame=900 pts=29997 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=900 1920x1080
+[INFO] movie: decoded frame=930 pts=30998 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=930 1920x1080
+[INFO] movie: decoded frame=960 pts=31999 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=960 1920x1080
+[INFO] movie: decoded frame=990 pts=33000 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=990 1920x1080
+[INFO] movie: decoded frame=1020 pts=34001 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=1020 1920x1080
+[INFO] movie: decoded frame=1050 pts=35002 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=1050 1920x1080
+[INFO] movie: decoded frame=1080 pts=36003 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=1080 1920x1080
+[INFO] movie: decoded frame=1110 pts=37004 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=1110 1920x1080
+[INFO] movie: decoded frame=1140 pts=38005 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=1140 1920x1080
+[INFO] movie: decoded frame=1170 pts=39006 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=1170 1920x1080
+[INFO] movie: decoded frame=1200 pts=40007 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=1200 1920x1080
+[INFO] movie: decoded frame=1230 pts=41008 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=1230 1920x1080
+[INFO] movie: decoded frame=1260 pts=42009 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=1260 1920x1080
+[INFO] movie: decoded frame=1290 pts=43010 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=1290 1920x1080
+[INFO] movie: decoded frame=1320 pts=44011 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=1320 1920x1080
+[INFO] movie: decoded frame=1350 pts=45012 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=1350 1920x1080
+[INFO] movie: decoded frame=1380 pts=46013 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=1380 1920x1080
+[INFO] movie: decoded frame=1410 pts=47014 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=1410 1920x1080
+[INFO] movie: decoded frame=1440 pts=48015 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=1440 1920x1080
+[INFO] movie: decoded frame=1470 pts=49016 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=1470 1920x1080
+[INFO] movie: decoded frame=1500 pts=50017 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=1500 1920x1080
+[INFO] movie: decoded frame=1530 pts=51018 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=1530 1920x1080
+[INFO] movie: decoded frame=1560 pts=52019 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=1560 1920x1080
+[INFO] movie: decoded frame=1590 pts=53020 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=1590 1920x1080
+[INFO] movie: decoded frame=1620 pts=54021 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=1620 1920x1080
+[INFO] movie: decoded frame=1650 pts=55022 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=1650 1920x1080
+[INFO] movie: decoded frame=1680 pts=56023 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=1680 1920x1080
+[INFO] movie: decoded frame=1710 pts=57024 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=1710 1920x1080
+[INFO] movie: decoded frame=1740 pts=58025 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=1740 1920x1080
+[INFO] movie: decoded frame=1770 pts=59026 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=1770 1920x1080
+[INFO] movie: decoded frame=1800 pts=60027 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=1800 1920x1080
+[INFO] movie: decoded frame=1830 pts=61028 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=1830 1920x1080
+[INFO] movie: decoded frame=1860 pts=62029 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=1860 1920x1080
+[INFO] movie: decoded frame=1890 pts=63030 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=1890 1920x1080
+[INFO] movie: decoded frame=1920 pts=64031 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=1920 1920x1080
+[INFO] movie: decoded frame=1950 pts=65032 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=1950 1920x1080
+[INFO] movie: decoded frame=1980 pts=66033 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=1980 1920x1080
+[INFO] movie: decoded frame=2010 pts=67034 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=2010 1920x1080
+[INFO] movie: decoded frame=2040 pts=68035 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=2040 1920x1080
+[INFO] movie: decoded frame=2070 pts=69036 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=2070 1920x1080
+[INFO] movie: decoded frame=2100 pts=70037 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=2100 1920x1080
+[INFO] movie: decoded frame=2130 pts=71038 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=2130 1920x1080
+[INFO] movie: decoded frame=2160 pts=72039 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=2160 1920x1080
+[INFO] movie: decoded frame=2190 pts=73040 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=2190 1920x1080
+[INFO] movie: decoded frame=2220 pts=74041 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=2220 1920x1080
+[INFO] movie: decoded frame=2250 pts=75042 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=2250 1920x1080
+[INFO] movie: decoded frame=2280 pts=76043 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=2280 1920x1080
+[INFO] movie: decoded frame=2310 pts=77044 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=2310 1920x1080
+[INFO] movie: decoded frame=2340 pts=78045 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=2340 1920x1080
+[INFO] movie: decoded frame=2370 pts=79046 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=2370 1920x1080
+[INFO] movie: decoded frame=2400 pts=80047 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=2400 1920x1080
+[INFO] movie: decoded frame=2430 pts=81048 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=2430 1920x1080
+[INFO] movie: decoded frame=2460 pts=82049 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=2460 1920x1080
+[INFO] movie: decoded frame=2490 pts=83050 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=2490 1920x1080
+[INFO] movie: decoded frame=2520 pts=84051 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=2520 1920x1080
+[INFO] movie: decoded frame=2550 pts=85052 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=2550 1920x1080
+[INFO] movie: decoded frame=2580 pts=86053 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=2580 1920x1080
+[INFO] movie: decoded frame=2610 pts=87054 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=2610 1920x1080
+[INFO] movie: decoded frame=2640 pts=88055 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=2640 1920x1080
+[INFO] movie: decoded frame=2670 pts=89056 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=2670 1920x1080
+[INFO] movie: decoded frame=2700 pts=90057 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=2700 1920x1080
+[INFO] movie: decoded frame=2730 pts=91058 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=2730 1920x1080
+[INFO] movie: decoded frame=2760 pts=92059 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=2760 1920x1080
+[INFO] movie: decoded frame=2790 pts=93060 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=2790 1920x1080
+[INFO] movie: decoded frame=2820 pts=94061 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=2820 1920x1080
+[INFO] movie: decoded frame=2850 pts=95062 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=2850 1920x1080
+[INFO] movie: decoded frame=2880 pts=96063 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=2880 1920x1080
+[INFO] movie: decoded frame=2910 pts=97064 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=2910 1920x1080
+[INFO] movie: decoded frame=2940 pts=98065 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=2940 1920x1080
+[INFO] movie: decoded frame=2970 pts=99066 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=2970 1920x1080
+[INFO] movie: decoded frame=3000 pts=100067 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=3000 1920x1080
+[INFO] movie: decoded frame=3030 pts=101068 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=3030 1920x1080
+[INFO] movie: decoded frame=3060 pts=102069 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=3060 1920x1080
+[INFO] movie: decoded frame=3090 pts=103070 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=3090 1920x1080
+[INFO] movie: decoded frame=3120 pts=104071 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=3120 1920x1080
+[INFO] movie: decoded frame=3150 pts=105072 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=3150 1920x1080
+[INFO] movie: decoded frame=3180 pts=106073 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=3180 1920x1080
+[INFO] movie: decoded frame=3210 pts=107074 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=3210 1920x1080
+[INFO] movie: decoded frame=3240 pts=108075 ms 1920x1080 decode_us=0
+[INFO] movie: presented frame=3240 1920x1080

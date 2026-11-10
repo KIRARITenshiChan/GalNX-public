@@ -1,0 +1,53 @@
+# Engine descriptor for the Brewser (nx.js web runtime) adapter.
+# Brewser is consumed as a pinned prebuilt brewser.nro; GalNX only verifies and
+# stages it together with the game's web app directory.
+id: brewser
+display_name: Brewser (nx.js web runtime)
+upstream_url: https://github.com/natureglass/Brewser
+pinned_commit: 8040580e92e40a60f704a6478ee296b105212f1b
+pinned_version: "v0.1.1.31 (brewser 0.1.131)"
+license_spdx: MPL-2.0
+license_url: https://github.com/natureglass/Brewser/blob/main/LICENSE
+license_notes: >-
+  The Brewser repository is MPL-2.0. The prebuilt brewser.nro bundles
+  nx.js / V8 / Skia / Mesa components that keep their own licenses; the binary
+  is redistributed from upstream release assets (dist/brewser.nro).
+target_kind: web
+build_backend: prebuilt
+capabilities:
+  video:
+    supported: true
+    note: V8 + Skia Canvas2D, WebGL 1/2 through Mesa Nouveau.
+  audio:
+    supported: true
+    note: Web Audio API bridged onto the nx.js audio backend.
+  input:
+    supported: true
+    note: Web Gamepad/keyboard events; the GalNX input layer supplies keyboard/mouse defaults.
+  save:
+    supported: true
+    note: >-
+      localStorage/IndexedDB persisted to sdmc under sdmc:/switch/brewser
+      (globally shared, not a per-app sandbox).
+  touch:
+    supported: true
+    note: Touch events are exposed to web apps.
+default_input_profile: kb_mouse
+artifact_naming: brewser.nro
+content_layout:
+  mode: sdmc
+  entry: index.html
+  destination: sdmc:/switch/brewser/apps/<app-id>/
+  notes: >-
+    Sideload a directory named after the reverse-domain app id; brewser.nro
+    itself is copied to sdmc:/switch/brewser.nro. Saves and config live under
+    sdmc:/switch/brewser/.
+status: ready
+artifact_sha256: 8ce31f5b7dfb617c18a705d0c5fc955b59f60d445b5a76e250a1dd98ccd04b13
+evidence_urls:
+  - docs/audit/02-web.md
+  - docs/experiments/web-02-citron-smoke.md
+notes: >-
+  Prebuilt upstream artifact (brewser.nro, 76546123 bytes, sha256 recorded
+  above); no local engine build is needed. M4-b covers mounting the emulator SD
+  card tree.

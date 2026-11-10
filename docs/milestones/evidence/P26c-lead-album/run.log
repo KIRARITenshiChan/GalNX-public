@@ -1,0 +1,24 @@
+launch mode : schtasks-limited
+wrapper     : C:\ProgramData\galnx-harness\launch-20261106-052325-rfvp.cmd
+cmdline     : "E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\web-02\citron\citron.exe" -g "C:\Users\ACETaffy\AppData\Roaming\citron\sdmc\switch\galnx-harness\rfvp.nro"
+game type   : nro
+game path   : /e/galnx-build/p25/rfvp-v111/target/rfvp-switch/switch/rfvp.nro
+stage path  : /c/Users/ACETaffy/AppData/Roaming/citron/sdmc/switch/galnx-harness/rfvp.nro
+log baseline: size=352058 mtime=1793912957
+status      : loaded
+game        : /e/galnx-build/p25/rfvp-v111/target/rfvp-switch/switch/rfvp.nro (type nro)
+window title: citron Nightly | 0237a9b88 | rfvp (64-bit) | NVIDIA
+pid         : 30736
+elapsed_s   : 17
+boot line   : [   3.642569] Frontend <Info> citron\main.cpp:2475:BootGame: Booting game: 0000000000000000 | rfvp (64-bit) | 
+signals     : title_match=1 boot_line=1 app_output=1 (screenshot_nonblack)
+screenshot  : E:\galnx-build\p26\run-lead-album\20261106-052325-rfvp\window.png (printwindow, 1319028 bytes, nonblack=0.9018)
+log         : E:\galnx-build\p26\run-lead-album\20261106-052325-rfvp\citron_log.txt
+error       : 
+input       : injected=1 focus_ok= clicks=4 keys_sent=11 diff_ratio= region=1728x1016 y=70-950
+input shots : before= after=
+input error : 
+input steps : done=1 failed=0 diff_ratio=0.811863
+steps file  : E:\galnx-build\p26\run-lead-album\20261106-052325-rfvp\input-steps.tsv
+steps final : E:\galnx-build\p26\run-lead-album\20261106-052325-rfvp\window-steps-final.png
+steps error : 

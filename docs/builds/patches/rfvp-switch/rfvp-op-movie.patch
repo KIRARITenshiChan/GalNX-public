@@ -1,0 +1,1338 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index aafed82..53d1254 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -4898,7 +4898,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "rfvp-horizon"
+-version = "1.1.4-test"
++version = "1.1.5-test"
+ dependencies = [
+  "cc",
+  "rfvp",
+@@ -7789,6 +7789,7 @@ dependencies = [
+  "cpal",
+  "crossbeam-channel",
+  "env_logger 0.10.2",
++ "hashbrown 0.14.5",
+  "kira 0.9.6",
+  "log 0.4.34",
+  "png",
+diff --git a/crates/na_wmv_player/Cargo.toml b/crates/na_wmv_player/Cargo.toml
+index ccbe594..76b61b6 100644
+--- a/crates/na_wmv_player/Cargo.toml
++++ b/crates/na_wmv_player/Cargo.toml
+@@ -6,12 +6,16 @@ edition = "2024"
+ [lib]
+ name = "wmv_decoder"
+ path = "src/lib.rs"
+-crate-type = ["rlib", "cdylib", "staticlib"]
++crate-type = ["rlib"]
+ 
+ [dependencies]
+-byteorder = "1.5"
+-thiserror = "1.0"
++# default-features = false: the packet demuxer only uses the `ByteOrder` trait, so the
++# std-backed `ReadBytesExt` extension trait is not needed (see src/byte_read.rs).
++byteorder = { version = "1.5", default-features = false }
++thiserror = { version = "1.0", optional = true }
+ log = "0.4"
++# Only used by the `nostd` build, where `std::collections::HashMap` is a shim.
++hashbrown = { version = "0.14.5", default-features = false, optional = true }
+ 
+ crossbeam-channel = { version = "0.5", optional = true }
+ pollster = { version = "0.3", optional = true }
+@@ -28,16 +32,25 @@ png = { version = "0.17", optional = true }
+ kira = { version = "0.9", optional = true }
+ 
+ [features]
+-default = ["audio"]
++default = ["audio", "std-error"]
+ 
+ # WMA audio decoding. Enabled by default for desktop builds.
+-# Excluded from UEFI video-only builds.
++# Excluded from UEFI / Switch video-only builds.
+ audio = []
+ 
+ # Marker feature: video decode only, no WMA audio decoder compiled.
+-# Used by UEFI builds via rfvp's uefi-native-video feature.
++# Used by UEFI builds via rfvp's uefi-native-video feature and by the
++# Nintendo Switch port via rfvp's switch-video feature.
+ video-only = []
+ 
++# Desktop-only: derive `DecoderError` with thiserror. The no_std build
++# implements `Display`/`core::error::Error` by hand instead.
++std-error = ["dep:thiserror"]
++
++# no_std + alloc build (Nintendo Switch / UEFI video-only). Pulls in the
++# minimal `std` shim in src/nostd_support.rs and hashbrown for `HashMap`.
++nostd = ["dep:hashbrown"]
++
+ desktop-bins = [
+   "audio",
+   "dep:anyhow",
+diff --git a/crates/na_wmv_player/src/api.rs b/crates/na_wmv_player/src/api.rs
+index 57a2d90..add3cd1 100644
+--- a/crates/na_wmv_player/src/api.rs
++++ b/crates/na_wmv_player/src/api.rs
+@@ -1,5 +1,10 @@
+ //! Public library API.
+ 
++// no_std prelude: Vec/String/Box/format! come from alloc.
++#[cfg(feature = "nostd")]
++#[allow(unused_imports)]
++use crate::nostd_prelude::*;
++
+ #[cfg(target_os = "uefi")]
+ use std::collections::hash_map::DefaultHasher;
+ use std::collections::{HashMap, VecDeque};
+diff --git a/crates/na_wmv_player/src/asf.rs b/crates/na_wmv_player/src/asf.rs
+index 1853deb..af1a098 100644
+--- a/crates/na_wmv_player/src/asf.rs
++++ b/crates/na_wmv_player/src/asf.rs
+@@ -1,8 +1,15 @@
+ //! ASF (Advanced Systems Format) container parser.
+ 
++// no_std prelude: Vec/String/Box/format! come from alloc.
++#[cfg(feature = "nostd")]
++#[allow(unused_imports)]
++use crate::nostd_prelude::*;
++
+ use std::io::{Read, Seek, SeekFrom};
+ 
+-use byteorder::{LittleEndian, ReadBytesExt};
++use byteorder::LittleEndian;
++
++use crate::byte_read::ReadBytesExt;
+ 
+ use crate::error::{DecoderError, Result};
+ 
+diff --git a/crates/na_wmv_player/src/bitreader.rs b/crates/na_wmv_player/src/bitreader.rs
+index 5a5f8ad..194e012 100644
+--- a/crates/na_wmv_player/src/bitreader.rs
++++ b/crates/na_wmv_player/src/bitreader.rs
+@@ -1,3 +1,8 @@
++// no_std prelude: Vec/String/Box/format! come from alloc.
++#[cfg(feature = "nostd")]
++#[allow(unused_imports)]
++use crate::nostd_prelude::*;
++
+ /// VC-1 / WMV9 Bitstream Reader
+ 
+ #[derive(Clone)]
+diff --git a/crates/na_wmv_player/src/byte_read.rs b/crates/na_wmv_player/src/byte_read.rs
+new file mode 100644
+index 0000000..51e7602
+--- /dev/null
++++ b/crates/na_wmv_player/src/byte_read.rs
+@@ -0,0 +1,53 @@
++//! Little-endian primitive readers for the ASF demuxer.
++//!
++//! `byteorder`'s `ReadBytesExt` extension trait is `std`-only, so this module
++//! implements the handful of readers the demuxer needs on top of either
++//! `std::io::Read` (desktop) or the `no_std` `crate::io::Read` shim (Switch).
++//! Call sites keep the `read_u32::<LittleEndian>()` spelling used before.
++
++use byteorder::{ByteOrder, LittleEndian};
++
++use crate::error::Result;
++
++#[cfg(feature = "nostd")]
++use crate::io::Read;
++#[cfg(not(feature = "nostd"))]
++use std::io::Read;
++
++pub trait ReadBytesExt: Read {
++    fn read_u8(&mut self) -> Result<u8> {
++        let mut b = [0u8; 1];
++        self.read_exact(&mut b)?;
++        Ok(b[0])
++    }
++
++    fn read_u16<E: ByteOrder>(&mut self) -> Result<u16> {
++        let mut b = [0u8; 2];
++        self.read_exact(&mut b)?;
++        Ok(E::read_u16(&b))
++    }
++
++    fn read_u32<E: ByteOrder>(&mut self) -> Result<u32> {
++        let mut b = [0u8; 4];
++        self.read_exact(&mut b)?;
++        Ok(E::read_u32(&b))
++    }
++
++    fn read_u64<E: ByteOrder>(&mut self) -> Result<u64> {
++        let mut b = [0u8; 8];
++        self.read_exact(&mut b)?;
++        Ok(E::read_u64(&b))
++    }
++
++    fn read_i32<E: ByteOrder>(&mut self) -> Result<i32> {
++        let mut b = [0u8; 4];
++        self.read_exact(&mut b)?;
++        Ok(E::read_i32(&b))
++    }
++}
++
++impl<R: Read + ?Sized> ReadBytesExt for R {}
++
++// Keep the little-endian marker type re-exported for call sites that spell
++// `read_u32::<LittleEndian>()` without importing `byteorder` themselves.
++// (no public byte-order re-export needed)
+diff --git a/crates/na_wmv_player/src/color.rs b/crates/na_wmv_player/src/color.rs
+index 8894cfe..ec302eb 100644
+--- a/crates/na_wmv_player/src/color.rs
++++ b/crates/na_wmv_player/src/color.rs
+@@ -6,6 +6,11 @@
+ //! Windows/DXVA convention: SD (source height <= 576) uses BT.601 and HD
+ //! (source height > 576) uses BT.709.
+ 
++// no_std prelude: Vec/String/Box/format! come from alloc.
++#[cfg(feature = "nostd")]
++#[allow(unused_imports)]
++use crate::nostd_prelude::*;
++
+ use crate::decoder::YuvFrame;
+ 
+ #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+diff --git a/crates/na_wmv_player/src/decoder.rs b/crates/na_wmv_player/src/decoder.rs
+index 4d8e5db..3cf0415 100644
+--- a/crates/na_wmv_player/src/decoder.rs
++++ b/crates/na_wmv_player/src/decoder.rs
+@@ -8,6 +8,11 @@
+ //!   • Overlap smoothing filter (Main profile)
+ //!   • Reference frame buffer for P/B frames
+ 
++// no_std prelude: Vec/String/Box/format! come from alloc.
++#[cfg(feature = "nostd")]
++#[allow(unused_imports)]
++use crate::nostd_prelude::*;
++
+ use crate::bitreader::BitReader;
+ use crate::error::{DecoderError, Result};
+ use crate::na_msmpeg4_mv_tables::{
+diff --git a/crates/na_wmv_player/src/error.rs b/crates/na_wmv_player/src/error.rs
+index 9d7bc66..4f94da3 100644
+--- a/crates/na_wmv_player/src/error.rs
++++ b/crates/na_wmv_player/src/error.rs
+@@ -1,6 +1,7 @@
+-use thiserror::Error;
++//! Decoder error type.
+ 
+-#[derive(Debug, Error)]
++#[cfg(feature = "std-error")]
++#[derive(Debug, thiserror::Error)]
+ pub enum DecoderError {
+     #[error("I/O error: {0}")]
+     Io(#[from] std::io::Error),
+@@ -15,4 +16,40 @@ pub enum DecoderError {
+     EndOfStream,
+ }
+ 
+-pub type Result<T> = std::result::Result<T, DecoderError>;
++#[cfg(not(feature = "std-error"))]
++use alloc::string::String;
++
++/// no_std variant: `thiserror` is std-only, so `Display` and
++/// `core::error::Error` are implemented by hand.
++#[cfg(not(feature = "std-error"))]
++#[derive(Debug)]
++pub enum DecoderError {
++    Io(crate::io::Error),
++    InvalidData(String),
++    Unsupported(String),
++    EndOfStream,
++}
++
++#[cfg(not(feature = "std-error"))]
++impl From<crate::io::Error> for DecoderError {
++    fn from(e: crate::io::Error) -> Self {
++        DecoderError::Io(e)
++    }
++}
++
++#[cfg(not(feature = "std-error"))]
++impl core::fmt::Display for DecoderError {
++    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
++        match self {
++            DecoderError::Io(e) => write!(f, "I/O error: {e}"),
++            DecoderError::InvalidData(m) => write!(f, "Invalid data: {m}"),
++            DecoderError::Unsupported(m) => write!(f, "Unsupported feature: {m}"),
++            DecoderError::EndOfStream => f.write_str("End of stream"),
++        }
++    }
++}
++
++#[cfg(not(feature = "std-error"))]
++impl core::error::Error for DecoderError {}
++
++pub type Result<T> = core::result::Result<T, DecoderError>;
+diff --git a/crates/na_wmv_player/src/ffi.rs b/crates/na_wmv_player/src/ffi.rs
+index 3c9283b..0c51d18 100644
+--- a/crates/na_wmv_player/src/ffi.rs
++++ b/crates/na_wmv_player/src/ffi.rs
+@@ -4,6 +4,14 @@
+ //! It decodes one assembled WMV2 frame payload at a time and exposes the internal
+ //! YUV420p planes.
+ 
++// no_std prelude: Vec/String/Box/format! come from alloc.
++#[cfg(feature = "nostd")]
++#[allow(unused_imports)]
++use crate::nostd_prelude::*;
++
++#[cfg(feature = "nostd")]
++use crate::nostd_support::ffi::c_void;
++#[cfg(not(feature = "nostd"))]
+ use std::ffi::c_void;
+ 
+ use crate::api::Wmv2Decoder;
+diff --git a/crates/na_wmv_player/src/lib.rs b/crates/na_wmv_player/src/lib.rs
+index a0250d9..531893a 100644
+--- a/crates/na_wmv_player/src/lib.rs
++++ b/crates/na_wmv_player/src/lib.rs
+@@ -1,8 +1,40 @@
++#![cfg_attr(feature = "nostd", no_std)]
+ //! Native ASF/WMV container parsing and WMV/VC-1 decoding library.
+ //!
++//! On the `nostd` feature (Nintendo Switch / UEFI video-only builds) the crate
++//! is `no_std` + `alloc`; the `std::...` paths used by the demuxer and the
++//! decoders resolve to the minimal shims in `nostd_support.rs`.
++
++#[cfg(feature = "nostd")]
++extern crate alloc;
++
++// The demuxer/decoders import `std::io`, `std::fmt`, `std::array`, ... so for
++// the no_std build this alias plus the re-exports below make those paths
++// resolve into `nostd_support.rs`. Same trick as the rfvp engine's Switch port.
++#[cfg(feature = "nostd")]
++extern crate self as std;
++
++#[cfg(feature = "nostd")]
++#[path = "nostd_support.rs"]
++mod nostd_support;
++
++#[cfg(feature = "nostd")]
++pub use nostd_support::{array, collections, fmt, hash, io, mem, result, slice, str};
++
++/// `alloc` prelude for the no_std build: `Vec`, `String`, `Box` and the
++/// `vec!`/`format!` macros are not part of `core`'s prelude.
++#[cfg(feature = "nostd")]
++pub mod nostd_prelude {
++    pub use alloc::{
++        boxed::Box, format,
++        string::{String, ToString},
++        vec, vec::Vec,
++    };
++}
+ 
+ pub mod asf;
+ pub mod bitreader;
++pub mod byte_read;
+ pub mod color;
+ pub mod decoder;
+ pub mod error;
+@@ -34,3 +66,27 @@ pub use decoder::YuvFrame;
+ pub use error::{DecoderError, Result};
+ 
+ pub mod ffi;
++
++#[cfg(not(feature = "nostd"))]
++use std::io::Cursor;
++#[cfg(feature = "nostd")]
++use crate::io::Cursor;
++#[cfg(feature = "nostd")]
++use crate::nostd_prelude::Vec;
++
++/// Decoder for an ASF/WMV stream that is already held in memory.
++///
++/// Desktop builds use `std::io::Cursor`; the no_std build uses the `Cursor`
++/// from the `io` shim. This is what the Switch port's movie player feeds from
++/// `Vfs::read_file`.
++#[cfg(not(feature = "nostd"))]
++pub type BytesDecoder = AsfWmv2Decoder<std::io::Cursor<Vec<u8>>>;
++#[cfg(feature = "nostd")]
++pub type BytesDecoder = AsfWmv2Decoder<crate::io::Cursor<Vec<u8>>>;
++
++impl BytesDecoder {
++    /// Open an ASF/WMV stream from an in-memory byte buffer.
++    pub fn open_bytes(bytes: Vec<u8>) -> Result<Self> {
++        Self::open(Cursor::new(bytes))
++    }
++}
+diff --git a/crates/na_wmv_player/src/na_msmpeg4_mv_tables.rs b/crates/na_wmv_player/src/na_msmpeg4_mv_tables.rs
+index 47bf4cf..b30658a 100644
+--- a/crates/na_wmv_player/src/na_msmpeg4_mv_tables.rs
++++ b/crates/na_wmv_player/src/na_msmpeg4_mv_tables.rs
+@@ -1,3 +1,8 @@
++// no_std prelude: Vec/String/Box/format! come from alloc.
++#[cfg(feature = "nostd")]
++#[allow(unused_imports)]
++use crate::nostd_prelude::*;
++
+ pub const FF_MSMP4_MV_TABLE0: [u16; 1100] = [
+     0u16, 7975u16, 9759u16, 6176u16, 5918u16, 8724u16, 8470u16, 5405u16, 7202u16, 8472u16,
+     12576u16, 6953u16, 8194u16, 10273u16, 8743u16, 9497u16, 7450u16, 9756u16, 11039u16, 9505u16,
+diff --git a/crates/na_wmv_player/src/na_msmpeg4_tables.rs b/crates/na_wmv_player/src/na_msmpeg4_tables.rs
+index 9612ab4..706623a 100644
+--- a/crates/na_wmv_player/src/na_msmpeg4_tables.rs
++++ b/crates/na_wmv_player/src/na_msmpeg4_tables.rs
+@@ -1,3 +1,8 @@
++// no_std prelude: Vec/String/Box/format! come from alloc.
++#[cfg(feature = "nostd")]
++#[allow(unused_imports)]
++use crate::nostd_prelude::*;
++
+ pub const FF_MB_NON_INTRA_TABLES: [[(u32, u8); 128]; 4] = [
+     [
+         (0xa7u32, 14u8),
+diff --git a/crates/na_wmv_player/src/na_rl_tables.rs b/crates/na_wmv_player/src/na_rl_tables.rs
+index a1ad055..6305087 100644
+--- a/crates/na_wmv_player/src/na_rl_tables.rs
++++ b/crates/na_wmv_player/src/na_rl_tables.rs
+@@ -1,3 +1,8 @@
++// no_std prelude: Vec/String/Box/format! come from alloc.
++#[cfg(feature = "nostd")]
++#[allow(unused_imports)]
++use crate::nostd_prelude::*;
++
+ pub const FF_WMV1_SCANTABLE: [[usize; 64]; 4] = [
+     [
+         0, 8, 1, 2, 9, 16, 24, 17, 10, 3, 4, 11, 18, 25, 32, 40, 48, 56, 41, 33, 26, 19, 12, 5, 6,
+diff --git a/crates/na_wmv_player/src/na_simple_idct.rs b/crates/na_wmv_player/src/na_simple_idct.rs
+index 2ba8839..8d1b4cc 100644
+--- a/crates/na_wmv_player/src/na_simple_idct.rs
++++ b/crates/na_wmv_player/src/na_simple_idct.rs
+@@ -1,3 +1,8 @@
++// no_std prelude: Vec/String/Box/format! come from alloc.
++#[cfg(feature = "nostd")]
++#[allow(unused_imports)]
++use crate::nostd_prelude::*;
++
+ #[inline(always)]
+ fn clip_u8(x: i32) -> u8 {
+     if x < 0 {
+diff --git a/crates/na_wmv_player/src/na_wmv2_tables.rs b/crates/na_wmv_player/src/na_wmv2_tables.rs
+index d38acbe..56eaf48 100644
+--- a/crates/na_wmv_player/src/na_wmv2_tables.rs
++++ b/crates/na_wmv_player/src/na_wmv2_tables.rs
+@@ -1,3 +1,8 @@
++// no_std prelude: Vec/String/Box/format! come from alloc.
++#[cfg(feature = "nostd")]
++#[allow(unused_imports)]
++use crate::nostd_prelude::*;
++
+ pub const FF_MSMP4_MB_I_TABLE: [(u32, u8); 64] = [
+     (0x1, 1u8),
+     (0x17, 6u8),
+diff --git a/crates/na_wmv_player/src/na_wmv2dsp.rs b/crates/na_wmv_player/src/na_wmv2dsp.rs
+index 57ecc76..2709695 100644
+--- a/crates/na_wmv_player/src/na_wmv2dsp.rs
++++ b/crates/na_wmv_player/src/na_wmv2dsp.rs
+@@ -1,3 +1,8 @@
++// no_std prelude: Vec/String/Box/format! come from alloc.
++#[cfg(feature = "nostd")]
++#[allow(unused_imports)]
++use crate::nostd_prelude::*;
++
+ #[inline(always)]
+ fn clip_u8(v: i32) -> u8 {
+     if v < 0 {
+diff --git a/crates/na_wmv_player/src/nostd_support.rs b/crates/na_wmv_player/src/nostd_support.rs
+new file mode 100644
+index 0000000..18c922a
+--- /dev/null
++++ b/crates/na_wmv_player/src/nostd_support.rs
+@@ -0,0 +1,228 @@
++//! Minimal `std` stand-ins for the `nostd` build (Nintendo Switch / UEFI).
++//!
++//! The ASF demuxer and the video decoders are written against `std::io`,
++//! `std::fmt`, `std::array`, `std::collections` and friends. Instead of
++//! rewriting every module, `src/lib.rs` does `extern crate self as std;` and
++//! re-exports the modules defined here under those names, so the existing
++//! `std::...` paths resolve into this file. This mirrors the shim the rfvp
++//! engine already uses for its Switch port (crates/rfvp/src/lib.rs).
++
++pub mod array {
++    pub use core::array::*;
++}
++
++pub mod fmt {
++    pub use core::fmt::*;
++}
++
++pub mod mem {
++    pub use core::mem::*;
++}
++
++pub mod result {
++    pub use core::result::*;
++}
++
++pub mod slice {
++    pub use core::slice::*;
++}
++
++pub mod str {
++    pub use core::str::*;
++}
++
++pub mod ffi {
++    pub use core::ffi::c_void;
++}
++
++pub mod hash {
++    pub use core::hash::{BuildHasher, Hash, Hasher};
++
++    /// Deterministic FNV-1a hasher.
++    ///
++    /// `std`'s `RandomState` needs OS entropy, which a no_std build does not
++    /// have; the demuxer's frame-assembly map is tiny and local to one stream,
++    /// so a fixed-seed hasher is both sufficient and reproducible.
++    #[derive(Clone, Copy)]
++    pub struct FnvHasher(u64);
++
++    impl Default for FnvHasher {
++        fn default() -> Self {
++            Self(0xcbf2_9ce4_8422_2325)
++        }
++    }
++
++    impl Hasher for FnvHasher {
++        fn finish(&self) -> u64 {
++            self.0
++        }
++
++        fn write(&mut self, bytes: &[u8]) {
++            let mut h = self.0;
++            for &b in bytes {
++                h ^= b as u64;
++                h = h.wrapping_mul(0x0000_0100_0000_01b3);
++            }
++            self.0 = h;
++        }
++    }
++
++    #[derive(Clone, Copy, Default)]
++    pub struct FnvBuildHasher;
++
++    impl BuildHasher for FnvBuildHasher {
++        type Hasher = FnvHasher;
++
++        fn build_hasher(&self) -> FnvHasher {
++            FnvHasher::default()
++        }
++    }
++}
++
++pub mod collections {
++    pub use alloc::collections::VecDeque;
++
++    /// `std::collections::HashMap` stand-in. The decoder only needs a plain
++    /// keyed map, so hashbrown (already in the workspace lock file) provides
++    /// the same API surface without `std`.
++    pub type HashMap<K, V> = hashbrown::HashMap<K, V, crate::hash::FnvBuildHasher>;
++
++    pub mod hash_map {
++        pub use crate::hash::FnvHasher as DefaultHasher;
++    }
++}
++
++pub mod io {
++    //! `std::io` subset: byte-oriented `Read`/`Seek` plus an in-memory `Cursor`.
++    use alloc::vec::Vec;
++    use core::fmt;
++
++    #[derive(Debug, Clone, Copy, PartialEq, Eq)]
++    pub enum ErrorKind {
++        UnexpectedEof,
++        Other,
++    }
++
++    #[derive(Debug, Clone, Copy, PartialEq, Eq)]
++    pub struct Error {
++        kind: ErrorKind,
++    }
++
++    impl Error {
++        pub fn new(kind: ErrorKind, _msg: &str) -> Self {
++            Self { kind }
++        }
++
++        pub fn kind(&self) -> ErrorKind {
++            self.kind
++        }
++    }
++
++    impl fmt::Display for Error {
++        fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
++            match self.kind {
++                ErrorKind::UnexpectedEof => f.write_str("failed to fill whole buffer"),
++                ErrorKind::Other => f.write_str("I/O error"),
++            }
++        }
++    }
++
++    impl core::error::Error for Error {}
++
++    #[derive(Debug, Clone, Copy, PartialEq, Eq)]
++    pub enum SeekFrom {
++        Start(u64),
++        End(i64),
++        Current(i64),
++    }
++
++    pub trait Read {
++        fn read(&mut self, buf: &mut [u8]) -> Result<usize, Error>;
++
++        fn read_exact(&mut self, mut buf: &mut [u8]) -> Result<(), Error> {
++            while !buf.is_empty() {
++                match self.read(buf) {
++                    Ok(0) => {
++                        return Err(Error::new(
++                            ErrorKind::UnexpectedEof,
++                            "failed to fill whole buffer",
++                        ));
++                    }
++                    Ok(n) => buf = &mut buf[n..],
++                    Err(e) => return Err(e),
++                }
++            }
++            Ok(())
++        }
++    }
++
++    pub trait Seek {
++        fn seek(&mut self, pos: SeekFrom) -> Result<u64, Error>;
++
++        /// Matches `std::io::Seek::stream_position`.
++        fn stream_position(&mut self) -> Result<u64, Error> {
++            self.seek(SeekFrom::Current(0))
++        }
++    }
++
++    /// In-memory reader used to decode a movie that was already loaded into RAM.
++    pub struct Cursor<T> {
++        inner: T,
++        pos: usize,
++    }
++
++    impl<T> Cursor<T> {
++        pub fn new(inner: T) -> Self {
++            Self { inner, pos: 0 }
++        }
++
++        pub fn into_inner(self) -> T {
++            self.inner
++        }
++
++        pub fn position(&self) -> u64 {
++            self.pos as u64
++        }
++
++        pub fn set_position(&mut self, pos: u64) {
++            self.pos = pos as usize;
++        }
++    }
++
++    impl Cursor<Vec<u8>> {
++        pub fn len(&self) -> usize {
++            self.inner.len()
++        }
++
++        pub fn is_empty(&self) -> bool {
++            self.inner.is_empty()
++        }
++    }
++
++    impl Read for Cursor<Vec<u8>> {
++        fn read(&mut self, buf: &mut [u8]) -> Result<usize, Error> {
++            let remaining = self.inner.len().saturating_sub(self.pos);
++            let n = remaining.min(buf.len());
++            if n > 0 {
++                buf[..n].copy_from_slice(&self.inner[self.pos..self.pos + n]);
++                self.pos += n;
++            }
++            Ok(n)
++        }
++    }
++
++    impl Seek for Cursor<Vec<u8>> {
++        fn seek(&mut self, pos: SeekFrom) -> Result<u64, Error> {
++            let new = match pos {
++                SeekFrom::Start(p) => p as i64,
++                SeekFrom::End(o) => self.inner.len() as i64 + o,
++                SeekFrom::Current(o) => self.pos as i64 + o,
++            };
++            if new < 0 {
++                return Err(Error::new(ErrorKind::Other, "invalid seek"));
++            }
++            self.pos = new as usize;
++            Ok(self.pos as u64)
++        }
++    }
++}
+diff --git a/crates/na_wmv_player/src/vc1.rs b/crates/na_wmv_player/src/vc1.rs
+index 42c3d84..933916f 100644
+--- a/crates/na_wmv_player/src/vc1.rs
++++ b/crates/na_wmv_player/src/vc1.rs
+@@ -4,6 +4,11 @@
+ //! and SMPTE 421M.  It is intentionally kept separate from the reconstruction
+ //! code in `decoder.rs` so ASF/WMV3 and ASF/WVC1 can share the same parser.
+ 
++// no_std prelude: Vec/String/Box/format! come from alloc.
++#[cfg(feature = "nostd")]
++#[allow(unused_imports)]
++use crate::nostd_prelude::*;
++
+ use crate::bitreader::BitReader;
+ use crate::error::{DecoderError, Result};
+ 
+diff --git a/crates/na_wmv_player/src/vc1_tables.rs b/crates/na_wmv_player/src/vc1_tables.rs
+index f49ee46..1b3c05b 100644
+--- a/crates/na_wmv_player/src/vc1_tables.rs
++++ b/crates/na_wmv_player/src/vc1_tables.rs
+@@ -2,6 +2,11 @@
+ //!
+ //! Values are transcribed from FFmpeg `libavcodec/vc1_vlc_data.h`.
+ 
++// no_std prelude: Vec/String/Box/format! come from alloc.
++#[cfg(feature = "nostd")]
++#[allow(unused_imports)]
++use crate::nostd_prelude::*;
++
+ use crate::na_rl_tables::{FF_RL_BASES, RlBase};
+ use crate::vlc::VlcTable;
+ use crate::vlc_tree::VlcTree;
+diff --git a/crates/na_wmv_player/src/vlc.rs b/crates/na_wmv_player/src/vlc.rs
+index b6faa99..d40918f 100644
+--- a/crates/na_wmv_player/src/vlc.rs
++++ b/crates/na_wmv_player/src/vlc.rs
+@@ -1,3 +1,8 @@
++// no_std prelude: Vec/String/Box/format! come from alloc.
++#[cfg(feature = "nostd")]
++#[allow(unused_imports)]
++use crate::nostd_prelude::*;
++
+ /// VC-1 / WMV9 VLC Tables
+ ///
+ /// Tables derived from SMPTE 421M Annex E, matching upstream's vc1data.h.
+diff --git a/crates/na_wmv_player/src/vlc_tree.rs b/crates/na_wmv_player/src/vlc_tree.rs
+index b0568d9..e7b192b 100644
+--- a/crates/na_wmv_player/src/vlc_tree.rs
++++ b/crates/na_wmv_player/src/vlc_tree.rs
+@@ -3,6 +3,11 @@
+ //! We intentionally use a tree (bit traversal) instead of a flat lookup table,
+ //! because MSMPEG4/WMV2 DC tables contain code lengths up to 24 bits.
+ 
++// no_std prelude: Vec/String/Box/format! come from alloc.
++#[cfg(feature = "nostd")]
++#[allow(unused_imports)]
++use crate::nostd_prelude::*;
++
+ use crate::bitreader::BitReader;
+ 
+ #[derive(Clone, Copy, Default)]
+diff --git a/crates/na_wmv_player/src/wmv2.rs b/crates/na_wmv_player/src/wmv2.rs
+index 07b2ecd..a3abbf2 100644
+--- a/crates/na_wmv_player/src/wmv2.rs
++++ b/crates/na_wmv_player/src/wmv2.rs
+@@ -7,6 +7,11 @@
+ //!
+ //! Any alternative/custom headers are deliberately not supported.
+ 
++// no_std prelude: Vec/String/Box/format! come from alloc.
++#[cfg(feature = "nostd")]
++#[allow(unused_imports)]
++use crate::nostd_prelude::*;
++
+ use crate::bitreader::BitReader;
+ use crate::error::{DecoderError, Result};
+ 
+diff --git a/crates/rfvp/Cargo.toml b/crates/rfvp/Cargo.toml
+index fd5043d..ac55acd 100644
+--- a/crates/rfvp/Cargo.toml
++++ b/crates/rfvp/Cargo.toml
+@@ -274,6 +274,13 @@ switch-zlib = []
+ # thread (GalNX P18).
+ switch-async = []
+ 
++# GalNX P29: Nintendo Switch no_std movie backend. `wmv-decoder` is compiled with its
++# `nostd` shim (io/hash/array/thiserror replacements) and the whole movie file is read
++# through the VFS, mirroring the UEFI inline backend. Deliberately does NOT enable
++# `runtime-core-deps` (std-only, 5.8k serde_core errors) nor the decoder's `audio`
++# feature: playback is video-only, the OP's WMA track has no decoder in this build.
++switch-video = ["dep:wmv-decoder", "wmv-decoder/nostd"]
++
+ # Pure Rust zlib decompression backend used by rfvp-os/UEFI builds.
+ # This avoids flate2/miniz_oxide default SIMD dependency paths on UEFI.
+ uefi-zlib = ["dep:miniz_oxide"]
+diff --git a/crates/rfvp/src/no_std_core.rs b/crates/rfvp/src/no_std_core.rs
+index b84fa2c..d178fb2 100644
+--- a/crates/rfvp/src/no_std_core.rs
++++ b/crates/rfvp/src/no_std_core.rs
+@@ -137,6 +137,10 @@ pub struct RfvpCore {
+     last_global_save_hash: Option<u64>,
+     /// Time since the global save was last looked at.
+     us_since_global_save: u64,
++    /// GalNX P29 debug-only: `debug.txt` with `movie=1` starts the OP movie once, so the
++    /// Citron probe can prove the Switch video path without playing through the prologue.
++    #[cfg(all(feature = "switch-video", feature = "no_std"))]
++    debug_movie_started: bool,
+ }
+ 
+ /// How often the global save (read-text marks, flags) is written during play. Consoles are often
+@@ -175,6 +179,8 @@ impl RfvpCore {
+             last_error_detail: None,
+             last_global_save_hash: None,
+             us_since_global_save: 0,
++            #[cfg(all(feature = "switch-video", feature = "no_std"))]
++            debug_movie_started: false,
+         }
+     }
+ 
+@@ -656,6 +662,28 @@ impl RfvpCore {
+         host.audio().tick(elapsed_us)?;
+         #[cfg(feature = "switch-async")]
+         self.apply_async_decodes(host);
++        // GalNX P29 debug-only: sdmc:/switch/rfvp/debug.txt holding `movie=1` starts the OP
++        // once. The C runtime exposes rfvp_switch_debug_movie(); shipping builds never set it,
++        // so the normal script-driven movie path is untouched.
++        #[cfg(all(feature = "switch-video", feature = "no_std"))]
++        if !self.debug_movie_started
++            && crate::subsystem::resources::videoplayer::horizon::debug_movie_requested()
++        {
++            self.debug_movie_started = true;
++            let path =
++                crate::script::Variant::String(alloc::string::String::from("movie/01.wmv"));
++            match crate::subsystem::components::syscalls::movie::movie_play(
++                &mut self.game_data,
++                &path,
++                &crate::script::Variant::Nil,
++            ) {
++                Ok(_) => host.log(RfvpLogLevel::Info, "debug movie: started movie/01.wmv"),
++                Err(err) => host.log(
++                    RfvpLogLevel::Warn,
++                    &format!("debug movie: start failed: {err}"),
++                ),
++            }
++        }
+         {
+             let game = &mut self.game_data;
+             if let Err(err) = game.video_manager.tick(&mut game.motion_manager) {
+diff --git a/crates/rfvp/src/subsystem/resources/vfs.rs b/crates/rfvp/src/subsystem/resources/vfs.rs
+index 314f08e..815991f 100644
+--- a/crates/rfvp/src/subsystem/resources/vfs.rs
++++ b/crates/rfvp/src/subsystem/resources/vfs.rs
+@@ -773,20 +773,33 @@ impl Vfs {
+     #[cfg(feature = "switch-async")]
+     pub fn pack_location(&self, path: &str) -> Option<(Arc<dyn PackSource>, u64, u64)> {
+         let key = normalize_vfs_key(path);
+-        let (folder, name) = key.split_once('/')?;
+-        let file = self.files.get(folder)?;
+-        #[cfg(not(feature = "psx"))]
+-        {
+-            let original = file.lowercase.get(name)?;
+-            let entry = file.entries.get(original)?;
+-            Some((file.pack.0.clone(), entry.offset, entry.size))
+-        }
+-        #[cfg(feature = "psx")]
+-        {
+-            // The PlayStation keeps no names, only name hashes (see VfsFile::index).
+-            let _ = name;
+-            None
++        if let Some((folder, name)) = key.split_once('/') {
++            if let Some(file) = self.files.get(folder) {
++                #[cfg(not(feature = "psx"))]
++                {
++                    if let Some(original) = file.lowercase.get(name) {
++                        if let Some(entry) = file.entries.get(original) {
++                            return Some((file.pack.0.clone(), entry.offset, entry.size));
++                        }
++                    }
++                }
++                #[cfg(feature = "psx")]
++                {
++                    // The PlayStation keeps no names, only name hashes (see VfsFile::index).
++                    let _ = name;
++                }
++            }
+         }
++
++        // GalNX P29: loose files (the OP movie, patched assets) stream as well. The host can open
++        // them on demand, so a 244 MB movie no longer has to be read into memory before it plays.
++        let dir = self.loose_dir.as_ref()?;
++        let on_disk = path.trim_start_matches("./").replace('\\', "/");
++        let on_disk = on_disk.trim_start_matches('/');
++        let real = dir.find(on_disk)?;
++        let source = open_pack(dir.storage.as_ref(), &real).ok()?;
++        let len = source.len();
++        Some((source, 0, len))
+     }
+ }
+ /// A file of `dir` as a pack source: streamed when the host can open files, read whole otherwise.
+diff --git a/crates/rfvp/src/subsystem/resources/videoplayer/horizon.rs b/crates/rfvp/src/subsystem/resources/videoplayer/horizon.rs
+new file mode 100644
+index 0000000..6e02086
+--- /dev/null
++++ b/crates/rfvp/src/subsystem/resources/videoplayer/horizon.rs
+@@ -0,0 +1,337 @@
++//! Nintendo Switch (no_std) movie backend: ASF/WMV (VC-1/WMV3) video-only playback.
++//!
++//! GalNX P29: the console build has no `std` and no audio decoder for WMA, so the
++//! OP movie has always been skipped ("no movie decoder in this build"). This
++//! backend compiles wmv-decoder with its nostd feature (rfvp switch-video) and
++//! plays the movie video-only; the WMA track is dropped and the rest of the
++//! game audio keeps flowing through the P27 ring buffer.
++//!
++//! Two input paths are used:
++//!
++//! * streaming: the ASF packet reader pulls bytes from the game pack on demand
++//!   through a tiny Read + Seek adapter over PackSource::read_at (movie/01.wmv
++//!   is 244 MiB, far too big for the console heap and far too slow to read whole);
++//! * in memory: a fallback for loose files (Vfs::read_file) when the asset is not
++//!   inside a pack.
++//!
++//! Decoding is soft VC-1 at 1920x1080; it is far below real time, so the player
++//! decodes at most one frame per engine tick and never blocks the frame on the
++//! decoder backlog. The known limitation is documented in
++//! docs/builds/036-rfvp-op-movie.md.
++
++use alloc::boxed::Box;
++use alloc::collections::VecDeque;
++use alloc::vec::Vec;
++
++use anyhow::{anyhow, Result};
++
++use crate::platform_time::Instant;
++
++use wmv_decoder::io::{self as wmv_io, ErrorKind, Read as WmvRead, Seek as WmvSeek, SeekFrom};
++use wmv_decoder::{AsfWmv2Decoder, BytesDecoder, DecodedFrame, yuv420p_to_rgba_scaled};
++
++use super::{MovieFrame, MovieRequest, MovieSource};
++
++#[cfg(feature = "switch-async")]
++use alloc::sync::Arc;
++#[cfg(feature = "switch-async")]
++use crate::subsystem::resources::vfs::PackSource;
++
++/// One decoded frame per engine tick at most: the OP is 1080p VC-1 and decodes
++/// an order of magnitude slower than real time on the console, so anything more
++/// only piles up latency (the first P29 build decoded four frames per tick and
++/// ran the whole app at 2 fps).
++const MAX_DECODE_PER_TICK: usize = 1;
++
++/// Log one line every this many decoded frames (plus the first frame).
++const DECODE_LOG_EVERY: u32 = 30;
++
++struct WmvRgbaFrame {
++    pts_ms: u32,
++    rgba: Vec<u8>,
++}
++
++/// VFS-backed byte reader handed to the ASF demuxer.
++///
++/// The demuxer only needs sequential packet reads plus the occasional seek, so
++/// this adapter turns them into PackSource::read_at calls. It keeps the whole
++/// 244 MiB movie out of memory.
++#[cfg(feature = "switch-async")]
++struct VfsMovieReader {
++    source: Arc<dyn PackSource>,
++    base: u64,
++    len: u64,
++    pos: u64,
++}
++
++#[cfg(feature = "switch-async")]
++impl VfsMovieReader {
++    fn new(source: Arc<dyn PackSource>, base: u64, len: u64) -> Self {
++        Self {
++            source,
++            base,
++            len,
++            pos: 0,
++        }
++    }
++}
++
++#[cfg(feature = "switch-async")]
++impl WmvRead for VfsMovieReader {
++    fn read(&mut self, buf: &mut [u8]) -> core::result::Result<usize, wmv_io::Error> {
++        let remaining = self.len.saturating_sub(self.pos);
++        if remaining == 0 || buf.is_empty() {
++            return Ok(0);
++        }
++        let want = remaining.min(buf.len() as u64) as usize;
++        match self.source.read_at(self.base + self.pos, &mut buf[..want]) {
++            Ok(0) => Ok(0),
++            Ok(n) => {
++                let n = n.min(want);
++                self.pos += n as u64;
++                Ok(n)
++            }
++            Err(_) => Err(wmv_io::Error::new(ErrorKind::Other, "pack read failed")),
++        }
++    }
++}
++
++#[cfg(feature = "switch-async")]
++impl WmvSeek for VfsMovieReader {
++    fn seek(&mut self, pos: SeekFrom) -> core::result::Result<u64, wmv_io::Error> {
++        let target: i128 = match pos {
++            SeekFrom::Start(offset) => offset as i128,
++            SeekFrom::Current(delta) => self.pos as i128 + delta as i128,
++            SeekFrom::End(delta) => self.len as i128 + delta as i128,
++        };
++        if target < 0 || target > self.len as i128 {
++            return Err(wmv_io::Error::new(ErrorKind::Other, "movie seek out of range"));
++        }
++        self.pos = target as u64;
++        Ok(self.pos)
++    }
++}
++
++/// A decoder fed either from the pack (streaming) or from a whole-file buffer.
++enum WmvDecoder {
++    #[cfg(feature = "switch-async")]
++    Stream(AsfWmv2Decoder<VfsMovieReader>),
++    Memory(BytesDecoder),
++}
++
++impl WmvDecoder {
++    fn next_frame(&mut self) -> wmv_decoder::Result<Option<DecodedFrame>> {
++        match self {
++            #[cfg(feature = "switch-async")]
++            WmvDecoder::Stream(dec) => dec.next_frame(),
++            WmvDecoder::Memory(dec) => dec.next_frame(),
++        }
++    }
++}
++
++struct WmvPlayback {
++    dec: WmvDecoder,
++    stash: VecDeque<WmvRgbaFrame>,
++    started_at: Option<Instant>,
++    base_pts_ms: Option<u32>,
++    last_presented_pts_ms: u32,
++    eof: bool,
++    screen_w: u32,
++    screen_h: u32,
++    decoded_frames: u32,
++    presented_frames: u32,
++    last_decode_us: u32,
++}
++
++impl WmvPlayback {
++    fn new(dec: WmvDecoder, screen_w: u32, screen_h: u32) -> Self {
++        Self {
++            dec,
++            stash: VecDeque::new(),
++            started_at: None,
++            base_pts_ms: None,
++            last_presented_pts_ms: u32::MAX,
++            eof: false,
++            screen_w,
++            screen_h,
++            decoded_frames: 0,
++            presented_frames: 0,
++            last_decode_us: 0,
++        }
++    }
++
++    /// Decode at most one frame. Returns true when a frame entered the stash.
++    fn decode_one(&mut self) -> Result<bool> {
++        if self.eof {
++            return Ok(false);
++        }
++        let started = Instant::now();
++        let decoded = self
++            .dec
++            .next_frame()
++            .map_err(|err| anyhow!("WMV next_frame failed: {err}"))?;
++        let Some(frame) = decoded else {
++            self.eof = true;
++            return Ok(false);
++        };
++        let rgba = yuv420p_to_rgba_scaled(&frame.frame, self.screen_w, self.screen_h);
++        self.decoded_frames = self.decoded_frames.saturating_add(1);
++        self.last_decode_us = started.elapsed().as_micros().min(u32::MAX as u128) as u32;
++        if self.decoded_frames == 1 || self.decoded_frames % DECODE_LOG_EVERY == 0 {
++            log::info!(
++                "movie: decoded frame={} pts={} ms {}x{} decode_us={}",
++                self.decoded_frames,
++                frame.pts_ms,
++                self.screen_w,
++                self.screen_h,
++                self.last_decode_us
++            );
++        }
++        self.stash.push_back(WmvRgbaFrame {
++            pts_ms: frame.pts_ms,
++            rgba,
++        });
++        Ok(true)
++    }
++
++    fn next_due_frame(&mut self) -> Result<Option<WmvRgbaFrame>> {
++        // Top the stash up first; MAX_DECODE_PER_TICK keeps the frame thread from
++        // spending several hundred ms per tick inside the decoder.
++        for _ in 0..MAX_DECODE_PER_TICK {
++            if !self.stash.is_empty() || self.eof {
++                break;
++            }
++            self.decode_one()?;
++        }
++
++        if self.started_at.is_none() {
++            if let Some(front) = self.stash.front() {
++                self.started_at = Some(Instant::now());
++                self.base_pts_ms = Some(front.pts_ms);
++            } else {
++                return Ok(None);
++            }
++        }
++
++        let started_at = match self.started_at {
++            Some(started_at) => started_at,
++            None => return Ok(None),
++        };
++        let elapsed_ms = started_at.elapsed().as_millis() as u32;
++        let target_pts_ms = self.base_pts_ms.unwrap_or(0).saturating_add(elapsed_ms);
++        let mut latest_due = None;
++        while let Some(front) = self.stash.front() {
++            if front.pts_ms <= target_pts_ms {
++                latest_due = self.stash.pop_front();
++            } else {
++                break;
++            }
++        }
++        if latest_due.is_some() {
++            self.presented_frames = self.presented_frames.saturating_add(1);
++        }
++        Ok(latest_due)
++    }
++
++    fn is_finished(&mut self) -> Result<bool> {
++        Ok(self.eof && self.stash.is_empty())
++    }
++}
++
++impl MovieSource for WmvPlayback {
++    fn next_frame(&mut self) -> Result<Option<MovieFrame>> {
++        let Some(frame) = self.next_due_frame()? else {
++            return Ok(None);
++        };
++        if frame.pts_ms == self.last_presented_pts_ms {
++            return Ok(None);
++        }
++        self.last_presented_pts_ms = frame.pts_ms;
++        Ok(Some(MovieFrame {
++            rgba: frame.rgba,
++            width: self.screen_w,
++            height: self.screen_h,
++        }))
++    }
++
++    fn is_finished(&mut self) -> Result<bool> {
++        WmvPlayback::is_finished(self)
++    }
++
++    fn stop(self: Box<Self>) {}
++}
++
++/// Open a movie for the Switch (no_std) backend: WMV/ASF only, video only.
++///
++/// The game ships exactly one movie (movie/01.wmv), so MPEG/MP4 support is out
++/// of scope here; those formats fall back to the engine's "no movie decoder"
++/// warning path instead of a panic.
++pub(super) fn open(request: &MovieRequest<'_>) -> Result<Box<dyn MovieSource>> {
++    let name = request.name;
++    let lower = name.to_ascii_lowercase();
++    let is_wmv = lower.ends_with(".wmv") || lower.ends_with(".asf");
++    if !is_wmv {
++        return Err(anyhow!(
++            "no movie decoder for this format in the Switch build: {name}"
++        ));
++    }
++
++    let (w, h) = (request.screen_w, request.screen_h);
++
++    #[cfg(feature = "switch-async")]
++    if let Some((source, offset, size)) = request.vfs.pack_location(name) {
++        let reader = VfsMovieReader::new(source, offset, size);
++        match AsfWmv2Decoder::open(reader) {
++            Ok(dec) => {
++                warn_movie_audio(request);
++                log::info!(
++                    "Movie: opened (Switch WMV video-only, streaming) name={name} bytes={size}"
++                );
++                return Ok(Box::new(WmvPlayback::new(WmvDecoder::Stream(dec), w, h)));
++            }
++            Err(err) => {
++                log::warn!(
++                    "movie: streaming open failed for {name}: {err}; falling back to a whole-file read"
++                );
++            }
++        }
++    }
++
++    let bytes = request
++        .vfs
++        .read_file(name)
++        .map_err(|err| anyhow!("read movie {name}: {err}"))?;
++    warn_movie_audio(request);
++    log::info!(
++        "Movie: opened (Switch WMV video-only, memory) name={name} bytes={}",
++        bytes.len()
++    );
++    let dec = BytesDecoder::open_bytes(bytes).map_err(|err| anyhow!("WMV open failed: {err}"))?;
++    Ok(Box::new(WmvPlayback::new(WmvDecoder::Memory(dec), w, h)))
++}
++
++fn warn_movie_audio(request: &MovieRequest<'_>) {
++    if request.audio.is_some() {
++        log::warn!(
++            "movie audio is not decoded on Switch (no WMA decoder); playing video only: {}",
++            request.name
++        );
++    }
++}
++
++/// GalNX P29 debug-only hook: rfvp_switch_debug_movie() is implemented in
++/// platform/switch/runtime/main.c and returns non-zero when
++/// sdmc:/switch/rfvp/debug.txt contains movie=1. It lets the Citron probe start
++/// the OP without playing through the prologue; shipping builds leave it off.
++#[cfg(target_os = "horizon")]
++pub(crate) fn debug_movie_requested() -> bool {
++    extern "C" {
++        fn rfvp_switch_debug_movie() -> core::ffi::c_int;
++    }
++    unsafe { rfvp_switch_debug_movie() != 0 }
++}
++
++#[cfg(not(target_os = "horizon"))]
++pub(crate) fn debug_movie_requested() -> bool {
++    false
++}
+diff --git a/crates/rfvp/src/subsystem/resources/videoplayer/mod.rs b/crates/rfvp/src/subsystem/resources/videoplayer/mod.rs
+index e1ecf4c..be0dcc1 100644
+--- a/crates/rfvp/src/subsystem/resources/videoplayer/mod.rs
++++ b/crates/rfvp/src/subsystem/resources/videoplayer/mod.rs
+@@ -106,9 +106,19 @@ use threaded::open;
+ ))]
+ use inline::open;
+ 
+-#[cfg(any(
+-    feature = "no_std",
+-    not(any(feature = "native-video", feature = "uefi-native-video"))
++/// GalNX P29: Nintendo Switch (no_std) WMV/ASF video-only backend.
++#[cfg(all(feature = "switch-video", feature = "no_std"))]
++pub(crate) mod horizon;
++
++#[cfg(all(feature = "switch-video", feature = "no_std"))]
++use horizon::open;
++
++#[cfg(all(
++    any(
++        feature = "no_std",
++        not(any(feature = "native-video", feature = "uefi-native-video"))
++    ),
++    not(all(feature = "switch-video", feature = "no_std"))
+ ))]
+ fn open(request: &MovieRequest<'_>) -> Result<Box<dyn MovieSource>> {
+     anyhow::bail!("no movie decoder in this build: {}", request.name)
+@@ -120,6 +130,8 @@ pub struct VideoPlayerManager {
+     playing: bool,
+     modal: bool,
+     source: Option<Box<dyn MovieSource>>,
++    /// Monotonic count of frames presented to the render tree (diagnostics).
++    frames: u32,
+ }
+ 
+ impl core::fmt::Debug for VideoPlayerManager {
+@@ -183,6 +195,23 @@ impl VideoPlayerManager {
+         if let Some(frame) = source.next_frame()? {
+             motion.load_texture_from_buff(MOVIE_GRAPH_ID, frame.rgba, frame.width, frame.height)?;
+             motion.refresh_prims(MOVIE_GRAPH_ID);
++            // GalNX P29: the movie sprite has to be the last child of root prim 0.
++            // The renderer walks the prim tree in child order and does not sort by
++            // z, and video_manager.tick() runs before the scene VM/Anzu update in
++            // no_std_core::tick(), so every frame the scene can (re)attach its own
++            // prims after the movie layer was appended once. Without raising the
++            // layer here the decoded frames are uploaded but drawn underneath the
++            // title background (which is exactly what the first P29 probe showed).
++            raise_layer(motion);
++            self.frames = self.frames.saturating_add(1);
++            if self.frames == 1 || self.frames % 30 == 0 {
++                log::info!(
++                    "movie: presented frame={} {}x{}",
++                    self.frames,
++                    frame.width,
++                    frame.height
++                );
++            }
+         }
+         if source.is_finished()? {
+             self.stop(motion);
+@@ -236,3 +265,16 @@ impl VideoPlayerManager {
+         pm.set_prim_group_in(root, MOVIE_GROUP_PRIM_ID as i32);
+     }
+ }
++
++/// Move the movie group to the end of root prim 0's child list.
++///
++/// set_prim_group_in/unlink_prim operate on the root prim tree, which the
++/// renderer walks in child order with no z sorting; appending the movie group
++/// last is what makes it cover the scene instead of hiding behind it. This is a
++/// free function (not a method) so `tick` can call it while `source` is mutably
++/// borrowed from `self.source`.
++fn raise_layer(motion: &mut MotionManager) {
++    let pm = &mut motion.prim_manager;
++    pm.unlink_prim(MOVIE_GROUP_PRIM_ID);
++    pm.set_prim_group_in(0, MOVIE_GROUP_PRIM_ID as i32);
++}
+diff --git a/platform/switch/host/Cargo.toml b/platform/switch/host/Cargo.toml
+index 7d9f4d4..1282214 100644
+--- a/platform/switch/host/Cargo.toml
++++ b/platform/switch/host/Cargo.toml
+@@ -1,6 +1,6 @@
+ [package]
+ name = "rfvp-horizon"
+-version = "1.1.4-test"
++version = "1.1.5-test"
+ edition = "2021"
+ description = "Nintendo Horizon host crate for rfvp no_std core"
+ license = "MPL-2.0"
+@@ -14,7 +14,7 @@ path = "src/lib.rs"
+ crate-type = ["staticlib"]
+ 
+ [dependencies]
+-rfvp = { path = "../../../crates/rfvp", default-features = false, features = ["no_std", "switch-zlib", "switch-async"] }
++rfvp = { path = "../../../crates/rfvp", default-features = false, features = ["no_std", "switch-zlib", "switch-async", "switch-video"] }
+ 
+ [build-dependencies]
+ cc = "1"
+diff --git a/platform/switch/runtime/main.c b/platform/switch/runtime/main.c
+index 4aac018..397442d 100644
+--- a/platform/switch/runtime/main.c
++++ b/platform/switch/runtime/main.c
+@@ -97,6 +97,19 @@ void rfvp_switch_async_disable(void) {
+     g_rfvp_async_enabled = 0;
+ }
+ 
++/* GalNX P29: debug-only movie trigger. When sdmc:/switch/rfvp/debug.txt contains "movie=1" the
++ * engine starts the OP movie (movie/01.wmv) once, so the Switch video path can be verified under
++ * Citron without playing through the prologue. Without that file behaviour is unchanged. */
++int rfvp_switch_debug_movie(void) {
++    FILE* file = fopen("sdmc:/switch/rfvp/debug.txt", "r");
++    if (file == NULL) return 0;
++    char buf[512] = { 0 };
++    const size_t got = fread(buf, 1, sizeof(buf) - 1, file);
++    fclose(file);
++    buf[got] = '\0';
++    return strstr(buf, "movie=1") != NULL;
++}
++
+ /* GalNX P22: async decode is opt-in per run. A file sdmc:/switch/rfvp/async.txt holding the word
+  * "on" (or "1") starts the worker; no file means the synchronous path, so an installed NSP keeps
+  * booting exactly like v1.0.9 until someone enables the test. v1.0.9 ignored this file because

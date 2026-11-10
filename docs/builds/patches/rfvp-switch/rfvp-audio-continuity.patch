@@ -1,0 +1,421 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index a1145ce..cd584f1 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -4898,7 +4898,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "rfvp-horizon"
+-version = "1.1.2-test"
++version = "1.1.3-test"
+ dependencies = [
+  "cc",
+  "rfvp",
+diff --git a/platform/switch/host/Cargo.toml b/platform/switch/host/Cargo.toml
+index 6d17f85..9e7cef3 100644
+--- a/platform/switch/host/Cargo.toml
++++ b/platform/switch/host/Cargo.toml
+@@ -1,6 +1,6 @@
+ [package]
+ name = "rfvp-horizon"
+-version = "1.1.2-test"
++version = "1.1.3-test"
+ edition = "2021"
+ description = "Nintendo Horizon host crate for rfvp no_std core"
+ license = "MPL-2.0"
+diff --git a/platform/switch/runtime/main.c b/platform/switch/runtime/main.c
+index da2f3c0..4aac018 100644
+--- a/platform/switch/runtime/main.c
++++ b/platform/switch/runtime/main.c
+@@ -3,6 +3,7 @@
+  * rfvp engine (Rust, linked in as librfvp_horizon.a) submits through the RfvpRenderer trait. */
+ 
+ #include <dirent.h>
++#include <stdatomic.h>
+ #include <stdio.h>
+ #include <string.h>
+ #include <sys/stat.h>
+@@ -234,14 +235,113 @@ enum {
+      * over 100 ms without running dry. */
+     AudioBufferFrames = 1024,
+     AudioBufferCount = 6,
++    /* GalNX P27: the frame thread renders PCM ahead into this ring and a separate audio thread
++     * feeds the six wave buffers from it, so a frame stalled on an SD read no longer stops the
++     * music. 144 pages = 147,456 frames = 3.07 s at 48 kHz stereo 16-bit (589,824 bytes). The
++     * ring holds whole 1024-frame pages, so no page straddles the wrap. */
++    AudioRingPages = 144,
++    AudioRingFrames = AudioBufferFrames * AudioRingPages,
++    AudioRingSamples = AudioRingFrames * 2,
++    /* At most 8 pages (170 ms of audio) are rendered per frame: a drained ring is full again
++     * about seven frames (0.12 s) after a stall ends. */
++    AudioProducePagesPerFrame = 8,
++    /* Half a second of PCM is queued before the audio thread starts, so playback never begins
++     * empty. */
++    AudioPrimePages = 24,
++    /* debug.txt "stall=NNNN" simulates a long frame for the audio continuity test; it is capped
++     * and limited to three drops per run. */
++    AudioStallMaxMs = 2000,
++    AudioStallMaxCount = 3,
+ };
+ static AudioDriver audio_driver;
+ static AudioDriverWaveBuf audio_wavebufs[AudioBufferCount];
+ static int16_t audio_buffers[AudioBufferCount][AudioBufferFrames * 2]
+     __attribute__((aligned(0x1000)));
++static int16_t audio_ring[AudioRingSamples] __attribute__((aligned(0x1000)));
+ static bool audio_renderer_ready;
+ static bool audio_driver_ready;
+ 
++/* GalNX P27: single producer (frame thread) / single consumer (audio thread) PCM ring. The two
++ * counters are the total frames ever written and read, so write - read is the fill level and a
++ * page starts at (counter % AudioRingFrames) * 2 samples. The acquire/release pairs order the
++ * samples with the index update. Both threads are CPU writers, so normal-memory coherency is
++ * enough; the armDCacheFlush() call in the consumer covers the audio DMA only. */
++static _Atomic uint64_t audio_ring_write = 0;
++static _Atomic uint64_t audio_ring_read = 0;
++
++/* The audio thread, plus the counters the frame thread reports. Updates are atomic (or volatile
++ * for single-word flags) because the one writer is the audio thread and the one reader is the
++ * frame thread; a report that catches a stale value is harmless. */
++static Thread g_audio_thread;
++static volatile int g_audio_thread_started = 0;
++static volatile int g_audio_thread_alive = 0;
++static volatile int g_audio_thread_stop = 0;
++static int g_audio_thread_cpu = -2;
++static unsigned g_audio_stall_ms = 0; /* debug.txt "stall=NNNN" */
++static unsigned g_audio_stall_at = 1200; /* debug.txt "stall_at=NNNN": first frame to drop */
++enum { AudioStallEveryFrames = 600 };
++static volatile unsigned g_audio_stall_count = 0;
++static _Atomic uint64_t audio_produced_frames = 0;
++static _Atomic uint64_t audio_consumed_frames = 0;
++static _Atomic uint64_t audio_min_watermark_frames = ~(uint64_t) 0;
++static _Atomic uint64_t audio_starve_start_us = 0;
++static _Atomic unsigned audio_underrun_events = 0;
++static _Atomic unsigned audio_max_underrun_ms = 0;
++static _Atomic int audio_stats_armed = 0;
++
++/* P27 acceptance evidence, written by the frame thread: sdmc:/switch/rfvp/audio_status.txt (ring
++ * fill, lowest watermark, underruns) and audio_stall.txt (per simulated long frame, before and
++ * after the drop). Both are read from the SD card after a run. */
++static void audio_write_status(void) {
++    FILE* file = fopen("sdmc:/switch/rfvp/audio_status.txt", "w");
++    if (file == NULL) return;
++    const uint64_t write = atomic_load_explicit(&audio_ring_write, memory_order_acquire);
++    const uint64_t read = atomic_load_explicit(&audio_ring_read, memory_order_acquire);
++    const uint64_t fill = write >= read ? write - read : 0;
++    const uint64_t starve_start =
++        atomic_load_explicit(&audio_starve_start_us, memory_order_relaxed);
++    const uint64_t starve_ms =
++        starve_start == 0 ? 0 : (rfvp_switch_ticks_us() - starve_start) / 1000;
++    const uint64_t watermark =
++        atomic_load_explicit(&audio_min_watermark_frames, memory_order_relaxed);
++    fprintf(file,
++            "driver=%d thread=%d alive=%d cpu=%d cap=%llu ring=%llu min_water=%llu "
++            "underrun=%u max_underrun_ms=%u starve_ms=%llu produced=%llu consumed=%llu "
++            "stalls=%u stall_ms=%u\n",
++            audio_driver_ready ? 1 : 0, g_audio_thread_started, g_audio_thread_alive,
++            g_audio_thread_cpu, (unsigned long long) AudioRingFrames,
++            (unsigned long long) fill,
++            (unsigned long long) (watermark == ~(uint64_t) 0 ? 0 : watermark),
++            atomic_load_explicit(&audio_underrun_events, memory_order_relaxed),
++            atomic_load_explicit(&audio_max_underrun_ms, memory_order_relaxed),
++            (unsigned long long) starve_ms,
++            (unsigned long long) atomic_load_explicit(&audio_produced_frames, memory_order_relaxed),
++            (unsigned long long) atomic_load_explicit(&audio_consumed_frames, memory_order_relaxed),
++            g_audio_stall_count, g_audio_stall_ms);
++    fclose(file);
++}
++
++/* One line per simulated long frame. The "pre" line also restarts the watermark window, so the
++ * "post" line's min_water is the lowest ring fill observed during that drop. */
++static void audio_write_stall(const char* phase, unsigned index) {
++    FILE* file = fopen("sdmc:/switch/rfvp/audio_stall.txt", "a");
++    if (file == NULL) return;
++    const uint64_t write = atomic_load_explicit(&audio_ring_write, memory_order_acquire);
++    const uint64_t read = atomic_load_explicit(&audio_ring_read, memory_order_acquire);
++    const uint64_t fill = write >= read ? write - read : 0;
++    const uint64_t watermark =
++        atomic_load_explicit(&audio_min_watermark_frames, memory_order_relaxed);
++    fprintf(file, "%s stall=%u ms=%u ring=%llu underrun=%u min_water=%llu t_us=%llu\n", phase,
++            index, g_audio_stall_ms, (unsigned long long) fill,
++            atomic_load_explicit(&audio_underrun_events, memory_order_relaxed),
++            (unsigned long long) (watermark == ~(uint64_t) 0 ? 0 : watermark),
++            (unsigned long long) rfvp_switch_ticks_us());
++    fclose(file);
++    if (strcmp(phase, "pre") == 0) {
++        atomic_store_explicit(&audio_min_watermark_frames, fill, memory_order_relaxed);
++    }
++}
++
+ static void log_result(const char* what, Result rc) {
+     char message[96];
+     int len = snprintf(message, sizeof(message), "rfvp: %s failed: 0x%08x\n", what,
+@@ -292,8 +392,25 @@ static void audio_init(void) {
+     audrvUpdate(&audio_driver);
+ }
+ 
+-/* Refill every buffer the device has finished with. */
+-static void audio_pump(void* app) {
++/* Render `pages` pages of PCM into the ring. Only the frame thread calls this: the rfvp Session is
++ * owned by that thread and rfvp_switch_audio_render() is not thread safe. */
++static void audio_render_pages(void* app, unsigned pages) {
++    if (!audio_driver_ready || app == NULL) return;
++    for (unsigned page = 0; page < pages; ++page) {
++        const uint64_t write = atomic_load_explicit(&audio_ring_write, memory_order_relaxed);
++        const uint64_t read = atomic_load_explicit(&audio_ring_read, memory_order_acquire);
++        if (write - read + AudioBufferFrames > AudioRingFrames) return;
++        int16_t pcm[AudioBufferFrames * 2];
++        rfvp_switch_audio_render(app, pcm, AudioBufferFrames);
++        memcpy(&audio_ring[(size_t) (write % AudioRingFrames) * 2], pcm, sizeof(pcm));
++        atomic_store_explicit(&audio_ring_write, write + AudioBufferFrames, memory_order_release);
++        atomic_fetch_add_explicit(&audio_produced_frames, AudioBufferFrames, memory_order_relaxed);
++    }
++}
++
++/* Pre-P27 path: render straight into every buffer the device has finished with. Still used when
++ * the audio thread could not be created (thread limit, emulator), so the game keeps its sound. */
++static void audio_pump_direct(void* app) {
+     if (!audio_driver_ready) return;
+     for (unsigned i = 0; i < AudioBufferCount; ++i) {
+         AudioDriverWaveBuf* wavebuf = &audio_wavebufs[i];
+@@ -311,7 +428,157 @@ static void audio_pump(void* app) {
+     audrvUpdate(&audio_driver);
+ }
+ 
++/* GalNX P27: the audio thread. It never touches the rfvp Session; it only moves PCM the frame
++ * thread already rendered out of the ring and into the six wave buffers, then commits them. The
++ * frame thread may be stuck inside a multi-second SD read: with three seconds of PCM queued the
++ * device keeps playing past it. Four milliseconds is shorter than the ~21 ms one page lasts, so a
++ * free buffer is noticed and refilled long before it is needed. */
++static void rfvp_audio_thread(void* arg) {
++    (void) arg;
++    g_audio_thread_alive = 1;
++    unsigned logged_underruns = 0;
++    uint64_t last_refresh_us = 0;
++    for (;;) {
++        if (g_audio_thread_stop) break;
++        if (!audio_driver_ready) {
++            svcSleepThread(20000000ULL); /* 20 ms */
++            continue;
++        }
++        const uint64_t now = rfvp_switch_ticks_us();
++        /* Audren reports a finished wave buffer only through audrvUpdate(): its state field is
++         * filled in by that call. Without a periodic update a buffer we queued once stays
++         * "queued" forever, we never see it free again and the ring stops draining. One update
++         * per ~20 ms (about the length of one page) is enough to keep all six buffers turning and
++         * keeps the audren IPC cost off the frame thread. */
++        if (last_refresh_us == 0 || now - last_refresh_us >= 20000ULL) {
++            audrvUpdate(&audio_driver);
++            last_refresh_us = now;
++        }
++        const uint64_t read = atomic_load_explicit(&audio_ring_read, memory_order_relaxed);
++        const uint64_t write = atomic_load_explicit(&audio_ring_write, memory_order_acquire);
++        const uint64_t available = write - read;
++        unsigned refilled = 0;
++        int needed = 0;
++        for (unsigned i = 0; i < AudioBufferCount; ++i) {
++            AudioDriverWaveBuf* wavebuf = &audio_wavebufs[i];
++            if (wavebuf->state != AudioDriverWaveBufState_Free &&
++                wavebuf->state != AudioDriverWaveBufState_Done) {
++                continue;
++            }
++            needed = 1;
++            if (available < ((uint64_t) refilled + 1) * AudioBufferFrames) continue;
++            const uint64_t frame = read + (uint64_t) refilled * AudioBufferFrames;
++            memcpy(audio_buffers[i], &audio_ring[(size_t) (frame % AudioRingFrames) * 2],
++                   sizeof(audio_buffers[i]));
++            armDCacheFlush(audio_buffers[i], sizeof(audio_buffers[i]));
++            wavebuf->data_raw = audio_buffers[i];
++            wavebuf->size = sizeof(audio_buffers[i]);
++            wavebuf->start_sample_offset = 0;
++            wavebuf->end_sample_offset = AudioBufferFrames;
++            wavebuf->is_looping = false;
++            /* If the buffer was refused it stays free and we retry next round with the same PCM. */
++            if (!audrvVoiceAddWaveBuf(&audio_driver, 0, wavebuf)) continue;
++            ++refilled;
++        }
++        uint64_t fill = available;
++        if (refilled > 0) {
++            fill = available - (uint64_t) refilled * AudioBufferFrames;
++            const uint64_t consumed = read + (uint64_t) refilled * AudioBufferFrames;
++            atomic_store_explicit(&audio_ring_read, consumed, memory_order_release);
++            atomic_fetch_add_explicit(&audio_consumed_frames,
++                                      (uint64_t) refilled * AudioBufferFrames,
++                                      memory_order_relaxed);
++            audrvUpdate(&audio_driver);
++            last_refresh_us = now;
++            /* Statistics start with the first page handed to the device: before that the ring is
++             * legitimately empty and is not an underrun. */
++            atomic_store_explicit(&audio_stats_armed, 1, memory_order_relaxed);
++            const uint64_t starve_start =
++                atomic_load_explicit(&audio_starve_start_us, memory_order_relaxed);
++            if (starve_start != 0) {
++                const unsigned ms = (unsigned) ((now - starve_start) / 1000);
++                if (ms > atomic_load_explicit(&audio_max_underrun_ms, memory_order_relaxed)) {
++                    atomic_store_explicit(&audio_max_underrun_ms, ms, memory_order_relaxed);
++                }
++                atomic_store_explicit(&audio_starve_start_us, 0, memory_order_relaxed);
++            }
++        } else if (needed && available < AudioBufferFrames &&
++                   atomic_load_explicit(&audio_stats_armed, memory_order_relaxed) &&
++                   atomic_load_explicit(&audio_starve_start_us, memory_order_relaxed) == 0) {
++            /* A wave buffer wants PCM but the ring is empty: from here on the device is living on
++             * what is already queued (at most six pages, ~128 ms). */
++            atomic_store_explicit(&audio_starve_start_us, now, memory_order_relaxed);
++            atomic_fetch_add_explicit(&audio_underrun_events, 1, memory_order_relaxed);
++            if (logged_underruns < 3) {
++                ++logged_underruns;
++                char message[128];
++                int len = snprintf(message, sizeof(message),
++                                   "rfvp: audio underrun ring=%llu starve_start_us=%llu\n",
++                                   (unsigned long long) fill, (unsigned long long) now);
++                rfvp_switch_log(message, (size_t) len);
++            }
++        }
++        if (atomic_load_explicit(&audio_stats_armed, memory_order_relaxed)) {
++            if (fill < atomic_load_explicit(&audio_min_watermark_frames, memory_order_relaxed)) {
++                atomic_store_explicit(&audio_min_watermark_frames, fill, memory_order_relaxed);
++            }
++        }
++        svcSleepThread(4000000ULL); /* 4 ms */
++    }
++    g_audio_thread_alive = 0;
++}
++
++/* Frame thread: keep the ring topped up; the audio thread drains it on its own schedule. */
++static void audio_pump(void* app) {
++    if (!audio_driver_ready) return;
++    if (g_audio_thread_started) {
++        audio_render_pages(app, AudioProducePagesPerFrame);
++        return;
++    }
++    audio_pump_direct(app);
++}
++
++/* GalNX P27: prime the ring, then hand playback to its own thread. Core 2 keeps it off the frame
++ * thread's core 0 and the decode worker's core 1; prio 0x2D is above the worker's 0x30 and below
++ * the frame thread's 0x2C, so a long audio mix can never outrank the frame thread, and the thread
++ * only sleeps, copies 4 KiB and issues audrvUpdate(). Thread creation can fail on the console's
++ * small thread allowance: then audio_pump() keeps the pre-P27 direct path and the game still has
++ * audio, it just does not survive a long frame. */
++static void start_audio_thread(void* app) {
++    if (!audio_driver_ready) return;
++    audio_render_pages(app, AudioPrimePages);
++    FILE* truncate = fopen("sdmc:/switch/rfvp/audio_stall.txt", "w");
++    if (truncate != NULL) fclose(truncate);
++    static const int cpus[] = { 2, 1, -2 };
++    Result rc = 0;
++    for (unsigned i = 0; i < sizeof(cpus) / sizeof(cpus[0]); ++i) {
++        rc = threadCreate(&g_audio_thread, rfvp_audio_thread, NULL, NULL, 0x10000, 0x2D, cpus[i]);
++        if (R_FAILED(rc)) continue;
++        rc = threadStart(&g_audio_thread);
++        if (R_FAILED(rc)) continue;
++        g_audio_thread_cpu = cpus[i];
++        g_audio_thread_started = 1;
++        audio_write_status();
++        char message[128];
++        int len = snprintf(message, sizeof(message),
++                           "rfvp: audio thread cpu=%d ring=%d frames prio=0x2d\n",
++                           g_audio_thread_cpu, AudioRingFrames);
++        rfvp_switch_log(message, (size_t) len);
++        return;
++    }
++    log_result("audio thread", rc);
++    g_audio_thread_cpu = -2;
++    audio_write_status();
++}
++
+ static void audio_exit(void) {
++    /* Stop the consumer first: audrv* must not be used after audrvClose(). The thread polls every
++     * 4 ms, so 200 ms is a generous upper bound; if it somehow does not acknowledge, closing the
++     * driver below still ends the process cleanly. */
++    if (g_audio_thread_started) {
++        g_audio_thread_stop = 1;
++        for (unsigned i = 0; i < 20 && g_audio_thread_alive; ++i) svcSleepThread(10000000ULL);
++    }
+     if (audio_driver_ready) audrvClose(&audio_driver);
+     if (audio_renderer_ready) audrenExit();
+ }
+@@ -333,6 +600,28 @@ static unsigned screenshot_frame(void) {
+     return frame;
+ }
+ 
++/* GalNX P27: "stall=NNNN" in debug.txt makes the frame thread sleep NNNN ms, which is how the
++ * audio continuity test simulates the real device's 300-1500 ms SD read stalls. Capped so a test
++ * run stays bounded. "stall_at=NNNN" picks the first frame that drops (default 1200, i.e. about
++ * 20 s in, so the title BGM is already playing when the stall hits; the drops repeat every
++ * AudioStallEveryFrames frames up to AudioStallMaxCount times). */
++static unsigned read_debug_stall_ms(void) {
++    FILE* file = fopen("sdmc:/switch/rfvp/debug.txt", "r");
++    if (file == NULL) return 0;
++    char line[128];
++    unsigned ms = 0;
++    while (fgets(line, sizeof(line), file)) {
++        unsigned value;
++        if (sscanf(line, "stall=%u", &value) == 1) ms = value;
++        if (sscanf(line, "stall_at=%u", &value) == 1) g_audio_stall_at = value;
++    }
++    fclose(file);
++    if (ms > AudioStallMaxMs) ms = AudioStallMaxMs;
++    if (g_audio_stall_at < 300u) g_audio_stall_at = 300u;
++    if (g_audio_stall_at > 60000u) g_audio_stall_at = 60000u;
++    return ms;
++}
++
+ /* The texture worker thread (GalNX P18): decodes the CG backgrounds and character sheets that
+  * the engine queued, so a scene change no longer stalls the frame and the audio with it. */
+ static void rfvp_decode_thread(void* arg) {
+@@ -466,6 +755,20 @@ int main(void) {
+         return 1;
+     }
+ 
++    /* GalNX P27: the audio ring needs the rfvp Session for rendering, so it starts after the app.
++     * The audio thread goes first so it gets a thread slot even on a build that also runs the
++     * decode worker and the watchdog; the watchdog last, because it is the only optional one. */
++    g_audio_stall_ms = read_debug_stall_ms();
++    start_audio_thread(app);
++    if (g_audio_stall_ms != 0) {
++        char message[96];
++        int len = snprintf(message, sizeof(message),
++                           "rfvp: audio stall test ms=%u count=%d at=%u every=%u\n",
++                           g_audio_stall_ms, (int) AudioStallMaxCount, g_audio_stall_at,
++                           (unsigned) AudioStallEveryFrames);
++        rfvp_switch_log(message, (size_t) len);
++    }
++
+     g_rfvp_async_enabled = read_async_enabled();
+     if (g_rfvp_async_enabled) start_decode_worker();
+     start_watchdog();
+@@ -522,10 +825,33 @@ int main(void) {
+         /* GalNX P20: refresh the watchdog file from the frame thread too, so a worker that stops
+          * iterating is still distinguishable from one that never started. */
+         if (g_rfvp_async_enabled && (frame % 600u) == 0u) write_async_status();
++        /* GalNX P27: keep up to three seconds of PCM queued; the audio thread drains it while this
++         * loop is blocked inside the engine, so a 1.2 s vfs_read no longer silences the device. */
+         audio_pump(app);
++        if ((frame % 600u) == 0u) audio_write_status();
++        if (g_audio_stall_ms != 0 && g_audio_stall_count < AudioStallMaxCount &&
++            frame >= g_audio_stall_at &&
++            (frame - g_audio_stall_at) % (unsigned) AudioStallEveryFrames == 0u) {
++            /* Simulated long frame (debug.txt "stall=NNNN"): deliberately stand still inside the
++             * frame loop, the same way an SD read stall freezes it on the console. */
++            audio_write_stall("pre", g_audio_stall_count);
++            char message[96];
++            int len = snprintf(message, sizeof(message), "rfvp: audio stall begin ms=%u\n",
++                               g_audio_stall_ms);
++            rfvp_switch_log(message, (size_t) len);
++            svcSleepThread((u64) g_audio_stall_ms * 1000000ULL);
++            g_audio_stall_count = g_audio_stall_count + 1;
++            audio_write_stall("post", g_audio_stall_count);
++            const uint64_t write = atomic_load_explicit(&audio_ring_write, memory_order_acquire);
++            const uint64_t read = atomic_load_explicit(&audio_ring_read, memory_order_acquire);
++            len = snprintf(message, sizeof(message), "rfvp: audio stall end ring=%llu\n",
++                           (unsigned long long) (write - read));
++            rfvp_switch_log(message, (size_t) len);
++        }
+         if (status != 0) break;
+     }
+ 
++    audio_write_status();
+     rfvp_switch_stop(app);
+     audio_exit();
+     galnx_sdl_video_shutdown();

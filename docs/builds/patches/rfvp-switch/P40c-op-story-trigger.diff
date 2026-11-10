@@ -1,0 +1,103 @@
+--- a/platform/switch/runtime/main.c
++++ b/platform/switch/runtime/main.c
+@@ -98,30 +98,41 @@
+ void rfvp_switch_async_disable(void) {
+     g_rfvp_async_enabled = 0;
+ }
+-/* GalNX P29: debug-only movie trigger. When sdmc:/switch/rfvp/debug.txt contains "movie=1" the
+- * engine starts the OP movie (movie/01.wmv) once, so the Switch video path can be verified under
+- * Citron without playing through the prologue. Without that file behaviour is unchanged. */
+-int rfvp_switch_debug_movie(void) {
+-    FILE* file = fopen("sdmc:/switch/rfvp/debug.txt", "r");
++/* GalNX P40b: debug-only movie trigger, isolated in its own marker file.
++ *
++ * It used to live inside sdmc:/switch/rfvp/debug.txt, the same file that enables debug_report.txt.
++ * That made the modal OP autoplay a side effect of a normal debug run, and on a device that still
++ * carried an old debug.txt the game started with an unskippable OP (reported by the pilot). The
++ * shipping build reads only movie_debug.txt, which test harnesses create on purpose; without it
++ * the movie path is driven exclusively by the game script (f_000426A7 in IROSEKA).
++ *
++ *   movie_debug.txt contains "modal" / "movie=1" -> start the OP once with flag = true
++ *   movie_debug.txt contains "nil"   / "movie=nil" -> start it once with flag = nil (game path)
++ */
++static const char* const MovieDebugFile = "sdmc:/switch/rfvp/movie_debug.txt";
++
++static int read_movie_debug_file(char* buf, size_t cap) {
++    FILE* file = fopen(MovieDebugFile, "r");
+     if (file == NULL) return 0;
+-    char buf[512] = { 0 };
+-    const size_t got = fread(buf, 1, sizeof(buf) - 1, file);
++    const size_t got = fread(buf, 1, cap - 1, file);
+     fclose(file);
+     buf[got] = '\0';
+-    return strstr(buf, "movie=1") != NULL || strstr(buf, "movie=nil") != NULL;
++    return 1;
+ }
+ 
+-/* GalNX P33: debug-only second trigger. The game itself plays the OP as a layer movie
+- * (flag = nil), which used to mean "no soundtrack". "movie=nil" starts exactly that variant
+- * so the device path (layer movie + Ogg soundtrack) can be checked under Citron. */
++int rfvp_switch_debug_movie(void) {
++    char buf[256] = { 0 };
++    if (!read_movie_debug_file(buf, sizeof(buf))) return 0;
++    return strstr(buf, "movie=1") != NULL || strstr(buf, "modal") != NULL ||
++           strstr(buf, "movie=nil") != NULL || strstr(buf, "nil") != NULL;
++}
++
++/* GalNX P33: the game itself plays the OP as a layer movie (flag = nil). "nil" starts exactly
++ * that variant so the device path (layer movie + Ogg soundtrack) can be checked under Citron. */
+ int rfvp_switch_debug_movie_nil(void) {
+-    FILE* file = fopen("sdmc:/switch/rfvp/debug.txt", "r");
+-    if (file == NULL) return 0;
+-    char buf[512] = { 0 };
+-    const size_t got = fread(buf, 1, sizeof(buf) - 1, file);
+-    fclose(file);
+-    buf[got] = '\0';
+-    return strstr(buf, "movie=nil") != NULL;
++    char buf[256] = { 0 };
++    if (!read_movie_debug_file(buf, sizeof(buf))) return 0;
++    return strstr(buf, "movie=nil") != NULL || strstr(buf, "nil") != NULL;
+ }
+ 
+ 
+--- a/crates/rfvp/src/subsystem/resources/videoplayer/horizon.rs
++++ b/crates/rfvp/src/subsystem/resources/videoplayer/horizon.rs
+@@ -585,10 +585,10 @@
+ }
+ 
+ 
+-/// GalNX P29 debug-only hook: rfvp_switch_debug_movie() is implemented in
+-/// platform/switch/runtime/main.c and returns non-zero when
+-/// sdmc:/switch/rfvp/debug.txt contains movie=1. It lets the Citron probe start
+-/// the OP without playing through the prologue; shipping builds leave it off.
++/// GalNX P29/P40b debug-only hook: rfvp_switch_debug_movie() is implemented in
++/// platform/switch/runtime/main.c and returns non-zero only when the dedicated marker
++/// sdmc:/switch/rfvp/movie_debug.txt exists (modal/nil). It is not tied to debug.txt any
++/// more, so ordinary debug runs never autoplay the OP; shipping builds leave it off.
+ #[cfg(target_os = "horizon")]
+ pub(crate) fn debug_movie_requested() -> bool {
+     extern "C" {
+@@ -602,7 +602,7 @@
+     false
+ }
+ 
+-/// GalNX P33: `movie=nil` in sdmc:/switch/rfvp/debug.txt starts the OP with the nil
++/// GalNX P33: `nil` in sdmc:/switch/rfvp/movie_debug.txt starts the OP with the nil
+ /// flag, i.e. the exact call the game makes (layer movie). Used to verify on-device
+ /// audio for the real path instead of the modal debug variant.
+ #[cfg(target_os = "horizon")]
+--- a/crates/rfvp/src/no_std_core.rs
++++ b/crates/rfvp/src/no_std_core.rs
+@@ -662,9 +662,9 @@
+         host.audio().tick(elapsed_us)?;
+         #[cfg(feature = "switch-async")]
+         self.apply_async_decodes(host);
+-        // GalNX P29 debug-only: sdmc:/switch/rfvp/debug.txt holding `movie=1` starts the OP
+-        // once. The C runtime exposes rfvp_switch_debug_movie(); shipping builds never set it,
+-        // so the normal script-driven movie path is untouched.
++        // GalNX P29/P40b debug-only: only the dedicated marker sdmc:/switch/rfvp/movie_debug.txt
++        // starts the OP once. debug.txt no longer triggers it, so normal debug runs and shipping
++        // builds always use the script-driven movie path (and its skip input).
+         #[cfg(all(feature = "switch-video", feature = "no_std"))]
+         if !self.debug_movie_started
+             && crate::subsystem::resources::videoplayer::horizon::debug_movie_requested()

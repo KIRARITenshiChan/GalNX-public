@@ -1,0 +1,49 @@
+# Engine descriptor for the KiriKiri SDL2 adapter (docs/engines/README.md).
+# Mirrors the built-in descriptor in src/galnx/engines/registry.py; kept as a
+# reference for adding adapters, and validated by tests/test_engines_descriptor.py
+id: krkrsdl2
+display_name: KiriKiri SDL2
+upstream_url: https://github.com/krkrsdl2/krkrsdl2
+pinned_commit: 124bdf841f09e7ce02aa99b7b55791a0f7a900ff
+pinned_version: "krkrsdl2@124bdf84 (2026-10-01)"
+license_spdx: MIT
+license_url: https://github.com/krkrsdl2/krkrsdl2/blob/main/LICENSE
+license_notes: >-
+  Upstream LICENSE (1063 bytes, Kirikiri SDL2 Developers) is MIT. Bundled
+  submodules (krkrz / FAudio / simde / zlib) keep their own licenses; the
+  upstream README states that src is MIT and third-party components are not GPL.
+target_kind: nro
+build_backend: cmake-switch
+capabilities:
+  video:
+    supported: true
+    note: SDL2 renderer through switch-sdl2 + EGL (Mesa Nouveau).
+  audio:
+    supported: true
+    note: FAudio (built from external/FAudio) plus the SDL2 audio device.
+  input:
+    supported: true
+    note: SDL2 joystick/keyboard; the GalNX input layer injects keyboard/mouse events.
+  save:
+    supported: true
+    note: KiriKiri save data through the libnx save namespace (per-title).
+  touch:
+    supported: false
+    note: Not wired in the upstream SDL2 backend.
+default_input_profile: krkrsdl2
+artifact_naming: "{id}-{version}.nro"
+content_layout:
+  mode: romfs
+  entry: data.xp3
+  destination: romfs/data.xp3
+  notes: >-
+    Upstream CMake takes -DEMBED_DATA_PATH=<file> and embeds it as
+    romfs/<basename> through elf2nro.
+status: ready
+evidence_urls:
+  - docs/builds/001-krkrsdl2-upstream.md
+  - docs/builds/004-krkrsdl2-switch-fixes.md
+  - docs/audit/01-engines.md
+notes: >-
+  GalNX pins the commit and applies four compatibility patches recorded in
+  docs/builds/patches/krkrsdl2-switch-emulator/.

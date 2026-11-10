@@ -1,0 +1,78 @@
+diff --git a/platform/switch/host/Cargo.toml b/platform/switch/host/Cargo.toml
+index cba051e..7ae14d1 100644
+--- a/platform/switch/host/Cargo.toml
++++ b/platform/switch/host/Cargo.toml
+@@ -1,6 +1,6 @@
+ [package]
+ name = "rfvp-horizon"
+-version = "1.0.8"
++version = "1.0.9"
+ edition = "2021"
+ description = "Nintendo Horizon host crate for rfvp no_std core"
+ license = "MPL-2.0"
+diff --git a/platform/switch/runtime/main.c b/platform/switch/runtime/main.c
+index bb22ac6..7374d0b 100644
+--- a/platform/switch/runtime/main.c
++++ b/platform/switch/runtime/main.c
+@@ -88,16 +88,12 @@ void rfvp_switch_async_disable(void) {
+     g_rfvp_async_enabled = 0;
+ }
+ 
++/* GalNX v1.0.9: the decode worker stays off on real hardware. v1.0.8 froze the whole process
++ * within the first frames whenever this returned 1 (async_status enabled=1 hb=3 stage=0), and the
++ * 3 s watchdog never ran because the frame thread itself stopped. The synchronous path is the one
++ * that boots reliably, so async.txt is ignored until the worker is redesigned. */
+ static int read_async_enabled(void) {
+-    FILE* file = fopen("sdmc:/switch/rfvp/async.txt", "r");
+-    if (file == NULL) return 0;
+-    char line[64];
+-    int enabled = 0;
+-    if (fgets(line, sizeof(line), file) != NULL) {
+-        if (strstr(line, "on") != NULL || strstr(line, "ON") != NULL || strchr(line, '1') != NULL) enabled = 1;
+-    }
+-    fclose(file);
+-    return enabled;
++    return 0;
+ }
+ 
+ /* Written at start-up and every ~1000 worker iterations, so a hung thread is visible from the SD
+@@ -110,6 +106,23 @@ static void write_async_status(void) {
+             (unsigned) g_rfvp_async_start_rc, g_rfvp_async_heartbeat, g_rfvp_async_stage);
+     fclose(file);
+ }
++/* GalNX v1.0.9: optional frame heartbeat. When sdmc:/switch/rfvp/debug.txt exists the frame
++ * thread rewrites frame_status.txt every few frames, so a hang still leaves the last frame number
++ * on the card even if the per-second report never completes. */
++static int debug_probe_enabled(void) {
++    FILE* file = fopen("sdmc:/switch/rfvp/debug.txt", "r");
++    if (file == NULL) return 0;
++    fclose(file);
++    return 1;
++}
++
++static void write_frame_status(unsigned frame, int status) {
++    FILE* file = fopen("sdmc:/switch/rfvp/frame_status.txt", "w");
++    if (file == NULL) return;
++    fprintf(file, "frame=%u status=%d async=%d\n", frame, status, g_rfvp_async_enabled);
++    fclose(file);
++}
++
+ extern int rfvp_switch_frame(void* app, const RfvpSwitchInput* input, uint32_t* framebuffer,
+                              uint32_t stride_bytes);
+ extern void rfvp_switch_audio_render(void* app, int16_t* dst, size_t frames);
+@@ -345,6 +358,7 @@ int main(void) {
+     write_async_status();
+     log_text(g_rfvp_async_enabled ? "rfvp: async decode on\n" : "rfvp: async decode off\n");
+ 
++    const int frame_probe = debug_probe_enabled();
+     const unsigned shot = screenshot_frame();
+     unsigned frame = 0;
+     int status = 0;
+@@ -378,6 +392,7 @@ int main(void) {
+                                   (int) dialog_open);
+         }
+         if (frame++ == shot) galnx_sdl_write_screen_bmp(ScreenshotFile);
++        if (frame_probe && (frame == 1u || (frame % 15u) == 0u)) write_frame_status(frame, status);
+         /* GalNX P20: refresh the watchdog file from the frame thread too, so a worker that stops
+          * iterating is still distinguishable from one that never started. */
+         if (g_rfvp_async_enabled && (frame % 600u) == 0u) write_async_status();

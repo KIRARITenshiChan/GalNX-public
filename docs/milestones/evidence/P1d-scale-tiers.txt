@@ -1,0 +1,25 @@
+# P1d RomFS scale 三档 + 3400 MiB 前科档记录（E1/E3）
+日期: 2026-10-30 05:57-06:33 (+08:00)
+执行: audit-package（task-35 / P1-d）
+
+| 档 | romfs 输入 | files / bytes | 构建耗时 | hacBrewPack 峰值内存 | work 目录峰值 | NSP 大小 | NSP sha256 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 200 MiB | scale/romfs-200m | 12 / 209,977,386 | 20 s | 未采样 | 未采样 | 210,696,408 B | ff0b6f26df41fdb8e9c6f8d9380c03895be00ac4ad2b26558c97210a52ed90ef |
+| 1024 MiB | scale/romfs-1024m | 12 / 1,074,004,011 | 43 s | 未采到（tasklist 采样失败） | 2,153,131,368 B / 21 files | 1,076,410,584 B | b9a4bc90a455aa20b7b45582d17fdd4dcca51b0aa731b34f46d6d7c969406e22 |
+| 2860 MiB（真实 payload，run1） | nsp/romfs-a1 | 108 / 2,878,185,572（构建时点） | 231.9 s | 111 MiB | — | 2,884,106,456 B | 9091c09d1d1862373ee80afcc999f97de97209eccfb60e71607a55f7401574d5 |
+| 2860 MiB（run2，1 Hz 采样） | nsp/romfs-a1 | 108 / 2,878,185,581（构建时点） | 230 s | 111 MiB | 7,407,040,373 B / 33 files | 2,884,106,456 B | bcb93a3d54f1f6fa3266ca2cb75fdf5d892e2cd62277b0efb632e7de40777593 |
+| 3400 MiB（前科档） | scale/romfs-3400m | 12 / 3,565,420,587 | 95.2 s | 111 MiB | 未采样（pwsh 采样只取内存） | 3,572,693,208 B | 670a7cda1c18d995ba92f786c4bb71cf50f59a67d6847f1d2339c51f06bba735 |
+| A1 最终（2860 MiB 真实 payload） | nsp/romfs-a1 | 108 / 2,878,185,598 | 288.4 s（含 r2 ELF 转换） | 111 MiB | 约 8.4 GB（阶段叠加估算） | 2,906,131,672 B | 9678e992c07bcbe46aa70695957b948badd6f2adaf97e39401060ad196efc3d3 |
+
+## 结论
+1. hacBrewPack v3.05 对 2.86 GiB 真实 payload 出包成功：NSP 2,884,106,456 B，仅比输入 romfs 大 5,920,884 B（约 0.2% 开销）；Program NCA 2.88 GB 正常，无 >2 GiB section 上限问题。
+2. 无内存瓶颈：峰值 111 MiB，与 romfs 体积无关（romfs_build 流式拷贝 + IVFC 逐层落临时文件）。
+3. 磁盘峰值约 3 倍 romfs（2860 档 work 峰值 7.407 GB；A1 阶段叠加约 8.4 GB）。
+4. 吞吐约 36-37 MB/s（2.878 GiB / 230 s）；3400 档 3.57 GB / 95.2 s（约 37.5 MB/s，注意该档文件为不可压缩 hash 块但读取缓存不同）。
+5. 200/1024/2860/3400 四档 NSP 均 < FAT32 4 GiB；3.4 GiB 档余量约 722 MB，2.86 GiB 档余量约 1.39 GB。
+6. 2860 两个 run 尺寸完全相同但 sha256 不同（RSA-PSS 随机盐，非确定性）；3400 与 2860 的 Program NCA 内 romfs 内容均由 nstool --part1 抽回并 round-trip 校验通过（见 P1d-romfs-roundtrip.txt）。
+
+## 复现命令（2860 档）
+bash scripts/build_pilot_nsp.sh --nro E:/galnx-build/m0-hello/m0-hello.nro --romfs-dir E:/galnx-build/pilot-01/nsp/romfs-a1 --title-id 010047410000a051 --name scale2860b --hacbrewpack <hacbrewpack.exe> --nstool <nstool.exe> --keyset <prod.keys 显式路径> --out E:/galnx-build/pilot-01/scale/out --work E:/galnx-build/pilot-01/scale/work2860b
+采样方式: E:/galnx-build/pilot-01/scale/tier_run.sh <WORK> <SAMPLES> -- <上条命令>（1 Hz 记录 du -sb、find 文件数、tasklist hacbrewpack 内存）
+内存采样（3400/2860 run1/A1）: pwsh Start-Job 跑 bash + 每 300 ms Get-Process hacbrewpack PeakWorkingSet64。

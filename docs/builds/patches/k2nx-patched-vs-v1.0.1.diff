@@ -1,0 +1,1187 @@
+diff --git a/src/core/environ/cocos2d/MainScene.cpp b/src/core/environ/cocos2d/MainScene.cpp
+index 4b1a5af..17b3fd3 100644
+--- a/src/core/environ/cocos2d/MainScene.cpp
++++ b/src/core/environ/cocos2d/MainScene.cpp
+@@ -10,6 +10,7 @@
+ #include "LayerBitmapImpl.h"
+ #include "ui/BaseForm.h"
+ #include "ui/GameMainMenu.h"
++#include "ui/InGameMenuForm.h"
+ #include "ui/UIHelper.h"
+ #include "TickCount.h"
+ #include "Random.h"
+@@ -23,8 +24,24 @@
+ #include "ui/FileSelectorForm.h"
+ #include "ui/DebugViewLayerForm.h"
+ #include "Application.h"
++// [GalNX] input diagnostics: appended to sdmc:/galnx-input.log from the game thread.
++#include <cstdio>
++#include <cstdarg>
++static void GalNXLog(const char *fmt, ...) {
++	static bool s_ok = true;
++	if (!s_ok) return;
++	FILE *fp = fopen("sdmc:/galnx-input.log", "a");
++	if (!fp) { s_ok = false; return; }
++	va_list ap;
++	va_start(ap, fmt);
++	vfprintf(fp, fmt, ap);
++	va_end(ap);
++	fputc(10, fp);
++	fclose(fp);
++}
+ #include "ScriptMgnIntf.h"
+ #include "win32/TVPWindow.h"
++#include "win32/MenuItemImpl.h"
+ #include "VelocityTracker.h"
+ #include "SystemImpl.h"
+ #include "RenderManager.h"
+@@ -32,6 +49,27 @@
+ #include "Exception.h"
+ #include "win32/SystemControl.h"
+ 
++// [GalNX] patch I: the game persists its settings, the save slot comments, the NEW marker and the
++// continue data only from MainWindow.finalize() (TraceSave + SystemSave). On Switch the close path
++// leaves the process before the TJS window is invalidated, so finalize never runs and all of those
++// values revert to the last properly closed session. Run the same two saves before leaving.
++static bool _galnxSaveOnExitDone = false;
++static void GalNX_SaveGameDataOnExit()
++{
++	if (_galnxSaveOnExitDone) return;
++	_galnxSaveOnExitDone = true;
++	try {
++		TVPExecuteScript(ttstr(TJS_W(
++			"if(MainObj !== void){"
++			"if(MainObj.TraceSave !== void)MainObj.TraceSave();"
++			"if(MainObj.SystemSave !== void)MainObj.SystemSave();"
++			"}")));
++		GalNXLog("[close] persisted system data (TraceSave + SystemSave)");
++	} catch (...) {
++		GalNXLog("[close] persisting system data raised an exception");
++	}
++}
++
+ USING_NS_CC;
+ 
+ enum SCENE_ORDER {
+@@ -58,6 +96,7 @@ static int _touchBeginTick;
+ static bool _virutalMouseMode = false;
+ #ifdef __SWITCH__
+ static bool _k2sStickCursor = false; // [K2S] virtual cursor shown by the left stick (see onAxisEvent)
++static bool _k2sWheelReady = true;  // [GalNX] patch G: left stick wheel, one step per push
+ #endif
+ static bool _mouseMoved, _mouseClickedDown;
+ static tjs_uint8 _scancode[0x200];
+@@ -671,6 +710,12 @@ public:
+ 		TVPPostInputEvent(new tTVPOnMouseUpInputEvent(TJSNativeInstance, _LastMouseX, _LastMouseY, _mouseBtn, TVPGetCurrentShiftKeyState()));
+ 	}
+ 
++    // [GalNX] patch G: inject one mouse wheel step at the last known cursor position.
++    void GalNX_SendWheel(int delta) {
++        if (!TJSNativeInstance) return;
++        TJSNativeInstance->OnMouseWheel(TVPGetCurrentShiftKeyState(), delta, _LastMouseX, _LastMouseY);
++    }
++
+ 	virtual void SetPaintBoxSize(tjs_int w, tjs_int h) {
+ 		LayerWidth = w; LayerHeight = h;
+ 		RecalcPaintBox();
+@@ -1262,6 +1307,18 @@ public:
+ 			if (TJSNativeInstance) {
+ 				if (TJSNativeInstance->IsMainWindow()) {
+ 					// this is the main window
++#ifdef __SWITCH__
++                    // [GalNX] patch G: a program close of the main window (K2S drawer power button ->
++                    // game own confirm dialog -> yes) must not invalidate the TJS window. Tearing the
++                    // TJS world down out of order makes the game finalizers touch an already dead
++                    // MainWnd (Member SystemObj does not exist @line(365) checkdialog.tjs). Leave the
++                    // process instead, like the user initiated close path in OnCloseQueryCalled does.
++					GalNX_SaveGameDataOnExit();
++					GalNXLog("[close] program close of main window confirmed; terminating application after save");
++					SetVisible(false);
++					scheduleOnce([this](float){ TVPExitApplication(0); }, 1.0f, "galnx-exit");
++					return;
++#endif
+ 				} else 			{
+ 					// not the main window
+ 					action = caFree;
+@@ -1308,7 +1365,10 @@ public:
+ 				//	TVPSystemControl->NotifyCloseClicked();
+ 					return false;
+ 				} else {
+-					CanCloseWork = true;
++                    // [GalNX] patch G: do not assume the game allows the close. The immediate onCloseQuery
++                    // may open the game own confirm dialog and never call OnCloseQueryCalled(); in that case
++                    // the close must be abandoned instead of invalidating the TJS window under the dialog.
++                    CanCloseWork = false;
+ 					TVPPostEvent(obj, obj, eventname, 0, TVP_EPT_IMMEDIATE, 1, arg);
+ 					TVPDrawSceneOnce(0); // for post event
+ 					// this event happens immediately
+@@ -1369,6 +1429,20 @@ public:
+ 				else
+ 					SetVisible(false);  // just hide
+ 
++#ifdef __SWITCH__
++				// [GalNX] Switch: a confirmed close of the main window means "leave the game".
++				// The desktop path below invalidates the script object, which tears the TJS world
++				// down in an arbitrary member order; games whose dialog finalizers then touch
++				// MainWnd die with: Member "SystemObj" does not exist. The game has already
++				// stored its data in its own close handler, so exiting the application is safe.
++				if (TJSNativeInstance && TJSNativeInstance->IsMainWindow()) {
++					GalNX_SaveGameDataOnExit();
++					GalNXLog("[close] main window close confirmed; terminating application after save");
++					SetVisible(false);
++					scheduleOnce([this](float){ TVPExitApplication(0); }, 1.0f, "galnx-exit");
++					return;
++				}
++#endif
+ 				Closing = false;
+ 				if (TJSNativeInstance) {
+ 					if (TJSNativeInstance->IsMainWindow()) {
+@@ -2116,6 +2190,8 @@ bool TVPMainScene::isVirtualMouseMode() const {
+ }
+ 
+ bool TVPMainScene::onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event) {
++	GalNXLog("[touch] began id=%p loc=(%.1f,%.1f) virt=%d uiChildren=%d",
++		(void*)touch, touch->getLocation().x, touch->getLocation().y, (int)_virutalMouseMode, (int)UINode->getChildrenCount());
+ 	if (UINode->getChildrenCount()) return false;
+ 	if (!_currentWindowLayer) return false;
+ #ifdef __SWITCH__
+@@ -2193,6 +2269,8 @@ void TVPMainScene::onTouchMoved(cocos2d::Touch *touch, cocos2d::Event *event) {
+ 
+ void TVPMainScene::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event) {
+ 	if (!_currentWindowLayer) return;
++	GalNXLog("[touch] ended id=%p loc=(%.1f,%.1f) virt=%d",
++		(void*)touch, touch->getLocation().x, touch->getLocation().y, (int)_virutalMouseMode);
+ 	if (!_virutalMouseMode || _windowMgrOverlay) return _currentWindowLayer->onTouchEnded(touch, event);
+ 	if (_mouseTouches.size() == 1) {
+ 		Vec2 pt = _mouseCursor->getPosition();
+@@ -2298,37 +2376,50 @@ void TVPMainScene::onTextInput(const std::string &text) {
+ }
+ 
+ void TVPMainScene::onAxisEvent(cocos2d::Controller* ctrl, int keyCode, cocos2d::Event *e) {
+-	if (!_currentWindowLayer || !_currentWindowLayer->PrimaryLayerArea) return;
+ #ifdef __SWITCH__
+-	// [K2S] pushing the left stick shows the virtual mouse cursor (no need to enable it in the menu first)
+-	if (!_virutalMouseMode && !_windowMgrOverlay && UINode->getChildren().empty() &&
+-		(keyCode == cocos2d::Controller::JOYSTICK_LEFT_X || keyCode == cocos2d::Controller::JOYSTICK_LEFT_Y) &&
+-		std::abs(ctrl->getKeyStatus(keyCode).value) > 0.5f) {
+-		showVirtualMouseCursor(true);
+-		_k2sStickCursor = true;
+-	}
+-	// [K2S] move the cursor in GameNode space (y up; the stick's y is down-positive). The generic code below
+-	// mixes the window's y-down mouse coordinates with node space, which flips the cursor vertically.
+-	if (_virutalMouseMode && !_windowMgrOverlay && _mouseCursor &&
+-		(keyCode == cocos2d::Controller::JOYSTICK_LEFT_X || keyCode == cocos2d::Controller::JOYSTICK_LEFT_Y)) {
+-		const float dead = 0.15f;
+-		float v = ctrl->getKeyStatus(keyCode).value;
+-		if (std::abs(v) < dead) return;
+-		v = (v > 0 ? v - dead : v + dead) / (1 - dead);
+-		Vec2 pt = _mouseCursor->getPosition();
+-		const float step = 12.f * v * std::abs(v) + (v > 0 ? 1.f : -1.f);	// fine control near the center
+-		if (keyCode == cocos2d::Controller::JOYSTICK_LEFT_X) pt.x += step; else pt.y -= step;
+-		Size size = GameNode->getContentSize();
+-		pt.x = std::max(0.f, std::min(pt.x, size.width));
+-		pt.y = std::max(0.f, std::min(pt.y, size.height));
+-		_mouseCursor->stopAllActions();
+-		_mouseCursor->setOpacity(255);
+-		_mouseCursor->setPosition(pt);
+-		_refadeMouseCursor();
+-		_currentWindowLayer->onMouseMove(GameNode->convertToWorldSpace(pt));
+-		return;
+-	}
++    // [GalNX] patch G: the right stick drives the virtual cursor (the left stick is the wheel).
++    // The cursor is created on the first stick push so that ZR / ZL have something to click.
++    if (!_virutalMouseMode && _currentWindowLayer && !_windowMgrOverlay && UINode->getChildren().empty() &&
++        (keyCode == cocos2d::Controller::JOYSTICK_RIGHT_X || keyCode == cocos2d::Controller::JOYSTICK_RIGHT_Y) &&
++        std::abs(ctrl->getKeyStatus(keyCode).value) > 0.5f) {
++        showVirtualMouseCursor(true);
++        _k2sStickCursor = true;
++    }
++    // move the cursor in GameNode space (y up; the stick y is down-positive)
++    if (_virutalMouseMode && _currentWindowLayer && !_windowMgrOverlay && _mouseCursor &&
++        (keyCode == cocos2d::Controller::JOYSTICK_RIGHT_X || keyCode == cocos2d::Controller::JOYSTICK_RIGHT_Y)) {
++        const float dead = 0.15f;
++        float v = ctrl->getKeyStatus(keyCode).value;
++        if (std::abs(v) < dead) return;
++        v = (v > 0 ? v - dead : v + dead) / (1 - dead);
++        Vec2 pt = _mouseCursor->getPosition();
++        // [GalNX] patch G: half the speed of the M2 build (12 -> 6), quadratic for fine control
++        const float step = 6.f * v * std::abs(v) + (v > 0 ? 0.5f : -0.5f);
++        if (keyCode == cocos2d::Controller::JOYSTICK_RIGHT_X) pt.x += step; else pt.y -= step;
++        Size size = GameNode->getContentSize();
++        pt.x = std::max(0.f, std::min(pt.x, size.width));
++        pt.y = std::max(0.f, std::min(pt.y, size.height));
++        _mouseCursor->stopAllActions();
++        _mouseCursor->setOpacity(255);
++        _mouseCursor->setPosition(pt);
++        _refadeMouseCursor();
++        _currentWindowLayer->onMouseMove(GameNode->convertToWorldSpace(pt));
++        return;
++    }
++    // [GalNX] patch G: left stick up / down = mouse wheel, exactly one step per push (hysteresis)
++    if (_currentWindowLayer && !_windowMgrOverlay && keyCode == cocos2d::Controller::JOYSTICK_LEFT_Y) {
++        const float v = ctrl->getKeyStatus(keyCode).value;
++        if (std::abs(v) < 0.25f) { _k2sWheelReady = true; return; }
++        if (_k2sWheelReady && std::abs(v) > 0.6f) {
++            _k2sWheelReady = false;
++            const int delta = v < 0 ? 120 : -120;  // [GalNX] patch H: stick up = wheel up (game backlog); stick down = next line
++            _currentWindowLayer->GalNX_SendWheel(delta);
++            GalNXLog("[pad] wheel %d", delta);
++        }
++        return;
++    }
+ #endif
++	if (!_currentWindowLayer || !_currentWindowLayer->PrimaryLayerArea) return;
+ 	if (!_virutalMouseMode || _windowMgrOverlay) return;
+ 	const float threashold = 0.1f;
+ 	const cocos2d::Controller::KeyStatus& keyStatus = ctrl->getKeyStatus(keyCode);
+@@ -2362,28 +2453,243 @@ void TVPMainScene::onAxisEvent(cocos2d::Controller* ctrl, int keyCode, cocos2d::
+ 	_currentWindowLayer->onMouseMove(GameNode->convertToWorldSpace(newpt));
+ }
+ 
+-void TVPMainScene::onPadKeyDown(cocos2d::Controller* ctrl, int keyCode, cocos2d::Event *e) {
+-#ifdef __SWITCH__
+-	// [K2S] Kirikiroid2's own UI (file selector, preferences, dialogs) only knows the Android back key:
+-	// B acts as that key there (close menu/dialog, go back); everything else in the UI is touch.
+-	if (!UINode->getChildren().empty()) {
+-		if (keyCode == cocos2d::Controller::BUTTON_B) {
+-			iTVPBaseForm* uiform = dynamic_cast<iTVPBaseForm*>(UINode->getChildren().back());
+-			if (uiform) uiform->onKeyPressed(EventKeyboard::KeyCode::KEY_BACK, e);
+-		}
++// [GalNX] quick save / quick load. KAG3 keeps its save / load entries in the game's own Window.menu,
++// and this port has no HWND based menu registry, so the menu can never be opened from a pad. Evaluate
++// KAG3's own TJS entry points instead (kag is the global KAGWindow created by Initialize.tjs):
++//   L shoulder -> kag.saveBookMark(0, false)  -> writes <dataPath>/<dataName>0.kdt (or .bmp)
++//   R shoulder -> kag.loadBookMark(0)         -> restores the same slot
++static void GalNX_EvalTJS(const char *expr, const char *tag) {
++	tTJSVariant result;
++	try {
++		TVPExecuteExpression(ttstr(expr), &result);
++		ttstr text(result);
++		std::string utf8 = text.AsStdString();
++		GalNXLog("[tjs] %s -> %s", tag, utf8.c_str());
++	} catch (const eTJS &e) {
++		std::string utf8 = e.GetMessage().AsStdString();
++		GalNXLog("[tjs] %s -> eTJS: %s", tag, utf8.c_str());
++	} catch (...) {
++		GalNXLog("[tjs] %s -> unknown exception", tag);
++	}
++}
++
++// ---------------------------------------------------------------------------
++// [GalNX] patch G controller helpers.
++// The BASE ADV SYSTEM scripts already implement the keyboard semantics, so the pad layer only
++// has to reach the same entry points:
++//   A / VK_RETURN -> MessObject.tjs:980 KeyUpAction advances the text; TitleObject.tjs:1143
++//                    KeyUpAction clicks the selected title menu entry (handled by the keymap).
++//   D-Pad         -> arrow keys; TitleObject.tjs KeyUpAction moves the title menu selection.
++//   VK_ESCAPE     -> unusable on this port: userFix.ks:500-505 sets nESC_KEY = false, so ESC runs
++//                    MainWindow.EscapeWork(), sets EscapeObj and calls this.minimize(). Patch F made
++//                    minimize() a no-op, so the game would stay with EscapeObj set and ignore input.
++//                    B maps to the native back action instead: RightMouseUpAction() of the active
++//                    object (MessObject toggles the message window, SaveLoadObject closes the
++//                    save/load panel, CheckDialog cancels, MovieObject stops the movie).
++//   X             -> MessObject.AutoFlag (same as MessObject.tjs ButtonWorkFunc case 8).
++//   Y / PLUS      -> the game own _SAVELOADOBJECT panels (nLOAD_SC / nSAVE_SC).
++//   MINUS         -> MainWindow.onCloseQuery(true): own confirm dialog, then the patch F exit.
++// ---------------------------------------------------------------------------
++static void GalNX_EvalScript(const char *script, const char *tag) {
++    try {
++        TVPExecuteScript(ttstr(script));
++        GalNXLog("[tjs] %s -> ok", tag);
++    } catch (const eTJS &e) {
++        std::string utf8 = e.GetMessage().AsStdString();
++        GalNXLog("[tjs] %s -> eTJS: %s", tag, utf8.c_str());
++    } catch (...) {
++        GalNXLog("[tjs] %s -> unknown exception", tag);
++    }
++}
++
++// [GalNX] close every K2S form (file selector / preferences / message boxes) before opening game UI.
++static void GalNX_CloseAllK2SForms(cocos2d::Node *uiNode) {
++    if (!uiNode) return;
++    cocos2d::Node *prev = nullptr;
++    for (int guard = 0; guard < 8; ++guard) {
++        if (uiNode->getChildren().empty()) break;
++        cocos2d::Node *top = uiNode->getChildren().back();
++        if (top == prev) break;
++        if (!dynamic_cast<iTVPBaseForm*>(top)) break;
++        prev = top;
++        GalNXLog("[ui] closing K2S form %p", (void*)top);
++        TVPMainScene::GetInstance()->popUIForm(top);
++    }
++}
++
++// [GalNX] B = native back / cancel of the active game object.
++static void GalNX_GameBack(void) {
++    GalNX_EvalTJS("(MainObj.ActiveObj !== void && MainObj.ActiveObj !== MainObj && MainObj.ActiveObj.RightMouseUpAction !== void) ? MainObj.ActiveObj.RightMouseUpAction() : 0", "back");
++}
++
++// [GalNX] X = auto mode on/off (MessObject.tjs ButtonWorkFunc case 8).
++static void GalNX_ToggleAuto(void) {
++    GalNX_EvalScript("if(MainObj.MessObj !== void){ MainObj.MessObj.AutoFlag = !MainObj.MessObj.AutoFlag; if(MainObj.MessObj.AutoFlag){ MainObj.MessObj.AutoWait = false; MainObj.MessObj.AutoBefor = false; } }", "auto");
++}
++
++// [GalNX] open the game own save / load panel. A K2S form stacked on top of that panel swallows
++// the pad events and looks like a freeze (device report 1), so close every K2S form first.
++static void GalNX_OpenGameSaveLoad(cocos2d::Node *uiNode, bool saveMode) {
++    GalNX_CloseAllK2SForms(uiNode);
++    GalNX_EvalScript("if(MainObj.SaveLoadObj !== void){ MainObj.ActiveObj = MainObj.SaveLoadObj.TempActive; MainObj.SaveLoadObj = void; }", "sl-replace");
++    if (saveMode) {
++        GalNX_EvalScript("s.dlg_save = false;", "saveui-nodlg");
++        GalNX_EvalScript("MainObj.SaveLoadObj = new _SAVELOADOBJECT(MainObj, MainObj.PrimaryLayer, nSAVE_SC); MainObj.ActiveObj = MainObj.SaveLoadObj;", "saveui-open");
++    } else {
++        GalNX_EvalScript("s.dlg_load = false;", "loadui-nodlg");
++        GalNX_EvalScript("MainObj.SaveLoadObj = new _SAVELOADOBJECT(MainObj, MainObj.PrimaryLayer, nLOAD_SC); MainObj.ActiveObj = MainObj.SaveLoadObj;", "loadui-open");
++    }
++}
++
++// [GalNX] MINUS = quit through the game own confirm dialog (patch F exits cleanly after yes).
++static void GalNX_RequestExit(void) {
++    GalNX_EvalScript("if(MainObj.onCloseQuery !== void){ MainObj.onCloseQuery(true); }", "exit");
++}
++
++// [GalNX] controller access to the in-game menu. The K2S drawer's top-left button opens the game's
++// own TJS menu (save / load / config) through TVPGetMenuDispatch(); a pad cannot press that button
++// because the drawer only knows touch events, so re-create the same call from onPadKeyDown().
++iTJSDispatch2* TVPGetMenuDispatch(tTVInteger hWnd);
++tTJSNI_Window *TVPGetActiveWindow();
++
++static iTVPBaseForm *GalNX_TopUIForm(cocos2d::Node *uiNode) {
++	if (!uiNode || uiNode->getChildren().empty()) return nullptr;
++	return dynamic_cast<iTVPBaseForm*>(uiNode->getChildren().back());
++}
++
++static void GalNX_ToggleInGameMenu(cocos2d::Node *uiNode) {
++	iTVPBaseForm *top = GalNX_TopUIForm(uiNode);
++	TVPInGameMenuForm *menuForm = dynamic_cast<TVPInGameMenuForm*>(top);
++	if (menuForm) {
++		TVPMainScene::GetInstance()->popUIForm(menuForm);
++		GalNXLog("[menu] closed");
+ 		return;
+ 	}
+-#endif
+-	if (!UINode->getChildren().empty()) return;
+-#ifdef __SWITCH__
+-	// [K2S] with the virtual mouse cursor shown, A = left click and B = right click at the cursor
+-	if (_virutalMouseMode && !_windowMgrOverlay && _mouseCursor && _currentWindowLayer &&
+-		(keyCode == cocos2d::Controller::BUTTON_A || keyCode == cocos2d::Controller::BUTTON_B)) {
+-		_mouseBtn = keyCode == cocos2d::Controller::BUTTON_A ? ::mbLeft : ::mbRight;
+-		_currentWindowLayer->onMouseClick(GameNode->convertToWorldSpace(_mouseCursor->getPosition()));
+-		_mouseBtn = ::mbLeft;
++	if (top) {
++		GalNXLog("[menu] open blocked: another K2S form is open (%p)", (void*)top);
+ 		return;
+ 	}
++	iTJSDispatch2 *menuobj = TVPGetMenuDispatch((tjs_intptr_t)TVPGetActiveWindow());
++	if (!menuobj) {
++		GalNXLog("[menu] no menu dispatch");
++		GalNX_EvalTJS("typeof kag == \"undefined\" ? \"kag:undefined\" : (\"kag:ok menu:\" + (kag.menu === void ? \"null\" : \"present\"))", "menu-probe");
++		return;
++	}
++	tTJSNI_MenuItem *menu = nullptr;
++	menuobj->NativeInstanceSupport(TJS_NIS_GETINSTANCE, tTJSNC_MenuItem::ClassID, (iTJSNativeInstance**)&menu);
++	if (!menu) { GalNXLog("[menu] no menu instance"); return; }
++	if (menu->GetChildren().empty()) { GalNXLog("[menu] empty menu"); return; }
++	GalNXLog("[menu] open GameMenu items=%d", (int)menu->GetChildren().size());
++	TVPMainScene::GetInstance()->pushUIForm(TVPInGameMenuForm::create("GameMenu", menu));
++}
++
++static bool GalNX_InGameMenuKey(cocos2d::Node *uiNode, int keyCode) {
++	TVPInGameMenuForm *menuForm = dynamic_cast<TVPInGameMenuForm*>(GalNX_TopUIForm(uiNode));
++	if (!menuForm) return false;
++	switch (keyCode) {
++	case cocos2d::Controller::BUTTON_DPAD_UP:
++		menuForm->navMove(-1);
++		GalNXLog("[menu] nav up");
++		return true;
++	case cocos2d::Controller::BUTTON_DPAD_DOWN:
++		menuForm->navMove(1);
++		GalNXLog("[menu] nav down");
++		return true;
++	case cocos2d::Controller::BUTTON_A:
++		GalNXLog("[menu] activate ret=%d", (int)menuForm->navActivate());
++		return true;
++	default:
++		return false;
++	}
++}
++
++void TVPMainScene::onPadKeyDown(cocos2d::Controller* ctrl, int keyCode, cocos2d::Event *e) {
++#ifdef __SWITCH__
++	// [GalNX] controller-driven UI for TV / docked mode (there is no touch screen there):
++	//   PLUS -> open / close the in-game menu (the game's own TJS menu that the K2S drawer's
++	//           top-left button opens; it holds the save / load / config entries)
++	//   Y    -> toggle the K2S virtual mouse cursor on/off
++	//   DPAD -> in-game menu: move the selection; otherwise (cursor shown) move the cursor 24 px
++	//   A    -> in-game menu: activate the selection; otherwise left click at the cursor
++	//   B    -> right click at the cursor, close the K2S drawer, or Android BACK inside a K2S form
++	// onAxisEvent() is intentionally not used: it bails out when the window has no PrimaryLayerArea,
++	// which is the case for KAG3 games, so the stick could never show the cursor.
++    // [GalNX] patch G default pad layout:
++    //   A = Enter / advance        B = native back          X = auto mode
++    //   Y = load panel             PLUS = save panel        MINUS = quit (game confirm dialog)
++    //   ZR = left click            ZL = right click         D-Pad = arrow keys
++    //   right stick = cursor (half speed)  left stick up/down = wheel step
++    GalNXLog("[pad] key=%d virt=%d uiChildren=%d gamemenu=%p cursor=%p", keyCode, (int)_virutalMouseMode, (int)UINode->getChildrenCount(), (void*)_gameMenu, (void*)_mouseCursor);
++
++    if (!UINode->getChildren().empty()) {
++        if (keyCode == cocos2d::Controller::BUTTON_B) {
++            iTVPBaseForm* uiform = dynamic_cast<iTVPBaseForm*>(UINode->getChildren().back());
++            if (uiform) uiform->onKeyPressed(EventKeyboard::KeyCode::KEY_BACK, e);
++            return;
++        }
++        // patch G: the save / load hotkeys close the stacked K2S form first (device bug 1: freeze)
++        if (keyCode == cocos2d::Controller::BUTTON_Y) { GalNX_OpenGameSaveLoad(UINode, false); return; }
++        if (keyCode == cocos2d::Controller::BUTTON_START) { GalNX_OpenGameSaveLoad(UINode, true); return; }
++        return;
++    }
++
++    const bool drawerOpen = _gameMenu && !_gameMenu->isShrinked();
++    // patch G: the save / load / auto / quit hotkeys fold the K2S drawer first
++    if (drawerOpen && (keyCode == cocos2d::Controller::BUTTON_X || keyCode == cocos2d::Controller::BUTTON_Y ||
++                       keyCode == cocos2d::Controller::BUTTON_START || keyCode == cocos2d::Controller::BUTTON_SELECT)) {
++        _gameMenu->shrink();
++    }
++    switch (keyCode) {
++    case cocos2d::Controller::BUTTON_B:
++        if (drawerOpen && _gameMenu) { _gameMenu->shrink(); return; }
++        GalNX_GameBack();
++        return;
++    case cocos2d::Controller::BUTTON_X:
++        GalNX_ToggleAuto();
++        return;
++    case cocos2d::Controller::BUTTON_Y:
++        GalNX_OpenGameSaveLoad(UINode, false);
++        return;
++    case cocos2d::Controller::BUTTON_START:
++        GalNX_OpenGameSaveLoad(UINode, true);
++        return;
++    case cocos2d::Controller::BUTTON_RIGHT_SHOULDER:
++        // [GalNX] patch H: hold R = hold VK_CONTROL, the game's own skip key
++        // (MainWindow.SkipCheck polls System.getKeyState(VK_CONTROL)).
++        if (_currentWindowLayer) {
++            _scancode[VK_CONTROL] = 0x11;
++            _currentWindowLayer->InternalKeyDown(VK_CONTROL, TVPGetCurrentShiftKeyState());
++            GalNXLog("[pad] ctrl down");
++        }
++        return;
++    case cocos2d::Controller::BUTTON_SELECT:
++        GalNX_RequestExit();
++        return;
++    case cocos2d::Controller::AXIS_RIGHT_TRIGGER:
++    case cocos2d::Controller::AXIS_LEFT_TRIGGER: {
++        // [GalNX] patch I: ZR / ZL are held mouse buttons, not one-shot clicks, so the right
++        // stick can drag a slider or scrollbar while the button stays down. A short tap ends
++        // with onMouseUp, which the game still handles as a normal click.
++        if (_currentWindowLayer) {
++            if (!_mouseCursor) showVirtualMouseCursor(true);
++            if (_mouseCursor) {
++                // [GalNX] patch I: ZR / ZL bring the cursor back after its 3 s fade-out
++                _mouseCursor->stopAllActions();
++                _mouseCursor->setOpacity(255);
++                _refadeMouseCursor();
++                const bool rightClick = keyCode == cocos2d::Controller::AXIS_LEFT_TRIGGER;
++                _mouseBtn = rightClick ? ::mbRight : ::mbLeft;
++                Vec2 pt = GameNode->convertToWorldSpace(_mouseCursor->getPosition());
++                _currentWindowLayer->onMouseMove(pt);
++                _currentWindowLayer->onMouseDown(pt);
++                GalNXLog("[pad] mouse down %s", rightClick ? "right" : "left");
++            }
++        }
++        return;
++    }
++    default:
++        break;
++    }
+ #endif
+ 	unsigned int code = TVPConvertPadKeyCodeToVKCode(keyCode);
+ 	if (!code || code >= 0x200) return;
+@@ -2395,6 +2701,27 @@ void TVPMainScene::onPadKeyDown(cocos2d::Controller* ctrl, int keyCode, cocos2d:
+ }
+ 
+ void TVPMainScene::onPadKeyUp(cocos2d::Controller* ctrl, int keyCode, cocos2d::Event *e) {
++    // [GalNX] patch I: release the ZR / ZL held mouse button (drag support).
++    if (keyCode == cocos2d::Controller::AXIS_RIGHT_TRIGGER || keyCode == cocos2d::Controller::AXIS_LEFT_TRIGGER) {
++        if (_currentWindowLayer && _mouseCursor) {
++            const bool rightClick = keyCode == cocos2d::Controller::AXIS_LEFT_TRIGGER;
++            _mouseBtn = rightClick ? ::mbRight : ::mbLeft;
++            _currentWindowLayer->onMouseUp(GameNode->convertToWorldSpace(_mouseCursor->getPosition()));
++            _mouseBtn = ::mbLeft;
++            GalNXLog("[pad] mouse up %s", rightClick ? "right" : "left");
++        }
++        return;
++    }
++    // [GalNX] patch H: release the Ctrl that the R shoulder holds down.
++    if (keyCode == cocos2d::Controller::BUTTON_RIGHT_SHOULDER) {
++        if (_currentWindowLayer) {
++            bool was = (_scancode[VK_CONTROL] & 1) != 0;
++            _scancode[VK_CONTROL] &= 0x10;
++            if (was) _currentWindowLayer->OnKeyUp(VK_CONTROL, TVPGetCurrentShiftKeyState());
++            GalNXLog("[pad] ctrl up");
++        }
++        return;
++    }
+ 	unsigned int code = TVPConvertPadKeyCodeToVKCode(keyCode);
+ 	if (!code || code >= 0x200) return;
+ 	code = _keymap[code];
+diff --git a/src/core/environ/switch/SwitchUtils.cpp b/src/core/environ/switch/SwitchUtils.cpp
+index d6791f2..f9cafea 100644
+--- a/src/core/environ/switch/SwitchUtils.cpp
++++ b/src/core/environ/switch/SwitchUtils.cpp
+@@ -8,6 +8,7 @@
+ #include "EventIntf.h"
+ #include "RenderManager.h"
+ #include "ConfigManager/LocaleConfigManager.h"
++#include "cocos2d/MainScene.h"
+ #include "platform/CCFileUtils.h"
+ #include "base/CCDirector.h"
+ #include "base/CCScheduler.h"
+@@ -130,9 +131,51 @@ void TVPFetchSDCardPermission() {}
+ void TVPSendToOtherApp(const std::string &filename) {}
+ void TVPProcessInputEvents() {}
+ 
++// ---- [GalNX] autostart hook ---------------------------------------------------------------
++// The GalNX pilot ships a self-contained NSP: the game payload is copied to the SD card by
++// galnxMaybeExtractGame() in environ/switch/main.cpp on first boot, and this function starts it
++// without showing the file selector.
++// sdmc:/switch/kirikiroid2/autostart.txt contains one line with a TJS-visible path (leading '/',
++// no media type; "sdmc:" would be parsed as a media type by the TJS storage layer), e.g.
++//     /kirikiri/haruno
++// Delete the file (or the game folder) to get the normal file selector back.
++
++static bool GalNX_AutostartPathExists(const std::string &path) {
++	struct stat st;
++	const std::string native = "sdmc:" + path; // libnx sdmc device prefix, not visible to TJS
++	return stat(native.c_str(), &st) == 0;
++}
++
++static std::string GalNX_TrimLine(const char *raw) {
++	std::string s(raw);
++	while (!s.empty() && (s.back() == '\n' || s.back() == '\r' || s.back() == ' ' || s.back() == '\t'))
++		s.pop_back();
++	size_t first = s.find_first_not_of(" \t");
++	if (first == std::string::npos)
++		return std::string();
++	return s.substr(first);
++}
++
+ void TVPCheckAndSendDumps(const std::string &dumpdir, const std::string &packageName, const std::string &versionStr);
+ bool TVPCheckStartupArg() {
+-	return false; // Android: only dump check; no launch arguments on Switch (yet)
++	FILE *fp = fopen("sdmc:/switch/kirikiroid2/autostart.txt", "r");
++	if (!fp)
++		return false;
++	char line[1024] = { 0 };
++	const bool got = fgets(line, (int)sizeof(line) - 1, fp) != nullptr;
++	fclose(fp);
++	if (!got)
++		return false;
++	const std::string path = GalNX_TrimLine(line);
++	if (path.empty())
++		return false;
++	if (!GalNX_AutostartPathExists(path)) {
++		printf("[GALNX] autostart path does not exist, falling back to the file selector: %s\n", path.c_str());
++		return false;
++	}
++	printf("[GALNX] autostarting game from %s\n", path.c_str());
++	TVPMainScene::GetInstance()->startupFrom(path);
++	return true;
+ }
+ 
+ void Android_PushEvents(const std::function<void()> &func) {
+diff --git a/src/core/environ/switch/main.cpp b/src/core/environ/switch/main.cpp
+index 9f84af6..4defa1b 100644
+--- a/src/core/environ/switch/main.cpp
++++ b/src/core/environ/switch/main.cpp
+@@ -3,6 +3,8 @@
+ #include <stdio.h>
+ #include <sys/stat.h>
+ #include "cocos2d/AppDelegate.h"
++#include <string>
++#include <vector>
+ 
+ // stdout/stderr: to `nxlink -s` when netloaded with a listening PC, otherwise to a log file on the SD card
+ // (sdmc:/switch/kirikiroid2/k2s_log.txt), so crashes on real hardware can be diagnosed.
+@@ -24,6 +26,272 @@ static void setupLogging()
+     printf("Kirikiroid2-Switch log (build " __DATE__ " " __TIME__ ")\n");
+ }
+ 
++// ---- [GalNX] self-contained game payload v2 -----------------------------------------------
++// A GalNX pilot NSP carries the game next to the engine in romfs. romfs is read-only and TJS/KAG
++// expects a writable game folder on the SD card (saves, preference files), so on first boot we copy
++// the payload once to the SD card and write the autostart file the platform layer looks for
++// (environ/switch/SwitchUtils.cpp, TVPCheckStartupArg).
++//
++// romfs:/game_files.txt (generated by the GalNX packaging script, not by this patch) format:
++//     version=<payload id, bumped when the payload changes>
++//     target=/kirikiri/<game>          SD-card folder, TJS-visible path
++//     startup=/kirikiri/<game>/data.xp3  path handed to TVPMainScene::startupFrom() (must be a file)
++//     bytes=<total payload size>       optional; enables the free-space precheck
++//     marker=<path>/<file>             optional; defaults to sdmc:/switch/kirikiroid2/.galnx_extracted
++//     file=<relative path under romfs:/game/>   (one line per payload file)
++// A normal (non-GalNX) NRO build has no romfs:/game_files.txt and nothing happens here.
++//
++// v2 changes: free-space precheck (statvfs), CPU boost around the copy, mkdir of the switch folder
++// before marker/autostart, marker hit re-verified with stat(startup), startup-empty warning, and a
++// mkdir bug fix (the directory helper used to create the final *file* name as a directory).
++
++#include <sys/statvfs.h>
++
++static std::string GalNX_Trim(const std::string &s) {
++	size_t first = s.find_first_not_of(" \t\r\n");
++	if (first == std::string::npos)
++		return std::string();
++	size_t last = s.find_last_not_of(" \t\r\n");
++	return s.substr(first, last - first + 1);
++}
++
++// mkdir -p for a native ("sdmc:/...") directory path: every component is created, including the last
++static void GalNX_MkDirs(const std::string &dir) {
++	for (size_t i = 1; i <= dir.size(); ++i) {
++		if (i != dir.size() && dir[i] != '/')
++			continue;
++		if (i <= 4)
++			continue; // "", "sdmc"
++		if (dir[i - 1] == '/')
++			continue; // trailing slash: parent was just created
++		mkdir(dir.substr(0, i).c_str(), 0777);
++	}
++}
++
++// mkdir -p for the parent folder of a native file path (never creates the file name itself)
++static void GalNX_MkParentDirs(const std::string &file) {
++	const size_t pos = file.find_last_of('/');
++	if (pos == std::string::npos || pos == 0)
++		return;
++	GalNX_MkDirs(file.substr(0, pos));
++}
++
++static bool GalNX_WriteWholeFile(const std::string &native, const std::string &content) {
++	GalNX_MkParentDirs(native);
++	FILE *fp = fopen(native.c_str(), "wb");
++	if (!fp)
++		return false;
++	const bool ok = fwrite(content.data(), 1, content.size(), fp) == content.size();
++	fclose(fp);
++	return ok;
++}
++
++// true when the destination already has the expected size (resume after an interrupted copy)
++static bool GalNX_FileHasSize(const std::string &native, long long expected) {
++	struct stat st;
++	if (stat(native.c_str(), &st) != 0 || !S_ISREG(st.st_mode))
++		return false;
++	return (long long)st.st_size == expected;
++}
++
++static bool GalNX_FileExists(const std::string &native) {
++	struct stat st;
++	return stat(native.c_str(), &st) == 0 && S_ISREG(st.st_mode);
++}
++
++static long long GalNX_FileSize(const char *native) {
++	struct stat st;
++	if (stat(native, &st) != 0 || !S_ISREG(st.st_mode))
++		return -1;
++	return (long long)st.st_size;
++}
++
++// free bytes on the SD card, or -1 when statvfs is unavailable
++static long long GalNX_FreeBytes() {
++	struct statvfs vfs;
++	if (statvfs("sdmc:/", &vfs) != 0)
++		return -1;
++	const long long unit = (long long)(vfs.f_frsize ? vfs.f_frsize : vfs.f_bsize);
++	return (long long)vfs.f_bavail * unit;
++}
++
++// the copy is CPU/SD bound; FastLoad clocks the CPU up for the duration (ignored on failure)
++static void GalNX_BoostMode(bool on) {
++	const Result rc = appletSetCpuBoostMode(on ? ApmCpuBoostMode_FastLoad : ApmCpuBoostMode_Normal);
++	if (R_FAILED(rc))
++		printf("[GALNX] WARNING: appletSetCpuBoostMode(%d) failed (0x%x)\n", on ? 1 : 0, (unsigned)rc);
++	fflush(stdout);
++}
++
++static bool GalNX_CopyFile(const std::string &src, const std::string &dst, long long srcSize) {
++	if (GalNX_FileHasSize(dst, srcSize)) {
++		printf("[GALNX] keep existing %s\n", dst.c_str());
++		fflush(stdout);
++		return true;
++	}
++	FILE *in = fopen(src.c_str(), "rb");
++	if (!in) {
++		printf("[GALNX] FAILED to open payload file %s\n", src.c_str());
++		return false;
++	}
++	GalNX_MkParentDirs(dst);
++	FILE *out = fopen(dst.c_str(), "wb");
++	if (!out) {
++		printf("[GALNX] FAILED to create %s\n", dst.c_str());
++		fclose(in);
++		return false;
++	}
++	static char buf[1024 * 1024];
++	size_t n = 0;
++	bool ok = true;
++	while ((n = fread(buf, 1, sizeof(buf), in)) > 0) {
++		if (fwrite(buf, 1, n, out) != n) {
++			ok = false;
++			break;
++		}
++	}
++	if (ferror(in))
++		ok = false;
++	fclose(out);
++	fclose(in);
++	return ok;
++}
++
++static void GalNX_WriteAutostart(const std::string &startup) {
++	if (startup.empty())
++		return;
++	GalNX_MkDirs("sdmc:/switch/kirikiroid2");
++	if (!GalNX_WriteWholeFile("sdmc:/switch/kirikiroid2/autostart.txt", startup + "\n"))
++		printf("[GALNX] WARNING: could not write autostart.txt\n");
++	fflush(stdout);
++}
++
++// Copy the ROMFS payload to the SD card once. Safe to call on every boot: it returns immediately
++// when the marker matches the payload version and the startup file is still present.
++static void GalNX_MaybeExtractGame() {
++	FILE *fp = fopen("romfs:/game_files.txt", "r");
++	if (!fp)
++		return; // ordinary engine build, no embedded payload
++	std::string version, target, startup, marker;
++	long long declaredBytes = -1;
++	std::vector<std::string> files;
++	char line[1024];
++	while (fgets(line, (int)sizeof(line), fp)) {
++		const std::string s = GalNX_Trim(line);
++		if (s.empty() || s[0] == '#')
++			continue;
++		if (s.compare(0, 8, "version=") == 0)
++			version = s.substr(8);
++		else if (s.compare(0, 7, "target=") == 0)
++			target = s.substr(7);
++		else if (s.compare(0, 8, "startup=") == 0)
++			startup = s.substr(8);
++		else if (s.compare(0, 6, "bytes=") == 0)
++			declaredBytes = atoll(s.c_str() + 6);
++		else if (s.compare(0, 7, "marker=") == 0)
++			marker = s.substr(7);
++		else if (s.compare(0, 5, "file=") == 0)
++			files.push_back(s.substr(5));
++	}
++	fclose(fp);
++	if (target.empty() || files.empty()) {
++		printf("[GALNX] romfs:/game_files.txt is malformed (target/files missing), payload ignored\n");
++		fflush(stdout);
++		return;
++	}
++	if (marker.empty())
++		marker = "sdmc:/switch/kirikiroid2/.galnx_extracted";
++	if (startup.empty()) {
++		printf("[GALNX] WARNING: game_files.txt has no startup= entry; the payload will be copied but not launched\n");
++		fflush(stdout);
++	}
++	bool alreadyDone = false;
++	if (!version.empty()) {
++		FILE *m = fopen(marker.c_str(), "r");
++		if (m) {
++			char done[256] = { 0 };
++			const bool got = fgets(done, (int)sizeof(done) - 1, m) != nullptr;
++			fclose(m);
++			alreadyDone = got && GalNX_Trim(done) == version;
++		}
++	}
++	if (alreadyDone && !startup.empty() && !GalNX_FileExists("sdmc:" + startup)) {
++		printf("[GALNX] marker %s matched but sdmc:%s is missing; re-extracting the payload\n",
++			marker.c_str(), startup.c_str());
++		fflush(stdout);
++		alreadyDone = false;
++	}
++	if (alreadyDone) {
++		printf("[GALNX] payload %s already extracted, starting game\n", version.c_str());
++		fflush(stdout);
++		GalNX_WriteAutostart(startup);
++		return;
++	}
++	if (declaredBytes > 0) {
++		const long long freeBytes = GalNX_FreeBytes();
++		const long long margin = 256LL * 1024 * 1024;
++		if (freeBytes < 0) {
++			printf("[GALNX] WARNING: could not query free space on sdmc:/; skipping the precheck\n");
++			fflush(stdout);
++		} else if (freeBytes < declaredBytes + margin) {
++			printf("[GALNX] FAILED: payload needs %lld MiB but sdmc:/ has only %lld MiB free (margin %lld MiB); "
++				"marker not written, free some space and relaunch\n",
++				declaredBytes / (1024 * 1024), freeBytes / (1024 * 1024), margin / (1024 * 1024));
++			fflush(stdout);
++			return;
++		} else {
++			printf("[GALNX] free space check ok: %lld MiB free for a %lld MiB payload\n",
++				freeBytes / (1024 * 1024), declaredBytes / (1024 * 1024));
++			fflush(stdout);
++		}
++	}
++	printf("[GALNX] first boot: copying %u payload file(s) to sdmc:%s\n", (unsigned)files.size(), target.c_str());
++	fflush(stdout);
++	GalNX_MkDirs("sdmc:" + target);
++	GalNX_MkDirs("sdmc:/switch/kirikiroid2");
++	GalNX_BoostMode(true);
++	unsigned copied = 0, skipped = 0, failed = 0;
++	long long total = 0, logged = 0;
++	for (size_t i = 0; i < files.size(); ++i) {
++		const std::string &rel = files[i];
++		const std::string src = "romfs:/game/" + rel;
++		const std::string dst = "sdmc:" + target + "/" + rel;
++		const long long size = GalNX_FileSize(src.c_str());
++		if (size < 0) {
++			printf("[GALNX] payload entry missing from romfs: %s\n", src.c_str());
++			++failed;
++			continue;
++		}
++		if (GalNX_FileHasSize(dst, size)) {
++			++skipped;
++			total += size;
++		} else if (GalNX_CopyFile(src, dst, size)) {
++			++copied;
++			total += size;
++		} else {
++			++failed;
++		}
++		if (total - logged >= 256LL * 1024 * 1024) {
++			logged = total;
++			printf("[GALNX] progress: %u/%u files, %lld MiB\n", (unsigned)(i + 1), (unsigned)files.size(), total / (1024 * 1024));
++			fflush(stdout);
++		}
++	}
++	GalNX_BoostMode(false);
++	printf("[GALNX] payload copy finished: %u copied, %u kept, %u failed, %lld MiB total\n",
++		copied, skipped, failed, total / (1024 * 1024));
++	fflush(stdout);
++	if (failed != 0) {
++		printf("[GALNX] WARNING: %u payload file(s) failed; the game may not start. Marker not written.\n", failed);
++		fflush(stdout);
++		return; // retry the whole copy on the next boot
++	}
++	const std::string markerContent = (version.empty() ? std::string("extracted") : version) + "\n";
++	if (!GalNX_WriteWholeFile(marker, markerContent))
++		printf("[GALNX] WARNING: could not write marker %s\n", marker.c_str());
++	GalNX_WriteAutostart(startup);
++}
++
+ extern "C" void K2SBootMark(const char *stage); // K2SBootLog.cpp
+ 
+ int main(int argc, char **argv)
+@@ -34,6 +302,8 @@ int main(int argc, char **argv)
+     K2SBootMark("4 logging ready");
+     Result rc0 = romfsInit();     // UI assets from APK 1.3.9 (tools/extract_apk_assets.sh)
+     K2SBootMark(R_SUCCEEDED(rc0) ? "5 romfs ok" : "5 romfs FAILED");
++	GalNX_MaybeExtractGame(); // [GalNX] first-boot payload copy (no-op without romfs:/game_files.txt)
++	K2SBootMark("5b galnx payload");
+ 
+     TVPAppDelegate app;
+     K2SBootMark("6 app delegate created, entering run()");
+diff --git a/src/core/environ/ui/InGameMenuForm.cpp b/src/core/environ/ui/InGameMenuForm.cpp
+index 44f31fc..50fedb2 100644
+--- a/src/core/environ/ui/InGameMenuForm.cpp
++++ b/src/core/environ/ui/InGameMenuForm.cpp
+@@ -1,9 +1,9 @@
+ #include "InGameMenuForm.h"
+ #include "cocos2d/MainScene.h"
++#include "MenuItemImpl.h"
+ #include "ui/UIButton.h"
+ #include "ui/UIListView.h"
+ #include "ui/UIText.h"
+-#include "MenuItemImpl.h"
+ #include "ui/UIHelper.h"
+ #include "tjsGlobalStringMap.h"
+ 
+@@ -37,6 +37,9 @@ void TVPInGameMenuForm::bindHeaderController(const NodeMap &allNodes)
+ }
+ 
+ void TVPInGameMenuForm::initMenu(const std::string& title, tTJSNI_MenuItem *item) {
++	_navItems.clear();
++	_navActions.clear();
++	_navSel = -1;
+ 	_list->removeAllItems();
+ 	if (_title) {
+ 		if (title.empty()) {
+@@ -58,16 +61,18 @@ void TVPInGameMenuForm::initMenu(const std::string& title, tTJSNI_MenuItem *item
+ 		if(caption != seperator)
+ 			++idx;
+ 	}
++	// [GalNX] preselect the first actionable entry so a pad can act immediately.
++	navMove(1);
+ }
+ 
+ cocos2d::ui::Widget * TVPInGameMenuForm::createMenuItem(int idx, tTJSNI_MenuItem *item, const std::string &caption) {
+ 	iPreferenceItem *ret = nullptr;
++	std::function<void()> action;
+ 	const Size &size = _list->getContentSize();
+ 	if (!item->GetChildren().empty()) {
+ 		ret = CreatePreferenceItem<tPreferenceItemSubDir>(idx, size, caption);
+-		ret->addClickEventListener([=](Ref*){
+-			TVPMainScene::GetInstance()->pushUIForm(create(caption, item));
+-		});
++		action = [=](){ TVPMainScene::GetInstance()->pushUIForm(create(caption, item)); };
++		ret->addClickEventListener([action](Ref*){ action(); });
+ 	} else if (item->GetGroup() > 0 || item->GetRadio()) {
+ 		auto getter = [=]()->bool{ return item->GetChecked(); };
+ 		auto setter = [=](bool b){
+@@ -79,6 +84,7 @@ cocos2d::ui::Widget * TVPInGameMenuForm::createMenuItem(int idx, tTJSNI_MenuItem
+ 			item->_getter = getter;
+ 			item->_setter = setter;
+ 		});
++		action = [=](){ item->OnClick(); TVPMainScene::GetInstance()->popAllUIForm(); };
+ 	} else if (item->GetChecked()) {
+ 		auto getter = [=]()->bool{ return item->GetChecked(); };
+ 		auto setter = [=](bool b){ item->OnClick(); };
+@@ -87,6 +93,7 @@ cocos2d::ui::Widget * TVPInGameMenuForm::createMenuItem(int idx, tTJSNI_MenuItem
+ 			item->_getter = getter;
+ 			item->_setter = setter;
+ 		});
++		action = [=](){ item->OnClick(); };
+ 	} else if(caption == "-") {
+ 		CSBReader reader;
+ 		Widget * root = static_cast<Widget*>(reader.Load("ui/comctrl/SeperateItem.csb"));
+@@ -97,16 +104,47 @@ cocos2d::ui::Widget * TVPInGameMenuForm::createMenuItem(int idx, tTJSNI_MenuItem
+ 		return root;
+ 	} else {
+ 		ret = CreatePreferenceItem<tPreferenceItemConstant>(idx, size, caption);
+-		ret->addClickEventListener([=](Ref*){
++		action = [=](){
+ 			TVPMainScene::GetInstance()->scheduleOnce(
+ 				std::bind(&TVPMainScene::popAllUIForm, TVPMainScene::GetInstance()), 0, "close_menu");
+ 			item->OnClick();
+-		});
++		};
++		ret->addClickEventListener([action](Ref*){ action(); });
+ 		ret->setTouchEnabled(true);
+ 	}
++	_navItems.push_back(ret);
++	_navActions.push_back(action);
+ 	return ret;
+ }
+ 
++void TVPInGameMenuForm::navMove(int delta) {
++	const int n = (int)_navItems.size();
++	if (n == 0) return;
++	int i = _navSel;
++	for (int k = 0; k < n; ++k) {
++		i = (i + delta + n) % n;
++		if (_navActions[i]) {
++			_navSel = i;
++			updateNavVisual();
++			return;
++		}
++	}
++}
++
++bool TVPInGameMenuForm::navActivate() {
++	if (_navSel < 0 || _navSel >= (int)_navActions.size()) return false;
++	std::function<void()> action = _navActions[_navSel];
++	if (!action) return false;
++	action();
++	return true;
++}
++
++void TVPInGameMenuForm::updateNavVisual() {
++	for (size_t i = 0; i < _navItems.size(); ++i) {
++		if (_navItems[i]) _navItems[i]->setSelectedVisual((int)i == _navSel);
++	}
++}
++
+ void TVPShowPopMenu(tTJSNI_MenuItem* menu) {
+ 	TVPMainScene::GetInstance()->pushUIForm(TVPInGameMenuForm::create(std::string(), menu));
+ }
+diff --git a/src/core/environ/ui/InGameMenuForm.h b/src/core/environ/ui/InGameMenuForm.h
+index d3e0e32..8da2280 100644
+--- a/src/core/environ/ui/InGameMenuForm.h
++++ b/src/core/environ/ui/InGameMenuForm.h
+@@ -1,5 +1,7 @@
+ #pragma once
+ #include "PreferenceForm.h"
++#include <functional>
++#include <vector>
+ 
+ class tTJSNI_MenuItem;
+ 
+@@ -12,9 +14,19 @@ public:
+ 
+ 	void initMenu(const std::string& title, tTJSNI_MenuItem *item);
+ 
++	// [GalNX] pad navigation: the list entries are touch-only widgets, so keep their actions around
++	// and let a controller move a highlight and activate the selected entry.
++	void navMove(int delta);
++	bool navActivate();
++
+ private:
+ 	cocos2d::ui::Widget *createMenuItem(int idx, tTJSNI_MenuItem *item, const std::string &caption);
++	void updateNavVisual();
+ 
+ 	cocos2d::ui::ListView *_list;
+ 	cocos2d::ui::Button *_title;
+-};
+\ No newline at end of file
++
++	std::vector<iPreferenceItem*> _navItems;
++	std::vector<std::function<void()>> _navActions;
++	int _navSel;
++};
+diff --git a/src/core/environ/ui/PreferenceForm.cpp b/src/core/environ/ui/PreferenceForm.cpp
+index 7764e16..122bbc4 100644
+--- a/src/core/environ/ui/PreferenceForm.cpp
++++ b/src/core/environ/ui/PreferenceForm.cpp
+@@ -544,3 +544,11 @@ void tPreferenceItemKeyMap::initData(int k, int v, int idx, const cocos2d::Size
+ 	initFromInfo(idx, size, buf);
+ }
+ 
++
++void tPreferenceItemCheckBox::setSelectedVisual(bool b) {
++	if (highlight) highlight->setVisible(b);
++}
++
++void tPreferenceItemWithHighlight::setSelectedVisual(bool b) {
++	if (highlight) highlight->setVisible(b);
++}
+diff --git a/src/core/environ/ui/PreferenceForm.h b/src/core/environ/ui/PreferenceForm.h
+index a5ba198..01c7268 100644
+--- a/src/core/environ/ui/PreferenceForm.h
++++ b/src/core/environ/ui/PreferenceForm.h
+@@ -74,6 +74,8 @@ protected:
+ class iPreferenceItem : public cocos2d::ui::Widget {
+ public:
+ 	void initFromInfo(int idx, cocos2d::Size size, const std::string& title); // not tid
++	// [GalNX] pad navigation: highlight this row when a controller selects it.
++	virtual void setSelectedVisual(bool b) { (void)b; }
+ 
+ protected:
+ 	virtual void initController(const NodeMap &allNodes) = 0;
+@@ -116,6 +118,7 @@ protected:
+ 	virtual const char* getUIFileName() const override;
+ 	virtual void onPressStateChangedToNormal() override;
+ 	virtual void onPressStateChangedToPressed() override;
++	virtual void setSelectedVisual(bool b) override;
+ 	cocos2d::ui::CheckBox *checkbox;
+ 	cocos2d::Node *highlight;
+ };
+@@ -127,6 +130,7 @@ protected:
+ 	virtual void onPressStateChangedToNormal() override;
+ 	virtual void onPressStateChangedToPressed() override;
+ 
++	virtual void setSelectedVisual(bool b) override;
+ 	cocos2d::Node *highlight = nullptr;
+ };
+ 
+diff --git a/src/core/visual/WindowIntf.cpp b/src/core/visual/WindowIntf.cpp
+index 72a0464..e313983 100644
+--- a/src/core/visual/WindowIntf.cpp
++++ b/src/core/visual/WindowIntf.cpp
+@@ -1908,6 +1908,63 @@ TJS_BEGIN_NATIVE_PROP_DECL(layerTreeOwnerInterface)
+ TJS_END_NATIVE_PROP_DECL(layerTreeOwnerInterface)
+ //----------------------------------------------------------------------
+ 
++//----------------------------------------------------------------------
++// [GalNX] Win32 compatibility layer. The Win32 build of Kirikiri had a real
++// window that games could minimize / restore, and games rely on it: the BASE
++// ADV SYSTEM engine (MainWindow.EscapeWork) tests `this.minimized` and calls
++// `this.minimize()` when the user presses ESC. The Switch build had no such
++// window state, so evaluating `this.minimized` raised
++// `Member "minimized" does not exist` and aborted the game script.
++// Report a constant non-minimized / non-maximized state and make the state
++// changing calls harmless no-ops.
++TJS_BEGIN_NATIVE_PROP_DECL(minimized)
++{
++	TJS_BEGIN_NATIVE_PROP_GETTER
++	{
++		// [GalNX] never minimized on Switch
++		*result = (tjs_int)0;
++		return TJS_S_OK;
++	}
++	TJS_END_NATIVE_PROP_GETTER
++
++	TJS_DENY_NATIVE_PROP_SETTER
++}
++TJS_END_NATIVE_PROP_DECL(minimized)
++//----------------------------------------------------------------------
++TJS_BEGIN_NATIVE_PROP_DECL(maximized)
++{
++	TJS_BEGIN_NATIVE_PROP_GETTER
++	{
++		// [GalNX] never maximized on Switch
++		*result = (tjs_int)0;
++		return TJS_S_OK;
++	}
++	TJS_END_NATIVE_PROP_GETTER
++
++	TJS_DENY_NATIVE_PROP_SETTER
++}
++TJS_END_NATIVE_PROP_DECL(maximized)
++//----------------------------------------------------------------------
++TJS_BEGIN_NATIVE_METHOD_DECL(/*func. name*/minimize)
++{
++	// [GalNX] no-op: there is no OS window to minimize on Switch
++	return TJS_S_OK;
++}
++TJS_END_NATIVE_METHOD_DECL(/*func. name*/minimize)
++//----------------------------------------------------------------------
++TJS_BEGIN_NATIVE_METHOD_DECL(/*func. name*/maximize)
++{
++	// [GalNX] no-op
++	return TJS_S_OK;
++}
++TJS_END_NATIVE_METHOD_DECL(/*func. name*/maximize)
++//----------------------------------------------------------------------
++TJS_BEGIN_NATIVE_METHOD_DECL(/*func. name*/restore)
++{
++	// [GalNX] no-op
++	return TJS_S_OK;
++}
++TJS_END_NATIVE_METHOD_DECL(/*func. name*/restore)
+ 	TJS_END_NATIVE_MEMBERS
+ 
+ }
+diff --git a/src/plugins/InternalPlugins.cpp b/src/plugins/InternalPlugins.cpp
+index 3cd565f..b7fa004 100644
+--- a/src/plugins/InternalPlugins.cpp
++++ b/src/plugins/InternalPlugins.cpp
+@@ -1,4 +1,5 @@
+ #include "ncbind/ncbind.hpp"
++#include <cstdio>
+ //extern void InitPlugin_CSVParser();
+ 
+ void TVPLoadInternalPlugins()
+@@ -15,5 +16,28 @@ void TVPUnloadInternalPlugins()
+ 
+ bool TVPLoadInternalPlugin(const ttstr &_name)
+ {
+-	return ncbAutoRegister::LoadModule(TVPExtractStorageName(_name));
++	// [GalNX] Games ship their plugins as plugin/*.tpm while the built-in modules
++	// (windowEx, layerExImage, fstat, extrans, csvParser, ...) register under *.dll.
++	// Without this alias the game's own plugin folder can never reach the built-in
++	// ports, so scripts fail with "Member ... does not exist" (e.g. KAG
++	// Window.registerExEvent). Try the requested name first, then *.tpm -> *.dll.
++	ttstr name = TVPExtractStorageName(_name);
++	if (ncbAutoRegister::LoadModule(name)) {
++		printf("[GalNX] internal plugin loaded: %s\n", name.AsNarrowStdString().c_str());
++		return true;
++	}
++	ttstr lower = name.AsLowerCase();
++	if (lower.GetLen() > 4 && lower.SubString(lower.GetLen() - 4, 4) == TJS_W(".tpm")) {
++		ttstr dll(name.SubString(0, name.GetLen() - 4));
++		dll += TJS_W(".dll");
++		if (ncbAutoRegister::LoadModule(dll)) {
++			printf("[GalNX] internal plugin loaded via .tpm alias: %s -> %s\n",
++			       name.AsNarrowStdString().c_str(), dll.AsNarrowStdString().c_str());
++			return true;
++		}
++		printf("[GalNX] no built-in module for game plugin: %s\n", name.AsNarrowStdString().c_str());
++	} else {
++		printf("[GalNX] no built-in module for plugin: %s\n", name.AsNarrowStdString().c_str());
++	}
++	return false;
+ }
+\ No newline at end of file

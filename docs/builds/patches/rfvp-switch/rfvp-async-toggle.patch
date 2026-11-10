@@ -1,0 +1,189 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 0bb96c4..4c01ede 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -4898,7 +4898,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "rfvp-horizon"
+-version = "0.1.0"
++version = "1.0.7"
+ dependencies = [
+  "cc",
+  "rfvp",
+diff --git a/crates/rfvp/src/subsystem/resources/async_decode.rs b/crates/rfvp/src/subsystem/resources/async_decode.rs
+index 2220864..f35f6c6 100644
+--- a/crates/rfvp/src/subsystem/resources/async_decode.rs
++++ b/crates/rfvp/src/subsystem/resources/async_decode.rs
+@@ -39,6 +39,33 @@ pub const ASYNC_MIN_BYTES: u64 = 384 * 1024;
+ /// previous texture instead of inflating the new one (GalNX P18).
+ pub const ASYNC_INLINE_MIN_BYTES: u64 = 1024 * 1024;
+ 
++/// GalNX P19: runtime switch for the decode worker. The runtime only creates the thread when the
++/// user asks for it (sdmc:/switch/rfvp/async.txt), and it disables async when creation fails.
++/// With it off every submit reports "not queued" and the engine decodes synchronously, which is
++/// the v1.0.5 behaviour that boots on every console.
++#[cfg(feature = "switch-async")]
++fn async_enabled() -> bool {
++    #[cfg(feature = "no_std")]
++    {
++        unsafe { rfvp_switch_async_enabled() != 0 }
++    }
++    #[cfg(not(feature = "no_std"))]
++    {
++        true
++    }
++}
++
++#[cfg(all(feature = "switch-async", feature = "no_std"))]
++extern "C" {
++    /// platform/switch/runtime/main.c: 1 when the worker exists and the user enabled async.
++    fn rfvp_switch_async_enabled() -> core::ffi::c_int;
++}
++
++#[cfg(not(feature = "switch-async"))]
++fn async_enabled() -> bool {
++    false
++}
++
+ struct Job {
+     kind: u8,
+     id: u16,
+@@ -113,6 +140,9 @@ pub fn submit_graph(
+     offset: u64,
+     size: u64,
+ ) -> bool {
++    if !async_enabled() {
++        return false;
++    }
+     if size < ASYNC_MIN_BYTES || resource_cache::get_texture(path).is_some() {
+         return false;
+     }
+@@ -133,6 +163,9 @@ pub fn submit_parts(
+     offset: u64,
+     size: u64,
+ ) -> bool {
++    if !async_enabled() {
++        return false;
++    }
+     if size < ASYNC_MIN_BYTES || resource_cache::get_parts(path).is_some() {
+         return false;
+     }
+@@ -179,6 +212,9 @@ extern "C" {
+ /// Returns true when the texture is in the cache and the frame thread can apply it without
+ /// decoding anything. Returns immediately when no job for this path is in flight.
+ pub fn wait_for_graph(path: &str, max_ms: u32) -> bool {
++    if !async_enabled() {
++        return resource_cache::get_texture(path).is_some();
++    }
+     for _ in 0..max_ms {
+         if resource_cache::get_texture(path).is_some() {
+             return true;
+@@ -193,6 +229,9 @@ pub fn wait_for_graph(path: &str, max_ms: u32) -> bool {
+ 
+ /// Wait (up to `max_ms`) for a parts sheet that a worker is decoding.
+ pub fn wait_for_parts(path: &str, max_ms: u32) -> bool {
++    if !async_enabled() {
++        return resource_cache::get_parts(path).is_some();
++    }
+     for _ in 0..max_ms {
+         if resource_cache::get_parts(path).is_some() {
+             return true;
+@@ -248,6 +287,9 @@ pub fn submit_prefetch_graph(
+     offset: u64,
+     size: u64,
+ ) -> bool {
++    if !async_enabled() {
++        return false;
++    }
+     if size < ASYNC_MIN_BYTES || resource_cache::get_texture(path).is_some() {
+         return false;
+     }
+diff --git a/platform/switch/host/Cargo.toml b/platform/switch/host/Cargo.toml
+index faa0cd7..f71f928 100644
+--- a/platform/switch/host/Cargo.toml
++++ b/platform/switch/host/Cargo.toml
+@@ -1,6 +1,6 @@
+ [package]
+ name = "rfvp-horizon"
+-version = "0.1.0"
++version = "1.0.7"
+ edition = "2021"
+ description = "Nintendo Horizon host crate for rfvp no_std core"
+ license = "MPL-2.0"
+diff --git a/platform/switch/runtime/main.c b/platform/switch/runtime/main.c
+index 524a091..dc6eced 100644
+--- a/platform/switch/runtime/main.c
++++ b/platform/switch/runtime/main.c
+@@ -63,6 +63,41 @@ typedef struct {
+ extern void* rfvp_switch_start(const char* game_root);
+ /* Decodes one queued picture (platform/switch/host/src/decode.rs); 1 while work remains. */
+ extern int rfvp_switch_decode_step(void);
++
++/* GalNX P19: the decode worker runs only when the user enables it (sdmc:/switch/rfvp/async.txt
++ * holds "on") and only when libnx actually created the thread. v1.0.6 ran it unconditionally and
++ * some consoles stayed black before the first frame; the default is the v1.0.5 synchronous path. */
++int g_rfvp_async_enabled = 0;
++static Result g_rfvp_async_create_rc = 0;
++static Result g_rfvp_async_start_rc = 0;
++static volatile unsigned g_rfvp_async_heartbeat = 0;
++
++int rfvp_switch_async_enabled(void) {
++    return g_rfvp_async_enabled;
++}
++
++static int read_async_enabled(void) {
++    FILE* file = fopen("sdmc:/switch/rfvp/async.txt", "r");
++    if (file == NULL) return 0;
++    char line[64];
++    int enabled = 0;
++    if (fgets(line, sizeof(line), file) != NULL) {
++        if (strstr(line, "on") != NULL || strstr(line, "ON") != NULL || strchr(line, '1') != NULL) enabled = 1;
++    }
++    fclose(file);
++    return enabled;
++}
++
++/* Written at start-up and every ~1000 worker iterations, so a hung thread is visible from the SD
++ * card without a debugger. */
++static void write_async_status(void) {
++    FILE* file = fopen("sdmc:/switch/rfvp/async_status.txt", "w");
++    if (file == NULL) return;
++    fprintf(file, "enabled=%d create=0x%x start=0x%x hb=%u\n", g_rfvp_async_enabled,
++            (unsigned) g_rfvp_async_create_rc, (unsigned) g_rfvp_async_start_rc,
++            g_rfvp_async_heartbeat);
++    fclose(file);
++}
+ extern int rfvp_switch_frame(void* app, const RfvpSwitchInput* input, uint32_t* framebuffer,
+                              uint32_t stride_bytes);
+ extern void rfvp_switch_audio_render(void* app, int16_t* dst, size_t frames);
+@@ -241,6 +276,8 @@ static unsigned screenshot_frame(void) {
+ static void rfvp_decode_thread(void* arg) {
+     (void) arg;
+     for (;;) {
++        g_rfvp_async_heartbeat = g_rfvp_async_heartbeat + 1;
++        if (g_rfvp_async_heartbeat % 1000u == 0) write_async_status();
+         if (rfvp_switch_decode_step() == 0) {
+             svcSleepThread(1000000ULL);
+         }
+@@ -283,8 +320,18 @@ int main(void) {
+     }
+ 
+     static Thread decode_thread;
+-    threadCreate(&decode_thread, rfvp_decode_thread, NULL, NULL, 0x20000, 0x30, -2);
+-    threadStart(&decode_thread);
++    g_rfvp_async_enabled = read_async_enabled();
++    if (g_rfvp_async_enabled) {
++        g_rfvp_async_create_rc = threadCreate(&decode_thread, rfvp_decode_thread, NULL, NULL, 0x20000, 0x30, -2);
++        if (R_SUCCEEDED(g_rfvp_async_create_rc)) {
++            g_rfvp_async_start_rc = threadStart(&decode_thread);
++            if (R_FAILED(g_rfvp_async_start_rc)) g_rfvp_async_enabled = 0;
++        } else {
++            g_rfvp_async_enabled = 0;
++        }
++    }
++    write_async_status();
++    log_text(g_rfvp_async_enabled ? "rfvp: async decode on\n" : "rfvp: async decode off\n");
+ 
+     const unsigned shot = screenshot_frame();
+     unsigned frame = 0;

@@ -1,0 +1,238 @@
+diff --git a/crates/rfvp/src/host_api/event.rs b/crates/rfvp/src/host_api/event.rs
+index 424a11f..19ea48a 100644
+--- a/crates/rfvp/src/host_api/event.rs
++++ b/crates/rfvp/src/host_api/event.rs
+@@ -74,6 +74,13 @@ impl Default for InputModifiers {
+ #[derive(Debug, Clone, Copy, PartialEq)]
+ pub enum RfvpEvent {
+     Quit,
++    /// Save the current game state to quick slot 0.
++    ///
++    /// The desktop build opens its own save/load slot UI; a console target has no such UI,
++    /// so its host emits this event instead.
++    QuickSave,
++    /// Load the game state stored in quick slot 0.
++    QuickLoad,
+     FocusGained,
+     FocusLost,
+     KeyDown {
+diff --git a/crates/rfvp/src/no_std_core.rs b/crates/rfvp/src/no_std_core.rs
+index 6d90c98..60357df 100644
+--- a/crates/rfvp/src/no_std_core.rs
++++ b/crates/rfvp/src/no_std_core.rs
+@@ -509,9 +509,34 @@ impl RfvpCore {
+         let consumed_events = self.pending_events.len();
+         self.apply_pending_events_to_game_data();
+         let mut quit_requested = false;
++        let mut quick_save_requested = false;
++        let mut quick_load_requested = false;
+         for event in self.pending_events.drain(..) {
+-            if matches!(event, RfvpEvent::Quit) {
+-                quit_requested = true;
++            match event {
++                RfvpEvent::Quit => quit_requested = true,
++                RfvpEvent::QuickSave => quick_save_requested = true,
++                RfvpEvent::QuickLoad => quick_load_requested = true,
++                _ => {}
++            }
++        }
++        // The desktop build opens its own slot UI for the quick save/load keys; a console has
++        // no such UI, so the host asks for quick slot 0 directly.
++        if quick_save_requested {
++            match crate::subsystem::components::syscalls::legacy::save_quick(
++                &mut self.game_data,
++                &crate::script::Variant::Int(0),
++            ) {
++                Ok(_) => host.log(RfvpLogLevel::Info, "quick save: wrote slot 0"),
++                Err(err) => host.log(RfvpLogLevel::Warn, &format!("quick save failed: {err:#}")),
++            }
++        }
++        if quick_load_requested {
++            match crate::subsystem::components::syscalls::legacy::load_quick(
++                &mut self.game_data,
++                &crate::script::Variant::Int(0),
++            ) {
++                Ok(_) => host.log(RfvpLogLevel::Info, "quick load: read slot 0"),
++                Err(err) => host.log(RfvpLogLevel::Warn, &format!("quick load failed: {err:#}")),
+             }
+         }
+         if quit_requested {
+@@ -558,6 +583,40 @@ impl RfvpCore {
+             crate::perf::mark(300);
+             let t2 = host.clock().ticks_us();
+ 
++            // A script asked for the file save/load slot UI, which only the desktop build has.
++            // Without a consumer the VM stays broken and the game looks frozen, so use quick slot 0.
++            if let Some(request) =
++                crate::subsystem::components::syscalls::legacy::take_pending_save_load_request()
++            {
++                use crate::subsystem::components::syscalls::legacy::LegacySaveLoadRequest;
++                let slot = crate::script::Variant::Int(0);
++                let (what, result) = match request {
++                    LegacySaveLoadRequest::SaveFile | LegacySaveLoadRequest::SaveTitle => (
++                        "save",
++                        crate::subsystem::components::syscalls::legacy::save_quick(
++                            &mut self.game_data,
++                            &slot,
++                        ),
++                    ),
++                    LegacySaveLoadRequest::LoadFile | LegacySaveLoadRequest::LoadTitle => (
++                        "load",
++                        crate::subsystem::components::syscalls::legacy::load_quick(
++                            &mut self.game_data,
++                            &slot,
++                        ),
++                    ),
++                };
++                match result {
++                    Ok(_) => host.log(
++                        RfvpLogLevel::Info,
++                        &format!("{what} request: used quick slot 0 (no slot UI on this target)"),
++                    ),
++                    Err(err) => host.log(
++                        RfvpLogLevel::Warn,
++                        &format!("{what} request failed: {err:#}"),
++                    ),
++                }
++            }
+             let t = crate::perf::start();
+             self.flush_audio(host)?;
+             crate::perf::stop(18, t);
+diff --git a/platform/switch/host/src/event.rs b/platform/switch/host/src/event.rs
+index 72347d4..cb5bfd9 100644
+--- a/platform/switch/host/src/event.rs
++++ b/platform/switch/host/src/event.rs
+@@ -2,7 +2,11 @@
+ //!
+ //! A = left click and B = right click at a cursor moved by the left stick or the D-pad (or
+ //! where the screen is touched), X = Enter, Y = Space, Minus = Escape, L/R/ZL/ZR = Ctrl (skip),
+-//! Plus = quit.
++//! right stick up/down = mouse wheel (the text backlog), Plus = quit.
++//!
++//! Plus is a modifier for the save slots the desktop build only reaches through its own UI:
++//! hold Plus and press ZR to write quick slot 0, ZL to read it. Quitting happens when Plus is
++//! released without either combination, so the two can never fire together.
+ 
+ use alloc::vec::Vec;
+ 
+@@ -11,8 +15,11 @@ use rfvp::host_api::{InputModifiers, KeyCode, PointerButton, RfvpEvent};
+ const SCREEN_WIDTH: i32 = 1280;
+ const SCREEN_HEIGHT: i32 = 720;
+ const STICK_DEADZONE: i32 = 8_000;
+-const STICK_CURSOR_DIVISOR: i32 = 18_000;
++const STICK_CURSOR_DIVISOR: i32 = 6_000;
+ const DPAD_CURSOR_STEP: i32 = 12;
++const WHEEL_STEP: i32 = 120;
++/// Polls between wheel events while the right stick is held: about ten lines a second at 60 Hz.
++const WHEEL_REPEAT_POLLS: u32 = 6;
+ 
+ /// `struct RfvpSwitchInput` in main.c.
+ #[repr(C)]
+@@ -21,6 +28,8 @@ pub struct SwitchInput {
+     pub buttons: u64,
+     pub stick_x: i32,
+     pub stick_y: i32,
++    pub right_stick_x: i32,
++    pub right_stick_y: i32,
+     pub touch_count: u32,
+     pub touch_id: u32,
+     pub touch_x: i32,
+@@ -59,6 +68,9 @@ pub struct HorizonInput {
+     cursor_x: i32,
+     cursor_y: i32,
+     previous_buttons: u64,
++    /// Plus is down and has not quit or run a quick save/load yet.
++    pending_quit: bool,
++    wheel_polls: u32,
+     touch_active: bool,
+     touch_id: u64,
+     touch_x: i32,
+@@ -71,6 +83,8 @@ impl HorizonInput {
+             cursor_x: SCREEN_WIDTH / 2,
+             cursor_y: SCREEN_HEIGHT / 2,
+             previous_buttons: 0,
++            pending_quit: false,
++            wheel_polls: 0,
+             touch_active: false,
+             touch_id: 0,
+             touch_x: 0,
+@@ -85,7 +99,22 @@ impl HorizonInput {
+         let held_before = self.previous_buttons;
+         self.previous_buttons = buttons;
+ 
++        // Plus quits, but only once it is released: while it is held, ZR/ZL pick the quick save
++        // and load slots of the desktop UI, which a console has no other way to reach.
+         if down & PLUS != 0 {
++            self.pending_quit = true;
++        }
++        if self.pending_quit && buttons & PLUS != 0 {
++            if down & ZR != 0 {
++                self.pending_quit = false;
++                out.push(RfvpEvent::QuickSave);
++            } else if down & ZL != 0 {
++                self.pending_quit = false;
++                out.push(RfvpEvent::QuickLoad);
++            }
++        }
++        if up & PLUS != 0 && self.pending_quit {
++            self.pending_quit = false;
+             out.push(RfvpEvent::Quit);
+         }
+         for (mask, key) in KEYS {
+@@ -107,6 +136,7 @@ impl HorizonInput {
+         }
+ 
+         self.move_cursor(buttons, input.stick_x, input.stick_y, out);
++        self.scroll(input.right_stick_y, out);
+         for (mask, button) in [(A, PointerButton::Left), (B, PointerButton::Right)] {
+             let (x, y) = (self.cursor_x, self.cursor_y);
+             if down & mask != 0 {
+@@ -151,6 +181,25 @@ impl HorizonInput {
+         }
+     }
+ 
++    /// Right stick up scrolls back through the text (mouse wheel up), down goes forward.
++    fn scroll(&mut self, stick_y: i32, out: &mut Vec<RfvpEvent>) {
++        if stick_y.abs() < STICK_DEADZONE {
++            self.wheel_polls = 0;
++            return;
++        }
++        self.wheel_polls = self.wheel_polls.wrapping_add(1);
++        // The first poll fires at once so a short stick tap scrolls one line; holding then
++        // repeats at the regular rate.
++        if self.wheel_polls != 1 && self.wheel_polls % WHEEL_REPEAT_POLLS != 0 {
++            return;
++        }
++        let delta_y = if stick_y > 0 { WHEEL_STEP } else { -WHEEL_STEP };
++        out.push(RfvpEvent::Wheel {
++            delta_x: 0,
++            delta_y,
++        });
++    }
++
+     fn update_touch(&mut self, input: &SwitchInput, out: &mut Vec<RfvpEvent>) {
+         if input.touch_count == 0 {
+             if self.touch_active {
+diff --git a/platform/switch/runtime/main.c b/platform/switch/runtime/main.c
+index 8752790..8ee5f05 100644
+--- a/platform/switch/runtime/main.c
++++ b/platform/switch/runtime/main.c
+@@ -17,6 +17,8 @@ typedef struct {
+     uint64_t buttons;
+     int32_t stick_x;
+     int32_t stick_y;
++    int32_t right_stick_x;
++    int32_t right_stick_y;
+     uint32_t touch_count;
+     uint32_t touch_id;
+     int32_t touch_x;
+@@ -239,6 +241,9 @@ int main(void) {
+         HidAnalogStickState stick = padGetStickPos(&pad, 0);
+         input.stick_x = stick.x;
+         input.stick_y = stick.y;
++        HidAnalogStickState right_stick = padGetStickPos(&pad, 1);
++        input.right_stick_x = right_stick.x;
++        input.right_stick_y = right_stick.y;
+         HidTouchScreenState touch = { 0 };
+         if (hidGetTouchScreenStates(&touch, 1) && touch.count > 0) {
+             input.touch_count = (uint32_t) touch.count;

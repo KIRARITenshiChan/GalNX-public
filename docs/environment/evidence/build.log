@@ -1,0 +1,11 @@
+date=2026-10-29T22:12:21+08:00
+uname=MSYS_NT-10.0-26100 ¼øÖ¤Ó¢ÐÛ 3.6.11-00eb8435.x86_64 2026-10-16 10:03 UTC x86_64 Msys
+DEVKITPRO=/opt/devkitpro
+MSYSTEM=MSYS
+build_dir=/e/galnx-build/m0-hello
+trace_dir=/e/Othergames/Nintendo Switch/Workspace/GalNX/workspaces/m0-hello
+main.c
+built ... m0-hello.nacp
+linking m0-hello.elf
+built ... m0-hello.nro
+make_exit=0

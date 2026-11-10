@@ -1,0 +1,361 @@
+{
+  "schema": "galnx-nsp-provenance",
+  "schema_version": 1,
+  "generated_at": "2026-10-30T00:59:01+00:00",
+  "galnx_version": "0.1.0",
+  "dry_run": false,
+  "metadata": {
+    "type": "self_contained_nsp",
+    "type_label": "self-contained NSP",
+    "title_name": "Haruno",
+    "title_author": "GalNX",
+    "version": "1.0.2",
+    "version_code": 65538,
+    "title_id": "010047410000A000",
+    "icon": "pilot01/icon.jpg",
+    "romfs_dir": "E:/galnx-build/pilot-01/p3/romfs",
+    "startup_user_account": 1,
+    "notes": "RomFS is assembled by \"galnx payload materialize\"; the ELF is the pinned Kirikiroid2-NX build (docs/builds/009). startup_user_account=1 matches the K2NX save layout (per-title save data)."
+  },
+  "title_id": "010047410000A000",
+  "inputs": {
+    "elf": {
+      "path": "E:\\galnx-build\\pilot-01\\out\\K2NX-rebuilt-galnx-r2.elf",
+      "size": 113874760,
+      "sha256": "4b4515837d0239ee2e7448dd5dbed65e8fdda72c37fb0bac0d0dd10ef849b882"
+    },
+    "romfs": {
+      "root": "E:\\galnx-build\\pilot-01\\p3\\romfs",
+      "files": 109,
+      "total_bytes": 2878186922,
+      "sha256": "53535c68d81a24d88fbac0a6fce0d710e0592558bc89286b732f88891b7d164e"
+    },
+    "icon": {
+      "path": "E:\\Othergames\\Nintendo Switch\\Workspace\\GalNX\\examples\\pilot01\\icon.jpg",
+      "size": 9872,
+      "sha256": "7f6b90277ef1df479bd44c7506c981f3898ceecd9419624e96d9f4ae8df83006"
+    },
+    "npdm": {
+      "path": "",
+      "size": 0,
+      "sha256": ""
+    },
+    "nacp": {
+      "path": "",
+      "size": 0,
+      "sha256": ""
+    },
+    "npdm_template": {
+      "path": "E:\\Othergames\\Nintendo Switch\\Workspace\\GalNX\\examples\\nsp\\npdm.json",
+      "size": 5217,
+      "sha256": "ba4775e7a7c6c3e05e22df474ceb88ca057010481592ad13d3f5ab92f3d34dbf"
+    }
+  },
+  "keyset": {
+    "mode": "real",
+    "path": "E:\\Othergames\\Nintendo Switch\\Ryujinx-canary\\portable\\system\\prod.keys",
+    "size": 12007,
+    "sha256": "7bb3b6d2a2eedc83c9f244ee2ed2eaa4d59eb9ad95b66df575f7dfffa71a2a40",
+    "note": "explicitly supplied keyset; contents intentionally not recorded"
+  },
+  "tools": {
+    "elf2nso": {
+      "path": "D:\\devkitPro\\tools\\bin\\elf2nso.exe",
+      "source": "explicit",
+      "size": 94720,
+      "sha256": "d41476f5f16f66345b2911b28ea8aabde2ea6ddfaf54d27e08f2ac98a794d99f"
+    },
+    "npdmtool": {
+      "path": "D:\\devkitPro\\tools\\bin\\npdmtool.exe",
+      "source": "explicit",
+      "size": 106496,
+      "sha256": "7fbce9299a0d17fee0c396bfbd09e63cfaf97cfa8e153c0d1fe6d6ca318c8fde"
+    },
+    "nacptool": {
+      "path": "D:\\devkitPro\\tools\\bin\\nacptool.exe",
+      "source": "explicit",
+      "size": 74240,
+      "sha256": "d899dd3753f05a9a837fcc4877d52c052128d772977de6c3cfeb4607885fa034"
+    },
+    "hacbrewpack": {
+      "path": "E:\\galnx-build\\m3-tools\\hacBrewPack-745b16ecfc9ce055743067d200572204cb2aac6c\\hacbrewpack.exe",
+      "source": "explicit",
+      "size": 508983,
+      "sha256": "5623fd2b51225b91d18e23f252bc8d21e440b94be53701f39e514358fecf2c7b"
+    },
+    "nstool": {
+      "path": "E:\\galnx-build\\m3-tools\\nstool.exe",
+      "source": "explicit",
+      "size": 1050112,
+      "sha256": "844648190dd8688098887a369da1126c1b3ab1c2a664fb603b01cb22e76b6ca9"
+    }
+  },
+  "commands": [
+    {
+      "name": "elf2nso",
+      "argv": [
+        "D:\\devkitPro\\tools\\bin\\elf2nso.exe",
+        "E:\\galnx-build\\pilot-01\\out\\K2NX-rebuilt-galnx-r2.elf",
+        "E:\\galnx-build\\pilot-01\\p3\\build\\nsp\\exefs\\main"
+      ],
+      "cwd": "E:\\galnx-build\\pilot-01\\p3\\build\\nsp",
+      "note": "ELF -> NSO；输出 exefs/main（带 LZ4 压缩与 SHA256）",
+      "outputs": [
+        "E:\\galnx-build\\pilot-01\\p3\\build\\nsp\\exefs\\main"
+      ]
+    },
+    {
+      "name": "npdm",
+      "argv": [
+        "D:\\devkitPro\\tools\\bin\\npdmtool.exe",
+        "E:\\galnx-build\\pilot-01\\p3\\build\\nsp\\npdm.json",
+        "E:\\galnx-build\\pilot-01\\p3\\build\\nsp\\exefs\\main.npdm"
+      ],
+      "cwd": "E:\\galnx-build\\pilot-01\\p3\\build\\nsp",
+      "note": "先渲染 examples/nsp/npdm.json（替换 title_id），再 npdmtool 生成 exefs/main.npdm",
+      "outputs": [
+        "E:\\galnx-build\\pilot-01\\p3\\build\\nsp\\exefs\\main.npdm"
+      ]
+    },
+    {
+      "name": "nacp",
+      "argv": [
+        "D:\\devkitPro\\tools\\bin\\nacptool.exe",
+        "--create",
+        "Haruno",
+        "GalNX",
+        "1.0.2",
+        "E:\\galnx-build\\pilot-01\\p3\\build\\nsp\\control\\control.nacp",
+        "--titleid=010047410000A000"
+      ],
+      "cwd": "E:\\galnx-build\\pilot-01\\p3\\build\\nsp",
+      "note": "nacptool 生成 control/control.nacp",
+      "outputs": [
+        "E:\\galnx-build\\pilot-01\\p3\\build\\nsp\\control\\control.nacp"
+      ]
+    },
+    {
+      "name": "hacbrewpack",
+      "argv": [
+        "E:\\galnx-build\\m3-tools\\hacBrewPack-745b16ecfc9ce055743067d200572204cb2aac6c\\hacbrewpack.exe",
+        "--nologo",
+        "-k",
+        "E:\\Othergames\\Nintendo Switch\\Ryujinx-canary\\portable\\system\\prod.keys",
+        "--romfsdir",
+        "E:\\galnx-build\\pilot-01\\p3\\romfs"
+      ],
+      "cwd": "E:\\galnx-build\\pilot-01\\p3\\build\\nsp",
+      "note": "在 work 内以相对路径暂存；产物 work/hacbrewpack_nsp/<title_id>.nsp 再复制到 out",
+      "outputs": [
+        "E:\\galnx-build\\pilot-01\\p3\\build\\nsp\\hacbrewpack_nsp\\010047410000A000.nsp"
+      ]
+    }
+  ],
+  "build": {
+    "ok": true,
+    "out_path": "E:\\galnx-build\\pilot-01\\p3\\out\\Kirikiroid2-NX-010047410000A000.nsp",
+    "work_dir": "E:\\galnx-build\\pilot-01\\p3\\build\\nsp",
+    "duration_s": 180.688,
+    "error": "",
+    "artifact": {
+      "path": "E:\\galnx-build\\pilot-01\\p3\\out\\Kirikiroid2-NX-010047410000A000.nsp",
+      "size": 2906131672,
+      "sha256": "1f54bdf105fdfc0e88a81e5aaec954ffd4c349132fe7bbadcf394948cde994d4",
+      "produced_by": "E:\\galnx-build\\pilot-01\\p3\\build\\nsp\\hacbrewpack_nsp\\010047410000A000.nsp"
+    },
+    "steps": [
+      {
+        "name": "stage-icon",
+        "argv": [],
+        "cwd": "E:\\galnx-build\\pilot-01\\p3\\build\\nsp",
+        "exit_code": 0,
+        "duration_s": 0.0,
+        "stdout_tail": "",
+        "stderr_tail": "",
+        "log_path": "",
+        "note": "copied E:\\Othergames\\Nintendo Switch\\Workspace\\GalNX\\examples\\pilot01\\icon.jpg -> E:\\galnx-build\\pilot-01\\p3\\build\\nsp\\control\\icon_AmericanEnglish.dat"
+      },
+      {
+        "name": "elf2nso",
+        "argv": [
+          "D:\\devkitPro\\tools\\bin\\elf2nso.exe",
+          "E:\\galnx-build\\pilot-01\\out\\K2NX-rebuilt-galnx-r2.elf",
+          "E:\\galnx-build\\pilot-01\\p3\\build\\nsp\\exefs\\main"
+        ],
+        "cwd": "E:\\galnx-build\\pilot-01\\p3\\build\\nsp",
+        "exit_code": 0,
+        "duration_s": 0.406,
+        "stdout_tail": "",
+        "stderr_tail": "",
+        "log_path": "E:\\galnx-build\\pilot-01\\p3\\build\\nsp\\logs\\elf2nso.log",
+        "note": "ELF -> NSO；输出 exefs/main（带 LZ4 压缩与 SHA256）"
+      },
+      {
+        "name": "npdm",
+        "argv": [
+          "D:\\devkitPro\\tools\\bin\\npdmtool.exe",
+          "E:\\galnx-build\\pilot-01\\p3\\build\\nsp\\npdm.json",
+          "E:\\galnx-build\\pilot-01\\p3\\build\\nsp\\exefs\\main.npdm"
+        ],
+        "cwd": "E:\\galnx-build\\pilot-01\\p3\\build\\nsp",
+        "exit_code": 0,
+        "duration_s": 0.156,
+        "stdout_tail": "",
+        "stderr_tail": "Failed to get system_resource_size (field not present).\nFailed to get version (field not present).\nFailed to get process_category (field not present).\nFailed to get optimize_memory_allocation (field not present).\nFailed to get disable_device_address_space_merge (field not present).\nFailed to get enable_alias_region_extra_size (field not present).\nFailed to get prevent_code_reads (field not present).\nFailed to get signature_key_generation (field not present).\nFailed to get program_id_range_min (field not present).\nFailed to get program_id_range_max (field not present).\nFailed to get program_id (field not present).",
+        "log_path": "E:\\galnx-build\\pilot-01\\p3\\build\\nsp\\logs\\npdm.log",
+        "note": "先渲染 examples/nsp/npdm.json（替换 title_id），再 npdmtool 生成 exefs/main.npdm"
+      },
+      {
+        "name": "nacp",
+        "argv": [
+          "D:\\devkitPro\\tools\\bin\\nacptool.exe",
+          "--create",
+          "Haruno",
+          "GalNX",
+          "1.0.2",
+          "E:\\galnx-build\\pilot-01\\p3\\build\\nsp\\control\\control.nacp",
+          "--titleid=010047410000A000"
+        ],
+        "cwd": "E:\\galnx-build\\pilot-01\\p3\\build\\nsp",
+        "exit_code": 0,
+        "duration_s": 0.125,
+        "stdout_tail": "",
+        "stderr_tail": "",
+        "log_path": "E:\\galnx-build\\pilot-01\\p3\\build\\nsp\\logs\\nacp.log",
+        "note": "nacptool 生成 control/control.nacp"
+      },
+      {
+        "name": "hacbrewpack",
+        "argv": [
+          "E:\\galnx-build\\m3-tools\\hacBrewPack-745b16ecfc9ce055743067d200572204cb2aac6c\\hacbrewpack.exe",
+          "--nologo",
+          "-k",
+          "E:\\Othergames\\Nintendo Switch\\Ryujinx-canary\\portable\\system\\prod.keys",
+          "--romfsdir",
+          "E:\\galnx-build\\pilot-01\\p3\\romfs"
+        ],
+        "cwd": "E:\\galnx-build\\pilot-01\\p3\\build\\nsp",
+        "exit_code": 0,
+        "duration_s": 175.032,
+        "stdout_tail": "Writing hacbrewpack_nca\\82f8227a4bac3f9d8c949667a43acc4d.nca to hacbrewpack_nsp\\010047410000a000.nsp\nWriting hacbrewpack_nca\\adb1490486ef4aab9705cced5b97e6cd.nca to hacbrewpack_nsp\\010047410000a000.nsp\n\n----> Created NSP: hacbrewpack_nsp\\010047410000a000.nsp\n\nRemoving created temp and nca directories\n\n\nSummary:\n\nTitle ID: 010047410000a000\nSDK Version: 0.12.17.0\nSection Crypto Type: Regular Crypto\nKeygeneration: 1\n<redacted: key material line>\nProgram NCA RomFS Section: Yes\nProgram NCA Logo Section: No\nHtmlDoc NCA: No\nLegalInfo NCA: No\nCreated NSP: hacbrewpack_nsp\\010047410000a000.nsp",
+        "stderr_tail": "",
+        "log_path": "E:\\galnx-build\\pilot-01\\p3\\build\\nsp\\logs\\hacbrewpack.log",
+        "note": "在 work 内以相对路径暂存；产物 work/hacbrewpack_nsp/<title_id>.nsp 再复制到 out"
+      }
+    ]
+  },
+  "artifact": {
+    "path": "E:\\galnx-build\\pilot-01\\p3\\out\\Kirikiroid2-NX-010047410000A000.nsp",
+    "size": 2906131672,
+    "sha256": "1f54bdf105fdfc0e88a81e5aaec954ffd4c349132fe7bbadcf394948cde994d4",
+    "produced_by": "E:\\galnx-build\\pilot-01\\p3\\build\\nsp\\hacbrewpack_nsp\\010047410000A000.nsp"
+  },
+  "verify": {
+    "ok": true,
+    "ncas": 3,
+    "checks": [
+      {
+        "id": "verify.nstool.nsp",
+        "name": "nstool NSP layer",
+        "status": "ok",
+        "detail": "nstool parsed the NSP container",
+        "hint": ""
+      },
+      {
+        "id": "nstool.partition.type",
+        "name": "PFS0 type",
+        "status": "ok",
+        "detail": "Type: PFS0",
+        "hint": ""
+      },
+      {
+        "id": "nstool.partition.files",
+        "name": "PFS0 files",
+        "status": "ok",
+        "detail": "FileNum: 3",
+        "hint": ""
+      },
+      {
+        "id": "nstool.nca.0",
+        "name": "NCA 0",
+        "status": "ok",
+        "detail": "Meta, ProgID 0x010047410000a000, Size 0x1000",
+        "hint": ""
+      },
+      {
+        "id": "nstool.nca.1",
+        "name": "NCA 1",
+        "status": "ok",
+        "detail": "Program, ProgID 0x010047410000a000, Size 0xad363000",
+        "hint": ""
+      },
+      {
+        "id": "nstool.nca.2",
+        "name": "NCA 2",
+        "status": "ok",
+        "detail": "Control, ProgID 0x010047410000a000, Size 0x1cc00",
+        "hint": ""
+      },
+      {
+        "id": "nstool.nca.type.program",
+        "name": "NCA type Program",
+        "status": "ok",
+        "detail": "Program NCA present",
+        "hint": ""
+      },
+      {
+        "id": "nstool.nca.type.control",
+        "name": "NCA type Control",
+        "status": "ok",
+        "detail": "Control NCA present",
+        "hint": ""
+      },
+      {
+        "id": "nstool.nca.type.meta",
+        "name": "NCA type Meta",
+        "status": "ok",
+        "detail": "Meta NCA present",
+        "hint": ""
+      },
+      {
+        "id": "nstool.progid.consistent",
+        "name": "NCA ProgID consistency",
+        "status": "ok",
+        "detail": "all 3 NCAs share ProgID 0x010047410000A000",
+        "hint": ""
+      },
+      {
+        "id": "nstool.progid.expected",
+        "name": "expected ProgID",
+        "status": "ok",
+        "detail": "ProgID matches 0x010047410000A000",
+        "hint": ""
+      },
+      {
+        "id": "verify.signature",
+        "name": "NCA signature",
+        "status": "warn",
+        "detail": "4 'Signature: FAIL' line(s): expected for unsigned homebrew NSP; hacBrewPack's RSA key is not Nintendo's, so signatures cannot validate",
+        "hint": ""
+      },
+      {
+        "id": "verify.summary",
+        "name": "nstool verify",
+        "status": "ok",
+        "detail": "12 checks: 0 fail, 1 warn, 3 NCAs",
+        "hint": ""
+      }
+    ],
+    "artifact": {
+      "path": "E:\\galnx-build\\pilot-01\\p3\\out\\Kirikiroid2-NX-010047410000A000.nsp",
+      "size": 2906131672,
+      "sha256": "1f54bdf105fdfc0e88a81e5aaec954ffd4c349132fe7bbadcf394948cde994d4"
+    }
+  },
+  "environment": {
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.26100-SP0",
+    "machine": "AMD64",
+    "cwd": "E:\\Othergames\\Nintendo Switch\\Workspace\\GalNX"
+  }
+}

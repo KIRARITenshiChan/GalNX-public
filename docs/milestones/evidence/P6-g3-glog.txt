@@ -1,0 +1,20 @@
+[pad] key=1013 virt=0 uiChildren=0 gamemenu=0x210d0cd340 cursor=0x0
+[pad] key=1004 virt=0 uiChildren=0 gamemenu=0x210d0cd340 cursor=0x0
+[touch] began id=0x210edf85c0 loc=(947.2,58.1) virt=0 uiChildren=0
+[touch] ended id=0x210edf85c0 loc=(947.2,58.1) virt=0
+[pad] key=1008 virt=0 uiChildren=0 gamemenu=0x210d0cd340 cursor=0x0
+[tjs] sl-replace -> ok
+[tjs] loadui-nodlg -> ok
+[tjs] loadui-open -> ok
+[pad] key=1005 virt=0 uiChildren=0 gamemenu=0x210d0cd340 cursor=0x0
+[tjs] back -> 
+[touch] began id=0x210d6337e0 loc=(882.1,320.9) virt=0 uiChildren=0
+[touch] ended id=0x210d6337e0 loc=(882.1,320.9) virt=0
+[touch] began id=0x210d6418c0 loc=(882.1,320.9) virt=0 uiChildren=0
+[touch] ended id=0x210d6418c0 loc=(882.1,320.9) virt=0
+[touch] began id=0x2114c7a300 loc=(439.6,276.0) virt=0 uiChildren=0
+[touch] ended id=0x2114c7a300 loc=(439.6,276.0) virt=0
+[touch] began id=0x210ed8e6a0 loc=(439.6,276.0) virt=0 uiChildren=0
+[touch] ended id=0x210ed8e6a0 loc=(439.6,276.0) virt=0
+[touch] began id=0x210cfe5800 loc=(439.6,276.0) virt=0 uiChildren=0
+[touch] ended id=0x210cfe5800 loc=(439.6,276.0) virt=0

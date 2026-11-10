@@ -1,0 +1,275 @@
+[   1.912505] Frontend <Info> citron\main.cpp:280:LogRuntimes: MSVC Compiler: 1944 Runtime: 14.51.36247.0
+[   1.912511] Frontend <Info> citron\main.cpp:289:LogRuntimes: Qt Compile: 6.9.3 Runtime: 6.9.3
+[   1.912513] Frontend <Info> citron\main.cpp:427:GMainWindow: Host CPU: 12th Gen Intel(R) Core(TM) i7-12650H | AVX2 | FMA
+[   1.912526] Frontend <Info> citron\main.cpp:429:GMainWindow: Host CPU Cores: 10
+[   1.912526] Frontend <Info> citron\main.cpp:432:GMainWindow: Host CPU Threads: 16
+[   1.913549] Frontend <Info> citron\main.cpp:433:GMainWindow: Host OS: Windows 11 Version 24H2 (Build 26100.9711)
+[   1.913565] Frontend <Info> citron\main.cpp:435:GMainWindow: Host RAM: 31.74 GiB
+[   1.913566] Frontend <Info> citron\main.cpp:436:GMainWindow: Host Swap: 105.00 GiB
+[   1.913649] Frontend <Info> citron\main.cpp:441:GMainWindow: Host Timer Resolution: 0.5000 ms
+[   1.913690] Frontend <Info> citron\main.cpp:446:GMainWindow: Registering system content providers...
+[   1.913698] Frontend <Info> citron\main.cpp:452:GMainWindow: Initializing factories...
+[   1.920895] Service.FS <Info> core\hle\service\filesystem\filesystem.cpp:445:CreateSaveDataFactory: Save Path: Using default NAND as the base.
+[   1.920934] Service.FS <Info> core\hle\service\filesystem\filesystem.cpp:477:CreateSaveDataFactory: Save Path: No overrides found. Using the determined base directory.
+[   1.922574] Service.FS <Info> core\hle\service\filesystem\filesystem.cpp:445:CreateSaveDataFactory: Save Path: Using default NAND as the base.
+[   1.922604] Service.FS <Info> core\hle\service\filesystem\filesystem.cpp:477:CreateSaveDataFactory: Save Path: No overrides found. Using the determined base directory.
+[   1.923265] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:76:SynthesizeSystemArchive: Synthesizing system archive 'SystemVersion' (0x0100000000000809).
+[   1.923616] Common.Filesystem <Warning> core\file_sys\system_archive\system_version.cpp:17:SystemVersion: called - Using hardcoded firmware version 'NintendoSDK Firmware for NX 22.0.0-3.0'
+[   1.924396] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:94:SynthesizeSystemArchive:     - System archive generation successful!
+[   1.924789] Frontend <Info> citron\main.cpp:6104:SetFirmwareVersion: Installed firmware: No firmware available
+[   1.925086] Frontend <Info> citron\game_list.cpp:3344:LoadCompatibilityList: No local compatibility list found, using internal resource.
+[   1.925129] Frontend <Error> citron\game_list.cpp:3354:LoadCompatibilityList: Game compatibility list is empty or unreadable
+[   2.229741] Frontend <Info> citron\game_list.cpp:2711:DonePopulating: Mirroring: Performing one-time startup sync...
+[   2.797878] Frontend <Info> citron\main.cpp:2322:BootGame: citron starting...
+[   2.799130] Config <Info> frontend_common\config.cpp:75:WriteToIni: Writing Global configuration to: C:\Users\ACETaffy\AppData\Roaming\citron\config\qt-config.ini
+[   2.801447] Config <Info> frontend_common\config.cpp:75:WriteToIni: Writing Global configuration to: C:\Users\ACETaffy\AppData\Roaming\citron\config\qt-config.ini
+[   2.810862] Config <Info> frontend_common\config.cpp:75:WriteToIni: Writing Game Specific configuration to: C:\Users\ACETaffy\AppData\Roaming\citron\config\custom\010047420000A000.ini
+[   2.812311] Config <Info> frontend_common\config.cpp:75:WriteToIni: Writing Game Specific configuration to: C:\Users\ACETaffy\AppData\Roaming\citron\config\custom\010047420000A000.ini
+[   2.815452] Config <Info> common\settings.cpp:118:LogSettings: citron Configuration:
+[   2.815460] Config <Info> common\settings.cpp:111:operator (): -- Audio.output_engine: auto
+[   2.815461] Config <Info> common\settings.cpp:111:operator (): -- Audio.output_device: auto
+[   2.815462] Config <Info> common\settings.cpp:111:operator (): -- Audio.input_device: auto
+[   2.815462] Config <Info> common\settings.cpp:111:operator (): -- Audio.volume: 100
+[   2.815463] Config <Info> common\settings.cpp:111:operator (): -- Audio.audio_muted: false
+[   2.815464] Config <Info> common\settings.cpp:111:operator (): -- Audio.dump_audio_commands: false
+[   2.815464] Config <Info> common\settings.cpp:111:operator (): -- Core.use_multi_core: true
+[   2.815467] Config <Info> common\settings.cpp:111:operator (): -- Core.memory_layout_mode: Memory_4Gb
+[   2.815467] Config <Info> common\settings.cpp:111:operator (): -- Core.use_speed_limit: true
+[   2.815468] Config <Info> common\settings.cpp:111:operator (): -- Core.speed_limit: 100
+[   2.815470] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpu_backend: Dynarmic
+[   2.815471] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpu_accuracy: Auto
+[   2.815471] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpu_debug_mode: false
+[   2.815472] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_page_tables: true
+[   2.815473] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_block_linking: true
+[   2.815473] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_return_stack_buffer: true
+[   2.815473] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_fast_dispatcher: true
+[   2.815474] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_context_elimination: true
+[   2.815474] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_const_prop: true
+[   2.815474] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_misc_ir: true
+[   2.815475] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_reduce_misalign_checks: true
+[   2.815475] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_fastmem: true
+[   2.815476] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_fastmem_exclusives: true
+[   2.815476] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_recompile_exclusives: true
+[   2.815476] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_ignore_memory_aborts: true
+[   2.815477] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_unsafe_unfuse_fma: true
+[   2.815478] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_unsafe_reduce_fp_error: true
+[   2.815478] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_unsafe_ignore_standard_fpcr: true
+[   2.815479] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_unsafe_inaccurate_nan: true
+[   2.815479] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_unsafe_fastmem_check: true
+[   2.815479] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_unsafe_ignore_global_monitor: true
+[   2.815481] Config <Info> common\settings.cpp:111:operator (): -- Renderer.backend: Vulkan
+[   2.815482] Config <Info> common\settings.cpp:111:operator (): -- Renderer.vulkan_device: 0
+[   2.815482] Config <Info> common\settings.cpp:111:operator (): -- Renderer.use_disk_shader_cache: true
+[   2.815483] Config <Info> common\settings.cpp:111:operator (): -- Renderer.use_asynchronous_gpu_emulation: true
+[   2.815484] Config <Info> common\settings.cpp:111:operator (): -- Renderer.accelerate_astc: Gpu
+[   2.815485] Config <Info> common\settings.cpp:111:operator (): -- Renderer.use_vsync: Fifo
+[   2.815485] Config <Info> common\settings.cpp:111:operator (): -- Renderer.nvdec_emulation: Gpu
+[   2.815486] Config <Info> common\settings.cpp:111:operator (): -- Renderer.fullscreen_mode: Borderless
+[   2.815488] Config <Info> common\settings.cpp:111:operator (): -- Renderer.aspect_ratio: R16_9
+[   2.815489] Config <Info> common\settings.cpp:111:operator (): -- Renderer.resolution_setup: Res1X
+[   2.815490] Config <Info> common\settings.cpp:111:operator (): -- Renderer.scaling_filter: Bilinear
+[   2.815491] Config <Info> common\settings.cpp:111:operator (): -- Renderer.anti_aliasing: None
+[   2.815491] Config <Info> common\settings.cpp:111:operator (): -- Renderer.fsr_sharpening_slider: 25
+[   2.815497] Config <Info> common\settings.cpp:111:operator (): -- Renderer.cas_sharpening_slider: 50
+[   2.815503] Config <Info> common\settings.cpp:111:operator (): -- Renderer.crt_scanline_strength: 1.000000
+[   2.815504] Config <Info> common\settings.cpp:111:operator (): -- Renderer.crt_curvature: 0.000000
+[   2.815508] Config <Info> common\settings.cpp:111:operator (): -- Renderer.crt_gamma: 1.000000
+[   2.815508] Config <Info> common\settings.cpp:111:operator (): -- Renderer.crt_bloom: 0.330000
+[   2.815509] Config <Info> common\settings.cpp:111:operator (): -- Renderer.crt_mask_type: 1
+[   2.815509] Config <Info> common\settings.cpp:111:operator (): -- Renderer.crt_brightness: 1.000000
+[   2.815510] Config <Info> common\settings.cpp:111:operator (): -- Renderer.crt_alpha: 1.000000
+[   2.815510] Config <Info> common\settings.cpp:111:operator (): -- Renderer.lanczos_quality: 3
+[   2.815511] Config <Info> common\settings.cpp:111:operator (): -- Renderer.fsr2_quality_mode: Quality
+[   2.815512] Config <Info> common\settings.cpp:111:operator (): -- Renderer.frame_skipping: Disabled
+[   2.815513] Config <Info> common\settings.cpp:111:operator (): -- Renderer.frame_skipping_mode: Adaptive
+[   2.815513] Config <Info> common\settings.cpp:111:operator (): -- Renderer.bg_red: 0
+[   2.815513] Config <Info> common\settings.cpp:111:operator (): -- Renderer.bg_green: 0
+[   2.815514] Config <Info> common\settings.cpp:111:operator (): -- Renderer.bg_blue: 0
+[   2.815514] Config <Info> common\settings.cpp:111:operator (): -- Renderer.gpu_accuracy: Normal
+[   2.815516] Config <Info> common\settings.cpp:111:operator (): -- Renderer.max_anisotropy: Automatic
+[   2.815516] Config <Info> common\settings.cpp:111:operator (): -- Renderer.astc_recompression: Uncompressed
+[   2.815517] Config <Info> common\settings.cpp:111:operator (): -- Renderer.vram_usage_mode: Conservative
+[   2.815517] Config <Info> common\settings.cpp:111:operator (): -- Renderer.vram_limit_mb: 0
+[   2.815518] Config <Info> common\settings.cpp:111:operator (): -- Renderer.gc_aggressiveness: Off
+[   2.815518] Config <Info> common\settings.cpp:111:operator (): -- Renderer.texture_eviction_frames: 0
+[   2.815519] Config <Info> common\settings.cpp:111:operator (): -- Renderer.buffer_eviction_frames: 0
+[   2.815519] Config <Info> common\settings.cpp:111:operator (): -- Renderer.sparse_texture_priority_eviction: false
+[   2.815520] Config <Info> common\settings.cpp:111:operator (): -- Renderer.log_vram_usage: false
+[   2.815520] Config <Info> common\settings.cpp:111:operator (): -- Renderer.android_astc_mode: Auto
+[   2.815521] Config <Info> common\settings.cpp:111:operator (): -- Renderer.async_presentation: false
+[   2.815521] Config <Info> common\settings.cpp:111:operator (): -- Renderer.force_max_clock: false
+[   2.815522] Config <Info> common\settings.cpp:111:operator (): -- Renderer.use_reactive_flushing: true
+[   2.815522] Config <Info> common\settings.cpp:111:operator (): -- Renderer.use_asynchronous_shaders: false
+[   2.815522] Config <Info> common\settings.cpp:111:operator (): -- Renderer.use_fast_gpu_time: true
+[   2.815523] Config <Info> common\settings.cpp:111:operator (): -- Renderer.use_vulkan_driver_pipeline_cache: true
+[   2.815523] Config <Info> common\settings.cpp:111:operator (): -- Renderer.enable_compute_pipelines: false
+[   2.815524] Config <Info> common\settings.cpp:111:operator (): -- Renderer.use_video_framerate: false
+[   2.815524] Config <Info> common\settings.cpp:111:operator (): -- Renderer.barrier_feedback_loops: true
+[   2.815524] Config <Info> common\settings.cpp:111:operator (): -- Renderer.enable_buffer_history: false
+[   2.815525] Config <Info> common\settings.cpp:111:operator (): -- Renderer.wider_reciprocals: false
+[   2.815525] Config <Info> common\settings.cpp:111:operator (): -- Renderer.extended_dynamic_state: EDS3
+[   2.815526] Config <Info> common\settings.cpp:111:operator (): -- Renderer.use_conditional_rendering: true
+[   2.815526] Config <Info> common\settings.cpp:111:operator (): -- Renderer.debug: false
+[   2.815526] Config <Info> common\settings.cpp:111:operator (): -- Renderer.shader_feedback: false
+[   2.815527] Config <Info> common\settings.cpp:111:operator (): -- Renderer.nsight_aftermath: false
+[   2.815527] Config <Info> common\settings.cpp:111:operator (): -- Renderer.disable_shader_loop_safety_checks: false
+[   2.815528] Config <Info> common\settings.cpp:111:operator (): -- Renderer.renderdoc_hotkey: false
+[   2.815528] Config <Info> common\settings.cpp:111:operator (): -- Renderer.disable_buffer_reorder: false
+[   2.815528] Config <Info> common\settings.cpp:111:operator (): -- System.qlaunch_enabled: true
+[   2.815532] Config <Info> common\settings.cpp:111:operator (): -- System.language_index: EnglishAmerican
+[   2.815532] Config <Info> common\settings.cpp:111:operator (): -- System.region_index: Usa
+[   2.815534] Config <Info> common\settings.cpp:111:operator (): -- System.time_zone_index: Auto
+[   2.815535] Config <Info> common\settings.cpp:111:operator (): -- System.custom_rtc_enabled: false
+[   2.815536] Config <Info> common\settings.cpp:111:operator (): -- System.custom_rtc: 0
+[   2.815536] Config <Info> common\settings.cpp:111:operator (): -- System.custom_rtc_offset: 0
+[   2.815537] Config <Info> common\settings.cpp:111:operator (): -- System.rng_seed_enabled: false
+[   2.815537] Config <Info> common\settings.cpp:111:operator (): -- System.rng_seed: 0
+[   2.815537] Config <Info> common\settings.cpp:111:operator (): -- System.device_name: citron
+[   2.815538] Config <Info> common\settings.cpp:111:operator (): -- System.current_user: 0
+[   2.815539] Config <Info> common\settings.cpp:111:operator (): -- System.use_docked_mode: Docked
+[   2.815540] Config <Info> common\settings.cpp:111:operator (): -- System.sound_index: Stereo
+[   2.815540] Config <Info> common\settings.cpp:111:operator (): -- Data Storage.use_virtual_sd: true
+[   2.815541] Config <Info> common\settings.cpp:111:operator (): -- Data Storage.gamecard_inserted: false
+[   2.815542] Config <Info> common\settings.cpp:111:operator (): -- Data Storage.gamecard_current_game: false
+[   2.815542] Config <Info> common\settings.cpp:111:operator (): -- Data Storage.gamecard_path: 
+[   2.815543] Config <Info> common\settings.cpp:111:operator (): -- Data Storage.global_custom_save_path_enabled: false
+[   2.815543] Config <Info> common\settings.cpp:111:operator (): -- Data Storage.global_custom_save_path: 
+[   2.815544] Config <Info> common\settings.cpp:111:operator (): -- Data Storage.backup_saves_to_nand: false
+[   2.815544] Config <Info> common\settings.cpp:111:operator (): -- Debugging.ultralow_benchmark_logging: false
+[   2.815545] Config <Info> common\settings.cpp:111:operator (): -- Debugging.use_gdbstub: false
+[   2.815545] Config <Info> common\settings.cpp:111:operator (): -- Debugging.gdbstub_port: 6543
+[   2.815546] Config <Info> common\settings.cpp:111:operator (): -- Debugging.program_args: 
+[   2.815546] Config <Info> common\settings.cpp:111:operator (): -- Debugging.dump_exefs: false
+[   2.815547] Config <Info> common\settings.cpp:111:operator (): -- Debugging.dump_nso: false
+[   2.815550] Config <Info> common\settings.cpp:111:operator (): -- Debugging.enable_fs_access_log: false
+[   2.815551] Config <Info> common\settings.cpp:111:operator (): -- Debugging.reporting_services: false
+[   2.815551] Config <Info> common\settings.cpp:111:operator (): -- Debugging.quest_flag: false
+[   2.815552] Config <Info> common\settings.cpp:111:operator (): -- Debugging.extended_logging: false
+[   2.815552] Config <Info> common\settings.cpp:111:operator (): -- Debugging.use_debug_asserts: false
+[   2.815552] Config <Info> common\settings.cpp:111:operator (): -- Debugging.use_auto_stub: false
+[   2.815553] Config <Info> common\settings.cpp:111:operator (): -- Debugging.enable_all_controllers: false
+[   2.815553] Config <Info> common\settings.cpp:111:operator (): -- Debugging.perform_vulkan_check: true
+[   2.815553] Config <Info> common\settings.cpp:111:operator (): -- Debugging.log_filter: *:Info
+[   2.815554] Config <Info> common\settings.cpp:111:operator (): -- Debugging.dump_shaders: false
+[   2.815554] Config <Info> common\settings.cpp:111:operator (): -- Debugging.dump_macros: false
+[   2.815555] Config <Info> common\settings.cpp:111:operator (): -- Debugging.disable_macro_jit: false
+[   2.815555] Config <Info> common\settings.cpp:111:operator (): -- Debugging.disable_macro_hle: false
+[   2.815556] Config <Info> common\settings.cpp:111:operator (): -- Miscellaneous.is_wayland_platform: false
+[   2.815556] Config <Info> common\settings.cpp:111:operator (): -- Miscellaneous.use_dev_keys: false
+[   2.815557] Config <Info> common\settings.cpp:111:operator (): -- Network.airplane_mode: false
+[   2.815557] Config <Info> common\settings.cpp:111:operator (): -- Network.network_interface: 
+[   2.815558] Config <Info> common\settings.cpp:111:operator (): -- Network.lobby_api_url: api.ynet-fun.xyz
+[   2.815559] Config <Info> common\settings.cpp:111:operator (): -- WebService.enable_telemetry: false
+[   2.815559] Config <Info> common\settings.cpp:111:operator (): -- WebService.web_api_url: api.ynet-fun.xyz
+[   2.815560] Config <Info> common\settings.cpp:111:operator (): -- WebService.citron_username: 
+[   2.815560] Config <Info> common\settings.cpp:111:operator (): -- WebService.enable_auto_update_check: true
+[   2.815561] Config <Info> common\settings.cpp:111:operator (): -- Controls.enable_raw_input: false
+[   2.815561] Config <Info> common\settings.cpp:111:operator (): -- Controls.controller_navigation: true
+[   2.815562] Config <Info> common\settings.cpp:111:operator (): -- Controls.navigation_repeat_delay: 500
+[   2.815562] Config <Info> common\settings.cpp:111:operator (): -- Controls.navigation_repeat_interval: 150
+[   2.815563] Config <Info> common\settings.cpp:111:operator (): -- Controls.navigation_deadzone: 0.500000
+[   2.815563] Config <Info> common\settings.cpp:111:operator (): -- Controls.enable_joycon_driver: true
+[   2.815564] Config <Info> common\settings.cpp:111:operator (): -- Controls.enable_procon_driver: false
+[   2.815564] Config <Info> common\settings.cpp:111:operator (): -- Controls.vibration_enabled: true
+[   2.815565] Config <Info> common\settings.cpp:111:operator (): -- Controls.enable_accurate_vibrations: false
+[   2.815565] Config <Info> common\settings.cpp:111:operator (): -- Controls.motion_enabled: true
+[   2.815565] Config <Info> common\settings.cpp:111:operator (): -- Controls.udp_input_servers: 127.0.0.1:26760
+[   2.815566] Config <Info> common\settings.cpp:111:operator (): -- Controls.enable_udp_controller: false
+[   2.815566] Config <Info> common\settings.cpp:111:operator (): -- Controls.pause_tas_on_load: true
+[   2.815567] Config <Info> common\settings.cpp:111:operator (): -- Controls.tas_enable: false
+[   2.815567] Config <Info> common\settings.cpp:111:operator (): -- Controls.tas_loop: false
+[   2.815567] Config <Info> common\settings.cpp:111:operator (): -- Controls.mouse_panning: false
+[   2.815568] Config <Info> common\settings.cpp:111:operator (): -- Controls.mouse_panning_sensitivity: 50
+[   2.815568] Config <Info> common\settings.cpp:111:operator (): -- Controls.mouse_enabled: false
+[   2.815569] Config <Info> common\settings.cpp:111:operator (): -- Controls.mouse_panning_x_sensitivity: 50
+[   2.815569] Config <Info> common\settings.cpp:111:operator (): -- Controls.mouse_panning_y_sensitivity: 50
+[   2.815569] Config <Info> common\settings.cpp:111:operator (): -- Controls.mouse_panning_deadzone_counterweight: 20
+[   2.815570] Config <Info> common\settings.cpp:111:operator (): -- Controls.mouse_panning_decay_strength: 18
+[   2.815570] Config <Info> common\settings.cpp:111:operator (): -- Controls.mouse_panning_min_decay: 6
+[   2.815571] Config <Info> common\settings.cpp:111:operator (): -- Controls.emulate_analog_keyboard: false
+[   2.815571] Config <Info> common\settings.cpp:111:operator (): -- Controls.keyboard_enabled: false
+[   2.815571] Config <Info> common\settings.cpp:111:operator (): -- Controls.debug_pad_enabled: false
+[   2.815572] Config <Info> common\settings.cpp:111:operator (): -- Controls.touch_device: min_x:100,min_y:50,max_x:1800,max_y:850
+[   2.815573] Config <Info> common\settings.cpp:111:operator (): -- Controls.touch_from_button_map: 0
+[   2.815573] Config <Info> common\settings.cpp:111:operator (): -- Controls.enable_ring_controller: true
+[   2.815574] Config <Info> common\settings.cpp:111:operator (): -- Controls.enable_ir_sensor: false
+[   2.815574] Config <Info> common\settings.cpp:111:operator (): -- Controls.ir_sensor_device: auto
+[   2.815574] Config <Info> common\settings.cpp:111:operator (): -- Controls.random_amiibo_id: false
+[   2.815575] Config <Info> common\settings.cpp:111:operator (): -- Linux.enable_gamemode: true
+[   2.815576] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.cabinet_applet_mode: LLE
+[   2.815576] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.controller_applet_mode: HLE
+[   2.815577] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.data_erase_applet_mode: HLE
+[   2.815577] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.error_applet_mode: LLE
+[   2.815578] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.net_connect_applet_mode: HLE
+[   2.815579] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.player_select_applet_mode: HLE
+[   2.815579] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.swkbd_applet_mode: LLE
+[   2.815580] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.mii_edit_applet_mode: LLE
+[   2.815580] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.web_applet_mode: HLE
+[   2.815581] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.shop_applet_mode: HLE
+[   2.815581] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.photo_viewer_applet_mode: LLE
+[   2.815581] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.offline_web_applet_mode: LLE
+[   2.815582] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.login_share_applet_mode: HLE
+[   2.815582] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.wifi_web_auth_applet_mode: HLE
+[   2.815583] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.my_page_applet_mode: LLE
+[   2.815585] Config <Info> common\settings.cpp:115:operator (): DataStorage_CacheDir: C:\Users\ACETaffy\AppData\Roaming\citron\cache
+[   2.815585] Config <Info> common\settings.cpp:115:operator (): DataStorage_ConfigDir: C:\Users\ACETaffy\AppData\Roaming\citron\config
+[   2.815586] Config <Info> common\settings.cpp:115:operator (): DataStorage_LoadDir: C:/Users/ACETaffy/AppData/Roaming/citron/load
+[   2.815586] Config <Info> common\settings.cpp:115:operator (): DataStorage_NANDDir: C:/Users/ACETaffy/AppData/Roaming/citron/nand
+[   2.815587] Config <Info> common\settings.cpp:115:operator (): DataStorage_SDMCDir: C:/Users/ACETaffy/AppData/Roaming/citron/sdmc
+[   2.857379] Loader <Info> core\file_sys\patch_manager.cpp:178:PatchExeFS: Patching ExeFS for title_id=010047420000A000
+[   2.857784] Loader <Info> core\file_sys\patch_manager.cpp:351:PatchExeFS:     ExeFS: LayeredExeFS patches applied successfully
+[   2.969264] Loader <Info> core\file_sys\patch_manager.cpp:452:HasNSOPatch: Querying NSO patch existence for build_id=83640E3A88C3F7AB6581D206A80F14215C6D4757, name=main
+[   2.972482] Service.FS <Info> core\hle\service\filesystem\filesystem.cpp:445:CreateSaveDataFactory: Save Path: Using default NAND as the base.
+[   2.972582] Service.FS <Info> core\hle\service\filesystem\filesystem.cpp:477:CreateSaveDataFactory: Save Path: No overrides found. Using the determined base directory.
+[   2.972644] Core <Info> core\core.cpp:392:Load: Loading IROSEKA FHD (010047420000A000) ...
+[   3.006137] Render.Vulkan <Info> video_core\vulkan_common\vulkan_device.cpp:1036:GetSuitability: Device doesn't support extension VK_EXT_external_memory_host
+[   3.006186] Render.Vulkan <Warning> video_core\vulkan_common\vulkan_device.cpp:563:Device: Ampere and newer have broken float16 math
+[   3.006187] Render.Vulkan <Warning> video_core\vulkan_common\vulkan_device.cpp:572:Device: NVIDIA Drivers >= 510 do not support MSAA image blits
+[   3.859206] Render.Vulkan <Info> video_core/texture_cache/texture_cache.h:91:TextureCache: VRAM Management initialized: limit=5031MB, expected=4780MB, critical=4981MB, gc_level=0
+[   3.861131] Render.Vulkan <Info> video_core/buffer_cache/buffer_cache.h:71:BufferCache: Buffer cache VRAM initialized: limit=5031MB, minimum=4528MB, critical=4780MB
+[   3.944454] Render.Vulkan <Info> video_core\renderer_vulkan\renderer_vulkan.cpp:196:Report: Driver: NVIDIA 621.1.0.0
+[   3.944461] Render.Vulkan <Info> video_core\renderer_vulkan\renderer_vulkan.cpp:197:Report: Device: NVIDIA GeForce RTX 4060 Laptop GPU
+[   3.944462] Render.Vulkan <Info> video_core\renderer_vulkan\renderer_vulkan.cpp:198:Report: Vulkan: 1.4.357
+[   3.944466] Render.Vulkan <Info> video_core\renderer_vulkan\renderer_vulkan.cpp:199:Report: Available VRAM: 6.14 GiB
+[   3.944468] Render.Vulkan <Info> video_core\renderer_vulkan\renderer_vulkan.cpp:211:Report: VRAM Limit: Auto (5032 MB, 80% of available)
+[   3.944471] Render.Vulkan <Info> video_core\renderer_vulkan\renderer_vulkan.cpp:216:Report: GC Aggressiveness: 0, Texture eviction: Auto, Buffer eviction: Auto
+[   3.944482] Render.Vulkan <Info> video_core\renderer_vulkan\renderer_vulkan.cpp:228:Report: VK_EXT_memory_budget: Supported, Current usage: 0.36 GiB
+[   3.946905] Service.Audio <Info> audio_core\sink\sink_details.cpp:107:GetOutputSinkDetails: Auto-selecting audio backend...
+[   3.946911] Service.Audio <Info> audio_core\sink\sink_details.cpp:110:GetOutputSinkDetails: Testing cubeb backend for suitability...
+[   4.049344] Service.Audio <Info> audio_core\sink\sink_details.cpp:114:GetOutputSinkDetails: cubeb backend is suitable, selecting it
+[   4.049351] Service.Audio <Info> audio_core\sink\sink_details.cpp:122:GetOutputSinkDetails: Auto-selecting the cubeb backend
+[   4.052725] Service.Audio <Info> audio_core\sink\sink_details.cpp:107:GetOutputSinkDetails: Auto-selecting audio backend...
+[   4.052731] Service.Audio <Info> audio_core\sink\sink_details.cpp:110:GetOutputSinkDetails: Testing cubeb backend for suitability...
+[   4.094290] Service.Audio <Info> audio_core\sink\sink_details.cpp:114:GetOutputSinkDetails: cubeb backend is suitable, selecting it
+[   4.094295] Service.Audio <Info> audio_core\sink\sink_details.cpp:122:GetOutputSinkDetails: Auto-selecting the cubeb backend
+[   4.136975] Frontend <Info> citron\main.cpp:2475:BootGame: Booting game: 010047420000A000 | IROSEKA FHD (64-bit) | 1.0.8
+[   4.151892] Render.Vulkan <Info> video_core\renderer_vulkan\vk_pipeline_cache.cpp:969:LoadVulkanPipelineCache: Loaded Vulkan driver pipeline cache: 
+[   4.152624] Render.Vulkan <Info> video_core\renderer_vulkan\vk_pipeline_cache.cpp:694:CreateGraphicsPipeline: 0x6e5a88cdcaa3fd31
+[   4.152659] Render.Vulkan <Info> video_core\renderer_vulkan\vk_pipeline_cache.cpp:694:CreateGraphicsPipeline: 0xe4293c6a7c010f16
+[   4.152768] Render.Vulkan <Info> video_core\renderer_vulkan\vk_pipeline_cache.cpp:632:LoadDiskResources: Total Pipeline Count: 4
+[   4.152971] Render.Vulkan <Info> video_core\renderer_vulkan\vk_pipeline_cache.cpp:694:CreateGraphicsPipeline: 0xd84844bcabb1ce4f
+[   4.152991] Render.Vulkan <Info> video_core\renderer_vulkan\vk_pipeline_cache.cpp:694:CreateGraphicsPipeline: 0x25bcb3a3eaccd4d7
+[   4.161312] Render.Vulkan <Info> video_core\renderer_vulkan\vk_pipeline_cache.cpp:912:SerializeVulkanPipelineCache: Vulkan driver pipelines cached at: C:\Users\ACETaffy\AppData\Roaming\citron\shader\010047420000a000\vulkan_pipelines.bin
+[   4.162819] Service.AOC <Warning> core\hle\service\aoc\addon_content_manager.cpp:54:AccumulateAOCTitleIDs: Accumulated 0 AOC title IDs
+[   4.211591] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:76:SynthesizeSystemArchive: Synthesizing system archive 'TimeZoneBinary' (0x010000000000080E).
+[   4.212411] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:94:SynthesizeSystemArchive:     - System archive generation successful!
+[   4.212848] Service.SET <Info> core\hle\service\set\system_settings_server.cpp:502:GetExternalSteadyClockSourceId: called, clock_source_id=0cd08720-f9e9-fadd-967c-1fbf31fc2ae2
+[   4.212864] Service.SET <Info> core\hle\service\set\system_settings_server.cpp:518:GetUserSystemClockContext: called
+[   4.212877] Service.SET <Info> core\hle\service\set\system_settings_server.cpp:905:GetNetworkSystemClockContext: called
+[   4.212886] Service.SET <Info> core\hle\service\set\system_settings_server.cpp:923:IsUserSystemClockAutomaticCorrectionEnabled: called, out_automatic_correction_enabled=true
+[   4.212886] Service.SET <Info> core\hle\service\set\system_settings_server.cpp:1249:GetUserSystemClockAutomaticCorrectionUpdatedTime: called
+[   4.212888] Service.SET <Info> core\hle\service\set\system_settings_server.cpp:880:GetDeviceTimeZoneLocationName: called
+[   4.298194] Service.SET <Info> core\hle\service\set\system_settings_server.cpp:1232:GetDeviceTimeZoneLocationUpdatedTime: called
+[   4.298876] Service.SET <Info> core\hle\service\set\system_settings_server.cpp:526:SetUserSystemClockContext: called
+[   4.298888] Service.SET <Info> core\hle\service\set\system_settings_server.cpp:913:SetNetworkSystemClockContext: called
+[   4.298901] Service.SET <Info> core\hle\service\set\system_settings_server.cpp:933:SetUserSystemClockAutomaticCorrectionEnabled: called, out_automatic_correction_enabled=true
+[   4.298903] Service.SET <Info> core\hle\service\set\system_settings_server.cpp:1257:SetUserSystemClockAutomaticCorrectionUpdatedTime: called
+[   4.319321] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:76:SynthesizeSystemArchive: Synthesizing system archive 'FontStandard' (0x0100000000000811).
+[   4.321413] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:94:SynthesizeSystemArchive:     - System archive generation successful!
+[   4.321684] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:76:SynthesizeSystemArchive: Synthesizing system archive 'FontChineseSimple' (0x0100000000000814).
+[   4.325576] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:94:SynthesizeSystemArchive:     - System archive generation successful!
+[   4.325704] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:76:SynthesizeSystemArchive: Synthesizing system archive 'FontChineseSimple' (0x0100000000000814).
+[   4.325996] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:94:SynthesizeSystemArchive:     - System archive generation successful!
+[   4.326282] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:76:SynthesizeSystemArchive: Synthesizing system archive 'FontChineseTraditional' (0x0100000000000813).
+[   4.328636] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:94:SynthesizeSystemArchive:     - System archive generation successful!
+[

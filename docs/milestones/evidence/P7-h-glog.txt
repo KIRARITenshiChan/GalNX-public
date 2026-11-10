@@ -1,0 +1,10 @@
+[pad] key=1013 virt=0 uiChildren=0 gamemenu=0x210d1bbca0 cursor=0x0
+[pad] key=1004 virt=0 uiChildren=0 gamemenu=0x210d1bbca0 cursor=0x0
+[pad] wheel 120
+[pad] key=1005 virt=0 uiChildren=0 gamemenu=0x210d1bbca0 cursor=0x0
+[tjs] back -> 
+[pad] wheel -120
+[pad] key=1016 virt=0 uiChildren=0 gamemenu=0x210d1bbca0 cursor=0x0
+[pad] ctrl down
+[pad] ctrl up
+[pad] key=1004 virt=0 uiChildren=0 gamemenu=0x210d1bbca0 cursor=0x0

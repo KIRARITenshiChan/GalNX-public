@@ -1,0 +1,41 @@
+diff --git a/src/plugins/InternalPlugins.cpp b/src/plugins/InternalPlugins.cpp
+index 03c919e..cb9b13f 100644
+--- a/src/plugins/InternalPlugins.cpp
++++ b/src/plugins/InternalPlugins.cpp
+@@ -1,4 +1,5 @@
+ #include "ncbind/ncbind.hpp"
++#include <cstdio>
+ //extern void InitPlugin_CSVParser();
+ 
+ void TVPLoadInternalPlugins()
+@@ -15,5 +16,28 @@ void TVPUnloadInternalPlugins()
+ 
+ bool TVPLoadInternalPlugin(const ttstr &_name)
+ {
+-	return ncbAutoRegister::LoadModule(TVPExtractStorageName(_name));
++	// [GalNX] Games ship their plugins as plugin/*.tpm while the built-in modules
++	// (windowEx, layerExImage, fstat, extrans, csvParser, ...) register under *.dll.
++	// Without this alias the game's own plugin folder can never reach the built-in
++	// ports, so scripts fail with "Member ... does not exist" (e.g. KAG
++	// Window.registerExEvent). Try the requested name first, then *.tpm -> *.dll.
++	ttstr name = TVPExtractStorageName(_name);
++	if (ncbAutoRegister::LoadModule(name)) {
++		printf("[GalNX] internal plugin loaded: %s\n", name.AsNarrowStdString().c_str());
++		return true;
++	}
++	ttstr lower = name.AsLowerCase();
++	if (lower.GetLen() > 4 && lower.SubString(lower.GetLen() - 4, 4) == TJS_W(".tpm")) {
++		ttstr dll(name.SubString(0, name.GetLen() - 4));
++		dll += TJS_W(".dll");
++		if (ncbAutoRegister::LoadModule(dll)) {
++			printf("[GalNX] internal plugin loaded via .tpm alias: %s -> %s\n",
++			       name.AsNarrowStdString().c_str(), dll.AsNarrowStdString().c_str());
++			return true;
++		}
++		printf("[GalNX] no built-in module for game plugin: %s\n", name.AsNarrowStdString().c_str());
++	} else {
++		printf("[GalNX] no built-in module for plugin: %s\n", name.AsNarrowStdString().c_str());
++	}
++	return false;
+ }
+\ No newline at end of file

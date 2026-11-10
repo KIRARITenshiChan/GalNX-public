@@ -1,0 +1,472 @@
+date=2026-10-29T22:14:42+08:00
+uname=MSYS_NT-10.0-26100 ��֤Ӣ�� 3.6.11-00eb8435.x86_64 2026-10-16 10:03 UTC x86_64 Msys
+## gcc --version (absolute)
+aarch64-none-elf-gcc.exe (devkitA64) 16.1.0
+Copyright (C) 2026 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+## gcc -dumpmachine
+aarch64-none-elf
+## ld --version
+GNU ld (GNU Binutils) 2.46.0.20260210
+Copyright (C) 2026 Free Software Foundation, Inc.
+## make --version
+GNU Make 4.4.1
+为 x86_64-pc-msys 编译
+## nxlink --help (PATH augmented)
+Usage: nxlink [options] nrofile
+
+--help,    -h   Display this information
+--address, -a   Hostname or IPv4 address of Switch
+--retries, -r   number of times to ping before giving up
+--path   , -p   set upload path for file
+--args          args to send to nro
+--server , -s   start server after completed upload
+
+
+## DEVKITPRO=/opt/devkitpro MSYSTEM=MSYS
+## pacman -V
+
+ .--.                  Pacman v6.1.0 - libalpm v14.0.0
+/ _.-' .-.  .-.  .-.   Copyright (C) 2006-2024 Pacman Development Team
+\  '-. '-'  '-'  '-'   Copyright (C) 2002-2006 Judd Vinet
+ '--'
+                       本程序可以在GNU一般公众许可条款下
+                       自由分发
+
+## pacman -Q count
+212
+## pacman -Sg switch-dev
+switch-dev catnip
+switch-dev deko3d
+switch-dev devkita64-cmake
+switch-dev libnx
+switch-dev switch-cmake
+switch-dev switch-examples
+switch-dev switch-pkg-config
+switch-dev devkit-env
+switch-dev devkitA64-gdb
+switch-dev devkita64-binutils
+switch-dev general-tools
+switch-dev switch-tools
+switch-dev uam
+## pacman -Q all
+armv4t-pkg-config 0.28-1
+autoconf-wrapper 20240607-1
+autoconf2.13 2.13-6
+autoconf2.69 2.69-4
+autoconf2.71 2.71-4
+autoconf2.72 2.72-3
+automake-wrapper 20240607-1
+automake1.11 1.11.6-6
+automake1.12 1.12.6-6
+automake1.13 1.13.4-7
+automake1.14 1.14.1-6
+automake1.15 1.15.1-4
+automake1.16 1.16.5-1
+automake1.17 1.17-1
+base 2022.06-1
+bash 5.3.20-2
+bash-completion 2.16.0-1
+brotli 1.1.0-2
+bsdtar 3.7.9-1
+bzip2 1.0.8-4
+ca-certificates 20241223-1
+calico 1.2.0-1
+catnip 0.2.0-1
+cmake 4.0.2-1
+coreutils 8.32-5
+cppdap 1.58.0a-3
+curl 8.13.0-2
+dash 0.5.12-1
+db 6.2.32-5
+default-arm7 0.8.4-4
+deko3d 0.5.0-1
+devkit-env 1.0.1-2
+devkitA64 r30-1
+devkitA64-gdb 14.1-1
+devkitARM r68-1
+devkitARM-gdb 14.1-1
+devkitPPC r51-1
+devkitPPC-gdb 14.1-1
+devkita64-binutils 2.46.0-1
+devkita64-cmake 1.1.3-1
+devkita64-gcc 16.1.0-1
+devkita64-newlib 4.6.0.20260123-4
+devkita64-rules 1.1.1-1
+devkitarm-binutils 2.46.0-1
+devkitarm-cmake 1.2.4-1
+devkitarm-crtls 1.2.6-1
+devkitarm-gcc 16.1.0-1
+devkitarm-newlib 4.6.0.20260123-5
+devkitarm-rules 1.6.0-4
+devkitppc-binutils 2.47-2
+devkitppc-cmake 1.1.4-1
+devkitppc-crtls 2.1.0-1
+devkitppc-gcc 16.2.0-1
+devkitppc-mn10200-binutils 2.24-3
+devkitppc-newlib 4.6.0.20260123-4
+devkitppc-rules 1.2.1-1
+devkitpro-keyring 20241017-2
+diffutils 3.12-1
+dkp-cmake-common-utils 1.5.3-1
+dstools 1.3.3-3
+dswifi 2.1.0-1
+file 5.46-2
+filesystem 2026.10.17-1
+findutils 4.10.0-2
+gamecube-tools 1.0.7-1
+gawk 5.3.2-1
+gcc-libs 13.3.0-1
+gdbm 1.25-1
+general-tools 1.4.4-1
+getent 2.18.90-5
+gettext 0.22.5-1
+git 2.49.0-1
+gmp 6.3.0-1
+gnupg 2.4.8-1
+gp32-examples 20051021-2
+gp32-tools 1.0.3-2
+grep 1~3.0-7
+grit 0.10.0-1
+gzip 1.14-1
+heimdal 7.8.0-5
+heimdal-libs 7.8.0-5
+inetutils 2.5-2
+info 7.2-1
+jsoncpp 1.9.6-3
+less 668-1
+libarchive 3.7.9-1
+libargp 20241207-1
+libasprintf 0.22.5-1
+libassuan 3.0.2-1
+libbz2 1.0.8-4
+libcbor 0.12.0-1
+libcurl 8.13.0-2
+libdb 6.2.32-5
+libedit 20240808_3.1-1
+libexpat 2.7.1-1
+libfat-nds 2.1.0-4
+libfat-ogc 2.1.0-4
+libffi 3.4.8-1
+libfido2 1.16.0-1
+libgcrypt 1.11.1-1
+libgdbm 1.25-1
+libgettextpo 0.22.5-1
+libgnutls 3.8.9-1
+libgpg-error 1.55-1
+libgxflux 20230423-3
+libhogweed 3.10.1-1
+libiconv 1.18-1
+libidn2 2.3.8-1
+libintl 0.22.5-1
+libksba 1.6.7-1
+libltdl 2.5.4-1
+liblz4 1.10.0-1
+liblzma 5.8.1-1
+libmirko 0.9.8-1
+libnds 2.0.2-1
+libnettle 3.10.1-1
+libnghttp2 1.65.0-1
+libnpth 1.8-1
+libnx 4.12.0-1
+libogc 3.2.1-1
+libopenssl 3.5.0-1
+libp11-kit 0.25.5-2
+libpcre 8.45-5
+libpcre2_8 10.45-1
+libpsl 0.21.5-2
+libreadline 8.2.013-1
+librhash 1.4.4-1
+libsqlite 3.49.2-1
+libssh2 1.11.1-1
+libtasn1 4.20.0-1
+libtool 2.5.4-1
+libunistring 1.3-1
+libutil-linux 2.40.2-2
+libuv 1.51.0-1
+libxcrypt 4.4.38-1
+libzstd 1.5.7-1
+m4 1.4.19-2
+make 4.4.1-2
+maxmod-nds 2.1.0-2
+mintty 1~3.8.3-1
+mmutil 1.10.1-1
+mpfr 4.2.2-1
+msys2-keyring 1~20250214-1
+msys2-launcher 1.5-3
+msys2-runtime 3.6.11-4
+nano 8.4-1
+ncurses 6.5.20240831-2
+nds-cmake 1.3.1-1
+nds-examples 20241110-1
+nds-pkg-config 0.28-4
+ndstool 2.3.1-1
+nettle 3.10.1-1
+ogc-cmake 1.3.0-1
+openssh 10.0p1-2
+openssl 3.5.0-1
+p11-kit 0.25.5-2
+pacman 6.1.0-26
+pacman-contrib 1.10.6-1
+pacman-mirrors 20260129-1
+perl 5.38.4-2
+perl-Authen-SASL 2.1800-1
+perl-Clone 0.47-1
+perl-Convert-BinHex 1.125-2
+perl-Encode-Locale 1.05-2
+perl-Error 0.17030-1
+perl-File-Listing 6.16-1
+perl-HTML-Parser 3.83-1
+perl-HTML-Tagset 3.24-1
+perl-HTTP-Cookies 6.11-1
+perl-HTTP-Daemon 6.16-1
+perl-HTTP-Date 6.06-1
+perl-HTTP-Message 7.00-1
+perl-HTTP-Negotiate 6.01-3
+perl-IO-HTML 1.004-2
+perl-IO-Socket-SSL 2.089-1
+perl-IO-Stringy 2.113-2
+perl-LWP-MediaTypes 6.04-2
+perl-MIME-tools 5.515-1
+perl-MailTools 2.22-1
+perl-Net-HTTP 6.23-1
+perl-Net-SMTP-SSL 1.04-2
+perl-Net-SSLeay 1.94-2
+perl-TermReadKey 2.38-6
+perl-TimeDate 2.33-2
+perl-Try-Tiny 0.32-1
+perl-URI 5.31-1
+perl-WWW-RobotRules 6.02-3
+perl-http-cookiejar 0.014-1
+perl-libwww 6.78-1
+pinentry 1.3.1-2
+pkgconf 2.4.3-1
+ppc-pkg-config 0.28-5
+rebase 4.5.0-5
+sed 4.9-1
+switch-cmake 1.5.2-1
+switch-examples 20260201-1
+switch-pkg-config 0.28-4
+switch-tools 1.13.1-1
+tar 1.35-2
+time 1.9-3
+tzcode 2025b-1
+uam 1.1.0-2
+util-linux 2.40.2-2
+wget 1.25.0-1
+which 2.23-4
+wii-cmake 1.0.1-1
+wii-examples 20260510-1
+wii-pkg-config 0.28-5
+wiiload 0.5.3-1
+xz 5.8.1-1
+zlib 1.3.1-1
+zstd 1.5.7-1
+## cache pkg.tar.zst count
+64
+## cache switch-related files
+catnip-0.2.0-1-any.pkg.tar.zst
+catnip-0.2.0-1-any.pkg.tar.zst.sig
+deko3d-0.5.0-1-any.pkg.tar.zst
+deko3d-0.5.0-1-any.pkg.tar.zst.sig
+devkita64-binutils-2.46.0-1-x86_64.pkg.tar.zst
+devkita64-binutils-2.46.0-1-x86_64.pkg.tar.zst.sig
+devkita64-cmake-1.1.3-1-any.pkg.tar.zst
+devkita64-cmake-1.1.3-1-any.pkg.tar.zst.sig
+devkita64-gcc-16.1.0-1-x86_64.pkg.tar.zst
+devkita64-gcc-16.1.0-1-x86_64.pkg.tar.zst.sig
+devkitA64-gdb-14.1-1-x86_64.pkg.tar.zst
+devkitA64-gdb-14.1-1-x86_64.pkg.tar.zst.sig
+devkita64-newlib-4.6.0.20260123-4-any.pkg.tar.zst
+devkita64-newlib-4.6.0.20260123-4-any.pkg.tar.zst.sig
+devkitA64-r30-1-any.pkg.tar.zst
+devkitA64-r30-1-any.pkg.tar.zst.sig
+devkita64-rules-1.1.1-1-any.pkg.tar.zst
+devkita64-rules-1.1.1-1-any.pkg.tar.zst.sig
+devkit-env-1.0.1-2-any.pkg.tar.zst
+devkit-env-1.0.1-2-any.pkg.tar.zst.sig
+general-tools-1.4.4-1-x86_64.pkg.tar.zst
+general-tools-1.4.4-1-x86_64.pkg.tar.zst.sig
+libnx-4.12.0-1-any.pkg.tar.zst
+libnx-4.12.0-1-any.pkg.tar.zst.sig
+switch-cmake-1.5.2-1-any.pkg.tar.zst
+switch-cmake-1.5.2-1-any.pkg.tar.zst.sig
+switch-examples-20260201-1-any.pkg.tar.zst
+switch-examples-20260201-1-any.pkg.tar.zst.sig
+switch-libdrm_nouveau-1.0.1-2-any.pkg.tar.xz
+switch-libdrm_nouveau-1.0.1-2-any.pkg.tar.xz.sig
+switch-mesa-20.1.0-5-any.pkg.tar.zst
+switch-mesa-20.1.0-5-any.pkg.tar.zst.sig
+switch-pkg-config-0.28-4-any.pkg.tar.xz
+switch-pkg-config-0.28-4-any.pkg.tar.xz.sig
+switch-sdl2-2.28.5-4-any.pkg.tar.zst
+switch-sdl2-2.28.5-4-any.pkg.tar.zst.sig
+switch-tools-1.13.1-1-x86_64.pkg.tar.zst
+switch-tools-1.13.1-1-x86_64.pkg.tar.zst.sig
+uam-1.1.0-2-x86_64.pkg.tar.xz
+uam-1.1.0-2-x86_64.pkg.tar.xz.sig
+## cache sha256 switch-related (pkg only)
+e960ff96ae62f2faaff68a3a97a81793a191a08d3efff1f3f306c3f9dadd18de *catnip-0.2.0-1-any.pkg.tar.zst
+d4281a573246c2e658c0a2619b78099d4016ad72d6210a1e13473a546e7f9ac3 *deko3d-0.5.0-1-any.pkg.tar.zst
+c516a70a31521b61e18759669c6f5c6718796a6cbb0b3c1c023a2ac418f79988 *devkita64-binutils-2.46.0-1-x86_64.pkg.tar.zst
+f2baa41f2b776ea5e7c5340464d2ba1bcccbc73a96c3293c91ae13df9ee5d467 *devkita64-cmake-1.1.3-1-any.pkg.tar.zst
+4ccf7ee6f3d85248f3b58708e44aa3e9f777479ff90cd4409a95862752e85400 *devkita64-gcc-16.1.0-1-x86_64.pkg.tar.zst
+293d8f1b1156aeadd7e670c2a2150129908488a164c5c40c5ce57c519594973b *devkitA64-gdb-14.1-1-x86_64.pkg.tar.zst
+fc97ba1009a94b68f8714c3cc548ef697ca82687b72fe0c05a7ca3df81beb53e *devkita64-newlib-4.6.0.20260123-4-any.pkg.tar.zst
+66f100490dafe506495ee083bc932aa2c2f231b5dafaa2b203d1832389b700e9 *devkitA64-r30-1-any.pkg.tar.zst
+2649cf7827243447070073acc2aa2fee152a0592fc30e827ceed803c565a1ede *devkita64-rules-1.1.1-1-any.pkg.tar.zst
+892648f8472aa4d15041d9d6f53fd2c50268d449d3ee6aa1a1f13c504f98f50c *devkit-env-1.0.1-2-any.pkg.tar.zst
+a0fcea1a26c4f472c2ac98c409847dbec9d8e86ed82cd8b02131454f63d239f1 *general-tools-1.4.4-1-x86_64.pkg.tar.zst
+c6950bdf8e4b872ece492225368c03e633776329548a7494f91aa1e8f239cd8a *libnx-4.12.0-1-any.pkg.tar.zst
+7eee6a98312991faac73246f93d88740fb234d90ac5bd19ca969d6e227a59c8f *switch-cmake-1.5.2-1-any.pkg.tar.zst
+c55cab70202eb7b1804957c9fdda8f8a1c76c27c6be8839729c9b7f6839e34c4 *switch-examples-20260201-1-any.pkg.tar.zst
+78328415d06bff75af07091243844ded5a63dc4d4520d2c708787b8d80ad386d *switch-mesa-20.1.0-5-any.pkg.tar.zst
+395b2fe3cd7fed9d3edc443a35cd40d2b7e8dce8730a5acffc8fb9a85b52c031 *switch-sdl2-2.28.5-4-any.pkg.tar.zst
+c9c5fc60e3dd2f82d7c6592611bd37cc610d150ef4fa75fe09ce329df998084d *switch-tools-1.13.1-1-x86_64.pkg.tar.zst
+## du -sh /opt/devkitpro
+2.5G	/opt/devkitpro
+## fstab
+# For a description of the file format, see the Users Guide
+# https://cygwin.com/cygwin-ug-net/using.html#mount-table
+
+# DO NOT REMOVE NEXT LINE. It remove cygdrive prefix from path
+none / cygdrive binary,posix=0,noacl,user 0 0
+
+# Share home with windows
+C:\Users	/home
+
+# map devkitPro to /opt
+D:\devkitPro	/opt/devkitpro
+
+## profile.d devkit-env.sh
+export DEVKITPRO=/opt/devkitpro
+export DEVKITARM=${DEVKITPRO}/devkitARM
+export DEVKITPPC=${DEVKITPRO}/devkitPPC
+
+export PATH=${DEVKITPRO}/tools/bin:$PATH
+
+## pacman.conf backups (ls)
+-rw-r--r-- 1 ACETaffy None 2708 10月 29 22:09 /etc/pacman.conf
+-rw-r--r-- 1 ACETaffy None 2512 10月 29 22:01 /etc/pacman.conf.bak-galnx-20261029
+-rw-r--r-- 1 ACETaffy None 2628 10月 29 22:09 /etc/pacman.conf.bak-galnx-20261029-220910
+总用量 12
+drwxr-xr-x 1 ACETaffy None    0 10月 29 15:31 gnupg
+-rw-r--r-- 1 ACETaffy None 1867  1月 29  2026 mirrorlist.mingw
+-rw-r--r-- 1 ACETaffy None 1721  1月 29  2026 mirrorlist.msys
+## pacman.conf key lines
+18:XferCommand = /usr/bin/env http_proxy=http://127.0.0.1:7897 https_proxy=http://127.0.0.1:7897 /usr/bin/curl -L -C - -f -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36" -o %o %u
+19:#XferCommand = /usr/bin/wget --passive-ftp -c -O %o %u
+57:#       Server = ServerName
+58:#       Include = IncludePath
+65:# repo name header and Include lines. You can add preferred servers immediately
+70:# Server = https://repo.msys2.org/staging/
+74:Include = /etc/pacman.d/mirrorlist.msys
+77:[dkp-libs]
+78:Server = https://pkg.devkitpro.org/packages
+80:[dkp-windows]
+81:Server = https://pkg.devkitpro.org/packages/windows/$arch
+88:#Server = file:///home/custompkgs
+## pacman.log 2026-10-29 lines
+168:[2026-10-29T15:31:46+0800] [PACMAN] Running '/opt/devkitpro/msys2/usr/bin/pacman -Syu --noconfirm'
+169:[2026-10-29T15:31:46+0800] [PACMAN] synchronizing package lists
+170:[2026-10-29T15:31:52+0800] [PACMAN] starting core system upgrade
+171:[2026-10-29T15:32:28+0800] [ALPM] transaction started
+172:[2026-10-29T15:32:28+0800] [ALPM] upgraded bash (5.2.037-2 -> 5.3.20-2)
+173:[2026-10-29T15:32:29+0800] [ALPM] upgraded filesystem (2025.02.23-1 -> 2026.10.17-1)
+174:[2026-10-29T15:32:29+0800] [ALPM] upgraded mintty (1~3.7.8-1 -> 1~3.8.3-1)
+175:[2026-10-29T15:32:29+0800] [ALPM] upgraded msys2-runtime (3.6.1-4 -> 3.6.11-4)
+176:[2026-10-29T15:32:29+0800] [ALPM] upgraded pacman-mirrors (20250220-1 -> 20260129-1)
+177:[2026-10-29T15:32:29+0800] [ALPM] upgraded pacman (6.1.0-11 -> 6.1.0-26)
+178:[2026-10-29T15:32:29+0800] [ALPM] transaction completed
+179:[2026-10-29T15:32:33+0800] [PACMAN] Running '/opt/devkitpro/msys2/usr/bin/pacman -S --noconfirm --needed gba-dev'
+180:[2026-10-29T15:32:59+0800] [PACMAN] Running '/opt/devkitpro/msys2/usr/bin/pacman -S --noconfirm --needed gp32-dev'
+181:[2026-10-29T15:33:34+0800] [ALPM] transaction started
+182:[2026-10-29T15:33:34+0800] [ALPM] installed armv4t-pkg-config (0.28-1)
+183:[2026-10-29T15:33:36+0800] [ALPM] installed devkitarm-binutils (2.46.0-1)
+184:[2026-10-29T15:33:36+0800] [ALPM] installed devkitarm-newlib (4.6.0.20260123-5)
+185:[2026-10-29T15:33:36+0800] [ALPM] installed general-tools (1.4.4-1)
+186:[2026-10-29T15:33:36+0800] [ALPM] installed devkitarm-rules (1.6.0-4)
+187:[2026-10-29T15:33:36+0800] [ALPM] installed devkitarm-crtls (1.2.6-1)
+188:[2026-10-29T15:33:39+0800] [ALPM] installed devkitarm-gcc (16.1.0-1)
+189:[2026-10-29T15:33:39+0800] [ALPM] installed devkitARM (r68-1)
+190:[2026-10-29T15:33:39+0800] [ALPM] installed dkp-cmake-common-utils (1.5.3-1)
+191:[2026-10-29T15:33:39+0800] [ALPM] installed devkitarm-cmake (1.2.4-1)
+192:[2026-10-29T15:33:39+0800] [ALPM] installed gp32-examples (20051021-2)
+193:[2026-10-29T15:33:39+0800] [ALPM] installed libmirko (0.9.8-1)
+194:[2026-10-29T15:33:39+0800] [ALPM] installed devkit-env (1.0.1-2)
+195:[2026-10-29T15:33:39+0800] [ALPM-SCRIPTLET] To use the toolchains some variables need to be set in your shell. A file
+196:[2026-10-29T15:33:39+0800] [ALPM-SCRIPTLET] has been provided for POSIX compatible shells (bash, zsh, ...) which will
+197:[2026-10-29T15:33:39+0800] [ALPM-SCRIPTLET] set the necessary variables after you logout and login again.
+198:[2026-10-29T15:33:39+0800] [ALPM-SCRIPTLET] 
+199:[2026-10-29T15:33:39+0800] [ALPM-SCRIPTLET] To use the toolchains right away, use
+200:[2026-10-29T15:33:39+0800] [ALPM-SCRIPTLET]   $ source /etc/profile.d/devkit-env.sh
+201:[2026-10-29T15:33:39+0800] [ALPM] installed devkitARM-gdb (14.1-1)
+202:[2026-10-29T15:33:39+0800] [ALPM] installed gp32-tools (1.0.3-2)
+203:[2026-10-29T15:33:39+0800] [ALPM] transaction completed
+204:[2026-10-29T15:33:42+0800] [PACMAN] Running '/opt/devkitpro/msys2/usr/bin/pacman -S --noconfirm --needed nds-dev'
+205:[2026-10-29T15:34:20+0800] [ALPM] transaction started
+206:[2026-10-29T15:34:20+0800] [ALPM] installed calico (1.2.0-1)
+207:[2026-10-29T15:34:20+0800] [ALPM] installed catnip (0.2.0-1)
+208:[2026-10-29T15:34:20+0800] [ALPM] installed default-arm7 (0.8.4-4)
+209:[2026-10-29T15:34:20+0800] [ALPM] installed dswifi (2.1.0-1)
+210:[2026-10-29T15:34:20+0800] [ALPM] installed libnds (2.0.2-1)
+211:[2026-10-29T15:34:20+0800] [ALPM] installed libfat-nds (2.1.0-4)
+212:[2026-10-29T15:34:20+0800] [ALPM] installed maxmod-nds (2.1.0-2)
+213:[2026-10-29T15:34:20+0800] [ALPM] installed ndstool (2.3.1-1)
+214:[2026-10-29T15:34:20+0800] [ALPM] installed grit (0.10.0-1)
+215:[2026-10-29T15:34:20+0800] [ALPM] installed mmutil (1.10.1-1)
+216:[2026-10-29T15:34:20+0800] [ALPM] installed nds-pkg-config (0.28-4)
+217:[2026-10-29T15:34:20+0800] [ALPM] installed nds-cmake (1.3.1-1)
+218:[2026-10-29T15:34:21+0800] [ALPM] installed nds-examples (20241110-1)
+219:[2026-10-29T15:34:21+0800] [ALPM] installed dstools (1.3.3-3)
+220:[2026-10-29T15:34:21+0800] [ALPM] transaction completed
+221:[2026-10-29T15:34:23+0800] [PACMAN] Running '/opt/devkitpro/msys2/usr/bin/pacman -S --noconfirm --needed 3ds-dev'
+222:[2026-10-29T15:34:48+0800] [PACMAN] Running '/opt/devkitpro/msys2/usr/bin/pacman -S --noconfirm --needed gamecube-dev'
+223:[2026-10-29T15:35:21+0800] [PACMAN] Running '/opt/devkitpro/msys2/usr/bin/pacman -S --noconfirm --needed wii-dev'
+224:[2026-10-29T15:35:59+0800] [ALPM] transaction started
+225:[2026-10-29T15:35:59+0800] [ALPM] installed devkitppc-cmake (1.1.4-1)
+226:[2026-10-29T15:35:59+0800] [ALPM] installed devkitppc-crtls (2.1.0-1)
+227:[2026-10-29T15:35:59+0800] [ALPM] installed devkitppc-rules (1.2.1-1)
+228:[2026-10-29T15:35:59+0800] [ALPM] installed libogc (3.2.1-1)
+229:[2026-10-29T15:35:59+0800] [ALPM] installed libfat-ogc (2.1.0-4)
+230:[2026-10-29T15:35:59+0800] [ALPM] installed libgxflux (20230423-3)
+231:[2026-10-29T15:35:59+0800] [ALPM] installed gamecube-tools (1.0.7-1)
+232:[2026-10-29T15:35:59+0800] [ALPM] installed ogc-cmake (1.3.0-1)
+233:[2026-10-29T15:35:59+0800] [ALPM] installed ppc-pkg-config (0.28-5)
+234:[2026-10-29T15:35:59+0800] [ALPM] installed wii-pkg-config (0.28-5)
+235:[2026-10-29T15:35:59+0800] [ALPM] installed wii-cmake (1.0.1-1)
+236:[2026-10-29T15:36:01+0800] [ALPM] installed devkitppc-binutils (2.47-2)
+237:[2026-10-29T15:36:02+0800] [ALPM] installed devkitppc-mn10200-binutils (2.24-3)
+238:[2026-10-29T15:36:02+0800] [ALPM] installed devkitppc-newlib (4.6.0.20260123-4)
+239:[2026-10-29T15:36:04+0800] [ALPM] installed devkitppc-gcc (16.2.0-1)
+240:[2026-10-29T15:36:04+0800] [ALPM] installed devkitPPC (r51-1)
+241:[2026-10-29T15:36:04+0800] [ALPM] installed wii-examples (20260510-1)
+242:[2026-10-29T15:36:04+0800] [ALPM] installed devkitPPC-gdb (14.1-1)
+243:[2026-10-29T15:36:04+0800] [ALPM] installed wiiload (0.5.3-1)
+244:[2026-10-29T15:36:04+0800] [ALPM] transaction completed
+245:[2026-10-29T15:36:07+0800] [PACMAN] Running '/opt/devkitpro/msys2/usr/bin/pacman -S --noconfirm --needed switch-dev'
+246:[2026-10-29T22:00:14+0800] [PACMAN] Running 'pacman -S --needed --noconfirm switch-dev'
+247:[2026-10-29T22:02:19+0800] [PACMAN] Running 'pacman -S --needed --noconfirm switch-dev'
+248:[2026-10-29T22:05:42+0800] [PACMAN] Running 'pacman -S --needed --noconfirm switch-dev'
+249:[2026-10-29T22:06:39+0800] [PACMAN] Running 'pacman -S --needed --noconfirm switch-dev'
+250:[2026-10-29T22:07:08+0800] [ALPM] transaction started
+251:[2026-10-29T22:07:09+0800] [ALPM] installed libnx (4.12.0-1)
+252:[2026-10-29T22:07:09+0800] [ALPM] installed deko3d (0.5.0-1)
+253:[2026-10-29T22:07:09+0800] [ALPM] installed devkita64-cmake (1.1.3-1)
+254:[2026-10-29T22:07:09+0800] [ALPM] installed switch-tools (1.13.1-1)
+255:[2026-10-29T22:07:09+0800] [ALPM] installed uam (1.1.0-2)
+256:[2026-10-29T22:07:09+0800] [ALPM] installed switch-pkg-config (0.28-4)
+257:[2026-10-29T22:07:09+0800] [ALPM] installed switch-cmake (1.5.2-1)
+258:[2026-10-29T22:07:10+0800] [ALPM] installed switch-examples (20260201-1)
+259:[2026-10-29T22:07:12+0800] [ALPM] installed devkita64-binutils (2.46.0-1)
+260:[2026-10-29T22:07:12+0800] [ALPM] installed devkita64-newlib (4.6.0.20260123-4)
+261:[2026-10-29T22:07:12+0800] [ALPM] installed devkita64-rules (1.1.1-1)
+262:[2026-10-29T22:07:16+0800] [ALPM] installed devkita64-gcc (16.1.0-1)
+263:[2026-10-29T22:07:16+0800] [ALPM] installed devkitA64 (r30-1)
+264:[2026-10-29T22:07:16+0800] [ALPM] installed devkitA64-gdb (14.1-1)
+265:[2026-10-29T22:07:16+0800] [ALPM] transaction completed
+266:[2026-10-29T22:09:14+0800] [PACMAN] Running 'pacman -Sw --noconfirm --needed switch-sdl2'
+## pacman.log total lines
+266 /var/log/pacman.log

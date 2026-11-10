@@ -1,0 +1,20 @@
+0	wait	wait:9000	ok	waited 9000ms		9864
+1	capture	capture:n0-title	ok	bytes=1417778 nonblack=0.9018	E:\galnx-build\m5-rfvp-run\p12-n\20261031-163906-rfvp\step-02-n0-title.png	2501
+2	click	click:1386,560	ok	focus_ok=1		2146
+3	wait	wait:50000	ok	waited 50000ms		50843
+4	capture	capture:n1-story	ok	bytes=94970 nonblack=0.9018	E:\galnx-build\m5-rfvp-run\p12-n\20261031-163906-rfvp\step-05-n1-story.png	2699
+5	key	key:C	ok	keys_sent=1		1883
+6	wait	wait:900	ok	waited 900ms		1712
+7	key	key:C	ok	keys_sent=1		1760
+8	wait	wait:900	ok	waited 900ms		1761
+9	key	key:C	ok	keys_sent=1		1887
+10	wait	wait:1500	ok	waited 1500ms		2337
+11	capture	capture:n2-after-A	ok	bytes=1306567 nonblack=0.9018	E:\galnx-build\m5-rfvp-run\p12-n\20261031-163906-rfvp\step-12-n2-after-A.png	2460
+12	wait	wait:1500	ok	waited 1500ms		2366
+13	capture	capture:n3-after-A2	ok	bytes=1424800 nonblack=0.9018	E:\galnx-build\m5-rfvp-run\p12-n\20261031-163906-rfvp\step-14-n3-after-A2.png	2414
+14	key	key:V	ok	keys_sent=1		1763
+15	wait	wait:6000	ok	waited 6000ms		6861
+16	capture	capture:n4-padx	ok	bytes=1590906 nonblack=0.9018	E:\galnx-build\m5-rfvp-run\p12-n\20261031-163906-rfvp\step-17-n4-padx.png	2691
+17	key	key:V	ok	keys_sent=1		1851
+18	wait	wait:4000	ok	waited 4000ms		4857
+19	capture	capture:n5-padx-off	ok	bytes=1648652 nonblack=0.9018	E:\galnx-build\m5-rfvp-run\p12-n\20261031-163906-rfvp\step-20-n5-padx-off.png	2473

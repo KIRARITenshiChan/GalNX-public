@@ -1,0 +1,49 @@
+P11 rfvp self-contained NSP - provenance
+========================================
+date: 2026-10-31 (Asia/Shanghai)
+game: 五彩斑斓的世界 HD Re:GENERATION (IROSEKA_FHD)
+engine: rfvp 0.7.0 (upstream 9f07ade) + GalNX Switch backend (SDL2/GLES2) + romfs self-containment
+title_id: 010047420000A000 (base application id, 0x2000 aligned)
+title: IROSEKA FHD / author: GalNX / version: 1.0.0 / display: handheld
+
+Artifact
+  path   E:/galnx-build/p11/out/IROSEKA_FHD-010047420000a000.nsp
+  size   9,979,435,224 B
+  sha256 4592385c1c3e6b166172315a1c79c574b9241f6f8c57244b2e050e0292549189
+
+Build inputs
+  exefs/main                        4,612,243 B sha256 915cdf7379ba784ad72a675837efb62ae829caab203e1b0341084fd3d028774b
+  exefs/main.npdm                       972 B sha256 3cfb9877ba2b37018bbc66ec3c64c760c399ee80b4bc1bd6bee1d03b332ba565
+  control/control.nacp               16,384 B sha256 8e9bbbd1625360ccb9d76388b864212e07af380ce243965bc3399e3a5dddc470
+  control/icon_AmericanEnglish.dat   22,454 B sha256 10daef90e30d9bcc7f4e40294f0694fd75c1b4f0c53d52b016cbdc2e2b980b79
+  romfs root                  9,932,275,140 B, 161 top-level game entries (hardlinked=161 copied=0)
+  keyset                    explicit local prod.keys, 12,007 B sha256 7bb3b6d2a2eedc83c9f244ee2ed2eaa4d59eb9ad95b66df575f7dfffa71a2a40
+                            (contents intentionally not recorded; never committed or logged)
+  hacBrewPack               546 s, Section Crypto Type Regular Crypto, SDK 0.12.17.0
+
+Engine binaries used
+  NRO  7,839,800 B sha256 9b5089f18e7c5c5ea6509d9772c49879d2bf627aae9edc50e7c8d631e1a6ba29
+  ELF 17,046,736 B sha256 67f903d8a27e8bd2c642a3011cc60b17cbe7d4ce5b9caeb7613ea8ce5a66fcf2
+
+Verification (galnx package nsp verify; nstool 1.9.2)
+  ok = true; 12 checks: 0 fail, 1 warn (unsigned homebrew NCA signature, expected)
+  3 NCAs (Meta / Control / Program), Program NCA 0x252cffc00 bytes, all ProgID 0x010047420000A000,
+  ProgID matches expected title id. Full output: nsp-verify.json
+
+Citron runs
+  NSP run2  p11-nsp2/20261031-054615-IROSEKA_FHD-010047420000a000  status=loaded rc=0, 0 exceptions
+            game root romfs:/game (romfs mounted); config.toml hcb=.iroseka.hcb nls=GBK;
+            game loaded 8.81 s, first frame 9.28 s, quit requested 182.03 s
+  NRO check p11-nro/20261031-053103-rfvp                         status=loaded rc=0, 0 exceptions
+            game root sdmc:/switch/rfvp/game (no romfs) - SD form still works
+
+RomFS top level
+  .iroseka.hcb 4,369,357 B; iroseka.hcb 4,275,282 B; default.ttf 22,839,132 B;
+  graph.bin / graph_bg.bin / graph_bs.bin / graph_vis.bin / graph_vis1.bin / graph_vis2.bin;
+  bgm.bin / bgm2.bin; se.bin; movie/; config.toml (hcb = ".iroseka.hcb", nls = "gbk")
+
+Notes
+  - Game data is hardlinked read-only from E:/Othergames/Galgame/IROSEKA_FHD; no copyrighted
+    game files are stored in the GalNX repository.
+  - FAT32 single-file limit is 4 GiB, so this 9.98 GB NSP needs an exFAT SD card or NAND install.
+  - Saves live on SD (sdmc:/switch/rfvp/saves) and are unaffected by the romfs game root switch.

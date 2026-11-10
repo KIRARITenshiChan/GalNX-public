@@ -1,0 +1,4 @@
+post_at=2026-10-30T00:01:43Z
+5109bb58005e64755f4f5806247de5a07e0e4f3a8b7c178395bb829156d10c3a */c/Users/ACETaffy/AppData/Roaming/citron/sdmc/switch/kirikiroid2/.galnx_extracted
+75b6df8004ab7c2831d6d6de844e124f173a8d10c2e2a58130c0cfda4377d966 */c/Users/ACETaffy/AppData/Roaming/citron/sdmc/switch/kirikiroid2/autostart.txt
+aa4fa8aab256f73c6d73111a62305f7078bd9c1eca3cd9d9128d0a51abef9543 */c/Users/ACETaffy/AppData/Roaming/citron/sdmc/kirikiri/haruno/Kirikiroid2Preference.xml

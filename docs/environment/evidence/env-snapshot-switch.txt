@@ -1,0 +1,73 @@
+# env/raw_env_snapshot.txt 的 Switch 相关摘要（节选）
+# 原始文件: workspaces/m0-hello/env/raw_env_snapshot.txt
+# 原始 sha256: be93518c79b8a0b128845d7219ff4fdf47777bcd8bbf393836b36266409d8fd1
+# 原始行数: 345（本文件为节选，非全文）
+
+date=2026-10-29T22:12:40+08:00
+uname=MSYS_NT-10.0-26100 ��֤Ӣ�� 3.6.11-00eb8435.x86_64 2026-10-16 10:03 UTC x86_64 Msys
+## gcc
+/e/Othergames/Nintendo Switch/Workspace/GalNX/scripts/collect_env_snapshot.sh: 行 9: aarch64-none-elf-gcc: 未找到命令
+## ld
+/e/Othergames/Nintendo Switch/Workspace/GalNX/scripts/collect_env_snapshot.sh: 行 11: aarch64-none-elf-ld: 未找到命令
+## make
+GNU Make 4.4.1
+为 x86_64-pc-msys 编译
+## nxlink
+Usage: nxlink [options] nrofile
+
+--help,    -h   Display this information
+--address, -a   Hostname or IPv4 address of Switch
+--retries, -r   number of times to ping before giving up
+--path   , -p   set upload path for file
+--args          args to send to nro
+--server , -s   start server after completed upload
+
+
+## pacman -Q switch/aarch64 related (grep)
+deko3d 0.5.0-1
+devkitA64 r30-1
+devkitA64-gdb 14.1-1
+devkita64-binutils 2.46.0-1
+devkita64-cmake 1.1.3-1
+devkita64-gcc 16.1.0-1
+devkita64-newlib 4.6.0.20260123-4
+devkita64-rules 1.1.1-1
+libnx 4.12.0-1
+switch-cmake 1.5.2-1
+switch-examples 20260201-1
+switch-pkg-config 0.28-4
+switch-tools 1.13.1-1
+uam 1.1.0-2
+## switch-dev group
+switch-dev catnip
+switch-dev deko3d
+switch-dev devkita64-cmake
+switch-dev libnx
+switch-dev switch-cmake
+switch-dev switch-examples
+switch-dev switch-pkg-config
+switch-dev devkit-env
+switch-dev devkitA64-gdb
+switch-dev devkita64-binutils
+switch-dev general-tools
+switch-dev switch-tools
+switch-dev uam
+## libnx dir
+default_icon.jpg
+include
+lib
+switch.ld
+switch.specs
+switch_rules
+## devkitA64 bin (head)
+aarch64-none-elf-addr2line.exe
+aarch64-none-elf-ar.exe
+aarch64-none-elf-as.exe
+aarch64-none-elf-c++.exe
+aarch64-none-elf-c++filt.exe
+8929c753ec6ef99b0607e7f44c85cac7c63e58a818254d179b631186d0bafd21 *devkitARM-gdb-14.1-1-x86_64.pkg.tar.zst.sig
+d314c644c143bd5b104bd82cdc27602f6449cf907cb9c37ccfb8c0707182f89d *devkitarm-newlib-4.6.0.20260123-5-any.pkg.tar.zst
+## disk
+文件系统        容量  已用  可用 已用% 挂载点
+D:/devkitPro    754G  241G  513G   32% /opt/devkitpro
+E:              1.9T  1.4T  492G   75% /e

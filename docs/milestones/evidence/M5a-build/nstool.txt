@@ -1,0 +1,97 @@
+[WARNING] Failed to load "prod.keys" keyfile.Maybe specify it with "-k <path>"?
+
+[WARNING] Failed to load "title.keys" keyfile.
+[NRO Header]
+  RoCrt:       
+    EntryPoint: 0x14000020
+    ModOffset:  0xf0
+  ModuleId:    e89739fd668a6dd7a63b24477a9611781333e25e000000000000000000000000
+  NroSize:     0x14b000
+  Program Sections:
+     .text:
+      Offset:     0x0
+      Size:       0xfd000
+    .ro:
+      Offset:     0xfd000
+      Size:       0x3f000
+    .data:
+      Offset:     0x13c000
+      Size:       0xf000
+    .bss:
+      Size:       0xd000
+[ApplicationControlProperty]
+  Title:
+    AmericanEnglish:
+      Name:       rfvp
+      Publisher:  rfvp
+    BritishEnglish:
+      Name:       rfvp
+      Publisher:  rfvp
+    Japanese:
+      Name:       rfvp
+      Publisher:  rfvp
+    French:
+      Name:       rfvp
+      Publisher:  rfvp
+    German:
+      Name:       rfvp
+      Publisher:  rfvp
+    LatinAmericanSpanish:
+      Name:       rfvp
+      Publisher:  rfvp
+    Spanish:
+      Name:       rfvp
+      Publisher:  rfvp
+    Italian:
+      Name:       rfvp
+      Publisher:  rfvp
+    Dutch:
+      Name:       rfvp
+      Publisher:  rfvp
+    CanadianFrench:
+      Name:       rfvp
+      Publisher:  rfvp
+    Portuguese:
+      Name:       rfvp
+      Publisher:  rfvp
+    Russian:
+      Name:       rfvp
+      Publisher:  rfvp
+  StartupUserAccount:                     Required
+  SupportedLanguage:
+    AmericanEnglish
+    BritishEnglish
+    Japanese
+    French
+    German
+    LatinAmericanSpanish
+    Spanish
+    Italian
+    Dutch
+    CanadianFrench
+    Russian
+  DataLossConfirmation:                   Required
+  RatingAge:
+    CERO:
+      Age: 12
+    ESRB:
+      Age: 10
+    USK:
+      Age: 12
+    PEGI:
+      Age: 12
+    PEGIPortugal:
+      Age: 12
+    PEGIBBFC:
+      Age: 12
+    Russian:
+      Age: 12
+    ACB:
+      Age: 13
+    OFLC:
+      Age: 13
+  DisplayVersion:                         0.1.0
+  UserAccountSaveDataSize:                62 MiB
+  UserAccountSaveDataJournalSize:         1 MiB
+  LogoType:                               Nintendo
+  LogoHandling:                           None

@@ -1,0 +1,1179 @@
+diff --git a/crates/rfvp/src/subsystem/resources/videoplayer/horizon.rs b/crates/rfvp/src/subsystem/resources/videoplayer/horizon.rs
+index f37ed46..9f77095 100644
+--- a/crates/rfvp/src/subsystem/resources/videoplayer/horizon.rs
++++ b/crates/rfvp/src/subsystem/resources/videoplayer/horizon.rs
+@@ -37,6 +37,11 @@ use wmv_decoder::{AsfWmv2Decoder, BytesDecoder, DecodedFrame, yuv420p_to_rgba_na
+ 
+ use super::{MovieFrame, MovieRequest, MovieSource};
+ 
++/// GalNX P40: NVDEC (nvtegra) H.264 backend used for the re-encoded OP.
++/// It is a child module so it can reuse the private audio helpers above.
++#[path = "horizon_h264.rs"]
++mod h264_movie;
++
+ #[cfg(feature = "switch-async")]
+ use crate::subsystem::resources::vfs::PackSource;
+ 
+@@ -509,6 +514,13 @@ pub(super) fn open(request: &MovieRequest<'_>) -> Result<Box<dyn MovieSource>> {
+         ));
+     }
+ 
++    // GalNX P40: when the payload ships the H.264 re-encode of this movie, play
++    // it through NVDEC (nvtegra). Missing asset or a decoder failure is not
++    // fatal: fall through to the software WMV2 path below.
++    if let Some(source) = h264_movie::try_open(request) {
++        return Ok(source);
++    }
++
+     // GalNX P32: read the Ogg OP soundtrack once, up front. It is only played
+     // once the first video frame is actually presented. Missing/unreadable
+     // soundtrack is not fatal: the movie keeps playing video-only.
+diff --git a/platform/switch/runtime/main.c b/platform/switch/runtime/main.c
+index 33544ff..00dc8c8 100644
+--- a/platform/switch/runtime/main.c
++++ b/platform/switch/runtime/main.c
+@@ -11,6 +11,8 @@
+ 
+ #include <switch.h>
+ 
++#include "rfvp_movie_h264.h"
++
+ /* A plain NRO reads the game data from the SD card; a self-contained NSP ships it inside
+  * romfs:/game. Saves always live on the SD card (platform/switch/host/src/fs.rs), so both
+  * layouts keep their save data. */
+@@ -715,6 +717,10 @@ int main(void) {
+     log_text(game_root);
+     log_text(romfs_mounted ? " (romfs mounted)\n" : " (no romfs)\n");
+ 
++    /* GalNX P40: hand the game root to the FFmpeg/NVDEC movie decoder. It opens the
++     * H.264 OP by absolute path, so the 108 MiB asset never goes through the engine heap. */
++    (void)galnx_movie_init(game_root);
++
+     void* app = rfvp_switch_start(game_root);
+     if (app == NULL) {
+         /* The reason is in sdmc:/switch/rfvp/last_error.txt. */
+diff --git a/platform/switch/build_switch.sh b/platform/switch/build_switch.sh
+index 4554463..c8980bf 100644
+--- a/platform/switch/build_switch.sh
++++ b/platform/switch/build_switch.sh
+@@ -15,6 +15,10 @@ source "$ROOT_DIR/platform/consoles/toolchain.env"
+ 
+ export DEVKITPRO="${DEVKITPRO:-/opt/devkitpro}"
+ DEVKITA64="$DEVKITPRO/devkitA64"
++# GalNX P40: the OP is H.264 so it can run on NVDEC through averne's nvtegra FFmpeg fork.
++# Build that fork once with build-ffmpeg-nvtegra-msys.sh (docs/builds/044) and point these at it.
++FFMPEG_SRC="${RFVP_FFMPEG_SRC:-$HOME/ffmpeg-nvtegra}"
++FFMPEG_BUILD="${RFVP_FFMPEG_BUILD:-$HOME/ffmpeg-build-nvtegra}"
+ TOOLCHAIN="${RFVP_CONSOLE_NIGHTLY}"
+ TARGET_NAME="aarch64-nintendo-switch-rfvp"
+ # The stock aarch64-nintendo-switch-freestanding target allows dynamic libraries, so rustc also
+@@ -49,15 +53,31 @@ ARCH_FLAGS=(-march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE)
+ SDL_CFLAGS=(-I"$DEVKITPRO/portlibs/switch/include/SDL2" -D__SWITCH__ -D_REENTRANT
+             -ftls-model=local-exec)
+ CFLAGS=("${ARCH_FLAGS[@]}" "${SDL_CFLAGS[@]}" -std=gnu17 -O2 -g -Wall -Wextra
+-        -ffunction-sections -fdata-sections -I"$DEVKITPRO/libnx/include")
++        -ffunction-sections -fdata-sections -I"$DEVKITPRO/libnx/include" \
++        -I"$FFMPEG_SRC" -I"$FFMPEG_BUILD")
++for ffmpeg_lib in libavformat/libavformat.a libavcodec/libavcodec.a libavutil/libavutil.a; do
++  [[ -f "$FFMPEG_BUILD/$ffmpeg_lib" ]] || {
++    echo "ERROR: missing $FFMPEG_BUILD/$ffmpeg_lib (set RFVP_FFMPEG_BUILD, see docs/builds/044)" >&2
++    exit 1
++  }
++done
+ mkdir -p "$BUILD_DIR" "$OUT_DIR"
+-for source in main sdl_video; do
++for source in main sdl_video rfvp_movie_h264 rfvp_movie_color; do
+   "$CC" "${CFLAGS[@]}" -c "$ROOT_DIR/platform/switch/runtime/$source.c" \
+     -o "$BUILD_DIR/$source.o"
+ done
+ # libSDL2.a pulls in the devkitPro EGL/GLESv2 stack, and that stack's shader compiler needs libm.
++# The FFmpeg archives are grouped because avformat references avcodec and avcodec references
++# avutil, and a plain static link would need the archives repeated.
+ "$CC" "${ARCH_FLAGS[@]}" -specs="$DEVKITPRO/libnx/switch.specs" -g -Wl,--gc-sections \
+-  -Wl,-Map,"$BUILD_DIR/rfvp.map" "$BUILD_DIR/main.o" "$BUILD_DIR/sdl_video.o" "$LIB" \
++  -Wl,-Map,"$BUILD_DIR/rfvp.map" \
++  "$BUILD_DIR/main.o" "$BUILD_DIR/sdl_video.o" \
++  "$BUILD_DIR/rfvp_movie_h264.o" "$BUILD_DIR/rfvp_movie_color.o" "$LIB" \
++  -Wl,--start-group \
++    -L"$FFMPEG_BUILD/libavformat" -lavformat \
++    -L"$FFMPEG_BUILD/libavcodec" -lavcodec \
++    -L"$FFMPEG_BUILD/libavutil" -lavutil \
++  -Wl,--end-group \
+   -L"$DEVKITPRO/portlibs/switch/lib" -lSDL2 -lEGL -lglapi -ldrm_nouveau -ldeflate -lz -lpthread \
+   -lstdc++ -L"$DEVKITPRO/libnx/lib" -lnx -lm -o "$BUILD_DIR/rfvp.elf"
+ 
+diff --git a/crates/rfvp/src/subsystem/resources/videoplayer/horizon_h264.rs b/p40/rfvp/crates/rfvp/src/subsystem/resources/videoplayer/horizon_h264.rs
+new file mode 100644
+index 0000000..6a0017f
+--- /dev/null
++++ b/crates/rfvp/src/subsystem/resources/videoplayer/horizon_h264.rs
+@@ -0,0 +1,408 @@
++//! GalNX P40: NVDEC (nvtegra) H.264 movie backend for the Switch port.
++//!
++//! The shipped OP is WMV2 1280x720@30. WMV2 has no hardware decoder on Tegra X1
++//! and the A57 needs ~25 ms/frame for software decode, so the payload also ships
++//! the same OP re-encoded to H.264 (movie/01_h264.mp4). probe9 measured NVDEC at
++//! 297.8 fps decode + 3.79 ms/frame transfer at 1080p, so decoding is no longer
++//! the bottleneck; the remaining cost is the NV12->RGBA conversion, which the
++//! NEON kernel in rfvp_movie_color.c does in ~1-2 ms for 720p (the scalar path
++//! in the WMV backend took 43.54 ms for 1080p).
++//!
++//! The asset is opened through the file system (FFmpeg's file protocol), not
++//! through the VFS: a 100+ MiB movie must not be copied into the engine heap.
++//! When the asset is missing, or FFmpeg cannot open it, `try_open` returns
++//! `None` and `horizon::open` falls back to the WMV2 software path.
++
++use alloc::boxed::Box;
++use alloc::collections::VecDeque;
++use alloc::string::String;
++use alloc::vec::Vec;
++use core::ffi::{c_char, c_int};
++use core::ptr;
++
++use anyhow::{anyhow, Result};
++
++use crate::perf;
++use crate::platform_time::Instant;
++
++use super::{load_movie_audio, MovieAudio, MovieFrame, MovieRequest, MovieSource};
++
++/// One decoder call per engine tick at most; the stash is only refilled when it
++/// is empty, which paces the decode to the presentation rate.
++const MAX_DECODE_PER_TICK: usize = 1;
++
++const DECODE_LOG_EVERY: u32 = 30;
++
++extern "C" {
++    fn galnx_movie_open(path: *const c_char, allow_sw: c_int) -> c_int;
++    fn galnx_movie_next() -> c_int;
++    fn galnx_movie_close();
++    fn galnx_movie_plane_y() -> *const u8;
++    fn galnx_movie_plane_u() -> *const u8;
++    fn galnx_movie_plane_v() -> *const u8;
++    fn galnx_movie_planar() -> c_int;
++    fn galnx_movie_width() -> c_int;
++    fn galnx_movie_height() -> c_int;
++    fn galnx_movie_y_stride() -> c_int;
++    fn galnx_movie_uv_stride() -> c_int;
++    fn galnx_movie_pts_ms() -> f64;
++    fn galnx_movie_is_hw() -> c_int;
++    fn galnx_movie_error() -> *const c_char;
++
++    fn galnx_nv12_to_rgba(
++        y: *const u8,
++        uv: *const u8,
++        width: c_int,
++        height: c_int,
++        y_stride: c_int,
++        uv_stride: c_int,
++        out_rgba: *mut u8,
++    );
++    fn galnx_yuv420p_to_rgba(
++        y: *const u8,
++        u: *const u8,
++        v: *const u8,
++        width: c_int,
++        height: c_int,
++        y_stride: c_int,
++        u_stride: c_int,
++        v_stride: c_int,
++        out_rgba: *mut u8,
++    );
++}
++
++fn c_error() -> String {
++    let message = unsafe {
++        let raw = galnx_movie_error();
++        if raw.is_null() {
++            String::from("unknown error")
++        } else {
++            let mut len = 0usize;
++            while unsafe { ptr::read(raw.add(len)) } != 0 && len < 255 {
++                len += 1;
++            }
++            let bytes = unsafe { core::slice::from_raw_parts(raw, len) };
++            String::from_utf8_lossy(bytes).into_owned()
++        }
++    };
++    message
++}
++
++/// movie/01.wmv -> movie/01_h264.mp4
++fn h264_sibling(name: &str) -> Option<String> {
++    let dot = name.rfind('.')?;
++    let slash = name.rfind('/').map(|index| index + 1).unwrap_or(0);
++    if dot < slash {
++        return None;
++    }
++    let mut out = String::with_capacity(name.len() + 10);
++    out.push_str(&name[..dot]);
++    out.push_str("_h264.mp4");
++    Some(out)
++}
++
++fn c_path(name: &str) -> Option<Vec<u8>> {
++    if name.as_bytes().contains(&0) || name.len() > 900 {
++        return None;
++    }
++    let mut bytes = Vec::with_capacity(name.len() + 1);
++    bytes.extend_from_slice(name.as_bytes());
++    bytes.push(0);
++    Some(bytes)
++}
++
++struct DecodedFrame {
++    pts_ms: u32,
++    rgba: Vec<u8>,
++    width: u32,
++    height: u32,
++}
++
++struct H264Playback {
++    /// Asset name in the game's files (movie/01_h264.mp4), for logs only.
++    asset: String,
++    stash: VecDeque<DecodedFrame>,
++    started_at: Option<Instant>,
++    base_pts_ms: Option<u32>,
++    last_presented_pts_ms: u32,
++    eof: bool,
++    decoded_frames: u32,
++    presented_frames: u32,
++    hw_frames: u32,
++    last_decode_us: u32,
++    last_convert_us: u32,
++    /// One recycled RGBA buffer, like the WMV backend's spare_buffer.
++    spare_buffer: Option<Vec<u8>>,
++    audio: Option<MovieAudio>,
++    closed: bool,
++}
++
++impl H264Playback {
++    fn new(asset: String, audio: Option<MovieAudio>) -> Self {
++        Self {
++            asset,
++            stash: VecDeque::new(),
++            started_at: None,
++            base_pts_ms: None,
++            last_presented_pts_ms: u32::MAX,
++            eof: false,
++            decoded_frames: 0,
++            presented_frames: 0,
++            hw_frames: 0,
++            last_decode_us: 0,
++            last_convert_us: 0,
++            spare_buffer: None,
++            audio,
++            closed: false,
++        }
++    }
++
++    fn maybe_start_audio(&mut self) {
++        if let Some(audio) = self.audio.as_mut() {
++            audio.start();
++        }
++    }
++
++    fn stop_audio(&mut self) {
++        if let Some(audio) = self.audio.as_mut() {
++            audio.stop();
++        }
++    }
++
++    fn close_decoder(&mut self) {
++        if !self.closed {
++            self.closed = true;
++            unsafe { galnx_movie_close() };
++        }
++    }
++
++    fn decode_one(&mut self) -> Result<bool> {
++        if self.eof {
++            return Ok(false);
++        }
++        let decode_t0 = perf::start();
++        let rc = unsafe { galnx_movie_next() };
++        if rc == 0 {
++            self.eof = true;
++            log::info!(
++                "movie h264: end of stream after {} frames ({} hardware)",
++                self.decoded_frames,
++                self.hw_frames
++            );
++            return Ok(false);
++        }
++        if rc < 0 {
++            return Err(anyhow!("h264 decode failed: {}", c_error()));
++        }
++        self.last_decode_us = perf::start()
++            .saturating_sub(decode_t0)
++            .min(u32::MAX as u64) as u32;
++
++        let (width, height, y_stride, uv_stride, planar, pts_ms, hw) = unsafe {
++            (
++                galnx_movie_width(),
++                galnx_movie_height(),
++                galnx_movie_y_stride(),
++                galnx_movie_uv_stride(),
++                galnx_movie_planar(),
++                galnx_movie_pts_ms(),
++                galnx_movie_is_hw(),
++            )
++        };
++        if width <= 0 || height <= 0 {
++            return Ok(false);
++        }
++        let width = width as u32;
++        let height = height as u32;
++        let needed = width as usize * height as usize * 4;
++        let mut rgba = self.spare_buffer.take().unwrap_or_default();
++        if rgba.len() != needed {
++            rgba.clear();
++            rgba.resize(needed, 255);
++        }
++
++        let convert_t0 = perf::start();
++        unsafe {
++            let y = galnx_movie_plane_y();
++            let u = galnx_movie_plane_u();
++            let v = galnx_movie_plane_v();
++            if y.is_null() || u.is_null() || v.is_null() {
++                self.spare_buffer = Some(rgba);
++                return Ok(false);
++            }
++            if planar != 0 {
++                galnx_yuv420p_to_rgba(
++                    y,
++                    u,
++                    v,
++                    width as c_int,
++                    height as c_int,
++                    y_stride,
++                    uv_stride,
++                    uv_stride,
++                    rgba.as_mut_ptr(),
++                );
++            } else {
++                galnx_nv12_to_rgba(
++                    y,
++                    u,
++                    width as c_int,
++                    height as c_int,
++                    y_stride,
++                    uv_stride,
++                    rgba.as_mut_ptr(),
++                );
++            }
++        }
++        self.last_convert_us = perf::start()
++            .saturating_sub(convert_t0)
++            .min(u32::MAX as u64) as u32;
++
++        self.decoded_frames = self.decoded_frames.saturating_add(1);
++        if hw != 0 {
++            self.hw_frames = self.hw_frames.saturating_add(1);
++        }
++        if self.decoded_frames <= 5 || self.decoded_frames % DECODE_LOG_EVERY == 0 {
++            log::info!(
++                "movie h264: decoded frame={} pts={} ms {}x{} hw={} decode_us={} convert_us={}",
++                self.decoded_frames,
++                pts_ms as u32,
++                width,
++                height,
++                hw,
++                self.last_decode_us,
++                self.last_convert_us
++            );
++        }
++        self.stash.push_back(DecodedFrame {
++            pts_ms: if pts_ms > 0.0 { pts_ms as u32 } else { 0 },
++            rgba,
++            width,
++            height,
++        });
++        Ok(true)
++    }
++
++    fn next_due_frame(&mut self) -> Result<Option<DecodedFrame>> {
++        for _ in 0..MAX_DECODE_PER_TICK {
++            if !self.stash.is_empty() || self.eof {
++                break;
++            }
++            self.decode_one()?;
++        }
++
++        if self.started_at.is_none() {
++            if let Some(front) = self.stash.front() {
++                self.started_at = Some(Instant::now());
++                self.base_pts_ms = Some(front.pts_ms);
++            } else {
++                return Ok(None);
++            }
++        }
++
++        let started_at = match self.started_at {
++            Some(started_at) => started_at,
++            None => return Ok(None),
++        };
++        let elapsed_ms = started_at.elapsed().as_millis() as u32;
++        let target_pts_ms = self.base_pts_ms.unwrap_or(0).saturating_add(elapsed_ms);
++        let mut latest_due = None;
++        while let Some(front) = self.stash.front() {
++            if front.pts_ms <= target_pts_ms {
++                latest_due = self.stash.pop_front();
++            } else {
++                break;
++            }
++        }
++        if latest_due.is_some() {
++            self.presented_frames = self.presented_frames.saturating_add(1);
++        }
++        Ok(latest_due)
++    }
++
++    fn finished(&mut self) -> Result<bool> {
++        let done = self.eof && self.stash.is_empty();
++        if done {
++            log::info!(
++                "movie h264: finished flag set (eof={} stash={} decoded={} hw={})",
++                self.eof,
++                self.stash.len(),
++                self.decoded_frames,
++                self.hw_frames
++            );
++        }
++        Ok(done)
++    }
++}
++
++impl MovieSource for H264Playback {
++    fn next_frame(&mut self) -> Result<Option<MovieFrame>> {
++        // GalNX P40 diagnostics: these three lines are what makes a stalled
++        // movie distinguishable from an ended one in debug_report.txt.
++        let frame = match self.next_due_frame() {
++            Ok(Some(frame)) => frame,
++            Ok(None) => return Ok(None),
++            Err(err) => {
++                log::warn!("movie h264: next_due_frame failed: {err}");
++                return Err(err);
++            }
++        };
++        if frame.pts_ms == self.last_presented_pts_ms {
++            log::info!(
++                "movie h264: dropping frame with duplicate pts={} ms (last={})",
++                frame.pts_ms,
++                self.last_presented_pts_ms
++            );
++            return Ok(None);
++        }
++        self.last_presented_pts_ms = frame.pts_ms;
++        self.maybe_start_audio();
++        Ok(Some(MovieFrame {
++            rgba: frame.rgba,
++            width: frame.width,
++            height: frame.height,
++        }))
++    }
++
++    fn is_finished(&mut self) -> Result<bool> {
++        self.finished()
++    }
++
++    fn recycle_buffer(&mut self, buffer: Vec<u8>) {
++        if self.spare_buffer.is_none() {
++            self.spare_buffer = Some(buffer);
++        }
++    }
++
++    fn stop(mut self: Box<Self>) {
++        self.stop_audio();
++        self.close_decoder();
++    }
++}
++
++impl Drop for H264Playback {
++    fn drop(&mut self) {
++        self.stop_audio();
++        self.close_decoder();
++    }
++}
++
++/// Try to open the H.264 sibling asset. `None` means "no hardware movie
++/// available"; the caller keeps using the WMV2 software path.
++pub(super) fn try_open(request: &MovieRequest<'_>) -> Option<Box<dyn MovieSource>> {
++    let asset = h264_sibling(request.name)?;
++    let path = c_path(asset.as_str())?;
++    let rc = unsafe { galnx_movie_open(path.as_ptr() as *const c_char, 1) };
++    if rc < 0 {
++        log::warn!(
++            "movie h264: cannot open {} ({}); using the WMV2 backend",
++            asset,
++            c_error()
++        );
++        unsafe { galnx_movie_close() };
++        return None;
++    }
++    log::info!("Movie: opened (Switch NVDEC H.264) asset={asset}");
++    let audio = load_movie_audio(request);
++    Some(Box::new(H264Playback::new(asset, audio)))
++}
+diff --git a/platform/switch/runtime/rfvp_movie_h264.c b/p40/rfvp/platform/switch/runtime/rfvp_movie_h264.c
+new file mode 100644
+index 0000000..5e21083
+--- /dev/null
++++ b/platform/switch/runtime/rfvp_movie_h264.c
+@@ -0,0 +1,416 @@
++/*
++ * GalNX P40: FFmpeg + nvtegra H.264 decoder for the rfvp Switch movie player.
++ *
++ * The OP shipped with IROSEKA is WMV2 1280x720@30, and WMV2 has no hardware
++ * decoder on Tegra X1 (nvtegra covers VC-1/WMV3/H.264 only), while software WMV2
++ * decode on the A57 needs ~25 ms/frame. The OP is therefore re-encoded to H.264
++ * and decoded with NVDEC (nvtegra), which probe9 measured at 297.8 fps decode
++ * and 3.79 ms/frame for the tiled->linear transfer at 1080p.
++ *
++ * This module only decodes and hands NV12 planes back to Rust; the colour
++ * conversion and the frame pacing live in horizon_h264.rs / rfvp_movie_color.c.
++ *
++ * The build statically links the nvtegra FFmpeg fork built by
++ * /e/galnx-build/nvdec/build-ffmpeg-nvtegra-msys.sh (see docs/builds/044).
++ */
++
++#include <stdint.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++
++#include <libavcodec/avcodec.h>
++#include <libavformat/avformat.h>
++#include <libavutil/error.h>
++#include <libavutil/hwcontext.h>
++#include <libavutil/imgutils.h>
++#include <libavutil/pixfmt.h>
++
++#include "rfvp_movie_h264.h"
++
++/* Root of the game data ("sdmc:/switch/rfvp/game" or "romfs:/game"). Set once
++ * by main.c right after the root is selected and before rfvp_switch_start(). */
++static char g_root[512] = "sdmc:/switch/rfvp/game";
++
++typedef struct MovieCtx {
++    AVFormatContext *fmt;
++    AVCodecContext *dec;
++    AVBufferRef *hw_device;
++    AVFrame *frame;    /* decoded frame, hardware or software */
++    AVFrame *sw_frame; /* NV12/planar target for hardware frames */
++    AVPacket *pkt;
++    int video_stream;
++    int eof;
++    int draining;
++    int allow_sw;
++    int used_hw;   /* whether the frame returned by the last next() came from NVDEC */
++    int requested; /* 1 after a successful open */
++    int width;
++    int height;
++    int y_stride;
++    int uv_stride;
++    int planar; /* 1 = YUV420P (U and V separate), 0 = NV12 (interleaved) */
++    const uint8_t *plane_y;
++    const uint8_t *plane_u;
++    const uint8_t *plane_v;
++    double pts_ms;
++    int64_t frame_index;
++    char path[1024];
++    char error[256];
++} MovieCtx;
++
++static MovieCtx *g_ctx = NULL;
++
++/* Kept across galnx_movie_close() so a failed open can still be reported:
++ * the open path closes the context before the caller asks for the message. */
++static char g_last_error[256] = { 0 };
++
++/* Shadow-test switch: Citron's HLE nvtegra accepts the device and the first
++ * frame but then fails every subsequent send_packet, so the emulator cannot
++ * exercise the hardware path. When this file exists we skip NVDEC entirely and
++ * decode with the CPU, which keeps the rest of the pipeline (NEON NV12->RGBA,
++ * pacing, audio) testable on the emulator. Never present on a real device. */
++static int g_force_soft = 0;
++
++static const char *ForceSoftMarker = "sdmc:/switch/rfvp/h264_sw.txt";
++
++/* ------------------------------------------------------------------ */
++/* helpers                                                            */
++/* ------------------------------------------------------------------ */
++
++static void set_error(const char *what, int err)
++{
++    char buf[160] = { 0 };
++    if (err != 0) {
++        av_strerror(err, buf, sizeof(buf));
++    }
++    snprintf(g_last_error, sizeof(g_last_error), "%s: %s (%d)", what, buf, err);
++    if (g_ctx != NULL) {
++        snprintf(g_ctx->error, sizeof(g_ctx->error), "%s", g_last_error);
++    }
++}
++
++void galnx_movie_set_root(const char *root)
++{
++    if (root == NULL) {
++        return;
++    }
++    snprintf(g_root, sizeof(g_root), "%s", root);
++    size_t len = strlen(g_root);
++    while (len > 1 && (g_root[len - 1] == '/' || g_root[len - 1] == '\\')) {
++        g_root[--len] = '\0';
++    }
++}
++
++const char *galnx_movie_error(void)
++{
++    if (g_ctx != NULL) {
++        return g_ctx->error;
++    }
++    return g_last_error[0] != '\0' ? g_last_error : "no movie context";
++}
++
++static enum AVPixelFormat movie_get_format(AVCodecContext *ctx, const enum AVPixelFormat *pix_fmts)
++{
++    (void)ctx;
++    const enum AVPixelFormat *p;
++    if (!g_force_soft) {
++        for (p = pix_fmts; *p != AV_PIX_FMT_NONE; p++) {
++            if (*p == AV_PIX_FMT_NVTEGRA) {
++                return *p;
++            }
++        }
++    }
++    for (p = pix_fmts; *p != AV_PIX_FMT_NONE; p++) {
++        if (*p == AV_PIX_FMT_NV12 || *p == AV_PIX_FMT_YUV420P) {
++            return *p;
++        }
++    }
++    return pix_fmts[0];
++}
++
++static void movie_reset_frame_state(MovieCtx *c)
++{
++    c->plane_y = NULL;
++    c->plane_u = NULL;
++    c->plane_v = NULL;
++    c->width = 0;
++    c->height = 0;
++    c->y_stride = 0;
++    c->uv_stride = 0;
++    c->planar = 0;
++    c->pts_ms = 0.0;
++}
++
++static void movie_close_internal(MovieCtx *c)
++{
++    movie_reset_frame_state(c);
++    if (c->pkt != NULL) {
++        av_packet_free(&c->pkt);
++    }
++    if (c->frame != NULL) {
++        av_frame_free(&c->frame);
++    }
++    if (c->sw_frame != NULL) {
++        av_frame_free(&c->sw_frame);
++    }
++    if (c->dec != NULL) {
++        avcodec_free_context(&c->dec);
++    }
++    if (c->fmt != NULL) {
++        avformat_close_input(&c->fmt);
++    }
++    if (c->hw_device != NULL) {
++        av_buffer_unref(&c->hw_device);
++    }
++    c->video_stream = -1;
++    c->eof = 0;
++    c->draining = 0;
++    c->requested = 0;
++    c->used_hw = 0;
++    c->frame_index = 0;
++}
++
++/* ------------------------------------------------------------------ */
++/* public API                                                         */
++/* ------------------------------------------------------------------ */
++
++void galnx_movie_close(void)
++{
++    if (g_ctx == NULL) {
++        return;
++    }
++    movie_close_internal(g_ctx);
++    free(g_ctx);
++    g_ctx = NULL;
++}
++
++int galnx_movie_init(const char *game_root)
++{
++    galnx_movie_set_root(game_root);
++    av_log_set_level(AV_LOG_ERROR);
++    FILE *marker = fopen(ForceSoftMarker, "rb");
++    if (marker != NULL) {
++        fclose(marker);
++        g_force_soft = 1;
++    }
++    av_log(NULL, AV_LOG_INFO, "[galnx] movie h264: software decode %s (%s %s)\n",
++           g_force_soft ? "forced" : "allowed",
++           g_force_soft ? "marker present:" : "no marker:",
++           ForceSoftMarker);
++    return 0;
++}
++
++int galnx_movie_open(const char *rel_path, int allow_sw)
++{
++    galnx_movie_close();
++
++    MovieCtx *c = (MovieCtx *)calloc(1, sizeof(MovieCtx));
++    if (c == NULL) {
++        return -1;
++    }
++    g_ctx = c;
++    c->video_stream = -1;
++    c->allow_sw = allow_sw ? 1 : 0;
++
++    size_t len = strlen(g_root);
++    char sep = (len > 0 && g_root[len - 1] == '/') ? '\0' : '/';
++    if (sep == '\0') {
++        snprintf(c->path, sizeof(c->path), "%s%s", g_root, rel_path);
++    } else {
++        snprintf(c->path, sizeof(c->path), "%s/%s", g_root, rel_path);
++    }
++
++    /* The horizon FFmpeg build only has the "file" protocol compiled in, and it
++     * would otherwise parse "sdmc:/..." as an unknown protocol named "sdmc".
++     * Prefix "file:" so the libnx devoptab path reaches libc open(). */
++    char url[sizeof(c->path) + 8];
++    const char *open_path = c->path;
++    if (strncmp(c->path, "file:", 5) != 0) {
++        snprintf(url, sizeof(url), "file:%s", c->path);
++        open_path = url;
++    }
++
++    int ret = avformat_open_input(&c->fmt, open_path, NULL, NULL);
++    if (ret < 0) {
++        set_error("avformat_open_input", ret);
++        galnx_movie_close();
++        return ret;
++    }
++    ret = avformat_find_stream_info(c->fmt, NULL);
++    if (ret < 0) {
++        set_error("avformat_find_stream_info", ret);
++        galnx_movie_close();
++        return ret;
++    }
++
++    const AVCodec *codec = NULL;
++    c->video_stream = av_find_best_stream(c->fmt, AVMEDIA_TYPE_VIDEO, -1, -1, &codec, 0);
++    if (c->video_stream < 0 || codec == NULL) {
++        set_error("av_find_best_stream", c->video_stream < 0 ? c->video_stream : -1);
++        galnx_movie_close();
++        return -2;
++    }
++
++    c->dec = avcodec_alloc_context3(codec);
++    if (c->dec == NULL) {
++        set_error("avcodec_alloc_context3", AVERROR(ENOMEM));
++        galnx_movie_close();
++        return AVERROR(ENOMEM);
++    }
++    ret = avcodec_parameters_to_context(c->dec, c->fmt->streams[c->video_stream]->codecpar);
++    if (ret < 0) {
++        set_error("avcodec_parameters_to_context", ret);
++        galnx_movie_close();
++        return ret;
++    }
++    c->dec->pkt_timebase = c->fmt->streams[c->video_stream]->time_base;
++    c->dec->get_format = movie_get_format;
++    c->dec->thread_count = 1;
++
++    int hw_ok = 0;
++    ret = g_force_soft ? AVERROR(ENOSYS)
++                       : av_hwdevice_ctx_create(&c->hw_device, AV_HWDEVICE_TYPE_NVTEGRA, NULL, NULL, 0);
++    if (ret >= 0) {
++        c->dec->hw_device_ctx = av_buffer_ref(c->hw_device);
++        hw_ok = c->dec->hw_device_ctx != NULL;
++    } else {
++        av_log(NULL, AV_LOG_WARNING, "[galnx] nvtegra device unavailable (%d); H.264 software decode\n", ret);
++        if (c->hw_device != NULL) {
++            av_buffer_unref(&c->hw_device);
++            c->hw_device = NULL;
++        }
++    }
++
++    ret = avcodec_open2(c->dec, codec, NULL);
++    if (ret < 0) {
++        set_error("avcodec_open2", ret);
++        galnx_movie_close();
++        return ret;
++    }
++
++    c->frame = av_frame_alloc();
++    c->sw_frame = av_frame_alloc();
++    c->pkt = av_packet_alloc();
++    if (c->frame == NULL || c->sw_frame == NULL || c->pkt == NULL) {
++        set_error("av_frame_alloc", AVERROR(ENOMEM));
++        galnx_movie_close();
++        return AVERROR(ENOMEM);
++    }
++
++    c->requested = 1;
++    av_log(NULL, AV_LOG_INFO,
++           "[galnx] movie opened: %s codec=%s hw_requested=%d hwdev=%d %dx%d\n",
++           c->path, codec->name, allow_sw ? 1 : 0, hw_ok,
++           c->dec->width, c->dec->height);
++    return 0;
++}
++
++int galnx_movie_next(void)
++{
++    MovieCtx *c = g_ctx;
++    if (c == NULL || !c->requested) {
++        return -1;
++    }
++
++    movie_reset_frame_state(c);
++
++    for (;;) {
++        int ret = avcodec_receive_frame(c->dec, c->frame);
++        if (ret == 0) {
++            break;
++        }
++        if (ret == AVERROR_EOF) {
++            c->eof = 1;
++            return 0;
++        }
++        if (ret != AVERROR(EAGAIN)) {
++            set_error("avcodec_receive_frame", ret);
++            return -1;
++        }
++
++        if (c->draining) {
++            c->eof = 1;
++            return 0;
++        }
++
++        ret = av_read_frame(c->fmt, c->pkt);
++        if (ret == AVERROR_EOF) {
++            avcodec_send_packet(c->dec, NULL);
++            c->draining = 1;
++            continue;
++        }
++        if (ret < 0) {
++            set_error("av_read_frame", ret);
++            return -1;
++        }
++        if (c->pkt->stream_index == c->video_stream) {
++            ret = avcodec_send_packet(c->dec, c->pkt);
++            av_packet_unref(c->pkt);
++            if (ret < 0 && ret != AVERROR(EAGAIN)) {
++                set_error("avcodec_send_packet", ret);
++                return -1;
++            }
++        } else {
++            av_packet_unref(c->pkt);
++        }
++    }
++
++    AVFrame *src = c->frame;
++    if (c->frame->format == AV_PIX_FMT_NVTEGRA) {
++        int ret = av_hwframe_transfer_data(c->sw_frame, c->frame, 0);
++        if (ret < 0) {
++            set_error("av_hwframe_transfer_data", ret);
++            return -1;
++        }
++        src = c->sw_frame;
++        c->used_hw = 1;
++    } else {
++        c->used_hw = 0;
++    }
++
++    c->width = src->width;
++    c->height = src->height;
++    c->y_stride = src->linesize[0];
++    if (src->format == AV_PIX_FMT_NV12) {
++        c->planar = 0;
++        c->plane_y = src->data[0];
++        c->plane_u = src->data[1];
++        c->plane_v = src->data[1] != NULL ? src->data[1] + 1 : NULL;
++        c->uv_stride = src->linesize[1];
++    } else if (src->format == AV_PIX_FMT_YUV420P) {
++        c->planar = 1;
++        c->plane_y = src->data[0];
++        c->plane_u = src->data[1];
++        c->plane_v = src->data[2];
++        c->uv_stride = src->linesize[1];
++    } else {
++        c->error[0] = '\0';
++        snprintf(c->error, sizeof(c->error), "unsupported pixel format %d", src->format);
++        return -2;
++    }
++
++    int64_t ts = src->best_effort_timestamp;
++    if (ts == AV_NOPTS_VALUE) {
++        ts = src->pts;
++    }
++    if (ts != AV_NOPTS_VALUE) {
++        c->pts_ms = (double)ts * av_q2d(c->fmt->streams[c->video_stream]->time_base) * 1000.0;
++    } else {
++        c->pts_ms = (double)(c->frame_index * 1000 / 30);
++    }
++    c->frame_index++;
++    return 1;
++}
++
++const uint8_t *galnx_movie_plane_y(void) { return g_ctx != NULL ? g_ctx->plane_y : NULL; }
++const uint8_t *galnx_movie_plane_u(void) { return g_ctx != NULL ? g_ctx->plane_u : NULL; }
++const uint8_t *galnx_movie_plane_v(void) { return g_ctx != NULL ? g_ctx->plane_v : NULL; }
++int galnx_movie_planar(void) { return g_ctx != NULL ? g_ctx->planar : 0; }
++int galnx_movie_width(void) { return g_ctx != NULL ? g_ctx->width : 0; }
++int galnx_movie_height(void) { return g_ctx != NULL ? g_ctx->height : 0; }
++int galnx_movie_y_stride(void) { return g_ctx != NULL ? g_ctx->y_stride : 0; }
++int galnx_movie_uv_stride(void) { return g_ctx != NULL ? g_ctx->uv_stride : 0; }
++double galnx_movie_pts_ms(void) { return g_ctx != NULL ? g_ctx->pts_ms : 0.0; }
++int galnx_movie_is_hw(void) { return g_ctx != NULL ? g_ctx->used_hw : 0; }
++int galnx_movie_frame_index(void) { return g_ctx != NULL ? (int)g_ctx->frame_index : 0; }
+diff --git a/platform/switch/runtime/rfvp_movie_h264.h b/p40/rfvp/platform/switch/runtime/rfvp_movie_h264.h
+new file mode 100644
+index 0000000..26052c7
+--- /dev/null
++++ b/platform/switch/runtime/rfvp_movie_h264.h
+@@ -0,0 +1,43 @@
++#ifndef GALNX_RFVP_MOVIE_H264_H
++#define GALNX_RFVP_MOVIE_H264_H
++
++#include <stdint.h>
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++/* GalNX P40: FFmpeg/nvtegra H.264 movie decoder (see rfvp_movie_h264.c). */
++
++int galnx_movie_init(const char *game_root);
++void galnx_movie_set_root(const char *root);
++int galnx_movie_open(const char *rel_path, int allow_sw);
++/* 1 = a frame is ready, 0 = end of stream, <0 = error. */
++int galnx_movie_next(void);
++void galnx_movie_close(void);
++
++const uint8_t *galnx_movie_plane_y(void);
++const uint8_t *galnx_movie_plane_u(void);
++const uint8_t *galnx_movie_plane_v(void);
++int galnx_movie_planar(void);
++int galnx_movie_width(void);
++int galnx_movie_height(void);
++int galnx_movie_y_stride(void);
++int galnx_movie_uv_stride(void);
++double galnx_movie_pts_ms(void);
++int galnx_movie_is_hw(void);
++int galnx_movie_frame_index(void);
++const char *galnx_movie_error(void);
++
++/* BT.709 limited-range YUV -> packed R,G,B,A. */
++void galnx_nv12_to_rgba(const uint8_t *y, const uint8_t *uv, int width, int height,
++                        int y_stride, int uv_stride, uint8_t *out_rgba);
++void galnx_yuv420p_to_rgba(const uint8_t *y, const uint8_t *u, const uint8_t *v,
++                           int width, int height, int y_stride, int u_stride,
++                           int v_stride, uint8_t *out_rgba);
++
++#ifdef __cplusplus
++}
++#endif
++
++#endif /* GALNX_RFVP_MOVIE_H264_H */
+diff --git a/platform/switch/runtime/rfvp_movie_color.c b/p40/rfvp/platform/switch/runtime/rfvp_movie_color.c
+new file mode 100644
+index 0000000..cc99925
+--- /dev/null
++++ b/platform/switch/runtime/rfvp_movie_color.c
+@@ -0,0 +1,184 @@
++/*
++ * GalNX P40: BT.709 limited-range YUV 4:2:0 -> packed RGBA conversion.
++ *
++ * probe9 measured the scalar NV12->RGBA path at 43.54 ms/frame for 1080p, which
++ * was 89% of the whole movie frame time and the only reason the OP still played
++ * in slow motion after NVDEC decode itself was proven to run at 297.8 fps.
++ * The kernels below are fixed-point (16.8) BT.709 and use NEON on 16 pixels per
++ * iteration; the tail falls back to the scalar code.
++ */
++
++#include <stddef.h>
++#include <stdint.h>
++
++#include "rfvp_movie_h264.h"
++
++static inline int clip8(int v)
++{
++    if (v < 0) {
++        return 0;
++    }
++    if (v > 255) {
++        return 255;
++    }
++    return v;
++}
++
++static inline int matrix_r(int c, int v) { return (c + 458 * v) >> 8; }
++static inline int matrix_g(int c, int u, int v) { return (c - 55 * u - 136 * v) >> 8; }
++static inline int matrix_b(int c, int u) { return (c + 540 * u) >> 8; }
++
++#if defined(__ARM_NEON)
++#include <arm_neon.h>
++
++static inline void store8(int16x8_t yv, int16x8_t uv, int16x8_t vv, uint8_t *dst)
++{
++    const int16x8_t c16 = vdupq_n_s16(16);
++    const int16x8_t c128 = vdupq_n_s16(128);
++
++    int16x8_t yd = vsubq_s16(yv, c16);
++    int16x8_t ud = vsubq_s16(uv, c128);
++    int16x8_t vd = vsubq_s16(vv, c128);
++
++    int16x4_t yl = vget_low_s16(yd);
++    int16x4_t yh = vget_high_s16(yd);
++    int16x4_t ul = vget_low_s16(ud);
++    int16x4_t uh = vget_high_s16(ud);
++    int16x4_t vl = vget_low_s16(vd);
++    int16x4_t vh = vget_high_s16(vd);
++
++    int32x4_t cyl = vmull_n_s16(yl, 298);
++    int32x4_t cyh = vmull_n_s16(yh, 298);
++
++    int32x4_t rl = vshrq_n_s32(vmlal_n_s16(cyl, vl, 458), 8);
++    int32x4_t rh = vshrq_n_s32(vmlal_n_s16(cyh, vh, 458), 8);
++    int32x4_t gl = vshrq_n_s32(vsubq_s32(vsubq_s32(cyl, vmull_n_s16(ul, 55)),
++                                         vmull_n_s16(vl, 136)), 8);
++    int32x4_t gh = vshrq_n_s32(vsubq_s32(vsubq_s32(cyh, vmull_n_s16(uh, 55)),
++                                         vmull_n_s16(vh, 136)), 8);
++    int32x4_t bl = vshrq_n_s32(vmlal_n_s16(cyl, ul, 540), 8);
++    int32x4_t bh = vshrq_n_s32(vmlal_n_s16(cyh, uh, 540), 8);
++
++    uint8x8_t r8 = vqmovun_s16(vcombine_s16(vqmovn_s32(rl), vqmovn_s32(rh)));
++    uint8x8_t g8 = vqmovun_s16(vcombine_s16(vqmovn_s32(gl), vqmovn_s32(gh)));
++    uint8x8_t b8 = vqmovun_s16(vcombine_s16(vqmovn_s32(bl), vqmovn_s32(bh)));
++
++    uint8x8x4_t px;
++    px.val[0] = r8;
++    px.val[1] = g8;
++    px.val[2] = b8;
++    px.val[3] = vdup_n_u8(255);
++    vst4_u8(dst, px);
++}
++
++/* Deinterleave 8 NV12 chroma bytes into duplicated 8-lane U and V vectors. */
++static inline void chroma_dup(uint8x8_t both, int16x8_t *u, int16x8_t *v)
++{
++    int16x8_t x = vreinterpretq_s16_u16(vmovl_u8(both));
++    int16x8_t even = vuzp1q_s16(x, x); /* u0,u1,u2,u3,u0,u1,u2,u3 */
++    int16x8_t odd = vuzp2q_s16(x, x);  /* v0,v1,v2,v3,v0,v1,v2,v3 */
++    *u = vzip1q_s16(even, even);       /* u0,u0,u1,u1,u2,u2,u3,u3 */
++    *v = vzip1q_s16(odd, odd);
++}
++
++static void nv12_row_neon(const uint8_t *yr, const uint8_t *uvr, int width, uint8_t *dst)
++{
++    int i = 0;
++    for (; i + 15 < width; i += 16) {
++        uint8x16_t yb = vld1q_u8(yr + i);
++        int16x8_t u0;
++        int16x8_t v0;
++        int16x8_t u1;
++        int16x8_t v1;
++        chroma_dup(vld1_u8(uvr + (i >> 1)), &u0, &v0);
++        chroma_dup(vld1_u8(uvr + (i >> 1) + 4), &u1, &v1);
++        store8(vreinterpretq_s16_u16(vmovl_u8(vget_low_u8(yb))), u0, v0, dst + i * 4);
++        store8(vreinterpretq_s16_u16(vmovl_u8(vget_high_u8(yb))), u1, v1, dst + i * 4 + 32);
++    }
++    for (; i < width; i++) {
++        int c = 298 * ((int)yr[i] - 16);
++        int u = (int)uvr[(i >> 1) * 2] - 128;
++        int v = (int)uvr[(i >> 1) * 2 + 1] - 128;
++        dst[i * 4 + 0] = (uint8_t)clip8(matrix_r(c, v));
++        dst[i * 4 + 1] = (uint8_t)clip8(matrix_g(c, u, v));
++        dst[i * 4 + 2] = (uint8_t)clip8(matrix_b(c, u));
++        dst[i * 4 + 3] = 255;
++    }
++}
++
++static void planar_row_neon(const uint8_t *yr, const uint8_t *ur, const uint8_t *vr,
++                            int width, uint8_t *dst)
++{
++    int i = 0;
++    for (; i + 15 < width; i += 16) {
++        uint8x16_t yb = vld1q_u8(yr + i);
++        int16x8_t u = vreinterpretq_s16_u16(vmovl_u8(vld1_u8(ur + (i >> 1))));
++        int16x8_t v = vreinterpretq_s16_u16(vmovl_u8(vld1_u8(vr + (i >> 1))));
++        int16x8_t u2 = vreinterpretq_s16_u16(vmovl_u8(vld1_u8(ur + (i >> 1) + 4)));
++        int16x8_t v2 = vreinterpretq_s16_u16(vmovl_u8(vld1_u8(vr + (i >> 1) + 4)));
++        u = vzip1q_s16(u, u);
++        v = vzip1q_s16(v, v);
++        u2 = vzip1q_s16(u2, u2);
++        v2 = vzip1q_s16(v2, v2);
++        store8(vreinterpretq_s16_u16(vmovl_u8(vget_low_u8(yb))), u, v, dst + i * 4);
++        store8(vreinterpretq_s16_u16(vmovl_u8(vget_high_u8(yb))), u2, v2, dst + i * 4 + 32);
++    }
++    for (; i < width; i++) {
++        int c = 298 * ((int)yr[i] - 16);
++        int u = (int)ur[i >> 1] - 128;
++        int v = (int)vr[i >> 1] - 128;
++        dst[i * 4 + 0] = (uint8_t)clip8(matrix_r(c, v));
++        dst[i * 4 + 1] = (uint8_t)clip8(matrix_g(c, u, v));
++        dst[i * 4 + 2] = (uint8_t)clip8(matrix_b(c, u));
++        dst[i * 4 + 3] = 255;
++    }
++}
++#endif /* __ARM_NEON */
++
++void galnx_nv12_to_rgba(const uint8_t *y, const uint8_t *uv, int width, int height,
++                        int y_stride, int uv_stride, uint8_t *out_rgba)
++{
++    for (int j = 0; j < height; j++) {
++        const uint8_t *yr = y + (size_t)j * (size_t)y_stride;
++        const uint8_t *uvr = uv + (size_t)(j >> 1) * (size_t)uv_stride;
++        uint8_t *dst = out_rgba + (size_t)j * (size_t)width * 4;
++#if defined(__ARM_NEON)
++        nv12_row_neon(yr, uvr, width, dst);
++#else
++        for (int i = 0; i < width; i++) {
++            int c = 298 * ((int)yr[i] - 16);
++            int u = (int)uvr[(i >> 1) * 2] - 128;
++            int v = (int)uvr[(i >> 1) * 2 + 1] - 128;
++            dst[i * 4 + 0] = (uint8_t)clip8(matrix_r(c, v));
++            dst[i * 4 + 1] = (uint8_t)clip8(matrix_g(c, u, v));
++            dst[i * 4 + 2] = (uint8_t)clip8(matrix_b(c, u));
++            dst[i * 4 + 3] = 255;
++        }
++#endif
++    }
++}
++
++void galnx_yuv420p_to_rgba(const uint8_t *y, const uint8_t *u, const uint8_t *v,
++                           int width, int height, int y_stride, int u_stride,
++                           int v_stride, uint8_t *out_rgba)
++{
++    for (int j = 0; j < height; j++) {
++        const uint8_t *yr = y + (size_t)j * (size_t)y_stride;
++        const uint8_t *ur = u + (size_t)(j >> 1) * (size_t)u_stride;
++        const uint8_t *vr = v + (size_t)(j >> 1) * (size_t)v_stride;
++        uint8_t *dst = out_rgba + (size_t)j * (size_t)width * 4;
++#if defined(__ARM_NEON)
++        planar_row_neon(yr, ur, vr, width, dst);
++#else
++        for (int i = 0; i < width; i++) {
++            int c = 298 * ((int)yr[i] - 16);
++            int uu = (int)ur[i >> 1] - 128;
++            int vv = (int)vr[i >> 1] - 128;
++            dst[i * 4 + 0] = (uint8_t)clip8(matrix_r(c, vv));
++            dst[i * 4 + 1] = (uint8_t)clip8(matrix_g(c, uu, vv));
++            dst[i * 4 + 2] = (uint8_t)clip8(matrix_b(c, uu));
++            dst[i * 4 + 3] = 255;
++        }
++#endif
++    }
++}

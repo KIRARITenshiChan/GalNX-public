@@ -1,0 +1,14 @@
+{
+  "engine_only_nro": {
+    "bytes": 10437716,
+    "sha256": "d84e9f4a2842ce47a370b47a890c85d7dcb755228dbb576c521f15c1e9467a1d"
+  },
+  "elf": {
+    "bytes": 23565056,
+    "sha256": "888f32c7f06513ca9c55996033cc71e13691c8246370c23df98c7a4594eca4cd"
+  },
+  "nacp": {
+    "bytes": 16384,
+    "sha256": "3cd7982c424b7048a86c08522b6c2a77914241756bb139ad4fd2881c4b035b7f"
+  }
+}

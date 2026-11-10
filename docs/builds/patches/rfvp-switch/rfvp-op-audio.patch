@@ -1,0 +1,338 @@
+diff --git a/crates/rfvp/src/host_api/audio.rs b/crates/rfvp/src/host_api/audio.rs
+index 64474dc..a2f95c2 100644
+--- a/crates/rfvp/src/host_api/audio.rs
++++ b/crates/rfvp/src/host_api/audio.rs
+@@ -70,6 +70,10 @@ pub const SE_STREAM_ID_BASE: u32 = 0x1000;
+ pub enum AudioSlotKind {
+     Bgm,
+     Se,
++    /// The soundtrack of the movie that is playing. It is not addressable from
++    /// scripts (the script-visible ids are the BGM/SE slots), so it does not
++    /// compete with the two BGM slots the game uses.
++    Movie,
+ }
+ 
+ impl AudioStreamId {
+@@ -91,6 +95,12 @@ impl AudioStreamId {
+             && self.0 < SE_STREAM_ID_BASE + SE_LOGICAL_SLOT_COUNT as u32
+         {
+             Some(AudioSlotKind::Se)
++        } else if self.0 == Self::MOVIE.0 {
++            // GalNX P32: the Switch command backend feeds SoftAudioMixer, which
++            // used to reject the movie id (0x2000) with InvalidArgument. The OGG
++            // OP soundtrack needs a slot kind that is independent from the
++            // script-visible BGM/SE slots.
++            Some(AudioSlotKind::Movie)
+         } else {
+             None
+         }
+@@ -701,6 +711,8 @@ impl<B: SoftAudioVorbis> SoftAudioMixer<B> {
+             AudioSlotKind::Se if se >= self.config.max_active_se => {
+                 Err(super::error::RfvpError::CapacityExceeded)
+             }
++            // At most one movie soundtrack at a time; a second play replaces it.
++            AudioSlotKind::Movie => Ok(()),
+             _ => Ok(()),
+         }
+     }
+diff --git a/crates/rfvp/src/no_std_core.rs b/crates/rfvp/src/no_std_core.rs
+index d178fb2..925749a 100644
+--- a/crates/rfvp/src/no_std_core.rs
++++ b/crates/rfvp/src/no_std_core.rs
+@@ -672,10 +672,14 @@ impl RfvpCore {
+             self.debug_movie_started = true;
+             let path =
+                 crate::script::Variant::String(alloc::string::String::from("movie/01.wmv"));
++            // GalNX P32: pass a non-nil flag. movie_play maps a nil flag to
++            // MovieMode::LayerNoAudio (no soundtrack); the OP now has an Ogg
++            // soundtrack next to the video, so start it as a modal movie with
++            // audio (the flag value itself is only tested for nil/true).
+             match crate::subsystem::components::syscalls::movie::movie_play(
+                 &mut self.game_data,
+                 &path,
+-                &crate::script::Variant::Nil,
++                &crate::script::Variant::True,
+             ) {
+                 Ok(_) => host.log(RfvpLogLevel::Info, "debug movie: started movie/01.wmv"),
+                 Err(err) => host.log(
+diff --git a/crates/rfvp/src/subsystem/resources/videoplayer/horizon.rs b/crates/rfvp/src/subsystem/resources/videoplayer/horizon.rs
+index 6e02086..7c0fd74 100644
+--- a/crates/rfvp/src/subsystem/resources/videoplayer/horizon.rs
++++ b/crates/rfvp/src/subsystem/resources/videoplayer/horizon.rs
+@@ -21,19 +21,22 @@
+ 
+ use alloc::boxed::Box;
+ use alloc::collections::VecDeque;
++use alloc::string::String;
++use alloc::sync::Arc;
+ use alloc::vec::Vec;
+ 
+ use anyhow::{anyhow, Result};
+ 
++use crate::host_api::{AudioParams, AudioStreamId};
+ use crate::platform_time::Instant;
++use crate::rfvp_audio::{AudioManager, SoundSource, Tween};
++use crate::subsystem::resources::vfs::Vfs;
+ 
+ use wmv_decoder::io::{self as wmv_io, ErrorKind, Read as WmvRead, Seek as WmvSeek, SeekFrom};
+ use wmv_decoder::{AsfWmv2Decoder, BytesDecoder, DecodedFrame, yuv420p_to_rgba_scaled};
+ 
+ use super::{MovieFrame, MovieRequest, MovieSource};
+ 
+-#[cfg(feature = "switch-async")]
+-use alloc::sync::Arc;
+ #[cfg(feature = "switch-async")]
+ use crate::subsystem::resources::vfs::PackSource;
+ 
+@@ -51,6 +54,121 @@ struct WmvRgbaFrame {
+     rgba: Vec<u8>,
+ }
+ 
++/// GalNX P32: the OP soundtrack shipped as an Ogg Vorbis file next to the video.
++/// It is handed to the engine audio backend as an in-memory encoded source; on
++/// the Switch that backend is the command queue drained by the P30 JIT audio
++/// thread, so neither decoding nor mixing happens on the frame thread.
++struct MovieAudio {
++    manager: Arc<AudioManager>,
++    bytes: Arc<[u8]>,
++    /// VFS path of the .ogg file, for logs only.
++    path: String,
++    /// The backend load+play commands were queued.
++    started: bool,
++    /// The backend accepted play; stop/unload are required.
++    playing: bool,
++}
++
++impl MovieAudio {
++    /// Start the soundtrack. Called when the first video frame is presented so
++    /// audio and video start together (same rule as threaded.rs).
++    fn start(&mut self) {
++        if self.started {
++            return;
++        }
++        self.started = true;
++        // The soundtrack is already in memory; the backend does not read game
++        // files for it, so an empty Vfs is enough (as in threaded.rs).
++        let vfs = Vfs::default();
++        let backend = self.manager.backend();
++        let params = AudioParams {
++            volume: 1.0,
++            pan: 0.0,
++            repeat: false,
++        };
++        let result = backend
++            .load(
++                AudioStreamId::MOVIE,
++                &SoundSource::Bytes(self.bytes.clone()),
++                &vfs,
++            )
++            .and_then(|()| backend.play(AudioStreamId::MOVIE, params, Tween::default(), &vfs));
++        match result {
++            Ok(()) => {
++                self.playing = true;
++                log::info!(
++                    "movie audio: playing {} (Ogg Vorbis, {} bytes)",
++                    self.path,
++                    self.bytes.len()
++                );
++            }
++            Err(err) => {
++                log::warn!("movie audio: could not play {}: {err:?}", self.path);
++            }
++        }
++    }
++
++    fn stop(&mut self) {
++        if !self.playing {
++            return;
++        }
++        self.playing = false;
++        let backend = self.manager.backend();
++        backend.stop(AudioStreamId::MOVIE, Tween::default());
++        backend.unload(AudioStreamId::MOVIE);
++        log::info!("movie audio: stopped {}", self.path);
++    }
++}
++
++/// Derive the soundtrack path from the movie path: movie/01.wmv becomes
++/// movie/01.ogg. Returns None for a path without a file name extension.
++fn ogg_sibling(name: &str) -> Option<String> {
++    let slash = name.rfind('/').map(|index| index + 1).unwrap_or(0);
++    let dot = name.rfind('.')?;
++    if dot < slash {
++        return None;
++    }
++    let mut ogg = String::from(&name[..dot]);
++    ogg.push_str(".ogg");
++    Some(ogg)
++}
++
++/// Load the OP soundtrack next to the movie. Failure only disables the music;
++/// the video keeps playing.
++fn load_movie_audio(request: &MovieRequest<'_>) -> Option<MovieAudio> {
++    let manager = request.audio.clone()?;
++    let Some(path) = ogg_sibling(request.name) else {
++        log::warn!(
++            "movie audio: cannot derive an .ogg soundtrack path from {}",
++            request.name
++        );
++        return None;
++    };
++    match request.vfs.read_file(&path) {
++        Ok(bytes) => {
++            log::info!(
++                "movie audio: loaded {} (Ogg Vorbis, {} bytes); queued for the audio thread",
++                path,
++                bytes.len()
++            );
++            Some(MovieAudio {
++                manager,
++                bytes: Arc::from(bytes),
++                path,
++                started: false,
++                playing: false,
++            })
++        }
++        Err(err) => {
++            log::warn!(
++                "movie audio: {} is missing or unreadable ({err}); playing the movie video only",
++                path
++            );
++            None
++        }
++    }
++}
++
+ /// VFS-backed byte reader handed to the ASF demuxer.
+ ///
+ /// The demuxer only needs sequential packet reads plus the occasional seek, so
+@@ -141,10 +259,18 @@ struct WmvPlayback {
+     decoded_frames: u32,
+     presented_frames: u32,
+     last_decode_us: u32,
++    /// GalNX P32: the Ogg OP soundtrack, when the movie was started as a
++    /// modal movie (script Movie flag non-nil) and movie/01.ogg exists.
++    audio: Option<MovieAudio>,
+ }
+ 
+ impl WmvPlayback {
+-    fn new(dec: WmvDecoder, screen_w: u32, screen_h: u32) -> Self {
++    fn new(
++        dec: WmvDecoder,
++        screen_w: u32,
++        screen_h: u32,
++        audio: Option<MovieAudio>,
++    ) -> Self {
+         Self {
+             dec,
+             stash: VecDeque::new(),
+@@ -157,6 +283,21 @@ impl WmvPlayback {
+             decoded_frames: 0,
+             presented_frames: 0,
+             last_decode_us: 0,
++            audio,
++        }
++    }
++
++    /// Start the OP soundtrack on the first presented video frame so audio and
++    /// video line up. Never fails the movie: the soundtrack is optional.
++    fn maybe_start_audio(&mut self) {
++        if let Some(audio) = self.audio.as_mut() {
++            audio.start();
++        }
++    }
++
++    fn stop_audio(&mut self) {
++        if let Some(audio) = self.audio.as_mut() {
++            audio.stop();
+         }
+     }
+ 
+@@ -247,6 +388,9 @@ impl MovieSource for WmvPlayback {
+             return Ok(None);
+         }
+         self.last_presented_pts_ms = frame.pts_ms;
++        // GalNX P32: first frame is about to be shown; start the OP soundtrack
++        // now so audio and video line up (same rule as threaded.rs).
++        self.maybe_start_audio();
+         Ok(Some(MovieFrame {
+             rgba: frame.rgba,
+             width: self.screen_w,
+@@ -258,7 +402,18 @@ impl MovieSource for WmvPlayback {
+         WmvPlayback::is_finished(self)
+     }
+ 
+-    fn stop(self: Box<Self>) {}
++    fn stop(mut self: Box<Self>) {
++        self.stop_audio();
++    }
++}
++
++impl Drop for WmvPlayback {
++    fn drop(&mut self) {
++        // VideoPlayerManager::stop goes through MovieSource::stop, but a movie
++        // that is torn down on an error path may merely drop the source; make
++        // sure the audio command queue always gets its Stop/Unload pair.
++        self.stop_audio();
++    }
+ }
+ 
+ /// Open a movie for the Switch (no_std) backend: WMV/ASF only, video only.
+@@ -278,16 +433,25 @@ pub(super) fn open(request: &MovieRequest<'_>) -> Result<Box<dyn MovieSource>> {
+ 
+     let (w, h) = (request.screen_w, request.screen_h);
+ 
++    // GalNX P32: read the Ogg OP soundtrack once, up front. It is only played
++    // once the first video frame is actually presented. Missing/unreadable
++    // soundtrack is not fatal: the movie keeps playing video-only.
++    let audio = load_movie_audio(request);
++
+     #[cfg(feature = "switch-async")]
+     if let Some((source, offset, size)) = request.vfs.pack_location(name) {
+         let reader = VfsMovieReader::new(source, offset, size);
+         match AsfWmv2Decoder::open(reader) {
+             Ok(dec) => {
+-                warn_movie_audio(request);
+                 log::info!(
+                     "Movie: opened (Switch WMV video-only, streaming) name={name} bytes={size}"
+                 );
+-                return Ok(Box::new(WmvPlayback::new(WmvDecoder::Stream(dec), w, h)));
++                return Ok(Box::new(WmvPlayback::new(
++                    WmvDecoder::Stream(dec),
++                    w,
++                    h,
++                    audio,
++                )));
+             }
+             Err(err) => {
+                 log::warn!(
+@@ -301,23 +465,19 @@ pub(super) fn open(request: &MovieRequest<'_>) -> Result<Box<dyn MovieSource>> {
+         .vfs
+         .read_file(name)
+         .map_err(|err| anyhow!("read movie {name}: {err}"))?;
+-    warn_movie_audio(request);
+     log::info!(
+         "Movie: opened (Switch WMV video-only, memory) name={name} bytes={}",
+         bytes.len()
+     );
+     let dec = BytesDecoder::open_bytes(bytes).map_err(|err| anyhow!("WMV open failed: {err}"))?;
+-    Ok(Box::new(WmvPlayback::new(WmvDecoder::Memory(dec), w, h)))
++    Ok(Box::new(WmvPlayback::new(
++        WmvDecoder::Memory(dec),
++        w,
++        h,
++        audio,
++    )))
+ }
+ 
+-fn warn_movie_audio(request: &MovieRequest<'_>) {
+-    if request.audio.is_some() {
+-        log::warn!(
+-            "movie audio is not decoded on Switch (no WMA decoder); playing video only: {}",
+-            request.name
+-        );
+-    }
+-}
+ 
+ /// GalNX P29 debug-only hook: rfvp_switch_debug_movie() is implemented in
+ /// platform/switch/runtime/main.c and returns non-zero when

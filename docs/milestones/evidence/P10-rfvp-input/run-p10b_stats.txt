@@ -1,0 +1,12 @@
+b-t0            1728x1016 white=0.040 dark=0.053 uniq=15348 sha=1cb648977b9864c9
+b-hover         1728x1016 white=0.040 dark=0.053 uniq=15388 sha=3650c304fbf118d3
+b-started       1728x1016 white=0.933 dark=0.053 uniq=160 sha=250b3b5dc47e0062
+b-story1        1728x1016 white=0.934 dark=0.053 uniq=152 sha=d40c767a26413300
+b-advA          1728x1016 white=0.933 dark=0.053 uniq=194 sha=b85c8209b469083c
+b-advX          1728x1016 white=0.167 dark=0.053 uniq=17478 sha=693eba3e86b6cc82
+b-advY          1728x1016 white=0.114 dark=0.053 uniq=19648 sha=9d796bdfa7b3b07a
+b-rmenu         1728x1016 white=0.147 dark=0.053 uniq=18276 sha=92560661cbdfaf40
+b-rmenu-close   1728x1016 white=0.140 dark=0.053 uniq=19238 sha=f671618d68f63a73
+b-skipL         1728x1016 white=0.931 dark=0.053 uniq=235 sha=e33a2d479807c7f8
+b-skipR         1728x1016 white=0.001 dark=0.053 uniq=19832 sha=03d5311e2e2efaab
+b-quit          1728x1016 white=0.000 dark=0.987 uniq=20 sha=e84daad06101052e

@@ -1,0 +1,75 @@
+# GalNX P3-a example manifest: self-contained NSP payload for the pilot game
+# (晴霁之后定是菜花盛开的好天气 / haruno, KiriKiri2 + Kikyou ADV).
+#
+# This manifest is used by tests/test_payload_plan.py and by the commands in
+# docs/packaging/payload.md. It only describes the payload (no build is run):
+# "galnx payload plan --manifest examples/payload/manifest.pilot01.yaml".
+#
+# The title_id in a real manifest must be allocated for the release; this one
+# is the GalNX pilot block (see docs/packaging/README.md, title-id registry).
+schema_version: 1
+
+game:
+  id: pilot01-haruno
+  title: 晴霁之后定是菜花盛开的好天气
+  publisher: (unknown)
+  version: "1.02"
+  source_dir: E:/Othergames/Galgame/晴霁之后定是菜花盛开的好天气
+  notes: >-
+    Pilot game P1 (KiriKiri2 + Kikyou ADV). Original 1.02 install with the
+    xmoe Chinese V2.0 patch applied. The Chinese *_chs.xp3 archives are
+    excluded from the payload: they are not portable and the patch author
+    forbids extraction/porting (docs/pilot/P1-game-audit.md, sections 4-5).
+
+engine:
+  adapter: krkrsdl2
+  adapter_version: "krkrsdl2@124bdf84 (2026-10-01)"
+  profile: default
+  entry: data.xp3
+
+switch:
+  title_id: "010047414C4E0000"
+  title: Haruno
+  author: GalNX
+  icon: artifacts/icon.jpg
+  target: nsp
+  display_mode: both
+  save_policy: per-title-isolated
+
+input:
+  default_mode: keyboard_mouse
+  toggle_combo: "L+R+PLUS"
+  profile: generic-vn
+
+build:
+  output_dir: E:/galnx-build/pilot01
+  reproducible: true
+  clean_workspace_before_build: true
+  keys_env: GALNX_PROD_KEYS
+  romfs_mode: embedded
+
+package:
+  type: self_contained_nsp
+  startup_user_account: 1
+  romfs_dir: romfs
+  icon: artifacts/icon.jpg
+  notes: Payload romfs assembled by "galnx payload materialize".
+
+payload:
+  version: pilot01-r2
+  target: /kirikiri/haruno
+  startup: /kirikiri/haruno/data.xp3
+  marker: sdmc:/switch/kirikiroid2/.galnx_extracted
+  source_dir: E:/Othergames/Galgame/晴霁之后定是菜花盛开的好天气
+  ui_dir: E:/galnx-build/pilot-01/k2nx-ws/build/romfs
+  include:
+    - "*.xp3"
+    - "*.cf"
+    - "plugin/*.tpm"
+  exclude:
+    - "*_chs.xp3"
+    - "*.sig"
+  keymap:
+    profile: generic-vn
+  payload_dir: game
+  manifest_name: game_files.txt

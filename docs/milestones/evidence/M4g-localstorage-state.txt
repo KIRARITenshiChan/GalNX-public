@@ -1,0 +1,7 @@
+# Brewser localStorage state at 2026-10-30T03:41+08:00 (after run A killed, before run B)
+# SD root: sdmc:/switch/brewser/
+35c6ba527f144eb40a099913e1d3e04cd456bd75ec0d43984e9372bab26be95d  16  2026-10-29T15:13:16.560Z  shell/localStorage/default.json
+
+apps/org.galnx.webvn/localStorage/ directory: EMPTY (0 files)
+shell/localStorage/default.json mtime 2026-10-29T23:13 (unchanged since web-02 probe run)
+find -newermt "2026-10-30 03:15" under sdmc/switch/brewser: only logs/foreignobject.log (656 B, 03:17)

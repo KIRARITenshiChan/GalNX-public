@@ -1,0 +1,12 @@
+usage: galnx payload [-h] {plan,materialize,verify} ...
+
+positional arguments:
+  {plan,materialize,verify}
+    plan                validate the manifest payload section and print the
+                        romfs plan
+    materialize         write the planned romfs tree to a directory
+    verify              check the built-in keymap template/golden sample and
+                        an optional manifest payload section
+
+options:
+  -h, --help            show this help message and exit

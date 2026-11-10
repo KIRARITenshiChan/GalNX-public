@@ -1,0 +1,869 @@
+[   0.664595] Frontend <Info> citron\main.cpp:280:LogRuntimes: MSVC Compiler: 1944 Runtime: 14.51.36247.0
+[   0.664597] Frontend <Info> citron\main.cpp:289:LogRuntimes: Qt Compile: 6.9.3 Runtime: 6.9.3
+[   0.664598] Frontend <Info> citron\main.cpp:427:GMainWindow: Host CPU: 12th Gen Intel(R) Core(TM) i7-12650H | AVX2 | FMA
+[   0.664674] Frontend <Info> citron\main.cpp:429:GMainWindow: Host CPU Cores: 10
+[   0.664674] Frontend <Info> citron\main.cpp:432:GMainWindow: Host CPU Threads: 16
+[   0.664880] Frontend <Info> citron\main.cpp:433:GMainWindow: Host OS: Windows 11 Version 24H2 (Build 26100.9711)
+[   0.664892] Frontend <Info> citron\main.cpp:435:GMainWindow: Host RAM: 31.74 GiB
+[   0.664893] Frontend <Info> citron\main.cpp:436:GMainWindow: Host Swap: 100.25 GiB
+[   0.664974] Frontend <Info> citron\main.cpp:441:GMainWindow: Host Timer Resolution: 0.5000 ms
+[   0.665056] Frontend <Info> citron\main.cpp:446:GMainWindow: Registering system content providers...
+[   0.665066] Frontend <Info> citron\main.cpp:452:GMainWindow: Initializing factories...
+[   0.666484] Service.FS <Info> core\hle\service\filesystem\filesystem.cpp:445:CreateSaveDataFactory: Save Path: Using default NAND as the base.
+[   0.666517] Service.FS <Info> core\hle\service\filesystem\filesystem.cpp:477:CreateSaveDataFactory: Save Path: No overrides found. Using the determined base directory.
+[   0.667563] Service.FS <Info> core\hle\service\filesystem\filesystem.cpp:445:CreateSaveDataFactory: Save Path: Using default NAND as the base.
+[   0.667589] Service.FS <Info> core\hle\service\filesystem\filesystem.cpp:477:CreateSaveDataFactory: Save Path: No overrides found. Using the determined base directory.
+[   0.667619] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:76:SynthesizeSystemArchive: Synthesizing system archive 'SystemVersion' (0x0100000000000809).
+[   0.667625] Common.Filesystem <Warning> core\file_sys\system_archive\system_version.cpp:17:SystemVersion: called - Using hardcoded firmware version 'NintendoSDK Firmware for NX 22.0.0-3.0'
+[   0.667652] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:94:SynthesizeSystemArchive:     - System archive generation successful!
+[   0.667667] Frontend <Info> citron\main.cpp:6104:SetFirmwareVersion: Installed firmware: No firmware available
+[   0.667764] Frontend <Info> citron\game_list.cpp:3344:LoadCompatibilityList: No local compatibility list found, using internal resource.
+[   0.667796] Frontend <Error> citron\game_list.cpp:3354:LoadCompatibilityList: Game compatibility list is empty or unreadable
+[   0.885865] Frontend <Info> citron\game_list.cpp:2711:DonePopulating: Mirroring: Performing one-time startup sync...
+[   1.166145] Frontend <Info> citron\main.cpp:2322:BootGame: citron starting...
+[   1.167295] Config <Info> frontend_common\config.cpp:75:WriteToIni: Writing Global configuration to: C:\Users\ACETaffy\AppData\Roaming\citron\config\qt-config.ini
+[   1.169767] Config <Info> frontend_common\config.cpp:75:WriteToIni: Writing Global configuration to: C:\Users\ACETaffy\AppData\Roaming\citron\config\qt-config.ini
+[   1.178781] Config <Info> frontend_common\config.cpp:75:WriteToIni: Writing Game Specific configuration to: C:\Users\ACETaffy\AppData\Roaming\citron\config\custom\010047420000C200.ini
+[   1.179180] Config <Info> frontend_common\config.cpp:75:WriteToIni: Writing Game Specific configuration to: C:\Users\ACETaffy\AppData\Roaming\citron\config\custom\010047420000C200.ini
+[   1.183741] Config <Info> common\settings.cpp:118:LogSettings: citron Configuration:
+[   1.183755] Config <Info> common\settings.cpp:111:operator (): -- Audio.output_engine: auto
+[   1.183756] Config <Info> common\settings.cpp:111:operator (): -- Audio.output_device: auto
+[   1.183757] Config <Info> common\settings.cpp:111:operator (): -- Audio.input_device: auto
+[   1.183759] Config <Info> common\settings.cpp:111:operator (): -- Audio.volume: 100
+[   1.183760] Config <Info> common\settings.cpp:111:operator (): -- Audio.audio_muted: false
+[   1.183761] Config <Info> common\settings.cpp:111:operator (): -- Audio.dump_audio_commands: false
+[   1.183762] Config <Info> common\settings.cpp:111:operator (): -- Core.use_multi_core: true
+[   1.183767] Config <Info> common\settings.cpp:111:operator (): -- Core.memory_layout_mode: Memory_4Gb
+[   1.183768] Config <Info> common\settings.cpp:111:operator (): -- Core.use_speed_limit: true
+[   1.183769] Config <Info> common\settings.cpp:111:operator (): -- Core.speed_limit: 100
+[   1.183771] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpu_backend: Dynarmic
+[   1.183772] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpu_accuracy: Auto
+[   1.183773] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpu_debug_mode: false
+[   1.183774] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_page_tables: true
+[   1.183774] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_block_linking: true
+[   1.183775] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_return_stack_buffer: true
+[   1.183776] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_fast_dispatcher: true
+[   1.183776] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_context_elimination: true
+[   1.183777] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_const_prop: true
+[   1.183777] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_misc_ir: true
+[   1.183778] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_reduce_misalign_checks: true
+[   1.183779] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_fastmem: true
+[   1.183780] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_fastmem_exclusives: true
+[   1.183780] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_recompile_exclusives: true
+[   1.183781] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_ignore_memory_aborts: true
+[   1.183782] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_unsafe_unfuse_fma: true
+[   1.183782] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_unsafe_reduce_fp_error: true
+[   1.183783] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_unsafe_ignore_standard_fpcr: true
+[   1.183784] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_unsafe_inaccurate_nan: true
+[   1.183784] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_unsafe_fastmem_check: true
+[   1.183785] Config <Info> common\settings.cpp:111:operator (): -- Cpu.cpuopt_unsafe_ignore_global_monitor: true
+[   1.183788] Config <Info> common\settings.cpp:111:operator (): -- Renderer.backend: Vulkan
+[   1.183789] Config <Info> common\settings.cpp:111:operator (): -- Renderer.vulkan_device: 0
+[   1.183790] Config <Info> common\settings.cpp:111:operator (): -- Renderer.use_disk_shader_cache: true
+[   1.183791] Config <Info> common\settings.cpp:111:operator (): -- Renderer.use_asynchronous_gpu_emulation: true
+[   1.183792] Config <Info> common\settings.cpp:111:operator (): -- Renderer.accelerate_astc: Gpu
+[   1.183794] Config <Info> common\settings.cpp:111:operator (): -- Renderer.use_vsync: Fifo
+[   1.183795] Config <Info> common\settings.cpp:111:operator (): -- Renderer.nvdec_emulation: Gpu
+[   1.183796] Config <Info> common\settings.cpp:111:operator (): -- Renderer.fullscreen_mode: Borderless
+[   1.183799] Config <Info> common\settings.cpp:111:operator (): -- Renderer.aspect_ratio: R16_9
+[   1.183801] Config <Info> common\settings.cpp:111:operator (): -- Renderer.resolution_setup: Res1X
+[   1.183803] Config <Info> common\settings.cpp:111:operator (): -- Renderer.scaling_filter: Bilinear
+[   1.183804] Config <Info> common\settings.cpp:111:operator (): -- Renderer.anti_aliasing: None
+[   1.183805] Config <Info> common\settings.cpp:111:operator (): -- Renderer.fsr_sharpening_slider: 25
+[   1.183805] Config <Info> common\settings.cpp:111:operator (): -- Renderer.cas_sharpening_slider: 50
+[   1.183809] Config <Info> common\settings.cpp:111:operator (): -- Renderer.crt_scanline_strength: 1.000000
+[   1.183810] Config <Info> common\settings.cpp:111:operator (): -- Renderer.crt_curvature: 0.000000
+[   1.183812] Config <Info> common\settings.cpp:111:operator (): -- Renderer.crt_gamma: 1.000000
+[   1.183813] Config <Info> common\settings.cpp:111:operator (): -- Renderer.crt_bloom: 0.330000
+[   1.183813] Config <Info> common\settings.cpp:111:operator (): -- Renderer.crt_mask_type: 1
+[   1.183814] Config <Info> common\settings.cpp:111:operator (): -- Renderer.crt_brightness: 1.000000
+[   1.183815] Config <Info> common\settings.cpp:111:operator (): -- Renderer.crt_alpha: 1.000000
+[   1.183816] Config <Info> common\settings.cpp:111:operator (): -- Renderer.lanczos_quality: 3
+[   1.183818] Config <Info> common\settings.cpp:111:operator (): -- Renderer.fsr2_quality_mode: Quality
+[   1.183819] Config <Info> common\settings.cpp:111:operator (): -- Renderer.frame_skipping: Disabled
+[   1.183820] Config <Info> common\settings.cpp:111:operator (): -- Renderer.frame_skipping_mode: Adaptive
+[   1.183820] Config <Info> common\settings.cpp:111:operator (): -- Renderer.bg_red: 0
+[   1.183821] Config <Info> common\settings.cpp:111:operator (): -- Renderer.bg_green: 0
+[   1.183822] Config <Info> common\settings.cpp:111:operator (): -- Renderer.bg_blue: 0
+[   1.183823] Config <Info> common\settings.cpp:111:operator (): -- Renderer.gpu_accuracy: Normal
+[   1.183825] Config <Info> common\settings.cpp:111:operator (): -- Renderer.max_anisotropy: Automatic
+[   1.183826] Config <Info> common\settings.cpp:111:operator (): -- Renderer.astc_recompression: Uncompressed
+[   1.183827] Config <Info> common\settings.cpp:111:operator (): -- Renderer.vram_usage_mode: Conservative
+[   1.183828] Config <Info> common\settings.cpp:111:operator (): -- Renderer.vram_limit_mb: 0
+[   1.183829] Config <Info> common\settings.cpp:111:operator (): -- Renderer.gc_aggressiveness: Off
+[   1.183830] Config <Info> common\settings.cpp:111:operator (): -- Renderer.texture_eviction_frames: 0
+[   1.183831] Config <Info> common\settings.cpp:111:operator (): -- Renderer.buffer_eviction_frames: 0
+[   1.183831] Config <Info> common\settings.cpp:111:operator (): -- Renderer.sparse_texture_priority_eviction: false
+[   1.183832] Config <Info> common\settings.cpp:111:operator (): -- Renderer.log_vram_usage: false
+[   1.183834] Config <Info> common\settings.cpp:111:operator (): -- Renderer.android_astc_mode: Auto
+[   1.183834] Config <Info> common\settings.cpp:111:operator (): -- Renderer.async_presentation: false
+[   1.183835] Config <Info> common\settings.cpp:111:operator (): -- Renderer.force_max_clock: false
+[   1.183836] Config <Info> common\settings.cpp:111:operator (): -- Renderer.use_reactive_flushing: true
+[   1.183836] Config <Info> common\settings.cpp:111:operator (): -- Renderer.use_asynchronous_shaders: false
+[   1.183837] Config <Info> common\settings.cpp:111:operator (): -- Renderer.use_fast_gpu_time: true
+[   1.183838] Config <Info> common\settings.cpp:111:operator (): -- Renderer.use_vulkan_driver_pipeline_cache: true
+[   1.183838] Config <Info> common\settings.cpp:111:operator (): -- Renderer.enable_compute_pipelines: false
+[   1.183839] Config <Info> common\settings.cpp:111:operator (): -- Renderer.use_video_framerate: false
+[   1.183840] Config <Info> common\settings.cpp:111:operator (): -- Renderer.barrier_feedback_loops: true
+[   1.183841] Config <Info> common\settings.cpp:111:operator (): -- Renderer.enable_buffer_history: false
+[   1.183841] Config <Info> common\settings.cpp:111:operator (): -- Renderer.wider_reciprocals: false
+[   1.183842] Config <Info> common\settings.cpp:111:operator (): -- Renderer.extended_dynamic_state: EDS3
+[   1.183843] Config <Info> common\settings.cpp:111:operator (): -- Renderer.use_conditional_rendering: true
+[   1.183844] Config <Info> common\settings.cpp:111:operator (): -- Renderer.debug: false
+[   1.183844] Config <Info> common\settings.cpp:111:operator (): -- Renderer.shader_feedback: false
+[   1.183845] Config <Info> common\settings.cpp:111:operator (): -- Renderer.nsight_aftermath: false
+[   1.183846] Config <Info> common\settings.cpp:111:operator (): -- Renderer.disable_shader_loop_safety_checks: false
+[   1.183846] Config <Info> common\settings.cpp:111:operator (): -- Renderer.renderdoc_hotkey: false
+[   1.183847] Config <Info> common\settings.cpp:111:operator (): -- Renderer.disable_buffer_reorder: false
+[   1.183847] Config <Info> common\settings.cpp:111:operator (): -- System.qlaunch_enabled: true
+[   1.183852] Config <Info> common\settings.cpp:111:operator (): -- System.language_index: EnglishAmerican
+[   1.183853] Config <Info> common\settings.cpp:111:operator (): -- System.region_index: Usa
+[   1.183858] Config <Info> common\settings.cpp:111:operator (): -- System.time_zone_index: Auto
+[   1.183859] Config <Info> common\settings.cpp:111:operator (): -- System.custom_rtc_enabled: false
+[   1.183859] Config <Info> common\settings.cpp:111:operator (): -- System.custom_rtc: 0
+[   1.183860] Config <Info> common\settings.cpp:111:operator (): -- System.custom_rtc_offset: 0
+[   1.183860] Config <Info> common\settings.cpp:111:operator (): -- System.rng_seed_enabled: false
+[   1.183861] Config <Info> common\settings.cpp:111:operator (): -- System.rng_seed: 0
+[   1.183862] Config <Info> common\settings.cpp:111:operator (): -- System.device_name: citron
+[   1.183863] Config <Info> common\settings.cpp:111:operator (): -- System.current_user: 0
+[   1.183864] Config <Info> common\settings.cpp:111:operator (): -- System.use_docked_mode: Docked
+[   1.183865] Config <Info> common\settings.cpp:111:operator (): -- System.sound_index: Stereo
+[   1.183866] Config <Info> common\settings.cpp:111:operator (): -- Data Storage.use_virtual_sd: true
+[   1.183867] Config <Info> common\settings.cpp:111:operator (): -- Data Storage.gamecard_inserted: false
+[   1.183867] Config <Info> common\settings.cpp:111:operator (): -- Data Storage.gamecard_current_game: false
+[   1.183868] Config <Info> common\settings.cpp:111:operator (): -- Data Storage.gamecard_path: 
+[   1.183869] Config <Info> common\settings.cpp:111:operator (): -- Data Storage.global_custom_save_path_enabled: false
+[   1.183870] Config <Info> common\settings.cpp:111:operator (): -- Data Storage.global_custom_save_path: 
+[   1.183870] Config <Info> common\settings.cpp:111:operator (): -- Data Storage.backup_saves_to_nand: false
+[   1.183871] Config <Info> common\settings.cpp:111:operator (): -- Debugging.ultralow_benchmark_logging: false
+[   1.183872] Config <Info> common\settings.cpp:111:operator (): -- Debugging.use_gdbstub: false
+[   1.183873] Config <Info> common\settings.cpp:111:operator (): -- Debugging.gdbstub_port: 6543
+[   1.183873] Config <Info> common\settings.cpp:111:operator (): -- Debugging.program_args: 
+[   1.183874] Config <Info> common\settings.cpp:111:operator (): -- Debugging.dump_exefs: false
+[   1.183874] Config <Info> common\settings.cpp:111:operator (): -- Debugging.dump_nso: false
+[   1.183875] Config <Info> common\settings.cpp:111:operator (): -- Debugging.enable_fs_access_log: false
+[   1.183875] Config <Info> common\settings.cpp:111:operator (): -- Debugging.reporting_services: false
+[   1.183876] Config <Info> common\settings.cpp:111:operator (): -- Debugging.quest_flag: false
+[   1.183877] Config <Info> common\settings.cpp:111:operator (): -- Debugging.extended_logging: false
+[   1.183877] Config <Info> common\settings.cpp:111:operator (): -- Debugging.use_debug_asserts: false
+[   1.183878] Config <Info> common\settings.cpp:111:operator (): -- Debugging.use_auto_stub: false
+[   1.183879] Config <Info> common\settings.cpp:111:operator (): -- Debugging.enable_all_controllers: false
+[   1.183879] Config <Info> common\settings.cpp:111:operator (): -- Debugging.perform_vulkan_check: true
+[   1.183880] Config <Info> common\settings.cpp:111:operator (): -- Debugging.log_filter: *:Info
+[   1.183881] Config <Info> common\settings.cpp:111:operator (): -- Debugging.dump_shaders: false
+[   1.183881] Config <Info> common\settings.cpp:111:operator (): -- Debugging.dump_macros: false
+[   1.183882] Config <Info> common\settings.cpp:111:operator (): -- Debugging.disable_macro_jit: false
+[   1.183883] Config <Info> common\settings.cpp:111:operator (): -- Debugging.disable_macro_hle: false
+[   1.183883] Config <Info> common\settings.cpp:111:operator (): -- Miscellaneous.is_wayland_platform: false
+[   1.183884] Config <Info> common\settings.cpp:111:operator (): -- Miscellaneous.use_dev_keys: false
+[   1.183885] Config <Info> common\settings.cpp:111:operator (): -- Network.airplane_mode: false
+[   1.183885] Config <Info> common\settings.cpp:111:operator (): -- Network.network_interface: 
+[   1.183886] Config <Info> common\settings.cpp:111:operator (): -- Network.lobby_api_url: api.ynet-fun.xyz
+[   1.183887] Config <Info> common\settings.cpp:111:operator (): -- WebService.enable_telemetry: false
+[   1.183888] Config <Info> common\settings.cpp:111:operator (): -- WebService.web_api_url: api.ynet-fun.xyz
+[   1.183889] Config <Info> common\settings.cpp:111:operator (): -- WebService.citron_username: 
+[   1.183890] Config <Info> common\settings.cpp:111:operator (): -- WebService.enable_auto_update_check: true
+[   1.183890] Config <Info> common\settings.cpp:111:operator (): -- Controls.enable_raw_input: false
+[   1.183891] Config <Info> common\settings.cpp:111:operator (): -- Controls.controller_navigation: true
+[   1.183892] Config <Info> common\settings.cpp:111:operator (): -- Controls.navigation_repeat_delay: 500
+[   1.183892] Config <Info> common\settings.cpp:111:operator (): -- Controls.navigation_repeat_interval: 150
+[   1.183894] Config <Info> common\settings.cpp:111:operator (): -- Controls.navigation_deadzone: 0.500000
+[   1.183894] Config <Info> common\settings.cpp:111:operator (): -- Controls.enable_joycon_driver: true
+[   1.183895] Config <Info> common\settings.cpp:111:operator (): -- Controls.enable_procon_driver: false
+[   1.183896] Config <Info> common\settings.cpp:111:operator (): -- Controls.vibration_enabled: true
+[   1.183896] Config <Info> common\settings.cpp:111:operator (): -- Controls.enable_accurate_vibrations: false
+[   1.183897] Config <Info> common\settings.cpp:111:operator (): -- Controls.motion_enabled: true
+[   1.183898] Config <Info> common\settings.cpp:111:operator (): -- Controls.udp_input_servers: 127.0.0.1:26760
+[   1.183898] Config <Info> common\settings.cpp:111:operator (): -- Controls.enable_udp_controller: false
+[   1.183899] Config <Info> common\settings.cpp:111:operator (): -- Controls.pause_tas_on_load: true
+[   1.183899] Config <Info> common\settings.cpp:111:operator (): -- Controls.tas_enable: false
+[   1.183900] Config <Info> common\settings.cpp:111:operator (): -- Controls.tas_loop: false
+[   1.183901] Config <Info> common\settings.cpp:111:operator (): -- Controls.mouse_panning: false
+[   1.183902] Config <Info> common\settings.cpp:111:operator (): -- Controls.mouse_panning_sensitivity: 50
+[   1.183902] Config <Info> common\settings.cpp:111:operator (): -- Controls.mouse_enabled: false
+[   1.183903] Config <Info> common\settings.cpp:111:operator (): -- Controls.mouse_panning_x_sensitivity: 50
+[   1.183903] Config <Info> common\settings.cpp:111:operator (): -- Controls.mouse_panning_y_sensitivity: 50
+[   1.183904] Config <Info> common\settings.cpp:111:operator (): -- Controls.mouse_panning_deadzone_counterweight: 20
+[   1.183905] Config <Info> common\settings.cpp:111:operator (): -- Controls.mouse_panning_decay_strength: 18
+[   1.183905] Config <Info> common\settings.cpp:111:operator (): -- Controls.mouse_panning_min_decay: 6
+[   1.183906] Config <Info> common\settings.cpp:111:operator (): -- Controls.emulate_analog_keyboard: false
+[   1.183906] Config <Info> common\settings.cpp:111:operator (): -- Controls.keyboard_enabled: false
+[   1.183907] Config <Info> common\settings.cpp:111:operator (): -- Controls.debug_pad_enabled: false
+[   1.183908] Config <Info> common\settings.cpp:111:operator (): -- Controls.touch_device: min_x:100,min_y:50,max_x:1800,max_y:850
+[   1.183909] Config <Info> common\settings.cpp:111:operator (): -- Controls.touch_from_button_map: 0
+[   1.183909] Config <Info> common\settings.cpp:111:operator (): -- Controls.enable_ring_controller: true
+[   1.183910] Config <Info> common\settings.cpp:111:operator (): -- Controls.enable_ir_sensor: false
+[   1.183911] Config <Info> common\settings.cpp:111:operator (): -- Controls.ir_sensor_device: auto
+[   1.183911] Config <Info> common\settings.cpp:111:operator (): -- Controls.random_amiibo_id: false
+[   1.183912] Config <Info> common\settings.cpp:111:operator (): -- Linux.enable_gamemode: true
+[   1.183913] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.cabinet_applet_mode: LLE
+[   1.183914] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.controller_applet_mode: HLE
+[   1.183915] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.data_erase_applet_mode: HLE
+[   1.183915] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.error_applet_mode: LLE
+[   1.183916] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.net_connect_applet_mode: HLE
+[   1.183917] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.player_select_applet_mode: HLE
+[   1.183917] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.swkbd_applet_mode: LLE
+[   1.183918] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.mii_edit_applet_mode: LLE
+[   1.183919] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.web_applet_mode: HLE
+[   1.183920] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.shop_applet_mode: HLE
+[   1.183920] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.photo_viewer_applet_mode: LLE
+[   1.183921] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.offline_web_applet_mode: LLE
+[   1.183921] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.login_share_applet_mode: HLE
+[   1.183922] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.wifi_web_auth_applet_mode: HLE
+[   1.183923] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.my_page_applet_mode: LLE
+[   1.183928] Config <Info> common\settings.cpp:115:operator (): DataStorage_CacheDir: C:\Users\ACETaffy\AppData\Roaming\citron\cache
+[   1.183929] Config <Info> common\settings.cpp:115:operator (): DataStorage_ConfigDir: C:\Users\ACETaffy\AppData\Roaming\citron\config
+[   1.183929] Config <Info> common\settings.cpp:115:operator (): DataStorage_LoadDir: C:/Users/ACETaffy/AppData/Roaming/citron/load
+[   1.183930] Config <Info> common\settings.cpp:115:operator (): DataStorage_NANDDir: C:/Users/ACETaffy/AppData/Roaming/citron/nand
+[   1.183931] Config <Info> common\settings.cpp:115:operator (): DataStorage_SDMCDir: C:/Users/ACETaffy/AppData/Roaming/citron/sdmc
+[   1.227500] Loader <Info> core\file_sys\patch_manager.cpp:178:PatchExeFS: Patching ExeFS for title_id=010047420000C200
+[   1.227795] Loader <Info> core\file_sys\patch_manager.cpp:351:PatchExeFS:     ExeFS: LayeredExeFS patches applied successfully
+[   1.337343] Loader <Info> core\file_sys\patch_manager.cpp:452:HasNSOPatch: Querying NSO patch existence for build_id=7DC7F8EA4067EB3D704DC1767F0BF9ABF954F48, name=main
+[   1.339728] Service.FS <Info> core\hle\service\filesystem\filesystem.cpp:445:CreateSaveDataFactory: Save Path: Using default NAND as the base.
+[   1.339837] Service.FS <Info> core\hle\service\filesystem\filesystem.cpp:477:CreateSaveDataFactory: Save Path: No overrides found. Using the determined base directory.
+[   1.339900] Core <Info> core\core.cpp:392:Load: Loading SAKURA MOYU CN (010047420000C200) ...
+[   1.375198] Render.Vulkan <Info> video_core\vulkan_common\vulkan_device.cpp:1036:GetSuitability: Device doesn't support extension VK_EXT_external_memory_host
+[   1.375247] Render.Vulkan <Warning> video_core\vulkan_common\vulkan_device.cpp:563:Device: Ampere and newer have broken float16 math
+[   1.375248] Render.Vulkan <Warning> video_core\vulkan_common\vulkan_device.cpp:572:Device: NVIDIA Drivers >= 510 do not support MSAA image blits
+[   1.741962] Render.Vulkan <Info> video_core/texture_cache/texture_cache.h:91:TextureCache: VRAM Management initialized: limit=5031MB, expected=4780MB, critical=4981MB, gc_level=0
+[   1.742741] Render.Vulkan <Info> video_core/buffer_cache/buffer_cache.h:71:BufferCache: Buffer cache VRAM initialized: limit=5031MB, minimum=4528MB, critical=4780MB
+[   1.744159] Render.Vulkan <Info> video_core\renderer_vulkan\renderer_vulkan.cpp:196:Report: Driver: NVIDIA 621.1.0.0
+[   1.744375] Render.Vulkan <Info> video_core\renderer_vulkan\renderer_vulkan.cpp:197:Report: Device: NVIDIA GeForce RTX 4060 Laptop GPU
+[   1.744376] Render.Vulkan <Info> video_core\renderer_vulkan\renderer_vulkan.cpp:198:Report: Vulkan: 1.4.357
+[   1.744383] Render.Vulkan <Info> video_core\renderer_vulkan\renderer_vulkan.cpp:199:Report: Available VRAM: 6.14 GiB
+[   1.744385] Render.Vulkan <Info> video_core\renderer_vulkan\renderer_vulkan.cpp:211:Report: VRAM Limit: Auto (5032 MB, 80% of available)
+[   1.744391] Render.Vulkan <Info> video_core\renderer_vulkan\renderer_vulkan.cpp:216:Report: GC Aggressiveness: 0, Texture eviction: Auto, Buffer eviction: Auto
+[   1.744404] Render.Vulkan <Info> video_core\renderer_vulkan\renderer_vulkan.cpp:228:Report: VK_EXT_memory_budget: Supported, Current usage: 0.36 GiB
+[   1.744468] Service.Audio <Info> audio_core\sink\sink_details.cpp:107:GetOutputSinkDetails: Auto-selecting audio backend...
+[   1.744471] Service.Audio <Info> audio_core\sink\sink_details.cpp:110:GetOutputSinkDetails: Testing cubeb backend for suitability...
+[   1.765621] Service.Audio <Info> audio_core\sink\sink_details.cpp:114:GetOutputSinkDetails: cubeb backend is suitable, selecting it
+[   1.765628] Service.Audio <Info> audio_core\sink\sink_details.cpp:122:GetOutputSinkDetails: Auto-selecting the cubeb backend
+[   1.770510] Service.Audio <Info> audio_core\sink\sink_details.cpp:107:GetOutputSinkDetails: Auto-selecting audio backend...
+[   1.770519] Service.Audio <Info> audio_core\sink\sink_details.cpp:110:GetOutputSinkDetails: Testing cubeb backend for suitability...
+[   1.784923] Service.Audio <Info> audio_core\sink\sink_details.cpp:114:GetOutputSinkDetails: cubeb backend is suitable, selecting it
+[   1.784931] Service.Audio <Info> audio_core\sink\sink_details.cpp:122:GetOutputSinkDetails: Auto-selecting the cubeb backend
+[   1.809825] Frontend <Info> citron\main.cpp:2475:BootGame: Booting game: 010047420000C200 | SAKURA MOYU CN (64-bit) | 1.0.1
+[   1.815320] Render.Vulkan <Info> video_core\renderer_vulkan\vk_pipeline_cache.cpp:632:LoadDiskResources: Total Pipeline Count: 0
+[   1.816214] Render.Vulkan <Info> video_core\renderer_vulkan\vk_pipeline_cache.cpp:912:SerializeVulkanPipelineCache: Vulkan driver pipelines cached at: C:\Users\ACETaffy\AppData\Roaming\citron\shader\010047420000c200\vulkan_pipelines.bin
+[   1.816779] Service.AOC <Warning> core\hle\service\aoc\addon_content_manager.cpp:54:AccumulateAOCTitleIDs: Accumulated 0 AOC title IDs
+[   1.819788] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:76:SynthesizeSystemArchive: Synthesizing system archive 'TimeZoneBinary' (0x010000000000080E).
+[   1.820751] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:94:SynthesizeSystemArchive:     - System archive generation successful!
+[   1.820909] Service.SET <Info> core\hle\service\set\system_settings_server.cpp:502:GetExternalSteadyClockSourceId: called, clock_source_id=0cd08720-f9e9-fadd-967c-1fbf31fc2ae2
+[   1.820922] Service.SET <Info> core\hle\service\set\system_settings_server.cpp:518:GetUserSystemClockContext: called
+[   1.820937] Service.SET <Info> core\hle\service\set\system_settings_server.cpp:905:GetNetworkSystemClockContext: called
+[   1.820947] Service.SET <Info> core\hle\service\set\system_settings_server.cpp:923:IsUserSystemClockAutomaticCorrectionEnabled: called, out_automatic_correction_enabled=true
+[   1.820948] Service.SET <Info> core\hle\service\set\system_settings_server.cpp:1249:GetUserSystemClockAutomaticCorrectionUpdatedTime: called
+[   1.820949] Service.SET <Info> core\hle\service\set\system_settings_server.cpp:880:GetDeviceTimeZoneLocationName: called
+[   1.825080] Service.SET <Info> core\hle\service\set\system_settings_server.cpp:1232:GetDeviceTimeZoneLocationUpdatedTime: called
+[   1.825597] Service.SET <Info> core\hle\service\set\system_settings_server.cpp:526:SetUserSystemClockContext: called
+[   1.825607] Service.SET <Info> core\hle\service\set\system_settings_server.cpp:913:SetNetworkSystemClockContext: called
+[   1.825619] Service.SET <Info> core\hle\service\set\system_settings_server.cpp:933:SetUserSystemClockAutomaticCorrectionEnabled: called, out_automatic_correction_enabled=true
+[   1.825619] Service.SET <Info> core\hle\service\set\system_settings_server.cpp:1257:SetUserSystemClockAutomaticCorrectionUpdatedTime: called
+[   1.834583] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:76:SynthesizeSystemArchive: Synthesizing system archive 'FontStandard' (0x0100000000000811).
+[   1.834926] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:94:SynthesizeSystemArchive:     - System archive generation successful!
+[   1.835057] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:76:SynthesizeSystemArchive: Synthesizing system archive 'FontChineseSimple' (0x0100000000000814).
+[   1.835752] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:94:SynthesizeSystemArchive:     - System archive generation successful!
+[   1.835861] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:76:SynthesizeSystemArchive: Synthesizing system archive 'FontChineseSimple' (0x0100000000000814).
+[   1.836420] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:94:SynthesizeSystemArchive:     - System archive generation successful!
+[   1.836706] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:76:SynthesizeSystemArchive: Synthesizing system archive 'FontChineseTraditional' (0x0100000000000813).
+[   1.837139] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:94:SynthesizeSystemArchive:     - System archive generation successful!
+[   1.837367] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:76:SynthesizeSystemArchive: Synthesizing system archive 'FontKorean' (0x0100000000000812).
+[   1.837582] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:94:SynthesizeSystemArchive:     - System archive generation successful!
+[   1.837655] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:76:SynthesizeSystemArchive: Synthesizing system archive 'FontNintendoExtension' (0x0100000000000810).
+[   1.837674] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:94:SynthesizeSystemArchive:     - System archive generation successful!
+[   1.837681] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:76:SynthesizeSystemArchive: Synthesizing system archive 'FontNintendoExtension' (0x0100000000000810).
+[   1.837687] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:94:SynthesizeSystemArchive:     - System archive generation successful!
+[   1.842014] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:76:SynthesizeSystemArchive: Synthesizing system archive 'FontStandard' (0x0100000000000811).
+[   1.842153] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:94:SynthesizeSystemArchive:     - System archive generation successful!
+[   1.842245] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:76:SynthesizeSystemArchive: Synthesizing system archive 'FontChineseSimple' (0x0100000000000814).
+[   1.842580] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:94:SynthesizeSystemArchive:     - System archive generation successful!
+[   1.842687] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:76:SynthesizeSystemArchive: Synthesizing system archive 'FontChineseSimple' (0x0100000000000814).
+[   1.842856] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:94:SynthesizeSystemArchive:     - System archive generation successful!
+[   1.842944] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:76:SynthesizeSystemArchive: Synthesizing system archive 'FontChineseTraditional' (0x0100000000000813).
+[   1.843018] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:94:SynthesizeSystemArchive:     - System archive generation successful!
+[   1.843081] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:76:SynthesizeSystemArchive: Synthesizing system archive 'FontKorean' (0x0100000000000812).
+[   1.843154] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:94:SynthesizeSystemArchive:     - System archive generation successful!
+[   1.843220] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:76:SynthesizeSystemArchive: Synthesizing system archive 'FontNintendoExtension' (0x0100000000000810).
+[   1.843238] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:94:SynthesizeSystemArchive:     - System archive generation successful!
+[   1.843246] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:76:SynthesizeSystemArchive: Synthesizing system archive 'FontNintendoExtension' (0x0100000000000810).
+[   1.843252] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:94:SynthesizeSystemArchive:     - System archive generation successful!
+[   1.916866] Service.SET <Info> core\hle\service\set\system_settings_server.cpp:647:GetVibrationMasterVolume: called, vibration_master_volume=1
+[   1.918896] Service.SET <Info> core\hle\service\set\system_settings_server.cpp:647:GetVibrationMasterVolume: called, vibration_master_volume=1
+[   1.918914] Service.SET <Info> core\hle\service\set\system_settings_server.cpp:647:GetVibrationMasterVolume: called, vibration_master_volume=1
+[   3.613235] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:76:SynthesizeSystemArchive: Synthesizing system archive 'SystemVersion' (0x0100000000000809).
+[   3.613241] Common.Filesystem <Warning> core\file_sys\system_archive\system_version.cpp:17:SystemVersion: called - Using hardcoded firmware version 'NintendoSDK Firmware for NX 22.0.0-3.0'
+[   3.613252] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:94:SynthesizeSystemArchive:     - System archive generation successful!
+[   3.614852] Service.VI <Warning> core\hle\service\vi\application_display_service.cpp:80:GetManagerDisplayService: (STUBBED) called
+[   3.615036] Service.AM <Info> core\hle\service\am\service\window_controller.cpp:35:GetAppletResourceUserId: called
+[   3.615845] Service.AM <Info> core\hle\service\am\service\window_controller.cpp:54:AcquireForegroundRights: called
+[   3.616031] Service.AM <Info> core\hle\service\am\service\self_controller.cpp:207:SetFocusHandlingMode: called, notify=false background=false suspend=true
+[   3.616170] Service.AM <Info> core\hle\service\am\service\self_controller.cpp:237:SetOutOfFocusSuspendingEnabled: called, enabled=false
+[   3.616328] Service.AM <Warning> core\hle\service\am\service\application_functions.cpp:365:NotifyRunning: (STUBBED) called
+[   3.616650] Service.AM <Info> core\hle\service\am\service\self_controller.cpp:189:SetOperationModeChangedNotification: called, enabled=true
+[   3.616692] Service.AM <Info> core\hle\service\am\service\self_controller.cpp:198:SetPerformanceModeChangedNotification: called, enabled=true
+[   3.617080] Service.SET <Info> core\hle\service\set\system_settings_server.cpp:1306:GetTouchScreenMode: called, touch_screen_mode=1
+[   3.625297] Service.VI <Warning> core\hle\service\vi\application_display_service.cpp:67:GetRelayService: (STUBBED) called
+[   3.625607] Service.VI <Warning> core\hle\service\vi\application_display_service.cpp:73:GetSystemDisplayService: (STUBBED) called
+[   3.625705] Service.VI <Warning> core\hle\service\vi\application_display_service.cpp:80:GetManagerDisplayService: (STUBBED) called
+[   3.625781] Service.VI <Warning> core\hle\service\vi\application_display_service.cpp:87:GetIndirectDisplayTransactionService: (STUBBED) called
+[   3.626062] Service.VI <Warning> core\hle\service\vi\application_display_service.cpp:92:OpenDisplay: (STUBBED) called
+[   3.626469] Service.AM <Info> core\hle\service\am\service\self_controller.cpp:281:CreateManagedDisplayLayer: called
+[   3.626474] Service.VI <Warning> core\hle\service\vi\application_display_service.cpp:92:OpenDisplay: (STUBBED) called
+[   3.633477] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp: starting
+
+[   3.648073] Service.NVDRV <Warning> core\hle\service\nvdrv\nvdrv_interface.cpp:155:Initialize: (STUBBED) called
+[   3.652477] Service.NVDRV <Warning> core\hle\service\nvdrv\nvdrv_interface.cpp:211:SetAruid: (STUBBED) called, pid=0x51
+[   3.661618] Service.NVDRV <Warning> core\hle\service\nvdrv\devices\nvhost_gpu.cpp:162:SetErrorNotifier: (STUBBED) called, offset=0, size=0, mem=1
+[   4.036349] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp: sdl video renderer: opengles2
+[   4.064961] Service.Audio <Info> audio_core\sink\cubeb_sink.cpp:78:CubebSinkStream: Opening cubeb stream ADSP_RenderStream-0 type 0 with: rate 48000 channels 2 (system channels 2) latency 480
+[   4.080666] Service.Audio <Info> audio_core\sink\cubeb_sink.cpp:78:CubebSinkStream: Opening cubeb stream ADSP_RenderStream-1 type 0 with: rate 48000 channels 2 (system channels 2) latency 480
+[   4.091315] Service.Audio <Info> audio_core\renderer\system.cpp:123:Initialize: Initializing audio renderer with revision 4 (numeric: 878069074)
+[   4.096790] Service.HID <Info> hid_core\frontend\emulated_controller.cpp:1392:SetPollingMode: Set polling mode 0, device_index=3
+[   4.097478] Loader <Info> core\file_sys\patch_manager.cpp:560:PatchRomFS: Patching RomFS for title_id=010047420000C200, type=01
+[   4.104668] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp: game root: 
+[   4.104685] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: romfs:/game
+[   4.104694] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString:  (romfs mounted)
+
+[   4.121223] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug.txt
+[   4.122310] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp: booting the game
+
+[   4.130349] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp [info] config.toml: GameConfig { hcb: Some("SakuraGBK.hcb"), nls: Some(GBK) }
+
+[   4.130585] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp [info] rfvp no_std boot: scanning asset root for HCB
+
+[   4.358519] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp [info] rfvp no_std boot: parsed real HCB, initialized real GameData, and started VmRunner
+
+[   4.891582] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp [info] prefetch: 70 textures, 23014604 bytes, 55 skipped, 530885 us
+
+[   4.891879] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp: the game is loaded, running
+
+[   4.894601] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/async_status.txt
+[   4.897619] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp: async decode off
+
+[   4.897843] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug.txt
+[   4.898501] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug.txt
+[   5.296392] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp: the first frame was drawn
+
+[   5.296613] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000020461
+[   5.296620] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[   5.296622] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x00000000000003f3
+[   5.296623] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[   5.296624] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[   5.296625] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[   5.296626] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[   5.296627] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[   5.297534] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000021462
+[   5.297542] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[   5.297544] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000aaa
+[   5.297545] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[   5.297546] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[   5.297547] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[   5.297548] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[   5.297550] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x000000000000000f
+[   5.297733] Render.Vulkan <Info> video_core\renderer_vulkan\vk_pipeline_cache.cpp:694:CreateGraphicsPipeline: 0x25bcb3a3eaccd4d7
+[   5.300152] Render.Vulkan <Info> video_core\renderer_vulkan\vk_pipeline_cache.cpp:694:CreateGraphicsPipeline: 0x6e5a88cdcaa3fd31
+[   5.303961] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/perf_slow.log
+[   5.307006] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp: frame 1 slow 1174.3 ms | vm 163.97 scene 2.49 render 222.95 ms | ops 45966 | mark 500 | stages(ms): text 0.62 alpha 0.03 move 0.10 rotation 0.09 scale 0.09 z 0.09 v3d 0.07 anim 0.45 parts 0.10 snow 0.28 dissolve 0.03 tree 7.20 submit 76.17 end_frame 5.24 text_tick 0.22 text_raster 0.17 vm 163.96 audio_cmds 24.44 save 0.24 syscalls 146.60 vfs_read 468.06 graph_decode 10.22 | host(ms): begin 99.83 upload 9.16/3 present 5.14 thumb 0.00/0 draws 2 flush 2
+
+[   5.309675] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[   5.320608] Render.Vulkan <Info> video_core\renderer_vulkan\vk_pipeline_cache.cpp:694:CreateGraphicsPipeline: 0xd84844bcabb1ce4f
+[   5.329615] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp [info] [save] capture slot=4294967295 thumb=150x85 thumb_ms=13.56
+
+[   5.365386] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/saves/sakuragbk-aad96959/save/rfvp_s901.bin
+[   5.377914] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/saves/sakuragbk-aad96959/save/rfvp_global.bin
+[   5.379050] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp [info] [save] prepared bytes=Some(450066) pending=false slot=4294967295
+
+[   5.381550] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/perf_slow.log
+[   5.384794] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp: frame 2 slow 84.3 ms | vm 2.54 scene 0.78 render 65.04 ms | ops 989 | mark 500 | stages(ms): text 0.12 anim 0.14 parts 0.33 dissolve 0.18 tree 0.13 submit 0.24 end_frame 0.46 text_tick 0.08 text_raster 0.03 vm 2.54 audio_cmds 0.01 save 63.46 syscalls 1.03 vm_snapshot 1.03 save_snapshot 7.27 save_finalize 41.82 | host(ms): begin 0.56 upload 0.00/0 present 0.46 thumb 10.18/1 draws 2 flush 2
+
+[   5.621585] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/perf_slow.log
+[   5.622314] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp: frame 4 slow 234.5 ms | vm 195.45 scene 2.30 render 36.59 ms | ops 19791 | mark 500 | stages(ms): text 0.80 alpha 0.38 move 0.28 scale 0.42 v3d 0.29 snow 0.03 dissolve 0.10 tree 24.01 submit 0.99 end_frame 1.79 vm 195.45 audio_cmds 0.04 syscalls 190.63 vfs_read 88.88 graph_decode 84.11 | host(ms): begin 0.05 upload 22.55/14 present 1.79 thumb 0.00/0 draws 17 flush 17
+
+[   5.743397] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/perf_slow.log
+[   5.744260] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp: frame 13 slow 32.6 ms | vm 0.21 scene 0.05 render 32.16 ms | ops 431 | mark 500 | stages(ms): text 0.02 tree 0.11 submit 0.41 end_frame 31.33 vm 0.21 syscalls 0.04 | host(ms): begin 0.10 upload 0.00/0 present 31.33 thumb 0.00/0 draws 15 flush 15
+
+[   5.763392] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[   6.010719] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[   6.260502] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[   6.513148] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[   6.514615] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[   6.760869] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[   7.010812] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[   7.260811] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[   7.511226] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[   7.512280] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[   7.760449] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[   8.010759] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[   8.260945] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[   8.511093] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[   8.512442] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[   8.760532] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[   9.010811] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[   9.260283] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[   9.511272] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[   9.512875] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[   9.760537] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  10.010892] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  10.260880] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  10.511018] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  10.512318] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  10.769763] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/perf_slow.log
+[  10.770563] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp: frame 308 slow 142.1 ms | vm 2.05 scene 0.22 render 139.66 ms | ops 621 | mark 500 | stages(ms): text 0.14 anim 0.07 tree 0.05 submit 0.23 end_frame 0.30 vm 2.05 audio_cmds 138.93 syscalls 1.83 | host(ms): begin 0.05 upload 0.00/0 present 0.30 thumb 0.00/0 draws 16 flush 15
+
+[  10.843850] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  11.093985] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  11.345016] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  11.594194] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  11.595460] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  11.843602] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  12.094557] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  12.344167] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  12.594179] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  12.595427] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  12.843673] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  13.094531] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  13.343809] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  13.595504] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  13.596781] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  13.843788] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  14.093649] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  14.344108] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  14.594397] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  14.595528] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  14.843608] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  15.093759] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  15.344191] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  15.594591] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  15.595917] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  15.619422] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_screen.bmp
+[  15.818408] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/perf_slow.log
+[  15.819144] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp: frame 602 slow 208.5 ms | vm 0.12 scene 0.02 render 0.67 ms | ops 456 | mark 500 | stages(ms): tree 0.04 submit 0.29 end_frame 0.21 vm 0.12 syscalls 0.02 | host(ms): begin 0.04 upload 0.00/0 present 0.21 thumb 0.00/0 draws 14 flush 14
+
+[  15.822109] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp [info] [save] capture slot=4294967295 thumb=150x85 thumb_ms=1.56
+
+[  15.833342] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/saves/sakuragbk-aad96959/save/rfvp_s906.bin
+[  15.840810] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/saves/sakuragbk-aad96959/save/rfvp_global.bin
+[  15.841415] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp [info] [save] prepared bytes=Some(454871) pending=false slot=4294967295
+
+[  15.993897] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  16.244220] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  16.493802] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  16.745170] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  16.746759] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  16.994188] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  17.244234] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  17.494308] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  17.744289] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  17.745645] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  17.994450] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  18.244074] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  18.493649] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  18.744485] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  18.746022] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  18.994614] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  19.243967] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  19.494020] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  19.744056] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  19.745659] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  19.994559] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  20.244412] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  20.494398] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  20.744652] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  20.746432] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  20.994009] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  21.244133] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  21.494208] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  21.744123] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  21.745558] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  21.993984] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  22.244293] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  22.493740] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  22.744265] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  22.745689] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  22.994856] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  23.244015] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  23.493717] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  23.744298] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  23.745658] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  23.993556] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  24.244083] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  24.493645] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  24.744230] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  24.745473] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  24.994378] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  25.244026] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  25.494590] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  25.744069] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  25.745360] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  25.993665] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  26.244061] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  26.494427] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  26.744310] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  26.745478] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  26.993860] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  27.244352] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  27.494531] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  27.744854] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  27.746169] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  27.993727] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  28.244054] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  28.494069] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  28.744759] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  28.746032] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  28.993786] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  29.243645] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  29.494244] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  29.744860] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  29.746512] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  29.993584] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  30.243640] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  30.493830] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  30.745190] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  30.746682] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  30.994240] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  31.243639] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  31.494176] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  31.744452] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  31.745782] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  31.993946] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  32.243723] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  32.493711] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  32.744727] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  32.746262] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  32.994447] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  33.243887] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  33.494151] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  33.744415] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  33.745963] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  33.994676] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  34.243800] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  34.493722] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  34.744886] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  34.746703] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  34.994667] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  35.245212] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  35.493780] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  35.744611] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  35.746304] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  35.994059] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  36.243768] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  36.493873] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  36.744198] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  36.745512] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  36.993880] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  37.244068] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  37.493882] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  37.744068] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  37.745661] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  37.993972] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  38.243748] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  38.493900] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  38.743975] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  38.745370] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  38.993724] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  39.244559] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  39.493904] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  39.744031] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  39.745164] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  39.993668] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  40.244531] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  40.494390] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  40.744510] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  40.745666] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  40.993629] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  41.244451] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  41.493840] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  41.744888] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  41.746779] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  41.993640] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  42.243893] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  42.493976] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  42.744445] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  42.745690] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  42.994546] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  43.243898] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  43.494540] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  43.744342] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  43.745543] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  43.993749] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  44.243753] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  44.493974] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  44.744611] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  44.746232] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  44.994070] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  45.243846] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  45.494285] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  45.744561] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  45.745768] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  45.993864] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  46.244066] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  46.494422] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  46.745080] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  46.746356] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  46.994300] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  47.243634] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  47.493877] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  47.745341] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  47.747285] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  47.993960] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  48.244186] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  48.493790] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  48.744491] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  48.745860] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  48.831934] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000020461
+[  48.831943] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[  48.831944] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x00000000000000f3
+[  48.831946] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[  48.831947] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[  48.831948] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[  48.831948] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[  48.831949] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[  48.833513] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000021462
+[  48.833515] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[  48.833516] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x00000000000000aa
+[  48.833517] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[  48.833518] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[  48.833518] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[  48.833519] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[  48.833520] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x000000000000000f
+[  48.833637] Render.Vulkan <Info> video_core\renderer_vulkan\vk_pipeline_cache.cpp:694:CreateGraphicsPipeline: 0xe4293c6a7c010f16
+[  48.993873] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  49.243685] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  49.494232] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  49.745297] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  49.746478] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  49.994684] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  50.243672] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  50.386448] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/perf_slow.log
+[  50.388795] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp: frame 2678 slow 25.7 ms | vm 0.11 scene 0.16 render 24.88 ms | ops 435 | mark 500 | stages(ms): text 0.14 tree 0.05 submit 0.20 end_frame 24.47 vm 0.11 syscalls 0.02 | host(ms): begin 0.04 upload 0.00/0 present 24.47 thumb 0.00/0 draws 15 flush 15
+
+[  50.494848] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  50.745114] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  50.747100] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  50.993903] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  51.243936] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  51.493716] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  51.745234] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  51.746919] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  51.994207] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  52.243852] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  52.493669] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  52.744473] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  52.745762] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  52.994255] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  53.243833] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  53.493713] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  53.744399] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  53.745917] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  53.994088] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  54.244229] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  54.494080] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  54.744616] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  54.746207] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  54.994060] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  55.244541] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  55.493911] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  55.744417] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  55.746109] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  55.995083] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/perf_slow.log
+[  55.999881] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp: frame 3014 slow 34.5 ms | vm 31.27 scene 0.02 render 2.82 ms | ops 1513 | mark 500 | stages(ms): tree 0.03 end_frame 0.68 vm 31.27 audio_cmds 1.94 syscalls 30.78 vfs_read 30.61 | host(ms): begin 0.05 upload 0.00/0 present 0.68 thumb 0.00/0 draws 1 flush 1
+
+[  56.002495] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  56.244126] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  56.493960] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  56.744232] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  56.745883] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  56.994850] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  57.244383] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  57.493938] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  57.744477] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  57.746097] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  57.993654] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  58.244560] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  58.494501] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  58.744482] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  58.745890] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  58.994029] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  60.554910] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/perf_slow.log
+[  60.563457] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp: frame 3203 slow 1444.4 ms | vm 1424.78 scene 0.04 render 19.39 ms | ops 3091 | mark 500 | stages(ms): text 0.02 tree 10.10 submit 0.16 end_frame 2.48 vm 1424.78 syscalls 1424.26 vfs_read 1385.78 graph_decode 37.21 | host(ms): begin 0.06 upload 10.05/1 present 2.48 thumb 0.00/0 draws 2 flush 2
+
+[  61.714909] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/perf_slow.log
+[  61.716820] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp: frame 3204 slow 1160.4 ms | vm 1128.08 scene 0.10 render 22.67 ms | ops 2396 | mark 500 | stages(ms): v3d 0.08 tree 10.24 submit 0.17 end_frame 0.66 vm 1128.08 syscalls 1127.57 vfs_read 1064.78 graph_decode 27.12 cpu_restore 34.48 | host(ms): begin 0.04 upload 10.20/1 present 0.66 thumb 0.00/0 draws 3 flush 3
+
+[  62.218074] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/perf_slow.log
+[  62.218834] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp: frame 3205 slow 503.1 ms | vm 32.82 scene 0.02 render 466.85 ms | ops 1699 | mark 500 | stages(ms): tree 0.13 submit 0.14 end_frame 0.44 vm 32.82 audio_cmds 460.17 syscalls 32.25 cpu_restore 26.20 | host(ms): begin 0.04 upload 0.00/0 present 0.44 thumb 0.00/0 draws 2 flush 2
+
+[  62.260264] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  62.510423] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  62.761898] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  62.763151] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  63.011260] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  63.260228] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  63.510526] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  63.761529] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  63.762818] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  64.010875] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  64.260421] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  64.510470] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  64.761059] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  64.762424] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  65.010597] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  65.260921] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  65.510929] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  65.761769] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  65.763106] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  66.002830] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp [info] [save] capture slot=4294967295 thumb=150x85 thumb_ms=1.37
+
+[  66.004245] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp [info] [save] prepared bytes=None pending=true slot=4294967295
+
+[  66.010468] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  66.260445] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  66.510501] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  66.761607] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  66.763102] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  67.010904] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  67.261034] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  67.510620] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  67.760916] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  67.762932] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  68.011282] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  68.260399] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  68.510598] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  68.760929] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  68.762376] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  69.011115] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  69.260566] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  69.510597] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  69.761176] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  69.762714] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  70.010522] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  70.260728] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  70.510524] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  70.760923] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  70.762147] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  71.010545] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  71.260953] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  71.510717] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  71.761174] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  71.762586] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  72.010783] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  72.260579] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  72.511464] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  72.760650] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  72.761803] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  73.010372] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  73.260364] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  73.511037] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  73.760833] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  73.762136] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  74.010627] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  74.260879] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  74.511284] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  74.760991] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  74.762275] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  75.010897] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  75.260486] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  75.511314] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  75.761847] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  75.763173] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  76.010785] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  76.260894] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  76.510686] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  76.760997] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  76.762097] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  76.983829] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp [info] [save] capture slot=4294967295 thumb=150x85 thumb_ms=1.50
+
+[  76.984691] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp [info] [save] prepared bytes=None pending=true slot=4294967295
+
+[  77.010523] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  77.260813] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  77.510533] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  77.761454] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  77.762544] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  78.010997] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  78.260611] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  78.510418] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  78.761218] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  78.762504] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  79.010407] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  79.260542] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  79.511379] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  79.761931] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  79.763958] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  80.010787] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  80.260804] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  80.510972] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  80.761087] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  80.762187] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  81.011169] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  81.260535] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  81.510426] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  81.762350] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  81.763526] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  82.010569] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  82.260618] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  82.510885] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  82.761245] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  82.762495] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  83.010783] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  83.261003] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  83.510335] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  83.760833] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  83.762128] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  84.011440] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  84.260819] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  84.510230] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  84.761611] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  84.763424] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  85.011640] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  85.261130] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  85.510592] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  85.762063] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  85.763382] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  86.011239] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  86.260769] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  86.510384] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  86.760950] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  86.762075] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  87.011014] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  87.261022] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  87.510765] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  87.760990] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  87.762068] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  88.011286] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  88.260888] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  88.510908] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/frame_status.txt
+[  88.760974] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/rfvp/debug_report.txt
+[  88.762072] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) 

@@ -1,0 +1,1 @@
+frame=4133 stalled_ms=3000 stage=0 hb=85083 enabled=1 cpu=1

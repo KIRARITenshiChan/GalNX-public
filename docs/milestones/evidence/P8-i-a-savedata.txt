@@ -1,0 +1,4 @@
+da82650b6f5dc301bf295f6b2cb0b65f8e0caf4e544a9a61b747bf0585e1b6a7 */c/Users/ACETaffy/AppData/Roaming/citron/sdmc/kirikiri/haruno/savedata/savedata010.bmp
+24aded0384431dcae85f6bfb6b391ffd0e991b45e444a233df4f36d0d94ead0f */c/Users/ACETaffy/AppData/Roaming/citron/sdmc/kirikiri/haruno/savedata/savedata400.bmp
+b803401bc05d627f11d29e5cdece8ec1dc8cceb0f8fe08b89957c2cc43248755 */c/Users/ACETaffy/AppData/Roaming/citron/sdmc/kirikiri/haruno/savedata/system.bmp
+6c6dc1e8264d05a5ad9bd6cb94cb66b9bccb6844b1231bdc73eacdc3eaeac088 */c/Users/ACETaffy/AppData/Roaming/citron/sdmc/kirikiri/haruno/savedata/trace.bmp

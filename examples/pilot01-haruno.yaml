@@ -1,0 +1,94 @@
+# GalNX P3-e pilot manifest - self-contained NSP for the first vertical pilot.
+#
+# Game: 晴霁之后定是菜花盛开的好天气 (haruno), KiriKiri2 + Kikyou ADV, original
+# 1.02 install with the xmoe Chinese V2.0 patch applied on the PC side. Only the
+# original Japanese archives are portable; the Chinese *_chs.xp3 archives are
+# excluded (the xmoe patch is a Windows DLL injection and its author forbids
+# extraction/porting - docs/pilot/P1-game-audit.md sections 4-5).
+#
+# Pipeline (P3):
+#   galnx engines prepare --descriptor examples/engines/kirikiroid2-nx.yaml --dest <src>
+#   galnx payload plan --manifest examples/pilot01-haruno.yaml
+#   galnx payload materialize --manifest examples/pilot01-haruno.yaml --out E:/galnx-build/pilot-01/p3/romfs
+#   galnx package nsp --manifest examples/pilot01-haruno.yaml \
+#       --elf E:/galnx-build/pilot-01/k2nx-ws/build/cmake-Release/kirikiroid2.elf \
+#       --out E:/galnx-build/pilot-01/p3/out/Kirikiroid2-NX-A4-010047410000A000.nsp \
+#       --keyset <prod.keys> --build
+#
+# The arm64 ELF is produced by the pinned Kirikiroid2-NX build documented in
+# docs/builds/009-k2nx-selfcontained-build.md; P3 consumes that artifact and
+# does not rebuild the engine.
+#
+# TitleID: the GalNX demo block 0x0100474100000000-0x01004741FFFFFFFF; this pilot
+# uses 010047410000A000, which is 0x2000-aligned (a base id, not a patch/DLC id).
+schema_version: 1
+
+game:
+  id: pilot01-haruno
+  title: 晴霁之后定是菜花盛开的好天气
+  publisher: (unknown)
+  version: "1.0.4"
+  source_dir: E:/Othergames/Galgame/晴霁之后定是菜花盛开的好天气
+  notes: >-
+    Pilot game P1 (KiriKiri2 + Kikyou ADV). Files are read-only; the payload only
+    stores relative names and sizes. Japanese archives only (no _chs.xp3).
+
+engine:
+  adapter: kirikiroid2-nx
+  adapter_version: "v1.0.1 (e96b6034, 2026-10-18)"
+  profile: default
+  entry: data.xp3
+  descriptor: engines/kirikiroid2-nx.yaml
+  options:
+    startup: /kirikiri/haruno/data.xp3
+    keymap: Kirikiroid2Preference.xml
+
+switch:
+  title_id: "010047410000A000"
+  title: Haruno
+  author: GalNX
+  icon: pilot01/icon.jpg
+  target: nsp
+  display_mode: both
+  save_policy: per-title-isolated
+
+input:
+  default_mode: controller
+  toggle_combo: "L+R+PLUS"
+  profile: krkr-ns
+
+build:
+  output_dir: E:/galnx-build/pilot-01/p3
+  reproducible: true
+  clean_workspace_before_build: false
+  keys_env: GALNX_PROD_KEYS
+  romfs_mode: embedded
+
+package:
+  type: self_contained_nsp
+  startup_user_account: 1
+  romfs_dir: E:/galnx-build/pilot-01/p3/romfs
+  icon: pilot01/icon.jpg
+  notes: >-
+    RomFS is assembled by "galnx payload materialize"; the ELF is the pinned
+    Kirikiroid2-NX build (docs/builds/009). startup_user_account=1 matches the
+    K2NX save layout (per-title save data).
+
+payload:
+  version: pilot01-r2
+  target: /kirikiri/haruno
+  startup: /kirikiri/haruno/data.xp3
+  marker: sdmc:/switch/kirikiroid2/.galnx_extracted
+  source_dir: E:/Othergames/Galgame/晴霁之后定是菜花盛开的好天气
+  ui_dir: E:/galnx-build/pilot-01/k2nx-ws/build/romfs
+  include:
+    - "*.xp3"
+    - "*.cf"
+    - "plugin/*.tpm"
+  exclude:
+    - "*_chs.xp3"
+    - "*.sig"
+  keymap:
+    profile: krkr-ns
+  payload_dir: game
+  manifest_name: game_files.txt

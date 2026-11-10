@@ -1,0 +1,477 @@
+[INFO] [diag t=719078312707us] [cache] bytes put size=3468 total=3468/201326592
+[INFO] [diag t=719078314460us] [cache] prefetch skip path="graph/diss00": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078316174us] [cache] bytes put size=12106 total=15574/201326592
+[INFO] [diag t=719078316185us] [cache] prefetch skip path="graph/diss01": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078316724us] [cache] bytes put size=12113 total=27687/201326592
+[INFO] [diag t=719078316744us] [cache] prefetch skip path="graph/diss02": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078326521us] [cache] bytes put size=279785 total=307472/201326592
+[INFO] [diag t=719078326536us] [cache] prefetch skip path="graph/diss03": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078334567us] [cache] bytes put size=280062 total=587534/201326592
+[INFO] [diag t=719078334580us] [cache] prefetch skip path="graph/diss04": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078335086us] [cache] bytes put size=15353 total=602887/201326592
+[INFO] [diag t=719078335097us] [cache] prefetch skip path="graph/diss05": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078335905us] [cache] bytes put size=15386 total=618273/201326592
+[INFO] [diag t=719078335915us] [cache] prefetch skip path="graph/diss06": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078379487us] [cache] bytes put size=1459381 total=2077654/201326592
+[INFO] [diag t=719078379507us] [cache] prefetch skip path="graph/diss07": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078383257us] [cache] bytes put size=141501 total=2219155/201326592
+[INFO] [diag t=719078383269us] [cache] prefetch skip path="graph/diss08": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078387470us] [cache] bytes put size=140297 total=2359452/201326592
+[INFO] [diag t=719078387484us] [cache] prefetch skip path="graph/diss09": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078387828us] [cache] bytes put size=4812 total=2364264/201326592
+[INFO] [diag t=719078387840us] [cache] prefetch skip path="graph/diss10": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078388477us] [cache] bytes put size=4814 total=2369078/201326592
+[INFO] [diag t=719078388488us] [cache] prefetch skip path="graph/diss11": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078388824us] [cache] bytes put size=6794 total=2375872/201326592
+[INFO] [diag t=719078388833us] [cache] prefetch skip path="graph/diss12": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078389017us] [cache] bytes put size=6801 total=2382673/201326592
+[INFO] [diag t=719078389023us] [cache] prefetch skip path="graph/diss13": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078389368us] [cache] bytes put size=13044 total=2395717/201326592
+[INFO] [diag t=719078389376us] [cache] prefetch skip path="graph/diss14": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078389941us] [cache] bytes put size=13209 total=2408926/201326592
+[INFO] [diag t=719078389951us] [cache] prefetch skip path="graph/diss15": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078390255us] [cache] bytes put size=5858 total=2414784/201326592
+[INFO] [diag t=719078390262us] [cache] prefetch skip path="graph/diss16": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078390477us] [cache] bytes put size=5862 total=2420646/201326592
+[INFO] [diag t=719078390482us] [cache] prefetch skip path="graph/diss17": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078391160us] [cache] bytes put size=15977 total=2436623/201326592
+[INFO] [diag t=719078391170us] [cache] prefetch skip path="graph/diss18": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078391597us] [cache] bytes put size=16096 total=2452719/201326592
+[INFO] [diag t=719078391606us] [cache] prefetch skip path="graph/diss19": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078420041us] [cache] bytes put size=1028355 total=3481074/201326592
+[INFO] [diag t=719078420062us] [cache] prefetch skip path="graph/diss20": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078424253us] [cache] bytes put size=152011 total=3633085/201326592
+[INFO] [diag t=719078424268us] [cache] prefetch skip path="graph/diss21": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078428588us] [cache] bytes put size=152479 total=3785564/201326592
+[INFO] [diag t=719078428602us] [cache] prefetch skip path="graph/diss22": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078429316us] [cache] bytes put size=19185 total=3804749/201326592
+[INFO] [diag t=719078429327us] [cache] prefetch skip path="graph/diss23": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078429874us] [cache] bytes put size=19415 total=3824164/201326592
+[INFO] [diag t=719078429885us] [cache] prefetch skip path="graph/diss24": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078430299us] [cache] bytes put size=17029 total=3841193/201326592
+[INFO] [diag t=719078430303us] [cache] prefetch skip path="graph/diss25": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078430726us] [cache] bytes put size=19201 total=3860394/201326592
+[INFO] [diag t=719078430730us] [cache] prefetch skip path="graph/diss26": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078432543us] [cache] bytes put size=69533 total=3929927/201326592
+[INFO] [diag t=719078432553us] [cache] prefetch skip path="graph/diss27": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078434489us] [cache] bytes put size=69564 total=3999491/201326592
+[INFO] [diag t=719078434498us] [cache] prefetch skip path="graph/diss28": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078436147us] [cache] bytes put size=69534 total=4069025/201326592
+[INFO] [diag t=719078436156us] [cache] prefetch skip path="graph/diss29": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078437763us] [cache] bytes put size=69436 total=4138461/201326592
+[INFO] [diag t=719078437770us] [cache] prefetch skip path="graph/diss30": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078438559us] [cache] bytes put size=27067 total=4165528/201326592
+[INFO] [diag t=719078438567us] [cache] prefetch skip path="graph/diss31": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078439401us] [cache] bytes put size=26718 total=4192246/201326592
+[INFO] [diag t=719078439407us] [cache] prefetch skip path="graph/diss32": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078440136us] [cache] bytes put size=26944 total=4219190/201326592
+[INFO] [diag t=719078440140us] [cache] prefetch skip path="graph/diss33": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078463106us] [cache] bytes put size=865086 total=5084276/201326592
+[INFO] [diag t=719078463126us] [cache] prefetch skip path="graph/diss34": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078463520us] [cache] bytes put size=6324 total=5090600/201326592
+[INFO] [diag t=719078463530us] [cache] prefetch skip path="graph/diss35": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078463839us] [cache] bytes put size=7237 total=5097837/201326592
+[INFO] [diag t=719078463850us] [cache] prefetch skip path="graph/diss36": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078473170us] [cache] bytes put size=357081 total=5454918/201326592
+[INFO] [diag t=719078473184us] [cache] prefetch skip path="graph/diss37": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078477407us] [cache] bytes put size=138995 total=5593913/201326592
+[INFO] [diag t=719078477421us] [cache] prefetch skip path="graph/diss38": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078501279us] [cache] bytes put size=845462 total=6439375/201326592
+[INFO] [diag t=719078501299us] [cache] prefetch skip path="graph/diss39": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078525040us] [cache] bytes put size=838293 total=7277668/201326592
+[INFO] [diag t=719078525058us] [cache] prefetch skip path="graph/diss40": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078549483us] [cache] bytes put size=838426 total=8116094/201326592
+[INFO] [diag t=719078549506us] [cache] prefetch skip path="graph/diss41": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078580079us] [cache] bytes put size=1064556 total=9180650/201326592
+[INFO] [diag t=719078580101us] [cache] prefetch skip path="graph/diss42": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078587620us] [cache] bytes put size=232607 total=9413257/201326592
+[INFO] [diag t=719078587638us] [cache] prefetch skip path="graph/diss43": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078594754us] [cache] bytes put size=272758 total=9686015/201326592
+[INFO] [diag t=719078594772us] [cache] prefetch skip path="graph/diss44": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078623713us] [cache] bytes put size=1064344 total=10750359/201326592
+[INFO] [diag t=719078623733us] [cache] prefetch skip path="graph/diss45": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078648479us] [cache] bytes put size=838528 total=11588887/201326592
+[INFO] [diag t=719078648499us] [cache] prefetch skip path="graph/diss46": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078649518us] [cache] bytes put size=19257 total=11608144/201326592
+[INFO] [diag t=719078649531us] [cache] prefetch skip path="graph/diss47": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078650158us] [cache] bytes put size=19501 total=11627645/201326592
+[INFO] [diag t=719078650167us] [cache] prefetch skip path="graph/diss48": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078673165us] [cache] bytes put size=764776 total=12392421/201326592
+[INFO] [diag t=719078673184us] [cache] prefetch skip path="graph/diss50": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078696214us] [cache] bytes put size=837105 total=13229526/201326592
+[INFO] [diag t=719078696232us] [cache] prefetch skip path="graph/diss51": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078716902us] [cache] bytes put size=796183 total=14025709/201326592
+[INFO] [diag t=719078716920us] [cache] prefetch skip path="graph/diss52": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078740193us] [cache] bytes put size=835787 total=14861496/201326592
+[INFO] [diag t=719078740213us] [cache] prefetch skip path="graph/diss53": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078752444us] [cache] bytes put size=426133 total=15287629/201326592
+[INFO] [diag t=719078752462us] [cache] prefetch skip path="graph/diss54": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078764915us] [cache] bytes put size=428298 total=15715927/201326592
+[INFO] [diag t=719078764933us] [cache] prefetch skip path="graph/diss55": Unexpected texture type: Single8Bit
+[INFO] [diag t=719078769125us] [cache] bytes put size=23414 total=15739341/201326592
+[INFO] [diag t=719078778320us] [cache] texture put size=626400 total=626400/167772160
+[INFO] [diag t=719078780441us] [cache] bytes put size=41486 total=15780827/201326592
+[INFO] [diag t=719078782543us] [cache] texture put size=271952 total=898352/167772160
+[INFO] [diag t=719078782733us] [cache] bytes put size=1033 total=15781860/201326592
+[INFO] [diag t=719078783017us] [cache] texture put size=2700 total=901052/167772160
+[INFO] [diag t=719078786413us] [cache] bytes put size=14375 total=15796235/201326592
+[INFO] [diag t=719078786879us] [cache] texture put size=76608 total=977660/167772160
+[INFO] [diag t=719078790147us] [cache] bytes put size=14900 total=15811135/201326592
+[INFO] [diag t=719078790762us] [cache] texture put size=85652 total=1063312/167772160
+[INFO] [diag t=719078794053us] [cache] bytes put size=18096 total=15829231/201326592
+[INFO] [diag t=719078794605us] [cache] texture put size=84288 total=1147600/167772160
+[INFO] [diag t=719078797442us] [cache] bytes put size=5344 total=15834575/201326592
+[INFO] [diag t=719078797723us] [cache] texture put size=33280 total=1180880/167772160
+[INFO] [diag t=719078800848us] [cache] bytes put size=10893 total=15845468/201326592
+[INFO] [diag t=719078801215us] [cache] texture put size=62320 total=1243200/167772160
+[INFO] [diag t=719078804708us] [cache] bytes put size=15576 total=15861044/201326592
+[INFO] [diag t=719078805179us] [cache] texture put size=86044 total=1329244/167772160
+[INFO] [diag t=719078808559us] [cache] bytes put size=18121 total=15879165/201326592
+[INFO] [diag t=719078809063us] [cache] texture put size=87216 total=1416460/167772160
+[INFO] [diag t=719078812181us] [cache] bytes put size=16337 total=15895502/201326592
+[INFO] [diag t=719078812664us] [cache] texture put size=83520 total=1499980/167772160
+[INFO] [diag t=719078815861us] [cache] bytes put size=18720 total=15914222/201326592
+[INFO] [diag t=719078816846us] [cache] texture put size=99456 total=1599436/167772160
+[INFO] [diag t=719078819932us] [cache] bytes put size=4877 total=15919099/201326592
+[INFO] [diag t=719078820234us] [cache] texture put size=32000 total=1631436/167772160
+[INFO] [diag t=719078823291us] [cache] bytes put size=10425 total=15929524/201326592
+[INFO] [diag t=719078823671us] [cache] texture put size=45440 total=1676876/167772160
+[INFO] [diag t=719078823994us] [cache] bytes put size=1047 total=15930571/201326592
+[INFO] [diag t=719078824062us] [cache] texture put size=5472 total=1682348/167772160
+[INFO] [diag t=719078824110us] [cache] bytes put size=947 total=15931518/201326592
+[INFO] [diag t=719078824158us] [cache] texture put size=3952 total=1686300/167772160
+[INFO] [diag t=719078824196us] [cache] bytes put size=998 total=15932516/201326592
+[INFO] [diag t=719078824243us] [cache] texture put size=4864 total=1691164/167772160
+[INFO] [diag t=719078824279us] [cache] bytes put size=1029 total=15933545/201326592
+[INFO] [diag t=719078824325us] [cache] texture put size=5320 total=1696484/167772160
+[INFO] [diag t=719078824458us] [cache] bytes put size=1138 total=15934683/201326592
+[INFO] [diag t=719078824750us] [cache] texture put size=5320 total=1701804/167772160
+[INFO] [diag t=719078824872us] [cache] bytes put size=1126 total=15935809/201326592
+[INFO] [diag t=719078824930us] [cache] texture put size=5320 total=1707124/167772160
+[INFO] [diag t=719078825010us] [cache] bytes put size=1107 total=15936916/201326592
+[INFO] [diag t=719078825060us] [cache] texture put size=5320 total=1712444/167772160
+[INFO] [diag t=719078825096us] [cache] bytes put size=1093 total=15938009/201326592
+[INFO] [diag t=719078825144us] [cache] texture put size=5320 total=1717764/167772160
+[INFO] [diag t=719078825233us] [cache] bytes put size=1076 total=15939085/201326592
+[INFO] [diag t=719078825280us] [cache] texture put size=5320 total=1723084/167772160
+[INFO] [diag t=719078825316us] [cache] bytes put size=1036 total=15940121/201326592
+[INFO] [diag t=719078825361us] [cache] texture put size=5320 total=1728404/167772160
+[INFO] [diag t=719078825406us] [cache] bytes put size=1006 total=15941127/201326592
+[INFO] [diag t=719078825466us] [cache] texture put size=5320 total=1733724/167772160
+[INFO] [diag t=719078825531us] [cache] bytes put size=967 total=15942094/201326592
+[INFO] [diag t=719078825582us] [cache] texture put size=4408 total=1738132/167772160
+[INFO] [diag t=719078825707us] [cache] bytes put size=952 total=15943046/201326592
+[INFO] [diag t=719078825752us] [cache] texture put size=5168 total=1743300/167772160
+[INFO] [diag t=719078825791us] [cache] bytes put size=907 total=15943953/201326592
+[INFO] [diag t=719078825834us] [cache] texture put size=5032 total=1748332/167772160
+[INFO] [diag t=719078825876us] [cache] bytes put size=729 total=15944682/201326592
+[INFO] [diag t=719078825923us] [cache] texture put size=4620 total=1752952/167772160
+[INFO] [diag t=719078825961us] [cache] bytes put size=908 total=15945590/201326592
+[INFO] [diag t=719078826002us] [cache] texture put size=3344 total=1756296/167772160
+[INFO] [diag t=719078826088us] [cache] bytes put size=851 total=15946441/201326592
+[INFO] [diag t=719078826126us] [cache] texture put size=2516 total=1758812/167772160
+[INFO] [diag t=719078826140us] [cache] bytes put size=797 total=15947238/201326592
+[INFO] [diag t=719078826174us] [cache] texture put size=1480 total=1760292/167772160
+[INFO] [diag t=719078826276us] [cache] bytes put size=488 total=15947726/201326592
+[INFO] [diag t=719078826342us] [cache] texture put size=888 total=1761180/167772160
+[INFO] [diag t=719078826909us] [cache] bytes put size=745 total=15948471/201326592
+[INFO] [diag t=719078826956us] [cache] texture put size=1184 total=1762364/167772160
+[INFO] [diag t=719078826979us] [cache] bytes put size=831 total=15949302/201326592
+[INFO] [diag t=719078827019us] [cache] texture put size=2128 total=1764492/167772160
+[INFO] [diag t=719078827069us] [cache] bytes put size=873 total=15950175/201326592
+[INFO] [diag t=719078827109us] [cache] texture put size=3040 total=1767532/167772160
+[INFO] [diag t=719078885361us] [cache] bytes put size=1653827 total=17604002/201326592
+[INFO] [diag t=719078929319us] [cache] texture put size=8294400 total=10061932/167772160
+[INFO] [diag t=719078936130us] [cache] bytes put size=131079 total=17735081/201326592
+[INFO] [diag t=719078956064us] [cache] texture put size=6625600 total=16687532/167772160
+[INFO] [diag t=719078996882us] [cache] bytes put size=1542658 total=19277739/201326592
+[INFO] [diag t=719079036122us] [cache] texture put size=8294400 total=24981932/167772160
+[INFO] [diag t=719079036816us] [cache] bytes put size=10271 total=19288010/201326592
+[INFO] [diag t=719079037153us] [cache] texture put size=58560 total=25040492/167772160
+[INFO] [diag t=719079037777us] [cache] bytes put size=11928 total=19299938/201326592
+[INFO] [diag t=719079038117us] [cache] texture put size=58560 total=25099052/167772160
+[INFO] [diag t=719079041515us] [cache] bytes put size=12602 total=19312540/201326592
+[INFO] [diag t=719079042151us] [cache] texture put size=146832 total=25245884/167772160
+[INFO] [diag t=719079042598us] [cache] bytes put size=7159 total=19319699/201326592
+[INFO] [diag t=719079042825us] [cache] texture put size=35872 total=25281756/167772160
+[INFO] [diag t=719079043206us] [cache] bytes put size=8298 total=19327997/201326592
+[INFO] [diag t=719079043448us] [cache] texture put size=35872 total=25317628/167772160
+[INFO] [diag t=719079046904us] [cache] bytes put size=10688 total=19338685/201326592
+[INFO] [diag t=719079047516us] [cache] texture put size=146832 total=25464460/167772160
+[INFO] [diag t=719079047869us] [cache] bytes put size=7330 total=19346015/201326592
+[INFO] [diag t=719079048101us] [cache] texture put size=38940 total=25503400/167772160
+[INFO] [diag t=719079048562us] [cache] bytes put size=8623 total=19354638/201326592
+[INFO] [diag t=719079048813us] [cache] texture put size=38940 total=25542340/167772160
+[INFO] [diag t=719079052457us] [cache] bytes put size=11929 total=19366567/201326592
+[INFO] [diag t=719079053120us] [cache] texture put size=146832 total=25689172/167772160
+[INFO] [diag t=719079053623us] [cache] bytes put size=8311 total=19374878/201326592
+[INFO] [diag t=719079053869us] [cache] texture put size=42212 total=25731384/167772160
+[INFO] [diag t=719079054266us] [cache] bytes put size=9561 total=19384439/201326592
+[INFO] [diag t=719079054520us] [cache] texture put size=42212 total=25773596/167772160
+[INFO] [diag t=719079057975us] [cache] bytes put size=10978 total=19395417/201326592
+[INFO] [diag t=719079058607us] [cache] texture put size=150328 total=25923924/167772160
+[INFO] [diag t=719079059175us] [cache] bytes put size=11039 total=19406456/201326592
+[INFO] [diag t=719079059518us] [cache] texture put size=61920 total=25985844/167772160
+[INFO] [diag t=719079060272us] [cache] bytes put size=12787 total=19419243/201326592
+[INFO] [diag t=719079060630us] [cache] texture put size=61920 total=26047764/167772160
+[INFO] [diag t=719079064115us] [cache] bytes put size=12799 total=19432042/201326592
+[INFO] [diag t=719079064801us] [cache] texture put size=150328 total=26198092/167772160
+[INFO] [diag t=719079065218us] [cache] bytes put size=8965 total=19441007/201326592
+[INFO] [diag t=719079065478us] [cache] texture put size=39120 total=26237212/167772160
+[INFO] [diag t=719079066006us] [cache] bytes put size=10287 total=19451294/201326592
+[INFO] [diag t=719079066273us] [cache] texture put size=39120 total=26276332/167772160
+[INFO] [diag t=719079069503us] [cache] bytes put size=10233 total=19461527/201326592
+[INFO] [diag t=719079070377us] [cache] texture put size=150328 total=26426660/167772160
+[INFO] [diag t=719079070868us] [cache] bytes put size=6851 total=19468378/201326592
+[INFO] [diag t=719079071121us] [cache] texture put size=43424 total=26470084/167772160
+[INFO] [diag t=719079071492us] [cache] bytes put size=8031 total=19476409/201326592
+[INFO] [diag t=719079071748us] [cache] texture put size=43424 total=26513508/167772160
+[INFO] [diag t=719079074967us] [cache] bytes put size=12486 total=19488895/201326592
+[INFO] [diag t=719079075646us] [cache] texture put size=150328 total=26663836/167772160
+[INFO] [diag t=719079076354us] [cache] bytes put size=9306 total=19498201/201326592
+[INFO] [diag t=719079076646us] [cache] texture put size=46360 total=26710196/167772160
+[INFO] [diag t=719079077045us] [cache] bytes put size=10821 total=19509022/201326592
+[INFO] [diag t=719079077343us] [cache] texture put size=46360 total=26756556/167772160
+[INFO] [diag t=719079080366us] [cache] bytes put size=14451 total=19523473/201326592
+[INFO] [diag t=719079081034us] [cache] texture put size=150328 total=26906884/167772160
+[INFO] [diag t=719079092147us] [cache] bytes put size=344943 total=19868416/201326592
+[INFO] [diag t=719079103070us] [cache] texture put size=2676496 total=29583380/167772160
+[INFO] [diag t=719079114918us] [cache] bytes put size=353813 total=20222229/201326592
+[INFO] [diag t=719079126335us] [cache] texture put size=2656900 total=32240280/167772160
+[INFO] [diag t=719079134428us] [cache] bytes put size=154281 total=20376510/201326592
+[INFO] [diag t=719079137877us] [cache] texture put size=509760 total=32750040/167772160
+[INFO] [diag t=719079193865us] [cache] bytes put size=705688 total=21082198/201326592
+[INFO] [diag t=719079216359us] [cache] bytes put size=289296 total=21371494/201326592
+[INFO] [diag t=719079226633us] [cache] bytes put size=305360 total=21676854/201326592
+[INFO] [diag t=719079228654us] [cache] bytes put size=52876 total=21729730/201326592
+[INFO] [diag t=719079231996us] [cache] bytes put size=100048 total=21829778/201326592
+[INFO] [diag t=719079254365us] [cache] bytes put size=297204 total=22126982/201326592
+[INFO] [diag t=719079258761us] [cache] bytes put size=129560 total=22256542/201326592
+[INFO] [diag t=719079263146us] [cache] bytes put size=147172 total=22403714/201326592
+[INFO] [diag t=719079275114us] [cache] bytes put size=385748 total=22789462/201326592
+[INFO] [diag t=719079289463us] [cache] bytes put size=472720 total=23262182/201326592
+[INFO] [diag t=719079313188us] [cache] bytes put size=374336 total=23636518/201326592
+[INFO] [diag t=719079315897us] [cache] bytes put size=88312 total=23724830/201326592
+[INFO] [diag t=719079332789us] [cache] bytes put size=128380 total=23853210/201326592
+[INFO] [diag t=719079338131us] [cache] bytes put size=34483 total=23887693/201326592
+[INFO] [diag t=719079345470us] [cache] texture put size=1758720 total=34508760/167772160
+[INFO] [diag t=719079356109us] [cache] bytes put size=31410 total=23919103/201326592
+[INFO] [diag t=719079356937us] [cache] texture put size=127680 total=34636440/167772160
+[INFO] [diag t=719079357550us] [cache] bytes put size=1316 total=23920419/201326592
+[INFO] [diag t=719079357633us] [cache] texture put size=9680 total=34646120/167772160
+[INFO] [diag t=719079358102us] [cache] bytes put size=2126 total=23922545/201326592
+[INFO] [diag t=719079358200us] [cache] texture put size=14080 total=34660200/167772160
+[INFO] [diag t=719079358527us] [cache] bytes put size=1461 total=23924006/201326592
+[INFO] [diag t=719079358620us] [cache] texture put size=16720 total=34676920/167772160
+[INFO] [diag t=719079358793us] [cache] bytes put size=543 total=23924549/201326592
+[INFO] [diag t=719079358838us] [cache] texture put size=5376 total=34682296/167772160
+[INFO] [diag t=719079360180us] [cache] bytes put size=1091 total=23925640/201326592
+[INFO] [diag t=719079360563us] [cache] texture put size=6400 total=34688696/167772160
+[INFO] [diag t=719079361012us] [cache] bytes put size=1370 total=23927010/201326592
+[INFO] [diag t=719079361091us] [cache] texture put size=6400 total=34695096/167772160
+[INFO] [diag t=719079361480us] [cache] bytes put size=1555 total=23928565/201326592
+[INFO] [diag t=719079361547us] [cache] texture put size=6400 total=34701496/167772160
+[INFO] [diag t=719079361895us] [cache] bytes put size=1133 total=23929698/201326592
+[INFO] [diag t=719079361963us] [cache] texture put size=6400 total=34707896/167772160
+[INFO] [diag t=719079362379us] [cache] bytes put size=775 total=23930473/201326592
+[INFO] [diag t=719079362443us] [cache] texture put size=6400 total=34714296/167772160
+[INFO] [diag t=719079362801us] [cache] bytes put size=1475 total=23931948/201326592
+[INFO] [diag t=719079362866us] [cache] texture put size=6400 total=34720696/167772160
+[INFO] [diag t=719079363467us] [cache] bytes put size=887 total=23932835/201326592
+[INFO] [diag t=719079363526us] [cache] texture put size=6400 total=34727096/167772160
+[INFO] [diag t=719079363831us] [cache] bytes put size=1258 total=23934093/201326592
+[INFO] [diag t=719079363895us] [cache] texture put size=6400 total=34733496/167772160
+[INFO] [diag t=719079364226us] [cache] bytes put size=1040 total=23935133/201326592
+[INFO] [diag t=719079364278us] [cache] texture put size=6400 total=34739896/167772160
+[INFO] [diag t=719079364680us] [cache] bytes put size=1095 total=23936228/201326592
+[INFO] [diag t=719079364738us] [cache] texture put size=6400 total=34746296/167772160
+[INFO] [diag t=719079365047us] [cache] bytes put size=1136 total=23937364/201326592
+[INFO] [diag t=719079365104us] [cache] texture put size=6400 total=34752696/167772160
+[INFO] [diag t=719079365508us] [cache] bytes put size=958 total=23938322/201326592
+[INFO] [diag t=719079365561us] [cache] texture put size=6400 total=34759096/167772160
+[INFO] [diag t=719079365913us] [cache] bytes put size=1191 total=23939513/201326592
+[INFO] [diag t=719079365987us] [cache] texture put size=6400 total=34765496/167772160
+[INFO] [diag t=719079366352us] [cache] bytes put size=1399 total=23940912/201326592
+[INFO] [diag t=719079366429us] [cache] texture put size=6400 total=34771896/167772160
+[INFO] [diag t=719079366794us] [cache] bytes put size=974 total=23941886/201326592
+[INFO] [diag t=719079366858us] [cache] texture put size=6400 total=34778296/167772160
+[INFO] [diag t=719079367146us] [cache] bytes put size=616 total=23942502/201326592
+[INFO] [diag t=719079367193us] [cache] texture put size=6400 total=34784696/167772160
+[INFO] [diag t=719079367477us] [cache] bytes put size=1365 total=23943867/201326592
+[INFO] [diag t=719079367534us] [cache] texture put size=6400 total=34791096/167772160
+[INFO] [diag t=719079367804us] [cache] bytes put size=719 total=23944586/201326592
+[INFO] [diag t=719079367852us] [cache] texture put size=6400 total=34797496/167772160
+[INFO] [diag t=719079368123us] [cache] bytes put size=1097 total=23945683/201326592
+[INFO] [diag t=719079368176us] [cache] texture put size=6400 total=34803896/167772160
+[INFO] [diag t=719079368457us] [cache] bytes put size=937 total=23946620/201326592
+[INFO] [diag t=719079368507us] [cache] texture put size=6400 total=34810296/167772160
+[INFO] [diag t=719079368772us] [cache] bytes put size=904 total=23947524/201326592
+[INFO] [diag t=719079368821us] [cache] texture put size=6400 total=34816696/167772160
+[INFO] [diag t=719079369109us] [cache] bytes put size=924 total=23948448/201326592
+[INFO] [diag t=719079369158us] [cache] texture put size=6400 total=34823096/167772160
+[INFO] [diag t=719079369400us] [cache] bytes put size=592 total=23949040/201326592
+[INFO] [diag t=719079369444us] [cache] texture put size=6400 total=34829496/167772160
+[INFO] [diag t=719079369713us] [cache] bytes put size=576 total=23949616/201326592
+[INFO] [diag t=719079369758us] [cache] texture put size=6400 total=34835896/167772160
+[INFO] [diag t=719079370044us] [cache] bytes put size=1071 total=23950687/201326592
+[INFO] [diag t=719079370098us] [cache] texture put size=6400 total=34842296/167772160
+[INFO] [diag t=719079370338us] [cache] bytes put size=963 total=23951650/201326592
+[INFO] [diag t=719079370388us] [cache] texture put size=6400 total=34848696/167772160
+[INFO] [diag t=719079373927us] [cache] bytes put size=4989 total=23956639/201326592
+[INFO] [diag t=719079374116us] [cache] texture put size=25200 total=34873896/167772160
+[INFO] [diag t=719079377348us] [cache] bytes put size=4856 total=23961495/201326592
+[INFO] [diag t=719079377529us] [cache] texture put size=25200 total=34899096/167772160
+[INFO] [diag t=719079380968us] [cache] bytes put size=4775 total=23966270/201326592
+[INFO] [diag t=719079381681us] [cache] texture put size=25200 total=34924296/167772160
+[INFO] [diag t=719079385106us] [cache] bytes put size=4895 total=23971165/201326592
+[INFO] [diag t=719079385301us] [cache] texture put size=25200 total=34949496/167772160
+[INFO] [diag t=719079388046us] [cache] bytes put size=4801 total=23975966/201326592
+[INFO] [diag t=719079388229us] [cache] texture put size=25200 total=34974696/167772160
+[INFO] [diag t=719079391912us] [cache] bytes put size=4761 total=23980727/201326592
+[INFO] [diag t=719079392098us] [cache] texture put size=25200 total=34999896/167772160
+[INFO] [diag t=719079395012us] [cache] bytes put size=4562 total=23985289/201326592
+[INFO] [diag t=719079395191us] [cache] texture put size=25200 total=35025096/167772160
+[INFO] [diag t=719079398573us] [cache] bytes put size=4822 total=23990111/201326592
+[INFO] [diag t=719079398760us] [cache] texture put size=25200 total=35050296/167772160
+[INFO] [diag t=719079401386us] [cache] bytes put size=4779 total=23994890/201326592
+[INFO] [diag t=719079401560us] [cache] texture put size=25200 total=35075496/167772160
+[INFO] [diag t=719079405000us] [cache] bytes put size=4929 total=23999819/201326592
+[INFO] [diag t=719079405188us] [cache] texture put size=25200 total=35100696/167772160
+[INFO] [diag t=719079408147us] [cache] bytes put size=4787 total=24004606/201326592
+[INFO] [diag t=719079408336us] [cache] texture put size=25200 total=35125896/167772160
+[INFO] [diag t=719079414930us] [cache] bytes put size=535 total=24005141/201326592
+[INFO] [diag t=719079417673us] [cache] bytes put size=355 total=24005496/201326592
+[INFO] [diag t=719079418298us] [cache] bytes put size=360 total=24005856/201326592
+[INFO] [diag t=719079418578us] [cache] bytes put size=344 total=24006200/201326592
+[INFO] [diag t=719079418832us] [cache] bytes put size=889 total=24007089/201326592
+[INFO] [diag t=719079419677us] [cache] bytes put size=592 total=24007681/201326592
+[INFO] [diag t=719079420061us] [cache] bytes put size=590 total=24008271/201326592
+[INFO] [diag t=719079420483us] [cache] bytes put size=511 total=24008782/201326592
+[INFO] [diag t=719079420881us] [cache] bytes put size=377 total=24009159/201326592
+[INFO] [diag t=719079421644us] [cache] bytes put size=255 total=24009414/201326592
+[INFO] [diag t=719079421806us] [cache] bytes put size=271 total=24009685/201326592
+[INFO] [diag t=719079422030us] [cache] bytes put size=243 total=24009928/201326592
+[INFO] [async] submit graph id=258 path="graph/title_bg1_A" bytes=2051578
+[INFO] [diag t=719079794266us] [cache] bytes put size=99247 total=24109175/201326592
+[INFO] [diag t=719079809633us] [cache] texture put size=4217400 total=39343296/167772160
+[INFO] [diag t=719079813348us] [cache] bytes put size=163324 total=24272499/201326592
+[INFO] [diag t=719079860057us] [cache] texture put size=12960000 total=52303296/167772160
+[INFO] [diag t=719079867300us] [cache] bytes put size=316939 total=24589438/201326592
+[INFO] [diag t=719079906733us] [cache] texture put size=9618600 total=61921896/167772160
+[INFO] [diag t=719079920336us] [cache] bytes put size=323632 total=24913070/201326592
+[INFO] [diag t=719079928743us] [cache] texture put size=1301800 total=63223696/167772160
+[INFO] [diag t=719079930279us] [cache] bytes put size=21390 total=24934460/201326592
+[INFO] [diag t=719079931134us] [cache] texture put size=87320 total=63311016/167772160
+[INFO] [diag t=719079932175us] [cache] bytes put size=19763 total=24954223/201326592
+[INFO] [diag t=719079932784us] [cache] texture put size=108800 total=63419816/167772160
+[INFO] [diag t=719079937809us] [cache] bytes put size=29717 total=24983940/201326592
+[INFO] [diag t=719079938649us] [cache] texture put size=123760 total=63543576/167772160
+[INFO] [diag t=719079939960us] [cache] bytes put size=18954 total=25002894/201326592
+[INFO] [diag t=719079940523us] [cache] texture put size=108800 total=63652376/167772160
+[INFO] [diag t=719079941162us] [cache] bytes put size=16719 total=25019613/201326592
+[INFO] [diag t=719079941721us] [cache] texture put size=108800 total=63761176/167772160
+[INFO] [diag t=719079942506us] [cache] bytes put size=14501 total=25034114/201326592
+[INFO] [diag t=719079943048us] [cache] texture put size=108800 total=63869976/167772160
+[INFO] [diag t=719079943640us] [cache] bytes put size=11893 total=25046007/201326592
+[INFO] [diag t=719079944141us] [cache] texture put size=108800 total=63978776/167772160
+[INFO] [diag t=719079945005us] [cache] bytes put size=17131 total=25063138/201326592
+[INFO] [diag t=719079945639us] [cache] texture put size=92800 total=64071576/167772160
+[INFO] [diag t=719079949459us] [cache] bytes put size=27446 total=25090584/201326592
+[INFO] [diag t=719079950191us] [cache] texture put size=105560 total=64177136/167772160
+[INFO] [diag t=719079951100us] [cache] bytes put size=16347 total=25106931/201326592
+[INFO] [diag t=719079951591us] [cache] texture put size=92800 total=64269936/167772160
+[INFO] [diag t=719079952133us] [cache] bytes put size=14417 total=25121348/201326592
+[INFO] [diag t=719079952603us] [cache] texture put size=92800 total=64362736/167772160
+[INFO] [diag t=719079953005us] [cache] bytes put size=12362 total=25133710/201326592
+[INFO] [diag t=719079953444us] [cache] texture put size=92800 total=64455536/167772160
+[INFO] [diag t=719079953812us] [cache] bytes put size=9822 total=25143532/201326592
+[INFO] [diag t=719079954234us] [cache] texture put size=92800 total=64548336/167772160
+[INFO] [diag t=719079955375us] [cache] bytes put size=12690 total=25156222/201326592
+[INFO] [diag t=719079955837us] [cache] texture put size=72000 total=64620336/167772160
+[INFO] [diag t=719079959851us] [cache] bytes put size=20092 total=25176314/201326592
+[INFO] [diag t=719079960441us] [cache] texture put size=81900 total=64702236/167772160
+[INFO] [diag t=719079961146us] [cache] bytes put size=12243 total=25188557/201326592
+[INFO] [diag t=719079961769us] [cache] texture put size=72000 total=64774236/167772160
+[INFO] [diag t=719079962393us] [cache] bytes put size=10662 total=25199219/201326592
+[INFO] [diag t=719079962759us] [cache] texture put size=72000 total=64846236/167772160
+[INFO] [diag t=719079963409us] [cache] bytes put size=9340 total=25208559/201326592
+[INFO] [diag t=719079963760us] [cache] texture put size=72000 total=64918236/167772160
+[INFO] [diag t=719079963979us] [cache] bytes put size=7811 total=25216370/201326592
+[INFO] [diag t=719079964311us] [cache] texture put size=72000 total=64990236/167772160
+[INFO] [diag t=719079964860us] [cache] bytes put size=15194 total=25231564/201326592
+[INFO] [diag t=719079965322us] [cache] texture put size=81000 total=65071236/167772160
+[INFO] [diag t=719079969999us] [cache] bytes put size=22589 total=25254153/201326592
+[INFO] [diag t=719079970631us] [cache] texture put size=82800 total=65154036/167772160
+[INFO] [diag t=719079971200us] [cache] bytes put size=14345 total=25268498/201326592
+[INFO] [diag t=719079971621us] [cache] texture put size=75600 total=65229636/167772160
+[INFO] [diag t=719079972167us] [cache] bytes put size=12425 total=25280923/201326592
+[INFO] [diag t=719079972688us] [cache] texture put size=72000 total=65301636/167772160
+[INFO] [diag t=719079973214us] [cache] bytes put size=10444 total=25291367/201326592
+[INFO] [diag t=719079973693us] [cache] texture put size=72000 total=65373636/167772160
+[INFO] [diag t=719079974113us] [cache] bytes put size=8352 total=25299719/201326592
+[INFO] [diag t=719079974460us] [cache] texture put size=72000 total=65445636/167772160
+[INFO] [diag t=719079975085us] [cache] bytes put size=9322 total=25309041/201326592
+[INFO] [diag t=719079975368us] [cache] texture put size=44800 total=65490436/167772160
+[INFO] [diag t=719079979159us] [cache] bytes put size=14213 total=25323254/201326592
+[INFO] [diag t=719079979573us] [cache] texture put size=51520 total=65541956/167772160
+[INFO] [diag t=719079980142us] [cache] bytes put size=8875 total=25332129/201326592
+[INFO] [diag t=719079980412us] [cache] texture put size=44800 total=65586756/167772160
+[INFO] [diag t=719079980784us] [cache] bytes put size=7602 total=25339731/201326592
+[INFO] [diag t=719079981032us] [cache] texture put size=44800 total=65631556/167772160
+[INFO] [diag t=719079981460us] [cache] bytes put size=6506 total=25346237/201326592
+[INFO] [diag t=719079981953us] [cache] texture put size=44800 total=65676356/167772160
+[INFO] [diag t=719079982319us] [cache] bytes put size=5498 total=25351735/201326592
+[INFO] [diag t=719079982576us] [cache] texture put size=44800 total=65721156/167772160
+[INFO] [diag t=719079984555us] [cache] bytes put size=6107 total=25357842/201326592
+[INFO] [diag t=719080012633us] [cache] texture put size=8294400 total=74015556/167772160
+[INFO] [diag t=719080016372us] [cache] bytes put size=36285 total=25394127/201326592
+[INFO] [diag t=719080018117us] [cache] texture put size=414180 total=74429736/167772160
+[INFO] [diag t=719080018999us] [cache] bytes put size=10710 total=25404837/201326592
+[INFO] [diag t=719080019500us] [cache] texture put size=110768 total=74540504/167772160
+[INFO] [diag t=719080019843us] [cache] bytes put size=432 total=25405269/201326592
+[INFO] [diag t=719080019898us] [cache] texture put size=6624 total=74547128/167772160
+[INFO] [diag t=719080020134us] [cache] bytes put size=433 total=25405702/201326592
+[INFO] [diag t=719080020180us] [cache] texture put size=6808 total=74553936/167772160
+[INFO] [diag t=719080020400us] [cache] bytes put size=434 total=25406136/201326592
+[INFO] [diag t=719080020446us] [cache] texture put size=6624 total=74560560/167772160
+[INFO] [async] tick seen=0 pending=1
+[INFO] [async] tick seen=0 pending=1
+[INFO] [async] tick seen=0 pending=1
+[INFO] [diag t=719080164402us] [cache] texture put size=12960000 total=87520560/167772160
+[INFO] [async] decoded "graph/title_bg1_A" id=258 bytes=2051578 us=384739 ok=true
+[INFO] [async] done pushed kind=0 id=258 total=1
+[INFO] [async] tick seen=1 pending=0
+[INFO] [async] submit graph id=186 path="graph_bg/BG043_000" bytes=3838866
+[INFO] [async] submit graph id=187 path="graph_bg/BG043_000b" bytes=2223174
+[INFO] [async] submit parts id=5 path="graph_bs/CHR_郰_婎_壞惂暈L_昞忣" bytes=3447414
+[INFO] [diag t=719125325507us] [cache] bytes put size=65116 total=25471252/201326592
+[INFO] [diag t=719125330096us] [cache] bytes put size=173916 total=25645168/201326592
+[INFO] [diag t=719125336956us] [cache] bytes put size=360784 total=26005952/201326592
+[INFO] [diag t=719125338453us] [cache] bytes put size=65716 total=26071668/201326592
+[INFO] [diag t=719125342601us] [cache] bytes put size=222444 total=26294112/201326592
+[INFO] [diag t=719125357465us] [cache] bytes put size=766568 total=27060680/201326592
+[INFO] [diag t=719125372377us] [cache] bytes put size=753552 total=27814232/201326592
+[INFO] [diag t=719125446866us] [cache] texture put size=12960000 total=100480560/167772160
+[INFO] [async] decoded "graph_bg/BG043_000" id=186 bytes=3838866 us=138489 ok=true
+[INFO] [async] done pushed kind=0 id=186 total=1
+[INFO] [async] tick seen=1 pending=2
+[INFO] [async] tick seen=0 pending=2
+[INFO] [async] tick seen=0 pending=2
+[INFO] [async] tick seen=0 pending=2
+[INFO] [async] tick seen=0 pending=2
+[INFO] [diag t=719125617076us] [cache] texture put size=12960000 total=113440560/167772160
+[INFO] [async] decoded "graph_bg/BG043_000b" id=187 bytes=2223174 us=170023 ok=true
+[INFO] [async] done pushed kind=0 id=187 total=1
+[INFO] [async] tick seen=1 pending=1
+[INFO] [async] tick seen=0 pending=1
+[INFO] [async] tick seen=0 pending=1
+[INFO] [async] tick seen=0 pending=1
+[INFO] [async] tick seen=0 pending=1
+[INFO] [async] tick seen=0 pending=1
+[INFO] [async] tick seen=0 pending=1
+[INFO] [async] tick seen=0 pending=1
+[INFO] [diag t=719125741338us] [cache] parts put size=10478160 total=10478160/50331648
+[INFO] [async] decoded "graph_bs/CHR_郰_婎_壞惂暈L_昞忣" id=5 bytes=3447414 us=124354 ok=true
+[INFO] [async] done pushed kind=1 id=5 total=1
+[INFO] [async] tick seen=1 pending=0
+[INFO] [diag t=719151031495us] [cache] bytes put size=13198 total=27827430/201326592

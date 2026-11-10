@@ -1,0 +1,6 @@
+total 92
+drwxr-xr-x 1 ACETaffy 197121     0 Oct 30 12:23 .
+drwxr-xr-x 1 ACETaffy 197121     0 Oct 30 09:58 ..
+-rw-r--r-- 1 ACETaffy 197121 29594 Oct 30 12:16 krkr.console.log
+-rw-r--r-- 1 ACETaffy 197121 45941 Oct 30 12:23 savedata010.bmp
+-rw-r--r-- 1 ACETaffy 197121   989 Oct 30 12:23 system.bmp

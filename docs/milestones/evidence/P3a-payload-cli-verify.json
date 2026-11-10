@@ -1,0 +1,29 @@
+{
+  "version": "0.1.0",
+  "manifest_path": null,
+  "checks": [
+    {
+      "id": "keymap-template-size",
+      "name": "keymap-template-size",
+      "status": "ok",
+      "detail": "1293 B (golden 1293 B)",
+      "hint": ""
+    },
+    {
+      "id": "keymap-template-sha256",
+      "name": "keymap-template-sha256",
+      "status": "ok",
+      "detail": "aa4fa8aab256f73c... (golden aa4fa8aab256f73c...)",
+      "hint": ""
+    },
+    {
+      "id": "keymap-default-render",
+      "name": "keymap-default-render",
+      "status": "ok",
+      "detail": "1293 B rendered, sha256 aa4fa8aab256f73c...",
+      "hint": ""
+    }
+  ],
+  "ok": true,
+  "errors": []
+}

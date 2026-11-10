@@ -1,0 +1,641 @@
+HEAD=a8439a86393f74c503d28df176f010ca544af56f
+MAKE_VERSION=GNU Make 4.4.1
+SDL2_CFLAGS=-I/opt/devkitpro/portlibs/switch/include/SDL2 -D__SWITCH__ -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -ftls-model=local-exec -isystem /opt/devkitpro/libnx/include -I/opt/devkitpro/portlibs/switch/include -D_REENTRANT
+SMPEG2_CFLAGS=-I/opt/devkitpro/portlibs/switch/include -I/opt/devkitpro/portlibs/switch/include/smpeg2 -I/opt/devkitpro/portlibs/switch/include/SDL2 -D__SWITCH__ -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -ftls-model=local-exec -isystem /opt/devkitpro/libnx/include -I/opt/devkitpro/portlibs/switch/include -D_REENTRANT
+onscripter.cpp
+ONScripterLabel.cpp
+ONScripterLabel_animation.cpp
+ONScripterLabel_command.cpp
+ONScripterLabel_effect.cpp
+ONScripterLabel_event.cpp
+ONScripterLabel_file.cpp
+ONScripterLabel_file2.cpp
+ONScripterLabel_image.cpp
+ONScripterLabel_rmenu.cpp
+ONScripterLabel_sound.cpp
+ONScripterLabel_text.cpp
+SarReader.cpp
+ScriptHandler.cpp
+ScriptParser.cpp
+ScriptParser_command.cpp
+In file included from E:/galnx-build/m4-ons/include/ScriptParser.h:33,
+                 from E:/galnx-build/m4-ons/include/ONScripterLabel.h:27,
+                 from E:/galnx-build/m4-ons/source/onscripter.cpp:24:
+E:/galnx-build/m4-ons/include/ScriptHandler.h:179:5: warning: 'typedef' was ignored in this declaration
+  179 |     typedef enum { LABEL_LOG = 0,
+      |     ^~~~~~~
+In file included from E:/galnx-build/m4-ons/include/ScriptParser.h:33,
+                 from E:/galnx-build/m4-ons/include/ONScripterLabel.h:27,
+                 from E:/galnx-build/m4-ons/source/ONScripterLabel.cpp:24:
+E:/galnx-build/m4-ons/include/ScriptHandler.h:179:5: warning: 'typedef' was ignored in this declaration
+  179 |     typedef enum { LABEL_LOG = 0,
+      |     ^~~~~~~
+In file included from E:/galnx-build/m4-ons/include/ONScripterLabel.h:53:
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:95:21: warning: 'OV_CALLBACKS_STREAMONLY_NOCLOSE' defined but not used [-Wunused-variable]
+   95 | static ov_callbacks OV_CALLBACKS_STREAMONLY_NOCLOSE = {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:88:21: warning: 'OV_CALLBACKS_STREAMONLY' defined but not used [-Wunused-variable]
+   88 | static ov_callbacks OV_CALLBACKS_STREAMONLY = {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:81:21: warning: 'OV_CALLBACKS_NOCLOSE' defined but not used [-Wunused-variable]
+   81 | static ov_callbacks OV_CALLBACKS_NOCLOSE = {
+      |                     ^~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:74:21: warning: 'OV_CALLBACKS_DEFAULT' defined but not used [-Wunused-variable]
+   74 | static ov_callbacks OV_CALLBACKS_DEFAULT = {
+      |                     ^~~~~~~~~~~~~~~~~~~~
+In file included from E:/galnx-build/m4-ons/include/ScriptParser.h:33,
+                 from E:/galnx-build/m4-ons/include/ONScripterLabel.h:27,
+                 from E:/galnx-build/m4-ons/source/ONScripterLabel_animation.cpp:24:
+E:/galnx-build/m4-ons/include/ScriptHandler.h:179:5: warning: 'typedef' was ignored in this declaration
+  179 |     typedef enum { LABEL_LOG = 0,
+      |     ^~~~~~~
+In file included from E:/galnx-build/m4-ons/include/ScriptParser.h:33,
+                 from E:/galnx-build/m4-ons/include/ONScripterLabel.h:27,
+                 from E:/galnx-build/m4-ons/source/ONScripterLabel_command.cpp:24:
+E:/galnx-build/m4-ons/include/ScriptHandler.h:179:5: warning: 'typedef' was ignored in this declaration
+  179 |     typedef enum { LABEL_LOG = 0,
+      |     ^~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel.cpp: In member function 'int ONScripterLabel::refreshMode()':
+E:/galnx-build/m4-ons/source/ONScripterLabel.cpp:1672:55: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+ 1670 |          (system_menu_mode == SYSTEM_NULL) &&
+      |          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~          
+ 1671 |          erase_text_window_mode == 0 &&
+      |          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                
+ 1672 |          (current_refresh_mode & REFRESH_SHADOW_MODE) &&
+      |          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+ 1673 |          text_on_flag ){
+      |          ~~~~~~~~~~~~                                  
+In file included from E:/galnx-build/m4-ons/include/ONScripterLabel.h:53:
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:95:21: warning: 'OV_CALLBACKS_STREAMONLY_NOCLOSE' defined but not used [-Wunused-variable]
+   95 | static ov_callbacks OV_CALLBACKS_STREAMONLY_NOCLOSE = {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:88:21: warning: 'OV_CALLBACKS_STREAMONLY' defined but not used [-Wunused-variable]
+   88 | static ov_callbacks OV_CALLBACKS_STREAMONLY = {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:81:21: warning: 'OV_CALLBACKS_NOCLOSE' defined but not used [-Wunused-variable]
+   81 | static ov_callbacks OV_CALLBACKS_NOCLOSE = {
+      |                     ^~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:74:21: warning: 'OV_CALLBACKS_DEFAULT' defined but not used [-Wunused-variable]
+   74 | static ov_callbacks OV_CALLBACKS_DEFAULT = {
+      |                     ^~~~~~~~~~~~~~~~~~~~
+sjis2utf16.cpp
+In file included from E:/galnx-build/m4-ons/include/ONScripterLabel.h:53:
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h: At global scope:
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:95:21: warning: 'OV_CALLBACKS_STREAMONLY_NOCLOSE' defined but not used [-Wunused-variable]
+   95 | static ov_callbacks OV_CALLBACKS_STREAMONLY_NOCLOSE = {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:88:21: warning: 'OV_CALLBACKS_STREAMONLY' defined but not used [-Wunused-variable]
+   88 | static ov_callbacks OV_CALLBACKS_STREAMONLY = {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:81:21: warning: 'OV_CALLBACKS_NOCLOSE' defined but not used [-Wunused-variable]
+   81 | static ov_callbacks OV_CALLBACKS_NOCLOSE = {
+      |                     ^~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:74:21: warning: 'OV_CALLBACKS_DEFAULT' defined but not used [-Wunused-variable]
+   74 | static ov_callbacks OV_CALLBACKS_DEFAULT = {
+      |                     ^~~~~~~~~~~~~~~~~~~~
+In file included from E:/galnx-build/m4-ons/include/ScriptParser.h:33,
+                 from E:/galnx-build/m4-ons/include/ONScripterLabel.h:27,
+                 from E:/galnx-build/m4-ons/source/ONScripterLabel_event.cpp:24:
+E:/galnx-build/m4-ons/include/ScriptHandler.h:179:5: warning: 'typedef' was ignored in this declaration
+  179 |     typedef enum { LABEL_LOG = 0,
+      |     ^~~~~~~
+In file included from E:/galnx-build/m4-ons/include/ScriptParser.h:33,
+                 from E:/galnx-build/m4-ons/include/ONScripterLabel.h:27,
+                 from E:/galnx-build/m4-ons/source/ONScripterLabel_file.cpp:24:
+E:/galnx-build/m4-ons/include/ScriptHandler.h:179:5: warning: 'typedef' was ignored in this declaration
+  179 |     typedef enum { LABEL_LOG = 0,
+      |     ^~~~~~~
+switch_mitm.cpp
+In file included from E:/galnx-build/m4-ons/include/ScriptParser.h:33,
+                 from E:/galnx-build/m4-ons/include/ONScripterLabel.h:27,
+                 from E:/galnx-build/m4-ons/source/ONScripterLabel_effect.cpp:24:
+E:/galnx-build/m4-ons/include/ScriptHandler.h:179:5: warning: 'typedef' was ignored in this declaration
+  179 |     typedef enum { LABEL_LOG = 0,
+      |     ^~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_command.cpp: In member function 'int ONScripterLabel::exbtnCommand()':
+E:/galnx-build/m4-ons/source/ONScripterLabel_command.cpp:2261:29: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+ 2261 |         if (cellcheck_flag  && (sprite_info[ sprite_no ].num_of_cells < 2) ||
+      |             ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from E:/galnx-build/m4-ons/include/ScriptParser.h:33,
+                 from E:/galnx-build/m4-ons/include/ONScripterLabel.h:27,
+                 from E:/galnx-build/m4-ons/source/ONScripterLabel_file2.cpp:24:
+E:/galnx-build/m4-ons/include/ScriptHandler.h:179:5: warning: 'typedef' was ignored in this declaration
+  179 |     typedef enum { LABEL_LOG = 0,
+      |     ^~~~~~~
+In file included from E:/galnx-build/m4-ons/include/ONScripterLabel.h:53:
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h: At global scope:
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:95:21: warning: 'OV_CALLBACKS_STREAMONLY_NOCLOSE' defined but not used [-Wunused-variable]
+   95 | static ov_callbacks OV_CALLBACKS_STREAMONLY_NOCLOSE = {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:88:21: warning: 'OV_CALLBACKS_STREAMONLY' defined but not used [-Wunused-variable]
+   88 | static ov_callbacks OV_CALLBACKS_STREAMONLY = {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:81:21: warning: 'OV_CALLBACKS_NOCLOSE' defined but not used [-Wunused-variable]
+   81 | static ov_callbacks OV_CALLBACKS_NOCLOSE = {
+      |                     ^~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:74:21: warning: 'OV_CALLBACKS_DEFAULT' defined but not used [-Wunused-variable]
+   74 | static ov_callbacks OV_CALLBACKS_DEFAULT = {
+      |                     ^~~~~~~~~~~~~~~~~~~~
+switch_nofile_splash.cpp
+In file included from E:/galnx-build/m4-ons/include/ScriptParser.h:33,
+                 from E:/galnx-build/m4-ons/include/ONScripterLabel.h:27,
+                 from E:/galnx-build/m4-ons/source/ONScripterLabel_image.cpp:24:
+E:/galnx-build/m4-ons/include/ScriptHandler.h:179:5: warning: 'typedef' was ignored in this declaration
+  179 |     typedef enum { LABEL_LOG = 0,
+      |     ^~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_file.cpp: In member function 'int ONScripterLabel::loadSaveFile(int)':
+E:/galnx-build/m4-ons/source/ONScripterLabel_file.cpp:229:13: warning: variable 'xy' set but not used [-Wunused-but-set-variable=]
+  229 |         int xy[2];
+      |             ^~
+E:/galnx-build/m4-ons/source/ONScripterLabel_file.cpp:172:19: warning: variable 'address' set but not used [-Wunused-but-set-variable=]
+  172 |     int  i, j, k, address;
+      |                   ^~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_file.cpp: In member function 'int ONScripterLabel::saveSaveFile(int)':
+E:/galnx-build/m4-ons/source/ONScripterLabel_file.cpp:533:31: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+  533 |     if (no < 0 || saveon_flag && internal_saveon_flag){
+      |                   ~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+In file included from E:/galnx-build/m4-ons/include/ONScripterLabel.h:53:
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:95:21: warning: 'OV_CALLBACKS_STREAMONLY_NOCLOSE' defined but not used [-Wunused-variable]
+   95 | static ov_callbacks OV_CALLBACKS_STREAMONLY_NOCLOSE = {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:88:21: warning: 'OV_CALLBACKS_STREAMONLY' defined but not used [-Wunused-variable]
+   88 | static ov_callbacks OV_CALLBACKS_STREAMONLY = {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:81:21: warning: 'OV_CALLBACKS_NOCLOSE' defined but not used [-Wunused-variable]
+   81 | static ov_callbacks OV_CALLBACKS_NOCLOSE = {
+      |                     ^~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:74:21: warning: 'OV_CALLBACKS_DEFAULT' defined but not used [-Wunused-variable]
+   74 | static ov_callbacks OV_CALLBACKS_DEFAULT = {
+      |                     ^~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_event.cpp:52:31: warning: converting to non-pointer type 'SDL_TimerID' {aka 'int'} from NULL [-Wconversion-null]
+   52 | static SDL_TimerID timer_id = NULL;
+      |                               ^~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_event.cpp:53:32: warning: converting to non-pointer type 'SDL_TimerID' {aka 'int'} from NULL [-Wconversion-null]
+   53 | SDL_TimerID timer_cdaudio_id = NULL;
+      |                                ^~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_event.cpp:60:35: warning: converting to non-pointer type 'SDL_TimerID' {aka 'int'} from NULL [-Wconversion-null]
+   60 | SDL_TimerID timer_mp3fadeout_id = NULL;
+      |                                   ^~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_event.cpp: In function 'Uint32 timerCallback(Uint32, void*)':
+E:/galnx-build/m4-ons/source/ONScripterLabel_event.cpp:93:16: warning: converting to non-pointer type 'SDL_TimerID' {aka 'int'} from NULL [-Wconversion-null]
+   93 |     timer_id = NULL;
+      |                ^~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_event.cpp: In function 'Uint32 cdaudioCallback(Uint32, void*)':
+E:/galnx-build/m4-ons/source/ONScripterLabel_event.cpp:105:24: warning: converting to non-pointer type 'SDL_TimerID' {aka 'int'} from NULL [-Wconversion-null]
+  105 |     timer_cdaudio_id = NULL;
+      |                        ^~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_event.cpp: In member function 'void ONScripterLabel::flushEventSub(SDL_Event&)':
+E:/galnx-build/m4-ons/source/ONScripterLabel_event.cpp:235:35: warning: converting to non-pointer type 'SDL_TimerID' {aka 'int'} from NULL [-Wconversion-null]
+  235 |             timer_mp3fadeout_id = NULL;
+      |                                   ^~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_event.cpp: In member function 'void ONScripterLabel::advancePhase(int)':
+E:/galnx-build/m4-ons/source/ONScripterLabel_event.cpp:310:22: warning: NULL used in arithmetic [-Wpointer-arith]
+  310 |     if ( timer_id != NULL ){
+      |                      ^~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_event.cpp:316:25: warning: NULL used in arithmetic [-Wpointer-arith]
+  316 |         if (timer_id != NULL) return;
+      |                         ^~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_event.cpp: In member function 'void ONScripterLabel::mousePressEvent(SDL_MouseButtonEvent*)':
+E:/galnx-build/m4-ons/source/ONScripterLabel_event.cpp:493:22: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+  493 |          (rmode_flag && event_mode & WAIT_TEXT_MODE ||
+      |           ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_event.cpp: In member function 'void ONScripterLabel::mouseWheelEvent(SDL_MouseWheelEvent*)':
+E:/galnx-build/m4-ons/source/ONScripterLabel_event.cpp:565:25: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+  565 |           usewheel_flag && event_mode & WAIT_BUTTON_MODE ||
+      |           ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_event.cpp:572:46: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+  572 |               (enable_wheeldown_advance_flag && event_mode & WAIT_TEXT_MODE ||
+      |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_event.cpp: In member function 'void ONScripterLabel::keyPressEvent(SDL_KeyboardEvent*)':
+E:/galnx-build/m4-ons/source/ONScripterLabel_event.cpp:897:27: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+  897 |            ( btndown_flag && event->keysym.sym == SDLK_RETURN ||
+      |              ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_event.cpp:899:29: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+  899 |         if (!getcursor_flag && event->keysym.sym == SDLK_LEFT ||
+      |             ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_event.cpp:905:34: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+  905 |         else if (!getcursor_flag && event->keysym.sym == SDLK_RIGHT ||
+      |                  ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_event.cpp:916:31: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+  916 |                  spclclk_flag && event->keysym.sym == SDLK_SPACE ){
+      |                  ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_event.cpp:955:33: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+  955 |                   usewheel_flag && event_mode & WAIT_BUTTON_MODE||
+      |                   ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_event.cpp:957:35: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+  957 |                  (!getcursor_flag && event->keysym.sym == SDLK_UP ||
+      |                   ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_event.cpp:963:49: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+  963 |         else if ((enable_wheeldown_advance_flag && event_mode & WAIT_TEXT_MODE ||
+      |                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_event.cpp:966:35: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+  966 |                  (!getcursor_flag && event->keysym.sym == SDLK_DOWN ||
+      |                   ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_event.cpp:983:33: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+  983 |         else if ( getenter_flag && event->keysym.sym == SDLK_RETURN ||
+      |                   ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from E:/galnx-build/m4-ons/include/ONScripterLabel.h:53:
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h: At global scope:
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:95:21: warning: 'OV_CALLBACKS_STREAMONLY_NOCLOSE' defined but not used [-Wunused-variable]
+   95 | static ov_callbacks OV_CALLBACKS_STREAMONLY_NOCLOSE = {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:88:21: warning: 'OV_CALLBACKS_STREAMONLY' defined but not used [-Wunused-variable]
+   88 | static ov_callbacks OV_CALLBACKS_STREAMONLY = {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:81:21: warning: 'OV_CALLBACKS_NOCLOSE' defined but not used [-Wunused-variable]
+   81 | static ov_callbacks OV_CALLBACKS_NOCLOSE = {
+      |                     ^~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:74:21: warning: 'OV_CALLBACKS_DEFAULT' defined but not used [-Wunused-variable]
+   74 | static ov_callbacks OV_CALLBACKS_DEFAULT = {
+      |                     ^~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_event.cpp:1117:24: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+ 1117 |          usewheel_flag && event_mode & WAIT_BUTTON_MODE||
+      |          ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_event.cpp:1119:26: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+ 1119 |         (!getcursor_flag && event->keysym.sym == SDLK_UP ||
+      |          ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_event.cpp:1125:45: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+ 1125 |     else if ((enable_wheeldown_advance_flag && event_mode & WAIT_TEXT_MODE ||
+      |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_event.cpp:1128:31: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+ 1128 |              (!getcursor_flag && event->keysym.sym == SDLK_DOWN ||
+      |               ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_file.cpp: In member function 'int ONScripterLabel::saveSaveFile(int)':
+E:/galnx-build/m4-ons/source/ONScripterLabel_file.cpp:548:35: warning: '.dat' directive writing 4 bytes into a region of size between 2 and 11 [-Wformat-overflow=]
+  548 |         sprintf( filename, "save%d.dat", no );
+      |                                   ^~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_file.cpp:548:16: note: 'sprintf' output between 10 and 19 bytes into a destination of size 16
+  548 |         sprintf( filename, "save%d.dat", no );
+      |         ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from E:/galnx-build/m4-ons/include/ScriptHandler.h:30:
+E:/galnx-build/m4-ons/include/BaseReader.h:45:22: warning: '%d' directive writing between 1 and 10 bytes into a region of size 8 [-Wformat-overflow=]
+   45 | #define RELATIVEPATH ""
+E:/galnx-build/m4-ons/source/ONScripterLabel_file.cpp:558:28: note: in expansion of macro 'RELATIVEPATH'
+  558 |         sprintf( filename, RELATIVEPATH "sav%csave%d.dat", DELIMITER, no );
+      |                            ^~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_file.cpp:558:51: note: format string is defined here
+  558 |         sprintf( filename, RELATIVEPATH "sav%csave%d.dat", DELIMITER, no );
+      |                                                   ^~
+E:/galnx-build/m4-ons/include/BaseReader.h:45:22: note: directive argument in the range [0, 2147483647]
+   45 | #define RELATIVEPATH ""
+E:/galnx-build/m4-ons/source/ONScripterLabel_file.cpp:558:28: note: in expansion of macro 'RELATIVEPATH'
+  558 |         sprintf( filename, RELATIVEPATH "sav%csave%d.dat", DELIMITER, no );
+      |                            ^~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_file.cpp:558:16: note: 'sprintf' output between 14 and 23 bytes into a destination of size 16
+  558 |         sprintf( filename, RELATIVEPATH "sav%csave%d.dat", DELIMITER, no );
+      |         ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from E:/galnx-build/m4-ons/include/ONScripterLabel.h:53:
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h: At global scope:
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:95:21: warning: 'OV_CALLBACKS_STREAMONLY_NOCLOSE' defined but not used [-Wunused-variable]
+   95 | static ov_callbacks OV_CALLBACKS_STREAMONLY_NOCLOSE = {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:88:21: warning: 'OV_CALLBACKS_STREAMONLY' defined but not used [-Wunused-variable]
+   88 | static ov_callbacks OV_CALLBACKS_STREAMONLY = {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:81:21: warning: 'OV_CALLBACKS_NOCLOSE' defined but not used [-Wunused-variable]
+   81 | static ov_callbacks OV_CALLBACKS_NOCLOSE = {
+      |                     ^~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:74:21: warning: 'OV_CALLBACKS_DEFAULT' defined but not used [-Wunused-variable]
+   74 | static ov_callbacks OV_CALLBACKS_DEFAULT = {
+      |                     ^~~~~~~~~~~~~~~~~~~~
+In file included from E:/galnx-build/m4-ons/include/ScriptParser.h:33,
+                 from E:/galnx-build/m4-ons/include/ONScripterLabel.h:27,
+                 from E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:24:
+E:/galnx-build/m4-ons/include/ScriptHandler.h:179:5: warning: 'typedef' was ignored in this declaration
+  179 |     typedef enum { LABEL_LOG = 0,
+      |     ^~~~~~~
+In file included from E:/galnx-build/m4-ons/include/ONScripterLabel.h:53:
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:95:21: warning: 'OV_CALLBACKS_STREAMONLY_NOCLOSE' defined but not used [-Wunused-variable]
+   95 | static ov_callbacks OV_CALLBACKS_STREAMONLY_NOCLOSE = {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:88:21: warning: 'OV_CALLBACKS_STREAMONLY' defined but not used [-Wunused-variable]
+   88 | static ov_callbacks OV_CALLBACKS_STREAMONLY = {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:81:21: warning: 'OV_CALLBACKS_NOCLOSE' defined but not used [-Wunused-variable]
+   81 | static ov_callbacks OV_CALLBACKS_NOCLOSE = {
+      |                     ^~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:74:21: warning: 'OV_CALLBACKS_DEFAULT' defined but not used [-Wunused-variable]
+   74 | static ov_callbacks OV_CALLBACKS_DEFAULT = {
+      |                     ^~~~~~~~~~~~~~~~~~~~
+In file included from E:/galnx-build/m4-ons/include/ScriptParser.h:33,
+                 from E:/galnx-build/m4-ons/include/ONScripterLabel.h:27,
+                 from E:/galnx-build/m4-ons/source/ONScripterLabel_rmenu.cpp:24:
+E:/galnx-build/m4-ons/include/ScriptHandler.h:179:5: warning: 'typedef' was ignored in this declaration
+  179 |     typedef enum { LABEL_LOG = 0,
+      |     ^~~~~~~
+In file included from E:/galnx-build/m4-ons/include/ScriptParser.h:33,
+                 from E:/galnx-build/m4-ons/include/ONScripterLabel.h:27,
+                 from E:/galnx-build/m4-ons/source/ONScripterLabel_sound.cpp:24:
+E:/galnx-build/m4-ons/include/ScriptHandler.h:179:5: warning: 'typedef' was ignored in this declaration
+  179 |     typedef enum { LABEL_LOG = 0,
+      |     ^~~~~~~
+In file included from E:/galnx-build/m4-ons/include/ONScripterLabel.h:53:
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:95:21: warning: 'OV_CALLBACKS_STREAMONLY_NOCLOSE' defined but not used [-Wunused-variable]
+   95 | static ov_callbacks OV_CALLBACKS_STREAMONLY_NOCLOSE = {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:88:21: warning: 'OV_CALLBACKS_STREAMONLY' defined but not used [-Wunused-variable]
+   88 | static ov_callbacks OV_CALLBACKS_STREAMONLY = {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:81:21: warning: 'OV_CALLBACKS_NOCLOSE' defined but not used [-Wunused-variable]
+   81 | static ov_callbacks OV_CALLBACKS_NOCLOSE = {
+      |                     ^~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:74:21: warning: 'OV_CALLBACKS_DEFAULT' defined but not used [-Wunused-variable]
+   74 | static ov_callbacks OV_CALLBACKS_DEFAULT = {
+      |                     ^~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp: In member function 'void ONScripterLabel::drawGlyph(SDL_Surface*, FontInfo*, SDL_Color&, char*, int*, bool, AnimationInfo*, SDL_Rect*, SDL_Rect&)':
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:39:30: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+   39 |           *(x) == (char)0x81 && *((x)+1) == (char)0x50 || \
+      |           ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:108:60: note: in expansion of macro 'IS_ROTATION_REQUIRED'
+  108 |     if ( info->getTateyokoMode() == FontInfo::TATE_MODE && IS_ROTATION_REQUIRED(text) ) rotate_flag = true;
+      |                                                            ^~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:40:30: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+   40 |           *(x) == (char)0x81 && *((x)+1) == (char)0x51 || \
+      |           ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:108:60: note: in expansion of macro 'IS_ROTATION_REQUIRED'
+  108 |     if ( info->getTateyokoMode() == FontInfo::TATE_MODE && IS_ROTATION_REQUIRED(text) ) rotate_flag = true;
+      |                                                            ^~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:41:50: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+   41 |           *(x) == (char)0x81 && *((x)+1) >= 0x5b && *((x)+1) <= 0x5d || \
+      |           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:108:60: note: in expansion of macro 'IS_ROTATION_REQUIRED'
+  108 |     if ( info->getTateyokoMode() == FontInfo::TATE_MODE && IS_ROTATION_REQUIRED(text) ) rotate_flag = true;
+      |                                                            ^~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:42:50: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+   42 |           *(x) == (char)0x81 && *((x)+1) >= 0x60 && *((x)+1) <= 0x64 || \
+      |           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:108:60: note: in expansion of macro 'IS_ROTATION_REQUIRED'
+  108 |     if ( info->getTateyokoMode() == FontInfo::TATE_MODE && IS_ROTATION_REQUIRED(text) ) rotate_flag = true;
+      |                                                            ^~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:43:50: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+   43 |           *(x) == (char)0x81 && *((x)+1) >= 0x69 && *((x)+1) <= 0x7a || \
+      |           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:108:60: note: in expansion of macro 'IS_ROTATION_REQUIRED'
+  108 |     if ( info->getTateyokoMode() == FontInfo::TATE_MODE && IS_ROTATION_REQUIRED(text) ) rotate_flag = true;
+      |                                                            ^~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:44:30: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+   44 |           *(x) == (char)0x81 && *((x)+1) == (char)0x80 )
+      |           ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:108:60: note: in expansion of macro 'IS_ROTATION_REQUIRED'
+  108 |     if ( info->getTateyokoMode() == FontInfo::TATE_MODE && IS_ROTATION_REQUIRED(text) ) rotate_flag = true;
+      |                                                            ^~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp: In member function 'void ONScripterLabel::drawString(const char*, unsigned char*, FontInfo*, bool, SDL_Surface*, SDL_Rect*, AnimationInfo*)':
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:29:30: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+   29 |         ( *(x) == (char)0x81 && *((x)+1) == (char)0x41 || \
+      |           ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:252:41: note: in expansion of macro 'IS_KINSOKU'
+  252 |             if (info->isEndOfLine(2) && IS_KINSOKU( str+2 )){
+      |                                         ^~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:31:30: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+   31 |           *(x) == (char)0x81 && *((x)+1) == (char)0x48 || \
+      |           ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:252:41: note: in expansion of macro 'IS_KINSOKU'
+  252 |             if (info->isEndOfLine(2) && IS_KINSOKU( str+2 )){
+      |                                         ^~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:32:30: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+   32 |           *(x) == (char)0x81 && *((x)+1) == (char)0x49 || \
+      |           ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:252:41: note: in expansion of macro 'IS_KINSOKU'
+  252 |             if (info->isEndOfLine(2) && IS_KINSOKU( str+2 )){
+      |                                         ^~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:33:30: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+   33 |           *(x) == (char)0x81 && *((x)+1) == (char)0x76 || \
+      |           ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:252:41: note: in expansion of macro 'IS_KINSOKU'
+  252 |             if (info->isEndOfLine(2) && IS_KINSOKU( str+2 )){
+      |                                         ^~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:34:30: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+   34 |           *(x) == (char)0x81 && *((x)+1) == (char)0x78 || \
+      |           ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:252:41: note: in expansion of macro 'IS_KINSOKU'
+  252 |             if (info->isEndOfLine(2) && IS_KINSOKU( str+2 )){
+      |                                         ^~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:35:30: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+   35 |           *(x) == (char)0x81 && *((x)+1) == (char)0x5b )
+      |           ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:252:41: note: in expansion of macro 'IS_KINSOKU'
+  252 |             if (info->isEndOfLine(2) && IS_KINSOKU( str+2 )){
+      |                                         ^~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:262:47: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+  262 |         else if (*str == 0x0a || *str == '\\' && info->is_newline_accepted){
+      |                                  ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp: In member function 'int ONScripterLabel::textCommand()':
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:571:89: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+  571 |            zenkakko_flag && script_h.getStringBuffer()[string_buffer_offset] == "y"[0] &&
+      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+  572 |            script_h.getStringBuffer()[string_buffer_offset+1] == "y"[1]))) ){
+      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                 
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp: In member function 'int ONScripterLabel::processText()':
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:29:30: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+   29 |         ( *(x) == (char)0x81 && *((x)+1) == (char)0x41 || \
+      |           ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:653:13: note: in expansion of macro 'IS_KINSOKU'
+  653 |         if (IS_KINSOKU( script_h.getStringBuffer() + string_buffer_offset + 2)){
+      |             ^~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:31:30: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+   31 |           *(x) == (char)0x81 && *((x)+1) == (char)0x48 || \
+      |           ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:653:13: note: in expansion of macro 'IS_KINSOKU'
+  653 |         if (IS_KINSOKU( script_h.getStringBuffer() + string_buffer_offset + 2)){
+      |             ^~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:32:30: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+   32 |           *(x) == (char)0x81 && *((x)+1) == (char)0x49 || \
+      |           ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:653:13: note: in expansion of macro 'IS_KINSOKU'
+  653 |         if (IS_KINSOKU( script_h.getStringBuffer() + string_buffer_offset + 2)){
+      |             ^~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:33:30: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+   33 |           *(x) == (char)0x81 && *((x)+1) == (char)0x76 || \
+      |           ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:653:13: note: in expansion of macro 'IS_KINSOKU'
+  653 |         if (IS_KINSOKU( script_h.getStringBuffer() + string_buffer_offset + 2)){
+      |             ^~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:34:30: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+   34 |           *(x) == (char)0x81 && *((x)+1) == (char)0x78 || \
+      |           ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:653:13: note: in expansion of macro 'IS_KINSOKU'
+  653 |         if (IS_KINSOKU( script_h.getStringBuffer() + string_buffer_offset + 2)){
+      |             ^~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:35:30: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+   35 |           *(x) == (char)0x81 && *((x)+1) == (char)0x5b )
+      |           ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:653:13: note: in expansion of macro 'IS_KINSOKU'
+  653 |         if (IS_KINSOKU( script_h.getStringBuffer() + string_buffer_offset + 2)){
+      |             ^~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:29:30: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+   29 |         ( *(x) == (char)0x81 && *((x)+1) == (char)0x41 || \
+      |           ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:656:20: note: in expansion of macro 'IS_KINSOKU'
+  656 |                    IS_KINSOKU( script_h.getStringBuffer() + string_buffer_offset + i + 2)){
+      |                    ^~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:31:30: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+   31 |           *(x) == (char)0x81 && *((x)+1) == (char)0x48 || \
+      |           ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:656:20: note: in expansion of macro 'IS_KINSOKU'
+  656 |                    IS_KINSOKU( script_h.getStringBuffer() + string_buffer_offset + i + 2)){
+      |                    ^~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:32:30: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+   32 |           *(x) == (char)0x81 && *((x)+1) == (char)0x49 || \
+      |           ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:656:20: note: in expansion of macro 'IS_KINSOKU'
+  656 |                    IS_KINSOKU( script_h.getStringBuffer() + string_buffer_offset + i + 2)){
+      |                    ^~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:33:30: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+   33 |           *(x) == (char)0x81 && *((x)+1) == (char)0x76 || \
+      |           ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:656:20: note: in expansion of macro 'IS_KINSOKU'
+  656 |                    IS_KINSOKU( script_h.getStringBuffer() + string_buffer_offset + i + 2)){
+      |                    ^~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:34:30: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+   34 |           *(x) == (char)0x81 && *((x)+1) == (char)0x78 || \
+      |           ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:656:20: note: in expansion of macro 'IS_KINSOKU'
+  656 |                    IS_KINSOKU( script_h.getStringBuffer() + string_buffer_offset + i + 2)){
+      |                    ^~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:35:30: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+   35 |           *(x) == (char)0x81 && *((x)+1) == (char)0x5b )
+      |           ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_text.cpp:656:20: note: in expansion of macro 'IS_KINSOKU'
+  656 |                    IS_KINSOKU( script_h.getStringBuffer() + string_buffer_offset + i + 2)){
+      |                    ^~~~~~~~~~
+built ... m4-ons.nacp
+E:/galnx-build/m4-ons/source/ONScripterLabel_rmenu.cpp: In member function 'void ONScripterLabel::executeSystemLoad()':
+E:/galnx-build/m4-ons/source/ONScripterLabel_rmenu.cpp:307:16: warning: unused variable 'color' [-Wunused-variable]
+  307 |         uchar3 color = {0xff, 0xff, 0xff};
+      |                ^~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_rmenu.cpp: In member function 'void ONScripterLabel::executeSystemSave()':
+E:/galnx-build/m4-ons/source/ONScripterLabel_rmenu.cpp:389:16: warning: unused variable 'color' [-Wunused-variable]
+  389 |         uchar3 color = {0xff, 0xff, 0xff};
+      |                ^~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_rmenu.cpp: In member function 'void ONScripterLabel::executeSystemYesNo()':
+E:/galnx-build/m4-ons/source/ONScripterLabel_rmenu.cpp:532:16: warning: unused variable 'color' [-Wunused-variable]
+  532 |         uchar3 color = {0xff, 0xff, 0xff};
+      |                ^~~~~
+In file included from E:/galnx-build/m4-ons/include/ONScripterLabel.h:53:
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h: At global scope:
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:95:21: warning: 'OV_CALLBACKS_STREAMONLY_NOCLOSE' defined but not used [-Wunused-variable]
+   95 | static ov_callbacks OV_CALLBACKS_STREAMONLY_NOCLOSE = {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:88:21: warning: 'OV_CALLBACKS_STREAMONLY' defined but not used [-Wunused-variable]
+   88 | static ov_callbacks OV_CALLBACKS_STREAMONLY = {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:81:21: warning: 'OV_CALLBACKS_NOCLOSE' defined but not used [-Wunused-variable]
+   81 | static ov_callbacks OV_CALLBACKS_NOCLOSE = {
+      |                     ^~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:74:21: warning: 'OV_CALLBACKS_DEFAULT' defined but not used [-Wunused-variable]
+   74 | static ov_callbacks OV_CALLBACKS_DEFAULT = {
+      |                     ^~~~~~~~~~~~~~~~~~~~
+In file included from E:/galnx-build/m4-ons/include/ONScripterLabel.h:53:
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h: At global scope:
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:95:21: warning: 'OV_CALLBACKS_STREAMONLY_NOCLOSE' defined but not used [-Wunused-variable]
+   95 | static ov_callbacks OV_CALLBACKS_STREAMONLY_NOCLOSE = {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:88:21: warning: 'OV_CALLBACKS_STREAMONLY' defined but not used [-Wunused-variable]
+   88 | static ov_callbacks OV_CALLBACKS_STREAMONLY = {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:81:21: warning: 'OV_CALLBACKS_NOCLOSE' defined but not used [-Wunused-variable]
+   81 | static ov_callbacks OV_CALLBACKS_NOCLOSE = {
+      |                     ^~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:74:21: warning: 'OV_CALLBACKS_DEFAULT' defined but not used [-Wunused-variable]
+   74 | static ov_callbacks OV_CALLBACKS_DEFAULT = {
+      |                     ^~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ONScripterLabel_sound.cpp: In function 'size_t oc_read_func(void*, size_t, size_t, void*)':
+E:/galnx-build/m4-ons/source/ONScripterLabel_sound.cpp:604:34: warning: comparison of integer expressions of different signedness: 'long unsigned int' and 'ogg_int64_t' {aka 'long int'} [-Wsign-compare]
+  604 |     if (ogg_vorbis_info->pos+len > ogg_vorbis_info->length)
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from E:/galnx-build/m4-ons/include/ONScripterLabel.h:53:
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h: At global scope:
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:95:21: warning: 'OV_CALLBACKS_STREAMONLY_NOCLOSE' defined but not used [-Wunused-variable]
+   95 | static ov_callbacks OV_CALLBACKS_STREAMONLY_NOCLOSE = {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:88:21: warning: 'OV_CALLBACKS_STREAMONLY' defined but not used [-Wunused-variable]
+   88 | static ov_callbacks OV_CALLBACKS_STREAMONLY = {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:81:21: warning: 'OV_CALLBACKS_NOCLOSE' defined but not used [-Wunused-variable]
+   81 | static ov_callbacks OV_CALLBACKS_NOCLOSE = {
+      |                     ^~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:74:21: warning: 'OV_CALLBACKS_DEFAULT' defined but not used [-Wunused-variable]
+   74 | static ov_callbacks OV_CALLBACKS_DEFAULT = {
+      |                     ^~~~~~~~~~~~~~~~~~~~
+In file included from E:/galnx-build/m4-ons/include/ScriptParser.h:33,
+                 from E:/galnx-build/m4-ons/source/ScriptParser.cpp:24:
+E:/galnx-build/m4-ons/include/ScriptHandler.h:179:5: warning: 'typedef' was ignored in this declaration
+  179 |     typedef enum { LABEL_LOG = 0,
+      |     ^~~~~~~
+In file included from E:/galnx-build/m4-ons/source/ScriptHandler.cpp:24:
+E:/galnx-build/m4-ons/include/ScriptHandler.h:179:5: warning: 'typedef' was ignored in this declaration
+  179 |     typedef enum { LABEL_LOG = 0,
+      |     ^~~~~~~
+In file included from E:/galnx-build/m4-ons/include/ScriptParser.h:33,
+                 from E:/galnx-build/m4-ons/source/ScriptParser_command.cpp:24:
+E:/galnx-build/m4-ons/include/ScriptHandler.h:179:5: warning: 'typedef' was ignored in this declaration
+  179 |     typedef enum { LABEL_LOG = 0,
+      |     ^~~~~~~
+E:/galnx-build/m4-ons/source/ScriptHandler.cpp: In member function 'int ScriptHandler::getStringFromInteger(char*, int, int, bool)':
+E:/galnx-build/m4-ons/source/ScriptHandler.cpp:731:12: warning: variable 'num_space' set but not used [-Wunused-but-set-variable=]
+  731 |     int i, num_space=0, num_minus = 0;
+      |            ^~~~~~~~~
+E:/galnx-build/m4-ons/source/ScriptHandler.cpp:757:24: warning: '%d' directive writing between 1 and 10 bytes into a region of size 5 [-Wformat-overflow=]
+  757 |     sprintf(format, "%%%dd", num_column);
+      |                        ^~
+E:/galnx-build/m4-ons/source/ScriptHandler.cpp:757:21: note: directive argument in the range [0, 2147483647]
+  757 |     sprintf(format, "%%%dd", num_column);
+      |                     ^~~~~~~
+E:/galnx-build/m4-ons/source/ScriptHandler.cpp:757:12: note: 'sprintf' output between 4 and 13 bytes into a destination of size 6
+  757 |     sprintf(format, "%%%dd", num_column);
+      |     ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ScriptHandler.cpp:755:29: warning: '%d' directive writing between 1 and 10 bytes into a region of size 4 [-Wformat-overflow=]
+  755 |         sprintf(format, "%%0%dd", num_column);
+      |                             ^~
+E:/galnx-build/m4-ons/source/ScriptHandler.cpp:755:25: note: directive argument in the range [0, 2147483647]
+  755 |         sprintf(format, "%%0%dd", num_column);
+      |                         ^~~~~~~~
+E:/galnx-build/m4-ons/source/ScriptHandler.cpp:755:16: note: 'sprintf' output between 5 and 14 bytes into a destination of size 6
+  755 |         sprintf(format, "%%0%dd", num_column);
+      |         ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ScriptParser_command.cpp: In member function 'int ScriptParser::nextCommand()':
+E:/galnx-build/m4-ons/source/ScriptParser_command.cpp:418:36: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+  418 |          last_nest_info->step >= 0 && val > last_nest_info->to ||
+      |          ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+E:/galnx-build/m4-ons/source/ScriptParser_command.cpp:419:36: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+  419 |          last_nest_info->step < 0  && val < last_nest_info->to ){
+      |          ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from E:/galnx-build/m4-ons/include/ScriptParser.h:33,
+                 from E:/galnx-build/m4-ons/include/ONScripterLabel.h:27,
+                 from E:/galnx-build/m4-ons/source/switch_mitm.cpp:24:
+E:/galnx-build/m4-ons/include/ScriptHandler.h:179:5: warning: 'typedef' was ignored in this declaration
+  179 |     typedef enum { LABEL_LOG = 0,
+      |     ^~~~~~~
+E:/galnx-build/m4-ons/source/switch_mitm.cpp: In function 'int switch_getinput(void*)':
+E:/galnx-build/m4-ons/source/switch_mitm.cpp:152:12: warning: suggest explicit braces to avoid ambiguous 'else' [-Wdangling-else]
+  152 |         if ( kDown & HidNpadButton_B )
+      |            ^
+E:/galnx-build/m4-ons/source/switch_mitm.cpp:170:28: warning: suggest parentheses around '&&' within '||' [-Wparentheses]
+  170 |         if ( !ctrl_pressed &&
+      |              ~~~~~~~~~~~~~~^~
+  171 |             kDown & HidNpadButton_ZL || kDown & HidNpadButton_ZR )
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from E:/galnx-build/m4-ons/include/ONScripterLabel.h:53:
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h: At global scope:
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:95:21: warning: 'OV_CALLBACKS_STREAMONLY_NOCLOSE' defined but not used [-Wunused-variable]
+   95 | static ov_callbacks OV_CALLBACKS_STREAMONLY_NOCLOSE = {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:88:21: warning: 'OV_CALLBACKS_STREAMONLY' defined but not used [-Wunused-variable]
+   88 | static ov_callbacks OV_CALLBACKS_STREAMONLY = {
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:81:21: warning: 'OV_CALLBACKS_NOCLOSE' defined but not used [-Wunused-variable]
+   81 | static ov_callbacks OV_CALLBACKS_NOCLOSE = {
+      |                     ^~~~~~~~~~~~~~~~~~~~
+D:/devkitPro/portlibs/switch/include/vorbis/vorbisfile.h:74:21: warning: 'OV_CALLBACKS_DEFAULT' defined but not used [-Wunused-variable]
+   74 | static ov_callbacks OV_CALLBACKS_DEFAULT = {
+      |                     ^~~~~~~~~~~~~~~~~~~~
+linking m4-ons.elf
+Visiting directories...
+Calculating metadata...
+Writing E:/galnx-build/m4-ons/romfs/default.ttf to RomFS image...
+built ... m4-ons.nro
+MAKE_EXIT=0
+ELAPSED_S=18
+-rw-r--r-- 1 ACETaffy None 23565056 10æœˆ 30 02:43 m4-ons.elf
+-rw-r--r-- 1 ACETaffy None    16384 10æœˆ 30 02:42 m4-ons.nacp
+-rw-r--r-- 1 ACETaffy None 10437716 10æœˆ 30 02:43 m4-ons.nro

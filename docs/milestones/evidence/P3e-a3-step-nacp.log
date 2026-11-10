@@ -1,0 +1,7 @@
+# step: nacp
+# cwd: E:\galnx-build\pilot-01\p3\build\nsp
+# argv: ["D:\\devkitPro\\tools\\bin\\nacptool.exe", "--create", "Haruno", "GalNX", "1.0.2", "E:\\galnx-build\\pilot-01\\p3\\build\\nsp\\control\\control.nacp", "--titleid=010047410000A000"]
+# exit: 0
+# duration_s: 0.125
+--- stdout ---
+--- stderr ---

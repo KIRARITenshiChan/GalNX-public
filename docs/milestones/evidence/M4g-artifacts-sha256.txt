@@ -1,0 +1,9 @@
+# M4g artifacts sha256 (2026-10-30)
+587dd781ecada2f7459e6495d5e7fe3e4426bb33dd4f52d18df1263655f87dbe  208184  docs/milestones/evidence/M4g-a-boot-save-absent.png
+8021ba6d9c7496f5d2c7883ef50e1e6fbd63643930e02f9eb544bbacc1559360  199126  docs/milestones/evidence/M4g-a-after-click-save-present.png
+d4a0670b0b237eaadd37f376f655dc785821938812f791a0616161f81c74a119  208071  docs/milestones/evidence/M4g-b-restart-save-absent.png
+9704054fb7a84cf642d8ef567655aa82b561796ba20f37424bb105a6a62876b1  1774  docs/milestones/evidence/M4g-run-a-result.json
+3b3c13bc3155395b20969302189f44995a9821df12a6fb99925298d3ce568e44  1773  docs/milestones/evidence/M4g-run-b-result.json
+001c864bd9265f070a9391b775cd1d222d0ad560499b26a332171652042d3404  1261  docs/milestones/evidence/M4g-run-a.log
+4fb86f3ec69113f53a0f7eb63013f032eed83bf09f30af659c9fbfc1b4bd87de  1261  docs/milestones/evidence/M4g-run-b.log
+7f9ae2294f644ac66ed02d2e80555e29ce095b6bcf2438c5ad460abb2cfa4317  506  docs/milestones/evidence/M4g-localstorage-state.txt

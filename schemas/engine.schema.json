@@ -1,0 +1,351 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://galnx.local/schemas/engine.schema.json",
+  "title": "GalNX Engine Descriptor",
+  "description": "Versioned record of one engine/runtime adapter: upstream source, pinned commit, license, target, build backend, capabilities, default input profile, artifact naming and content layout.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "display_name",
+    "upstream_url",
+    "license_spdx",
+    "license_url",
+    "target_kind",
+    "build_backend",
+    "capabilities",
+    "default_input_profile",
+    "artifact_naming",
+    "content_layout",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{1,63}$",
+      "description": "Adapter id; must match manifest.engine.adapter."
+    },
+    "display_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "upstream_url": {
+      "type": "string",
+      "pattern": "^https://",
+      "description": "Upstream repository or release page."
+    },
+    "pinned_commit": {
+      "type": "string",
+      "pattern": "^[0-9A-Fa-f]{40}$",
+      "description": "40 hex character commit pinned for source builds."
+    },
+    "pinned_version": {
+      "type": "string",
+      "description": "Human readable pinned version, e.g. krkrsdl2@124bdf84 (2026-10-01)."
+    },
+    "license_spdx": {
+      "type": "string",
+      "minLength": 1,
+      "description": "SPDX license id for the component GalNX depends on."
+    },
+    "license_url": {
+      "type": "string",
+      "pattern": "^https?://",
+      "description": "Link to the license evidence (LICENSE file, release note)."
+    },
+    "license_notes": {
+      "type": "string",
+      "description": "Main repo license vs bundled third-party components."
+    },
+    "target_kind": {
+      "type": "string",
+      "enum": [
+        "nro",
+        "self_contained_nsp",
+        "web"
+      ]
+    },
+    "build_backend": {
+      "type": "string",
+      "enum": [
+        "cmake-switch",
+        "make-switch",
+        "devkitpro-make",
+        "custom-script",
+        "prebuilt",
+        "none"
+      ]
+    },
+    "capabilities": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "video",
+        "audio",
+        "input",
+        "save",
+        "touch"
+      ],
+      "properties": {
+        "video": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "supported"
+          ],
+          "properties": {
+            "supported": {
+              "type": "boolean"
+            },
+            "note": {
+              "type": "string"
+            }
+          }
+        },
+        "audio": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "supported"
+          ],
+          "properties": {
+            "supported": {
+              "type": "boolean"
+            },
+            "note": {
+              "type": "string"
+            }
+          }
+        },
+        "input": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "supported"
+          ],
+          "properties": {
+            "supported": {
+              "type": "boolean"
+            },
+            "note": {
+              "type": "string"
+            }
+          }
+        },
+        "save": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "supported"
+          ],
+          "properties": {
+            "supported": {
+              "type": "boolean"
+            },
+            "note": {
+              "type": "string"
+            }
+          }
+        },
+        "touch": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "supported"
+          ],
+          "properties": {
+            "supported": {
+              "type": "boolean"
+            },
+            "note": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "default_input_profile": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Built-in input profile name from galnx.input (kb_mouse, generic-vn, krkrsdl2, krkr-ns)."
+    },
+    "artifact_naming": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Template using {id}, {version}, {target}, {kind}. Must end with .nro for nro/web targets and .nsp for self_contained_nsp."
+    },
+    "content_layout": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode"
+      ],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "romfs",
+            "sdmc",
+            "none"
+          ]
+        },
+        "entry": {
+          "type": "string",
+          "description": "Entry file name inside the content tree (e.g. data.xp3, index.html)."
+        },
+        "destination": {
+          "type": "string",
+          "description": "Where the content tree lives (e.g. romfs/data.xp3, sdmc:/switch/brewser/apps/<app-id>/)."
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ready",
+        "research",
+        "blocked"
+      ]
+    },
+    "status_reason": {
+      "type": "string",
+      "description": "Required when status is research or blocked."
+    },
+    "artifact_sha256": {
+      "type": "string",
+      "pattern": "^([0-9A-Fa-f]{64})?$",
+      "description": "Expected artifact hash when the artifact is prebuilt or reproducible."
+    },
+    "evidence_urls": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Audit/build docs that back the descriptor claims."
+    },
+    "notes": {
+      "type": "string"
+    },
+    "source": {
+      "type": "object",
+      "description": "Machine-readable upstream source pin used by 'galnx engines prepare'.",
+      "additionalProperties": false,
+      "properties": {
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Clone URL used when --fetch is given (git clone)."
+        },
+        "commit": {
+          "type": "string",
+          "pattern": "^([0-9A-Fa-f]{40})?$",
+          "description": "Commit to check out after cloning; must match pinned_commit when both are set."
+        },
+        "submodules": {
+          "type": "array",
+          "description": "Submodules that the build needs (informational for offline prepare).",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "path",
+              "url"
+            ],
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "url": {
+                "type": "string",
+                "minLength": 1
+              },
+              "commit": {
+                "type": "string",
+                "pattern": "^([0-9A-Fa-f]{40})?$"
+              }
+            }
+          }
+        }
+      }
+    },
+    "patches": {
+      "type": "array",
+      "description": "Patch files applied by 'galnx engines prepare' after checking out the pin.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Path to a unified git patch (relative to the working directory or the descriptor file)."
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "portlibs": {
+      "type": "array",
+      "description": "Port libraries built out-of-tree for this engine; recorded in the engine lock.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "version": {
+            "type": "string"
+          },
+          "source_url": {
+            "type": "string"
+          },
+          "recipe": {
+            "type": "string",
+            "description": "Path or short description of the build recipe."
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "build": {
+      "type": "object",
+      "description": "Machine-readable build entry point for this engine.",
+      "additionalProperties": false,
+      "properties": {
+        "commands": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "env": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "workdir": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

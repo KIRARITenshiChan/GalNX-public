@@ -1,0 +1,407 @@
+diff --git a/src/core/environ/cocos2d/MainScene.cpp b/src/core/environ/cocos2d/MainScene.cpp
+index 881a0c3..544b7fd 100644
+--- a/src/core/environ/cocos2d/MainScene.cpp
++++ b/src/core/environ/cocos2d/MainScene.cpp
+@@ -75,6 +75,7 @@ static int _touchBeginTick;
+ static bool _virutalMouseMode = false;
+ #ifdef __SWITCH__
+ static bool _k2sStickCursor = false; // [K2S] virtual cursor shown by the left stick (see onAxisEvent)
++static bool _k2sWheelReady = true;  // [GalNX] patch G: left stick wheel, one step per push
+ #endif
+ static bool _mouseMoved, _mouseClickedDown;
+ static tjs_uint8 _scancode[0x200];
+@@ -688,6 +689,12 @@ public:
+ 		TVPPostInputEvent(new tTVPOnMouseUpInputEvent(TJSNativeInstance, _LastMouseX, _LastMouseY, _mouseBtn, TVPGetCurrentShiftKeyState()));
+ 	}
+ 
++    // [GalNX] patch G: inject one mouse wheel step at the last known cursor position.
++    void GalNX_SendWheel(int delta) {
++        if (!TJSNativeInstance) return;
++        TJSNativeInstance->OnMouseWheel(TVPGetCurrentShiftKeyState(), delta, _LastMouseX, _LastMouseY);
++    }
++
+ 	virtual void SetPaintBoxSize(tjs_int w, tjs_int h) {
+ 		LayerWidth = w; LayerHeight = h;
+ 		RecalcPaintBox();
+@@ -1279,6 +1286,18 @@ public:
+ 			if (TJSNativeInstance) {
+ 				if (TJSNativeInstance->IsMainWindow()) {
+ 					// this is the main window
++#ifdef __SWITCH__
++                    // [GalNX] patch G: a program close of the main window (K2S drawer power button ->
++                    // game own confirm dialog -> yes) must not invalidate the TJS window. Tearing the
++                    // TJS world down out of order makes the game finalizers touch an already dead
++                    // MainWnd (Member SystemObj does not exist @line(365) checkdialog.tjs). Leave the
++                    // process instead, like the user initiated close path in OnCloseQueryCalled does.
++                    GalNXLog("[close] program close of main window confirmed; terminating application");
++                    TJSNativeInstance = NULL;
++                    SetVisible(false);
++                    TVPExitApplication(0);
++                    return;
++#endif
+ 				} else 			{
+ 					// not the main window
+ 					action = caFree;
+@@ -1325,7 +1344,10 @@ public:
+ 				//	TVPSystemControl->NotifyCloseClicked();
+ 					return false;
+ 				} else {
+-					CanCloseWork = true;
++                    // [GalNX] patch G: do not assume the game allows the close. The immediate onCloseQuery
++                    // may open the game own confirm dialog and never call OnCloseQueryCalled(); in that case
++                    // the close must be abandoned instead of invalidating the TJS window under the dialog.
++                    CanCloseWork = false;
+ 					TVPPostEvent(obj, obj, eventname, 0, TVP_EPT_IMMEDIATE, 1, arg);
+ 					TVPDrawSceneOnce(0); // for post event
+ 					// this event happens immediately
+@@ -2333,34 +2355,47 @@ void TVPMainScene::onTextInput(const std::string &text) {
+ void TVPMainScene::onAxisEvent(cocos2d::Controller* ctrl, int keyCode, cocos2d::Event *e) {
+ 	if (!_currentWindowLayer || !_currentWindowLayer->PrimaryLayerArea) return;
+ #ifdef __SWITCH__
+-	// [K2S] pushing the left stick shows the virtual mouse cursor (no need to enable it in the menu first)
+-	if (!_virutalMouseMode && !_windowMgrOverlay && UINode->getChildren().empty() &&
+-		(keyCode == cocos2d::Controller::JOYSTICK_LEFT_X || keyCode == cocos2d::Controller::JOYSTICK_LEFT_Y) &&
+-		std::abs(ctrl->getKeyStatus(keyCode).value) > 0.5f) {
+-		showVirtualMouseCursor(true);
+-		_k2sStickCursor = true;
+-	}
+-	// [K2S] move the cursor in GameNode space (y up; the stick's y is down-positive). The generic code below
+-	// mixes the window's y-down mouse coordinates with node space, which flips the cursor vertically.
+-	if (_virutalMouseMode && !_windowMgrOverlay && _mouseCursor &&
+-		(keyCode == cocos2d::Controller::JOYSTICK_LEFT_X || keyCode == cocos2d::Controller::JOYSTICK_LEFT_Y)) {
+-		const float dead = 0.15f;
+-		float v = ctrl->getKeyStatus(keyCode).value;
+-		if (std::abs(v) < dead) return;
+-		v = (v > 0 ? v - dead : v + dead) / (1 - dead);
+-		Vec2 pt = _mouseCursor->getPosition();
+-		const float step = 12.f * v * std::abs(v) + (v > 0 ? 1.f : -1.f);	// fine control near the center
+-		if (keyCode == cocos2d::Controller::JOYSTICK_LEFT_X) pt.x += step; else pt.y -= step;
+-		Size size = GameNode->getContentSize();
+-		pt.x = std::max(0.f, std::min(pt.x, size.width));
+-		pt.y = std::max(0.f, std::min(pt.y, size.height));
+-		_mouseCursor->stopAllActions();
+-		_mouseCursor->setOpacity(255);
+-		_mouseCursor->setPosition(pt);
+-		_refadeMouseCursor();
+-		_currentWindowLayer->onMouseMove(GameNode->convertToWorldSpace(pt));
+-		return;
+-	}
++    // [GalNX] patch G: the right stick drives the virtual cursor (the left stick is the wheel).
++    // The cursor is created on the first stick push so that ZR / ZL have something to click.
++    if (!_virutalMouseMode && !_windowMgrOverlay && UINode->getChildren().empty() &&
++        (keyCode == cocos2d::Controller::JOYSTICK_RIGHT_X || keyCode == cocos2d::Controller::JOYSTICK_RIGHT_Y) &&
++        std::abs(ctrl->getKeyStatus(keyCode).value) > 0.5f) {
++        showVirtualMouseCursor(true);
++        _k2sStickCursor = true;
++    }
++    // move the cursor in GameNode space (y up; the stick y is down-positive)
++    if (_virutalMouseMode && !_windowMgrOverlay && _mouseCursor &&
++        (keyCode == cocos2d::Controller::JOYSTICK_RIGHT_X || keyCode == cocos2d::Controller::JOYSTICK_RIGHT_Y)) {
++        const float dead = 0.15f;
++        float v = ctrl->getKeyStatus(keyCode).value;
++        if (std::abs(v) < dead) return;
++        v = (v > 0 ? v - dead : v + dead) / (1 - dead);
++        Vec2 pt = _mouseCursor->getPosition();
++        // [GalNX] patch G: half the speed of the M2 build (12 -> 6), quadratic for fine control
++        const float step = 6.f * v * std::abs(v) + (v > 0 ? 0.5f : -0.5f);
++        if (keyCode == cocos2d::Controller::JOYSTICK_RIGHT_X) pt.x += step; else pt.y -= step;
++        Size size = GameNode->getContentSize();
++        pt.x = std::max(0.f, std::min(pt.x, size.width));
++        pt.y = std::max(0.f, std::min(pt.y, size.height));
++        _mouseCursor->stopAllActions();
++        _mouseCursor->setOpacity(255);
++        _mouseCursor->setPosition(pt);
++        _refadeMouseCursor();
++        _currentWindowLayer->onMouseMove(GameNode->convertToWorldSpace(pt));
++        return;
++    }
++    // [GalNX] patch G: left stick up / down = mouse wheel, exactly one step per push (hysteresis)
++    if (_currentWindowLayer && !_windowMgrOverlay && keyCode == cocos2d::Controller::JOYSTICK_LEFT_Y) {
++        const float v = ctrl->getKeyStatus(keyCode).value;
++        if (std::abs(v) < 0.25f) { _k2sWheelReady = true; return; }
++        if (_k2sWheelReady && std::abs(v) > 0.6f) {
++            _k2sWheelReady = false;
++            const int delta = v < 0 ? -120 : 120;  // stick up = wheel up, same sign as onMouseScroll
++            _currentWindowLayer->GalNX_SendWheel(delta);
++            GalNXLog("[pad] wheel %d", delta);
++        }
++        return;
++    }
+ #endif
+ 	if (!_virutalMouseMode || _windowMgrOverlay) return;
+ 	const float threashold = 0.1f;
+@@ -2415,52 +2450,79 @@ static void GalNX_EvalTJS(const char *expr, const char *tag) {
+ 	}
+ }
+ 
+-static bool GalNX_QuickSaveLoad(int keyCode) {
+-	if (keyCode == cocos2d::Controller::BUTTON_LEFT_SHOULDER) {
+-		GalNX_EvalTJS("MainObj.f[\"savetitle\"] = \"GalNX save\"", "preset-title");
+-		GalNX_EvalTJS("MainObj.SaveAction(1)", "qsave");
+-		GalNX_EvalTJS("MainObj.SystemSave()", "syssave");
+-		GalNX_EvalTJS("\"saved1\"", "qsave-ok");
+-		return true;
+-	}
+-	if (keyCode == cocos2d::Controller::BUTTON_RIGHT_SHOULDER) {
+-		GalNX_EvalTJS("s[\"dlg_load\"] = false", "loadui-nodlg");
+-		GalNX_EvalTJS("typeof MainObj", "loadui-mainobj");
+-		GalNX_EvalTJS("MainObj.SaveLoadObj = new _SAVELOADOBJECT(MainObj, MainObj.PrimaryLayer, nLOAD_SC)", "loadui-open");
+-		GalNX_EvalTJS("MainObj.ActiveObj = MainObj.SaveLoadObj", "loadui-active");
+-		GalNX_EvalTJS("\"load-ui-shown\"", "loadui-ok");
+-		return true;
+-	}
+-	if (keyCode == cocos2d::Controller::AXIS_RIGHT_TRIGGER) {
+-		GalNX_EvalTJS("MainObj.DataLoadAction(10)", "qload10");
+-		GalNX_EvalTJS("\"load10\"", "qload10-ok");
+-		return true;
+-	}
+-	if (keyCode == cocos2d::Controller::BUTTON_START) {
+-		GalNX_EvalTJS("MainObj.f[\"savetitle\"] = \"GalNX save\"", "preset-title");
+-		GalNX_EvalTJS("s[\"dlg_save\"] = false", "saveui-nodlg");
+-		GalNX_EvalTJS("MainObj.SaveLoadObj = new _SAVELOADOBJECT(MainObj, MainObj.PrimaryLayer, nSAVE_SC)", "ui-open");
+-		GalNX_EvalTJS("MainObj.ActiveObj = MainObj.SaveLoadObj", "ui-active");
+-		GalNX_EvalTJS("\"ui-shown\"", "ui-ok");
+-		return true;
+-	}
+-// [GalNX] temporary diagnostic: reproduce the K2S power button close chain.
+-// X evaluates the game's own onCloseQuery(true), the same entry point the
+-// K2S drawer power button reaches through the engine Close() path.
+-	if (keyCode == cocos2d::Controller::BUTTON_X) {
+-		GalNX_EvalTJS("typeof MainObj.onCloseQuery", "closereq-type");
+-		GalNX_EvalTJS("MainObj.onCloseQuery(true)", "closereq");
+-		GalNX_EvalTJS("\"closereq-done\"", "closereq-ok");
+-		return true;
+-	}
+-	if (keyCode == cocos2d::Controller::AXIS_LEFT_TRIGGER) {
+-		GalNX_EvalTJS("MainObj.SystemSave()", "syssave2");
+-		GalNX_EvalTJS("\"syssave-done\"", "syssave2-ok");
+-		return true;
+-	}
+-	return false;
+-}
+-
++// ---------------------------------------------------------------------------
++// [GalNX] patch G controller helpers.
++// The BASE ADV SYSTEM scripts already implement the keyboard semantics, so the pad layer only
++// has to reach the same entry points:
++//   A / VK_RETURN -> MessObject.tjs:980 KeyUpAction advances the text; TitleObject.tjs:1143
++//                    KeyUpAction clicks the selected title menu entry (handled by the keymap).
++//   D-Pad         -> arrow keys; TitleObject.tjs KeyUpAction moves the title menu selection.
++//   VK_ESCAPE     -> unusable on this port: userFix.ks:500-505 sets nESC_KEY = false, so ESC runs
++//                    MainWindow.EscapeWork(), sets EscapeObj and calls this.minimize(). Patch F made
++//                    minimize() a no-op, so the game would stay with EscapeObj set and ignore input.
++//                    B maps to the native back action instead: RightMouseUpAction() of the active
++//                    object (MessObject toggles the message window, SaveLoadObject closes the
++//                    save/load panel, CheckDialog cancels, MovieObject stops the movie).
++//   X             -> MessObject.AutoFlag (same as MessObject.tjs ButtonWorkFunc case 8).
++//   Y / PLUS      -> the game own _SAVELOADOBJECT panels (nLOAD_SC / nSAVE_SC).
++//   MINUS         -> MainWindow.onCloseQuery(true): own confirm dialog, then the patch F exit.
++// ---------------------------------------------------------------------------
++static void GalNX_EvalScript(const char *script, const char *tag) {
++    try {
++        TVPExecuteScript(ttstr(script));
++        GalNXLog("[tjs] %s -> ok", tag);
++    } catch (const eTJS &e) {
++        std::string utf8 = e.GetMessage().AsStdString();
++        GalNXLog("[tjs] %s -> eTJS: %s", tag, utf8.c_str());
++    } catch (...) {
++        GalNXLog("[tjs] %s -> unknown exception", tag);
++    }
++}
++
++// [GalNX] close every K2S form (file selector / preferences / message boxes) before opening game UI.
++static void GalNX_CloseAllK2SForms(cocos2d::Node *uiNode) {
++    if (!uiNode) return;
++    cocos2d::Node *prev = nullptr;
++    for (int guard = 0; guard < 8; ++guard) {
++        if (uiNode->getChildren().empty()) break;
++        cocos2d::Node *top = uiNode->getChildren().back();
++        if (top == prev) break;
++        if (!dynamic_cast<iTVPBaseForm*>(top)) break;
++        prev = top;
++        GalNXLog("[ui] closing K2S form %p", (void*)top);
++        TVPMainScene::GetInstance()->popUIForm(top);
++    }
++}
++
++// [GalNX] B = native back / cancel of the active game object.
++static void GalNX_GameBack(void) {
++    GalNX_EvalTJS("(MainObj.ActiveObj !== void && MainObj.ActiveObj !== MainObj && MainObj.ActiveObj.RightMouseUpAction !== void) ? MainObj.ActiveObj.RightMouseUpAction() : 0", "back");
++}
++
++// [GalNX] X = auto mode on/off (MessObject.tjs ButtonWorkFunc case 8).
++static void GalNX_ToggleAuto(void) {
++    GalNX_EvalScript("if(MainObj.MessObj !== void){ MainObj.MessObj.AutoFlag = !MainObj.MessObj.AutoFlag; if(MainObj.MessObj.AutoFlag){ MainObj.MessObj.AutoWait = false; MainObj.MessObj.AutoBefor = false; } }", "auto");
++}
++
++// [GalNX] open the game own save / load panel. A K2S form stacked on top of that panel swallows
++// the pad events and looks like a freeze (device report 1), so close every K2S form first.
++static void GalNX_OpenGameSaveLoad(cocos2d::Node *uiNode, bool saveMode) {
++    GalNX_CloseAllK2SForms(uiNode);
++    GalNX_EvalScript("if(MainObj.SaveLoadObj !== void){ MainObj.ActiveObj = MainObj.SaveLoadObj.TempActive; MainObj.SaveLoadObj = void; }", "sl-replace");
++    if (saveMode) {
++        GalNX_EvalScript("s.dlg_save = false;", "saveui-nodlg");
++        GalNX_EvalScript("MainObj.SaveLoadObj = new _SAVELOADOBJECT(MainObj, MainObj.PrimaryLayer, nSAVE_SC); MainObj.ActiveObj = MainObj.SaveLoadObj;", "saveui-open");
++    } else {
++        GalNX_EvalScript("s.dlg_load = false;", "loadui-nodlg");
++        GalNX_EvalScript("MainObj.SaveLoadObj = new _SAVELOADOBJECT(MainObj, MainObj.PrimaryLayer, nLOAD_SC); MainObj.ActiveObj = MainObj.SaveLoadObj;", "loadui-open");
++    }
++}
++
++// [GalNX] MINUS = quit through the game own confirm dialog (patch F exits cleanly after yes).
++static void GalNX_RequestExit(void) {
++    GalNX_EvalScript("if(MainObj.onCloseQuery !== void){ MainObj.onCloseQuery(true); }", "exit");
++}
++
+ // [GalNX] controller access to the in-game menu. The K2S drawer's top-left button opens the game's
+ // own TJS menu (save / load / config) through TVPGetMenuDispatch(); a pad cannot press that button
+ // because the drawer only knows touch events, so re-create the same call from onPadKeyDown().
+@@ -2529,62 +2591,65 @@ void TVPMainScene::onPadKeyDown(cocos2d::Controller* ctrl, int keyCode, cocos2d:
+ 	//   B    -> right click at the cursor, close the K2S drawer, or Android BACK inside a K2S form
+ 	// onAxisEvent() is intentionally not used: it bails out when the window has no PrimaryLayerArea,
+ 	// which is the case for KAG3 games, so the stick could never show the cursor.
+-	GalNXLog("[pad] key=%d virt=%d uiChildren=%d gamemenu=%p cursor=%p", keyCode, (int)_virutalMouseMode, (int)UINode->getChildrenCount(), (void*)_gameMenu, (void*)_mouseCursor);
+-	if (GalNX_QuickSaveLoad(keyCode)) return;
+-	if (keyCode == cocos2d::Controller::BUTTON_START) {
+-		GalNX_ToggleInGameMenu(UINode);
+-		return;
+-	}
+-	if (keyCode == cocos2d::Controller::BUTTON_Y) {
+-		toggleVirtualMouseCursor();
+-		return;
+-	}
+-	if (GalNX_InGameMenuKey(UINode, keyCode)) return;
+-	if (_virutalMouseMode && !_windowMgrOverlay && _mouseCursor && UINode->getChildren().empty()) {
+-		const bool drawerOpen = _gameMenu && !_gameMenu->isShrinked();
+-		GalNXLog("[virt] key=%d drawerOpen=%d cursor=(%.1f,%.1f)", keyCode, (int)drawerOpen,
+-			_mouseCursor->getPosition().x, _mouseCursor->getPosition().y);
+-		if (keyCode == cocos2d::Controller::BUTTON_DPAD_LEFT || keyCode == cocos2d::Controller::BUTTON_DPAD_RIGHT ||
+-			keyCode == cocos2d::Controller::BUTTON_DPAD_UP || keyCode == cocos2d::Controller::BUTTON_DPAD_DOWN) {
+-			Vec2 pt = _mouseCursor->getPosition();
+-			const float step = 24.f;
+-			switch (keyCode) {
+-			case cocos2d::Controller::BUTTON_DPAD_LEFT: pt.x -= step; break;
+-			case cocos2d::Controller::BUTTON_DPAD_RIGHT: pt.x += step; break;
+-			case cocos2d::Controller::BUTTON_DPAD_UP: pt.y += step; break;
+-			default: pt.y -= step; break;
+-			}
+-			Size size = GameNode->getContentSize();
+-			pt.x = std::max(0.f, std::min(pt.x, size.width));
+-			pt.y = std::max(0.f, std::min(pt.y, size.height));
+-			_mouseCursor->stopAllActions();
+-			_mouseCursor->setOpacity(255);
+-			_mouseCursor->setPosition(pt);
+-			_refadeMouseCursor();
+-			if (_currentWindowLayer) _currentWindowLayer->onMouseMove(GameNode->convertToWorldSpace(pt));
+-			return;
+-		}
+-		if (keyCode == cocos2d::Controller::BUTTON_A || keyCode == cocos2d::Controller::BUTTON_B) {
+-			const bool isTap = keyCode == cocos2d::Controller::BUTTON_A;
+-			if (!isTap && drawerOpen && _gameMenu) { _gameMenu->shrink(); return; }
+-			if (_currentWindowLayer) {
+-				_mouseBtn = isTap ? ::mbLeft : ::mbRight;
+-				_currentWindowLayer->onMouseClick(GameNode->convertToWorldSpace(_mouseCursor->getPosition()));
+-				_mouseBtn = ::mbLeft;
+-			}
+-			return;
+-		}
+-	}
+-
+-	// [K2S] Kirikiroid2's own UI (file selector, preferences, dialogs) only knows the Android back key:
+-	// B acts as that key there (close menu/dialog, go back); everything else in the UI is touch.
+-	if (!UINode->getChildren().empty()) {
+-		if (keyCode == cocos2d::Controller::BUTTON_B) {
+-			iTVPBaseForm* uiform = dynamic_cast<iTVPBaseForm*>(UINode->getChildren().back());
+-			if (uiform) uiform->onKeyPressed(EventKeyboard::KeyCode::KEY_BACK, e);
+-		}
+-		return;
+-	}
++    // [GalNX] patch G default pad layout:
++    //   A = Enter / advance        B = native back          X = auto mode
++    //   Y = load panel             PLUS = save panel        MINUS = quit (game confirm dialog)
++    //   ZR = left click            ZL = right click         D-Pad = arrow keys
++    //   right stick = cursor (half speed)  left stick up/down = wheel step
++    GalNXLog("[pad] key=%d virt=%d uiChildren=%d gamemenu=%p cursor=%p", keyCode, (int)_virutalMouseMode, (int)UINode->getChildrenCount(), (void*)_gameMenu, (void*)_mouseCursor);
++
++    if (!UINode->getChildren().empty()) {
++        if (keyCode == cocos2d::Controller::BUTTON_B) {
++            iTVPBaseForm* uiform = dynamic_cast<iTVPBaseForm*>(UINode->getChildren().back());
++            if (uiform) uiform->onKeyPressed(EventKeyboard::KeyCode::KEY_BACK, e);
++            return;
++        }
++        // patch G: the save / load hotkeys close the stacked K2S form first (device bug 1: freeze)
++        if (keyCode == cocos2d::Controller::BUTTON_Y) { GalNX_OpenGameSaveLoad(UINode, false); return; }
++        if (keyCode == cocos2d::Controller::BUTTON_START) { GalNX_OpenGameSaveLoad(UINode, true); return; }
++        return;
++    }
++
++    const bool drawerOpen = _gameMenu && !_gameMenu->isShrinked();
++    // patch G: the save / load / auto / quit hotkeys fold the K2S drawer first
++    if (drawerOpen && (keyCode == cocos2d::Controller::BUTTON_X || keyCode == cocos2d::Controller::BUTTON_Y ||
++                       keyCode == cocos2d::Controller::BUTTON_START || keyCode == cocos2d::Controller::BUTTON_SELECT)) {
++        _gameMenu->shrink();
++    }
++    switch (keyCode) {
++    case cocos2d::Controller::BUTTON_B:
++        if (drawerOpen && _gameMenu) { _gameMenu->shrink(); return; }
++        GalNX_GameBack();
++        return;
++    case cocos2d::Controller::BUTTON_X:
++        GalNX_ToggleAuto();
++        return;
++    case cocos2d::Controller::BUTTON_Y:
++        GalNX_OpenGameSaveLoad(UINode, false);
++        return;
++    case cocos2d::Controller::BUTTON_START:
++        GalNX_OpenGameSaveLoad(UINode, true);
++        return;
++    case cocos2d::Controller::BUTTON_SELECT:
++        GalNX_RequestExit();
++        return;
++    case cocos2d::Controller::AXIS_RIGHT_TRIGGER:
++    case cocos2d::Controller::AXIS_LEFT_TRIGGER: {
++        if (_currentWindowLayer) {
++            if (!_mouseCursor || !_mouseCursor->isVisible()) showVirtualMouseCursor(true);
++            if (_mouseCursor) {
++                const bool rightClick = keyCode == cocos2d::Controller::AXIS_LEFT_TRIGGER;
++                _mouseBtn = rightClick ? ::mbRight : ::mbLeft;
++                _currentWindowLayer->onMouseClick(GameNode->convertToWorldSpace(_mouseCursor->getPosition()));
++                _mouseBtn = ::mbLeft;
++                GalNXLog("[pad] click %s", rightClick ? "right" : "left");
++            }
++        }
++        return;
++    }
++    default:
++        break;
++    }
+ #endif
+ 	unsigned int code = TVPConvertPadKeyCodeToVKCode(keyCode);
+ 	if (!code || code >= 0x200) return;
+diff --git a/src/vendor/cocos2d-x/current-3.11.1/cocos/base/CCController-switch.cpp b/src/vendor/cocos2d-x/current-3.11.1/cocos/base/CCController-switch.cpp
+index fbd3732..806b40e 100644
+--- a/src/vendor/cocos2d-x/current-3.11.1/cocos/base/CCController-switch.cpp
++++ b/src/vendor/cocos2d-x/current-3.11.1/cocos/base/CCController-switch.cpp
+@@ -29,6 +29,7 @@ const ButtonMap kButtons[] = {
+     { HidNpadButton_StickL, Controller::BUTTON_LEFT_THUMBSTICK },
+     { HidNpadButton_StickR, Controller::BUTTON_RIGHT_THUMBSTICK },
+     { HidNpadButton_Plus, Controller::BUTTON_START },
++    { HidNpadButton_Minus, Controller::BUTTON_SELECT },
+     { HidNpadButton_Up, Controller::BUTTON_DPAD_UP },
+     { HidNpadButton_Down, Controller::BUTTON_DPAD_DOWN },
+     { HidNpadButton_Left, Controller::BUTTON_DPAD_LEFT },
+@@ -93,12 +94,8 @@ public:
+                 c->onButtonEvent(b.key, down, down ? 1.f : 0.f, false);
+             }
+         }
+-        // Minus = the Kirikiroid2 in-game menu (the Android menu key): virtual mouse, exit, ...
+-        if (changed & HidNpadButton_Minus)
+-        {
+-            EventKeyboard ev(EventKeyboard::KeyCode::KEY_MENU, (held & HidNpadButton_Minus) != 0);
+-            Director::getInstance()->getEventDispatcher()->dispatchEvent(&ev);
+-        }
++        // [GalNX] patch G: Minus is mapped to Controller::BUTTON_SELECT above; TVPMainScene::onPadKeyDown
++        // turns it into the game quit path (the old KEY_MENU dispatch opened the K2S drawer menu instead).
+         s_prevHeld = held;
+ 
+         // sticks: -1..1, y down = positive (Android convention, which Kirikiroid2 expects). Sent every frame

@@ -1,0 +1,163 @@
+# Citron 运行 nvdec-probe4.nro 的探针日志（已裁剪）
+# 原始文件 729,255 B / 10389 行；其中 10229 行 `[ffmpeg] ...` 库日志（av_log 全开）为噪音，已删除，
+# 其余 160 行逐字保留（仅为加本头部）。
+# 采集：scripts/citron_run.sh 封装，run dir E:/galnx-build/nvdec/run-citron4/20261108-120259-nvdec-probe4
+=== GalNX NVDEC probe4 v1 ===
+build: Nov  8 2026 11:56:39
+input: sdmc:/nvdec-poc.wmv
+frmrtq_postproc=7, bitrtq_postproc=31
+LoopFilter=0, ChromaFormat=1, Pulldown=1, Interlace: 0
+TFCTRflag=0, FINTERPflag=0
+BrokenLink=0, ClosedEntry=0, PanscanFlag=0
+RefDist=1, Postproc=1, FastUVMC=0, ExtMV=1
+DQuant=0, VSTransform=1, Overlap=0, Qmode=0
+frmrtq_postproc=7, bitrtq_postproc=31
+LoopFilter=0, ChromaFormat=1, Pulldown=1, Interlace: 0
+TFCTRflag=0, FINTERPflag=0
+BrokenLink=0, ClosedEntry=0, PanscanFlag=0
+RefDist=1, Postproc=1, FastUVMC=0, ExtMV=1
+DQuant=0, VSTransform=1, Overlap=0, Qmode=0
+swref: found=2 1920x1080 time=655.4 ms err=-
+swref[0]: target frame 1 -> ok
+swref[1]: target frame 30 -> ok
+frmrtq_postproc=7, bitrtq_postproc=31
+LoopFilter=0, ChromaFormat=1, Pulldown=1, Interlace: 0
+TFCTRflag=0, FINTERPflag=0
+BrokenLink=0, ClosedEntry=0, PanscanFlag=0
+RefDist=1, Postproc=1, FastUVMC=0, ExtMV=1
+DQuant=0, VSTransform=1, Overlap=0, Qmode=0
+frmrtq_postproc=7, bitrtq_postproc=31
+LoopFilter=0, ChromaFormat=1, Pulldown=1, Interlace: 0
+TFCTRflag=0, FINTERPflag=0
+BrokenLink=0, ClosedEntry=0, PanscanFlag=0
+RefDist=1, Postproc=1, FastUVMC=0, ExtMV=1
+DQuant=0, VSTransform=1, Overlap=0, Qmode=0
+info: 1920x1080 codec=vc1(70) pix=yuv420p fps=59.940 duration=25130 ms frames_hint=-1
+sdl: window=0x2101e0a4b0 renderer=0x2101ee1ea0 texture=0x2107de2920
+frame idx=0 1920x1080 pts=33ms dec=1.57 xfer=0.00 conv=33.91 hw=0
+frame idx=0 1920x1080 pts=66ms dec=14.63 xfer=0.00 conv=42.74 hw=0
+frame idx=0 1920x1080 pts=100ms dec=12.70 xfer=0.00 conv=33.32 hw=0
+frame idx=0 1920x1080 pts=133ms dec=15.76 xfer=0.00 conv=31.57 hw=0
+frame idx=0 1920x1080 pts=166ms dec=13.74 xfer=0.00 conv=30.47 hw=0
+frame idx=0 1920x1080 pts=200ms dec=15.85 xfer=0.00 conv=26.66 hw=0
+frame idx=0 1920x1080 pts=233ms dec=14.57 xfer=0.00 conv=26.49 hw=0
+frame idx=0 1920x1080 pts=266ms dec=14.62 xfer=0.00 conv=28.18 hw=0
+frame idx=0 1920x1080 pts=300ms dec=13.78 xfer=0.00 conv=26.36 hw=0
+frame idx=0 1920x1080 pts=333ms dec=15.51 xfer=0.00 conv=34.96 hw=0
+frame idx=0 1920x1080 pts=367ms dec=16.54 xfer=0.00 conv=31.30 hw=0
+frame idx=0 1920x1080 pts=400ms dec=16.53 xfer=0.00 conv=32.23 hw=0
+frame idx=0 1920x1080 pts=433ms dec=16.10 xfer=0.00 conv=28.16 hw=0
+frame idx=0 1920x1080 pts=467ms dec=16.59 xfer=0.00 conv=28.67 hw=0
+frame idx=0 1920x1080 pts=500ms dec=19.27 xfer=0.00 conv=30.88 hw=0
+frame idx=0 1920x1080 pts=533ms dec=22.70 xfer=0.00 conv=29.36 hw=0
+frame idx=0 1920x1080 pts=567ms dec=19.15 xfer=0.00 conv=28.37 hw=0
+frame idx=0 1920x1080 pts=600ms dec=19.41 xfer=0.00 conv=28.03 hw=0
+frame idx=0 1920x1080 pts=633ms dec=21.05 xfer=0.00 conv=27.33 hw=0
+frame idx=0 1920x1080 pts=667ms dec=21.46 xfer=0.00 conv=25.67 hw=0
+frame idx=0 1920x1080 pts=700ms dec=22.46 xfer=0.00 conv=27.86 hw=0
+frame idx=0 1920x1080 pts=734ms dec=22.31 xfer=0.00 conv=29.97 hw=0
+frame idx=0 1920x1080 pts=767ms dec=25.21 xfer=0.00 conv=25.30 hw=0
+frame idx=0 1920x1080 pts=800ms dec=24.30 xfer=0.00 conv=26.46 hw=0
+frame idx=0 1920x1080 pts=834ms dec=23.99 xfer=0.00 conv=30.52 hw=0
+frame idx=0 1920x1080 pts=867ms dec=22.31 xfer=0.00 conv=31.33 hw=0
+frame idx=0 1920x1080 pts=900ms dec=20.48 xfer=0.00 conv=30.16 hw=0
+frame idx=0 1920x1080 pts=934ms dec=28.05 xfer=0.00 conv=27.43 hw=0
+frame idx=0 1920x1080 pts=967ms dec=22.70 xfer=0.00 conv=29.96 hw=0
+frame idx=0 1920x1080 pts=1001ms dec=18.98 xfer=0.00 conv=25.53 hw=0
+frame idx=0 1920x1080 pts=1034ms dec=20.50 xfer=0.00 conv=37.85 hw=0
+frame idx=0 1920x1080 pts=1067ms dec=20.74 xfer=0.00 conv=28.37 hw=0
+frame idx=0 1920x1080 pts=1101ms dec=20.18 xfer=0.00 conv=25.79 hw=0
+frame idx=0 1920x1080 pts=1134ms dec=20.23 xfer=0.00 conv=26.98 hw=0
+frame idx=0 1920x1080 pts=1167ms dec=19.89 xfer=0.00 conv=30.05 hw=0
+frame idx=0 1920x1080 pts=1201ms dec=28.57 xfer=0.00 conv=34.66 hw=0
+frame idx=0 1920x1080 pts=1234ms dec=20.80 xfer=0.00 conv=31.20 hw=0
+frame idx=0 1920x1080 pts=1267ms dec=19.46 xfer=0.00 conv=31.89 hw=0
+frame idx=0 1920x1080 pts=1301ms dec=26.54 xfer=0.00 conv=28.82 hw=0
+frame idx=0 1920x1080 pts=1334ms dec=20.18 xfer=0.00 conv=29.06 hw=0
+frame idx=0 1920x1080 pts=1368ms dec=23.76 xfer=0.00 conv=26.10 hw=0
+frame idx=0 1920x1080 pts=1401ms dec=20.31 xfer=0.00 conv=26.85 hw=0
+frame idx=0 1920x1080 pts=1434ms dec=20.45 xfer=0.00 conv=32.25 hw=0
+frame idx=0 1920x1080 pts=1468ms dec=22.85 xfer=0.00 conv=29.62 hw=0
+frame idx=0 1920x1080 pts=1501ms dec=23.73 xfer=0.00 conv=27.13 hw=0
+frame idx=0 1920x1080 pts=1534ms dec=24.46 xfer=0.00 conv=26.04 hw=0
+frame idx=0 1920x1080 pts=1568ms dec=24.02 xfer=0.00 conv=26.77 hw=0
+frame idx=0 1920x1080 pts=1601ms dec=30.00 xfer=0.00 conv=30.43 hw=0
+frame idx=0 1920x1080 pts=1634ms dec=33.10 xfer=0.00 conv=34.50 hw=0
+frame idx=0 1920x1080 pts=1668ms dec=33.53 xfer=0.00 conv=29.11 hw=0
+frame idx=0 1920x1080 pts=1701ms dec=30.70 xfer=0.00 conv=29.31 hw=0
+frame idx=0 1920x1080 pts=1735ms dec=35.01 xfer=0.00 conv=28.51 hw=0
+frame idx=0 1920x1080 pts=1768ms dec=29.54 xfer=0.00 conv=26.18 hw=0
+frame idx=0 1920x1080 pts=1801ms dec=51.21 xfer=0.00 conv=40.63 hw=0
+frame idx=0 1920x1080 pts=1835ms dec=33.74 xfer=0.00 conv=32.77 hw=0
+frame idx=0 1920x1080 pts=1868ms dec=29.99 xfer=0.00 conv=26.63 hw=0
+frame idx=0 1920x1080 pts=1901ms dec=32.40 xfer=0.00 conv=33.31 hw=0
+frame idx=0 1920x1080 pts=1935ms dec=36.22 xfer=0.00 conv=31.79 hw=0
+frame idx=0 1920x1080 pts=1968ms dec=33.51 xfer=0.00 conv=28.27 hw=0
+frame idx=0 1920x1080 pts=2002ms dec=28.80 xfer=0.00 conv=28.54 hw=0
+frame idx=0 1920x1080 pts=2035ms dec=32.93 xfer=0.00 conv=30.10 hw=0
+frame idx=0 1920x1080 pts=2068ms dec=29.05 xfer=0.00 conv=29.76 hw=0
+frame idx=0 1920x1080 pts=2102ms dec=28.92 xfer=0.00 conv=45.35 hw=0
+frame idx=0 1920x1080 pts=2135ms dec=27.97 xfer=0.00 conv=26.06 hw=0
+frame idx=0 1920x1080 pts=2168ms dec=26.22 xfer=0.00 conv=27.92 hw=0
+frame idx=0 1920x1080 pts=2202ms dec=28.04 xfer=0.00 conv=32.55 hw=0
+frame idx=0 1920x1080 pts=2235ms dec=25.19 xfer=0.00 conv=29.07 hw=0
+frame idx=0 1920x1080 pts=2268ms dec=23.55 xfer=0.00 conv=26.93 hw=0
+frame idx=0 1920x1080 pts=2302ms dec=25.13 xfer=0.00 conv=28.04 hw=0
+frame idx=0 1920x1080 pts=2335ms dec=35.03 xfer=0.00 conv=28.47 hw=0
+frame idx=0 1920x1080 pts=2369ms dec=26.00 xfer=0.00 conv=31.12 hw=0
+frame idx=0 1920x1080 pts=2402ms dec=25.63 xfer=0.00 conv=29.43 hw=0
+frame idx=0 1920x1080 pts=2435ms dec=30.34 xfer=0.00 conv=31.01 hw=0
+frame idx=0 1920x1080 pts=2469ms dec=27.05 xfer=0.00 conv=30.38 hw=0
+frame idx=0 1920x1080 pts=2502ms dec=24.75 xfer=0.00 conv=28.66 hw=0
+frame idx=0 1920x1080 pts=2535ms dec=23.57 xfer=0.00 conv=25.41 hw=0
+frame idx=0 1920x1080 pts=2569ms dec=23.85 xfer=0.00 conv=28.50 hw=0
+frame idx=0 1920x1080 pts=2602ms dec=25.80 xfer=0.00 conv=26.55 hw=0
+frame idx=0 1920x1080 pts=2635ms dec=26.02 xfer=0.00 conv=26.04 hw=0
+frame idx=0 1920x1080 pts=2669ms dec=23.39 xfer=0.00 conv=27.42 hw=0
+frame idx=0 1920x1080 pts=2702ms dec=18.36 xfer=0.00 conv=27.91 hw=0
+frame idx=0 1920x1080 pts=2736ms dec=24.66 xfer=0.00 conv=24.98 hw=0
+frame idx=0 1920x1080 pts=2769ms dec=23.08 xfer=0.00 conv=25.57 hw=0
+frame idx=0 1920x1080 pts=2802ms dec=20.99 xfer=0.00 conv=32.11 hw=0
+frame idx=0 1920x1080 pts=2836ms dec=23.89 xfer=0.00 conv=30.47 hw=0
+frame idx=0 1920x1080 pts=2869ms dec=23.50 xfer=0.00 conv=26.28 hw=0
+frame idx=0 1920x1080 pts=2902ms dec=23.41 xfer=0.00 conv=32.34 hw=0
+frame idx=0 1920x1080 pts=2936ms dec=21.61 xfer=0.00 conv=27.88 hw=0
+frame idx=0 1920x1080 pts=2969ms dec=16.07 xfer=0.00 conv=29.15 hw=0
+frame idx=0 1920x1080 pts=3003ms dec=17.67 xfer=0.00 conv=25.16 hw=0
+frame idx=0 1920x1080 pts=3036ms dec=18.25 xfer=0.00 conv=27.58 hw=0
+frame idx=0 1920x1080 pts=3069ms dec=20.90 xfer=0.00 conv=28.13 hw=0
+frame idx=0 1920x1080 pts=3103ms dec=19.88 xfer=0.00 conv=27.19 hw=0
+frame idx=0 1920x1080 pts=3136ms dec=19.97 xfer=0.00 conv=28.22 hw=0
+frame idx=0 1920x1080 pts=3169ms dec=19.70 xfer=0.00 conv=33.85 hw=0
+frame idx=0 1920x1080 pts=3203ms dec=16.41 xfer=0.00 conv=28.69 hw=0
+frame idx=0 1920x1080 pts=3236ms dec=16.59 xfer=0.00 conv=31.90 hw=0
+frame idx=0 1920x1080 pts=3269ms dec=16.03 xfer=0.00 conv=40.36 hw=0
+frame idx=0 1920x1080 pts=3303ms dec=20.12 xfer=0.00 conv=36.37 hw=0
+frame idx=0 1920x1080 pts=3336ms dec=16.44 xfer=0.00 conv=27.45 hw=0
+frame idx=0 1920x1080 pts=3370ms dec=15.38 xfer=0.00 conv=26.04 hw=0
+frame idx=0 1920x1080 pts=3403ms dec=15.05 xfer=0.00 conv=28.12 hw=0
+frame idx=0 1920x1080 pts=3436ms dec=15.72 xfer=0.00 conv=24.63 hw=0
+frame idx=0 1920x1080 pts=3470ms dec=15.81 xfer=0.00 conv=26.94 hw=0
+frame idx=0 1920x1080 pts=3503ms dec=14.09 xfer=0.00 conv=26.38 hw=0
+frame idx=0 1920x1080 pts=3536ms dec=14.59 xfer=0.00 conv=25.35 hw=0
+frame idx=0 1920x1080 pts=3570ms dec=12.94 xfer=0.00 conv=25.07 hw=0
+frame idx=0 1920x1080 pts=3603ms dec=14.53 xfer=0.00 conv=26.24 hw=0
+frame idx=0 1920x1080 pts=3636ms dec=16.60 xfer=0.00 conv=25.93 hw=0
+frame idx=0 1920x1080 pts=3670ms dec=13.65 xfer=0.00 conv=27.39 hw=0
+frame idx=0 1920x1080 pts=3703ms dec=13.81 xfer=0.00 conv=26.16 hw=0
+frame idx=0 1920x1080 pts=3737ms dec=14.20 xfer=0.00 conv=26.08 hw=0
+frame idx=0 1920x1080 pts=3770ms dec=14.24 xfer=0.00 conv=27.05 hw=0
+frame idx=0 1920x1080 pts=3803ms dec=13.40 xfer=0.00 conv=28.22 hw=0
+frame idx=0 1920x1080 pts=3837ms dec=14.14 xfer=0.00 conv=27.65 hw=0
+frame idx=0 1920x1080 pts=3870ms dec=14.72 xfer=0.00 conv=26.69 hw=0
+frame idx=0 1920x1080 pts=3903ms dec=14.81 xfer=0.00 conv=26.04 hw=0
+frame idx=0 1920x1080 pts=3937ms dec=15.75 xfer=0.00 conv=26.13 hw=0
+frame idx=0 1920x1080 pts=3970ms dec=16.09 xfer=0.00 conv=27.14 hw=0
+frame idx=0 1920x1080 pts=4004ms dec=16.32 xfer=0.00 conv=28.75 hw=0
+--- probe4 report ---
+probe4: prefix=sdmc:/nvdec-probe4 targets=1 30 
+--- end report ---
+summary: rendered=120 skipped=0 hw=0 idx=0 elapsed=7056.0 ms
+decode-only: no hardware frames observed
+=== DONE ===
+files on sdmc: nvdec-probe4*.bin / *.yuv / *.bmp / nvdec-probe4.txt

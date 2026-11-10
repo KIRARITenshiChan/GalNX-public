@@ -1,0 +1,16 @@
+launch mode : runas-deelevated
+wrapper     : C:\Users\ACETaffy\AppData\Local\Temp\galnx-harness\launch-20261030-032429-brewser.cmd
+cmdline     : "E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\web-02\citron\citron.exe" -g "C:\Users\ACETaffy\AppData\Roaming\citron\sdmc\switch\galnx-harness\brewser.nro"
+game type   : nro
+game path   : /e/Othergames/Nintendo Switch/Workspace/GalNX/workspaces/web-01/brewser.nro
+stage path  : /c/Users/ACETaffy/AppData/Roaming/citron/sdmc/switch/galnx-harness/brewser.nro
+status      : loaded
+game        : /e/Othergames/Nintendo Switch/Workspace/GalNX/workspaces/web-01/brewser.nro (type nro)
+window title: citron Nightly | 0237a9b88 | brewser (64-bit) | NVIDIA
+pid         : 15128
+elapsed_s   : 37
+boot line   : [   1.986430] Frontend <Info> citron\main.cpp:2475:BootGame: Booting game: 01F5905036D20000 | brewser (64-bit) | 
+signals     : title_match=1 boot_line=1 app_output=1 (screenshot_nonblack)
+screenshot  : E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\citron-harness\runs\20261030-032429-brewser\window.png (printwindow, 208071 bytes, nonblack=0.9018)
+log         : E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\citron-harness\runs\20261030-032429-brewser\citron_log.txt
+error       : 

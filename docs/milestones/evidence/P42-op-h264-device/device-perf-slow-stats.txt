@@ -1,0 +1,32 @@
+# 设备原始日志统计：sdmc:/switch/rfvp/perf_slow.log
+# 来源设备：NS1（IROSEKA FHD v1.2.1-test）；采集：MTP 只读
+# 原始文件：2,632,802 B / 10,563 行  sha256 3ae5a16df2a458cf693da2eff015e6f0c22836f0241514f21a96ccbc53e0bb85
+# 注意：该文件只追加不清空，跨多次运行累积；以下统计不做 OP/故事段切分
+
+## 汇总
+- 慢帧阈值：>25 ms（引擎固定阈值）
+- 条数：10,563
+- min 25.0 ms / p50 32.2 / p90 90.7 / p95 155.5 / p99 1031.4 / max 4473.7 ms
+- 帧号覆盖：1 … 75930（含 OP 段 frame 1–7620 与故事段）
+
+## 最高 15 条（帧号 / 总耗时 / 阶段分解 / 宿主阶段）
+- frame 777 → 4473.7 ms | | vm 3023.81 scene 7.23 render 1441.84 ms | ops 0 | mark 500 | stages(ms): text 7.22 tree 74.28 submit 0.35 end_frame 2.76 text_raster 5.14 vm 3023.81 audio_cmds 1314.16 vfs_read 2116.72 graph_decode 520.90 parts_decode 158.81 | host(ms): begin 0.03 upload 74.10/18 present 2.76 thumb 0.00/0 draws 18 flush 18
+- frame 1 → 4450.9 ms | | vm 610.41 scene 0.01 render 29.91 ms | ops 47790 | mark 500 | stages(ms): tree 3.31 end_frame 6.55 vm 610.41 audio_cmds 7.25 syscalls 598.59 vfs_read 3382.21 graph_decode 18.23 | host(ms): begin 8.52 upload 4.02/2 present 6.55 thumb 0.00/0 draws 1 flush 1
+- frame 1 → 4373.8 ms | | vm 640.59 scene 0.01 render 29.62 ms | ops 47790 | mark 500 | stages(ms): tree 3.30 end_frame 6.87 vm 640.59 audio_cmds 7.08 syscalls 628.37 vfs_read 3279.17 graph_decode 18.84 | host(ms): begin 8.39 upload 3.69/2 present 6.87 thumb 0.00/0 draws 1 flush 1
+- frame 1 → 4347.0 ms | | vm 641.44 scene 0.02 render 29.56 ms | ops 47790 | mark 500 | stages(ms): tree 3.39 end_frame 6.82 vm 641.44 audio_cmds 7.05 syscalls 629.49 vfs_read 3272.24 graph_decode 18.97 | host(ms): begin 8.37 upload 3.75/2 present 6.82 thumb 0.00/0 draws 1 flush 1
+- frame 1 → 4337.9 ms | | vm 651.52 scene 0.02 render 29.32 ms | ops 47790 | mark 500 | stages(ms): tree 3.46 end_frame 6.58 vm 651.52 audio_cmds 7.01 syscalls 639.84 vfs_read 3267.02 graph_decode 18.48 | host(ms): begin 8.34 upload 3.81/2 present 6.58 thumb 0.00/0 draws 1 flush 1
+- frame 1 → 4302.7 ms | | vm 642.51 scene 0.02 render 31.33 ms | ops 47790 | mark 500 | stages(ms): tree 3.27 end_frame 6.47 vm 642.51 audio_cmds 9.17 syscalls 630.79 vfs_read 3229.95 graph_decode 18.51 | host(ms): begin 8.44 upload 3.64/2 present 6.47 thumb 0.00/0 draws 1 flush 1
+- frame 1 → 4287.8 ms | | vm 634.92 scene 0.01 render 29.23 ms | ops 47790 | mark 500 | stages(ms): tree 3.17 end_frame 6.58 vm 634.92 audio_cmds 6.97 syscalls 623.11 vfs_read 3233.01 graph_decode 18.94 | host(ms): begin 8.36 upload 3.73/2 present 6.58 thumb 0.00/0 draws 1 flush 1
+- frame 3337 → 4263.2 ms | | vm 2834.32 scene 16.27 render 1412.16 ms | ops 0 | mark 500 | stages(ms): text 16.27 tree 87.24 submit 0.40 end_frame 3.10 text_raster 14.84 vm 2834.32 audio_cmds 1232.32 vfs_read 1896.96 graph_decode 541.00 parts_decode 177.17 | host(ms): begin 0.03 upload 87.00/22 present 3.10 thumb 0.00/0 draws 22 flush 22
+- frame 1 → 4249.0 ms | | vm 599.89 scene 0.01 render 29.79 ms | ops 47790 | mark 500 | stages(ms): tree 3.18 end_frame 6.94 vm 599.89 audio_cmds 6.88 syscalls 587.94 vfs_read 3190.01 graph_decode 18.58 | host(ms): begin 8.82 upload 3.53/2 present 6.94 thumb 0.00/0 draws 1 flush 1
+- frame 1 → 4203.2 ms | | vm 603.57 scene 0.02 render 29.15 ms | ops 47790 | mark 500 | stages(ms): tree 3.22 end_frame 6.56 vm 603.57 audio_cmds 6.88 syscalls 591.80 vfs_read 3175.81 graph_decode 18.66 | host(ms): begin 8.61 upload 3.54/2 present 6.56 thumb 0.00/0 draws 1 flush 1
+- frame 1 → 4199.3 ms | | vm 603.62 scene 0.01 render 29.39 ms | ops 47790 | mark 500 | stages(ms): tree 3.15 end_frame 6.61 vm 603.62 audio_cmds 6.88 syscalls 591.62 vfs_read 3173.28 graph_decode 18.34 | host(ms): begin 8.58 upload 3.74/2 present 6.61 thumb 0.00/0 draws 1 flush 1
+- frame 1 → 4198.6 ms | | vm 604.39 scene 0.01 render 29.54 ms | ops 47790 | mark 500 | stages(ms): tree 3.46 end_frame 6.72 vm 604.39 audio_cmds 6.87 syscalls 592.19 vfs_read 3166.12 graph_decode 18.21 | host(ms): begin 8.43 upload 3.95/2 present 6.72 thumb 0.00/0 draws 1 flush 1
+- frame 1 → 4191.7 ms | | vm 602.34 scene 0.02 render 29.68 ms | ops 47790 | mark 500 | stages(ms): tree 3.23 end_frame 6.58 vm 602.34 audio_cmds 7.33 syscalls 590.08 vfs_read 3166.77 graph_decode 18.27 | host(ms): begin 8.57 upload 3.66/2 present 6.58 thumb 0.00/0 draws 1 flush 1
+- frame 1 → 4181.4 ms | | vm 604.33 scene 0.02 render 29.32 ms | ops 47790 | mark 500 | stages(ms): tree 3.19 end_frame 6.68 vm 604.33 audio_cmds 6.87 syscalls 592.45 vfs_read 3149.23 graph_decode 18.23 | host(ms): begin 8.34 upload 3.87/2 present 6.68 thumb 0.00/0 draws 1 flush 1
+- frame 1 → 4179.4 ms | | vm 599.63 scene 0.01 render 29.34 ms | ops 47790 | mark 500 | stages(ms): tree 3.32 end_frame 6.68 vm 599.63 audio_cmds 6.86 syscalls 587.85 vfs_read 3148.15 graph_decode 18.21 | host(ms): begin 8.56 upload 3.66/2 present 6.68 thumb 0.00/0 draws 1 flush 1
+
+## 观察
+- OP 段（frame 1–7620）在 perf_slow 中只有零星条目，OP 段后 `frame 7620: 60.0 fps` 与 debug_report 一致。
+- 最大尖峰均在故事段：`vfs_read`（数秒级）与 `audio_cmds`（约 1.2–1.3 s）为主导，另有 `save_finalize` 60–80 ms/次与 `parts_decode` 百余 ms。
+- 结论：故事区慢帧是既有问题，与 P40/P40b 的 OP 硬解链路无关；后续优化需先按会话切分日志。

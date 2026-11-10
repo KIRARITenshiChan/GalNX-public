@@ -1,0 +1,136 @@
+{
+  "tool": "package nsp",
+  "mode": "verify",
+  "manifest": "E:\\Othergames\\Nintendo Switch\\Workspace\\GalNX\\examples\\pilot01-haruno.yaml",
+  "nsp": "E:\\galnx-build\\pilot-01\\p3\\out\\Kirikiroid2-NX-010047410000A000.nsp",
+  "expected_title_id": "010047410000A000",
+  "nstool": {
+    "path": "E:\\galnx-build\\m3-tools\\nstool.exe",
+    "source": "explicit"
+  },
+  "keyset": {
+    "mode": "real",
+    "path": "",
+    "size": 0,
+    "sha256": "",
+    "note": "explicitly supplied keyset; contents intentionally not recorded"
+  },
+  "work_dir": "C:\\Users\\ACETaffy\\AppData\\Local\\Temp\\galnx-nsp-verify-kf7_pqqj",
+  "provenance": null,
+  "verify": {
+    "ok": true,
+    "nsp": "E:\\galnx-build\\pilot-01\\p3\\out\\Kirikiroid2-NX-010047410000A000.nsp",
+    "nstool": "E:\\galnx-build\\m3-tools\\nstool.exe",
+    "ncas": 0,
+    "error": "",
+    "artifact": {
+      "path": "E:\\galnx-build\\pilot-01\\p3\\out\\Kirikiroid2-NX-010047410000A000.nsp",
+      "size": 2906131672,
+      "sha256": "1f54bdf105fdfc0e88a81e5aaec954ffd4c349132fe7bbadcf394948cde994d4"
+    },
+    "checks": [
+      {
+        "id": "verify.keyset",
+        "name": "keyset",
+        "status": "warn",
+        "detail": "no keyset: nstool can only print the PFS0 header; NCA checks will be limited",
+        "hint": ""
+      },
+      {
+        "id": "verify.nstool.nsp",
+        "name": "nstool NSP layer",
+        "status": "ok",
+        "detail": "nstool parsed the NSP container",
+        "hint": ""
+      },
+      {
+        "id": "nstool.partition.type",
+        "name": "PFS0 type",
+        "status": "ok",
+        "detail": "Type: PFS0",
+        "hint": ""
+      },
+      {
+        "id": "nstool.partition.files",
+        "name": "PFS0 files",
+        "status": "ok",
+        "detail": "FileNum: 3",
+        "hint": ""
+      },
+      {
+        "id": "nstool.ncas",
+        "name": "NCA headers",
+        "status": "warn",
+        "detail": "no [NCA Header] sections parsed",
+        "hint": "run nstool on each .nca inside the NSP"
+      },
+      {
+        "id": "verify.ncas",
+        "name": "NCA headers",
+        "status": "warn",
+        "detail": "no [NCA Header] sections: provide a matching keyset and work_dir to enable NCA checks",
+        "hint": ""
+      },
+      {
+        "id": "verify.summary",
+        "name": "nstool verify",
+        "status": "ok",
+        "detail": "6 checks: 0 fail, 3 warn, 0 NCAs",
+        "hint": ""
+      }
+    ]
+  },
+  "checks": [
+    {
+      "id": "verify.keyset",
+      "name": "keyset",
+      "status": "warn",
+      "detail": "no keyset: nstool can only print the PFS0 header; NCA checks will be limited",
+      "hint": ""
+    },
+    {
+      "id": "verify.nstool.nsp",
+      "name": "nstool NSP layer",
+      "status": "ok",
+      "detail": "nstool parsed the NSP container",
+      "hint": ""
+    },
+    {
+      "id": "nstool.partition.type",
+      "name": "PFS0 type",
+      "status": "ok",
+      "detail": "Type: PFS0",
+      "hint": ""
+    },
+    {
+      "id": "nstool.partition.files",
+      "name": "PFS0 files",
+      "status": "ok",
+      "detail": "FileNum: 3",
+      "hint": ""
+    },
+    {
+      "id": "nstool.ncas",
+      "name": "NCA headers",
+      "status": "warn",
+      "detail": "no [NCA Header] sections parsed",
+      "hint": "run nstool on each .nca inside the NSP"
+    },
+    {
+      "id": "verify.ncas",
+      "name": "NCA headers",
+      "status": "warn",
+      "detail": "no [NCA Header] sections: provide a matching keyset and work_dir to enable NCA checks",
+      "hint": ""
+    },
+    {
+      "id": "verify.summary",
+      "name": "nstool verify",
+      "status": "ok",
+      "detail": "6 checks: 0 fail, 3 warn, 0 NCAs",
+      "hint": ""
+    }
+  ],
+  "ok": true,
+  "errors": []
+}

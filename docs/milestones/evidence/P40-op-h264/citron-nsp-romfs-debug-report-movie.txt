@@ -1,0 +1,27 @@
+# P40 Citron NSP(romfs) 冒烟 —— 《IROSEKA FHD》1.2.0-test，movie 相关日志（完整文件 99,185 B / 1,170 行）
+# 冒烟脚本：/e/galnx-build/p40/run-nsp-romfs-citron.sh（--game NSP --no-stage，sdmc 写 h264_sw.txt 强制软解 + debug.txt movie=1）
+
+[INFO] MoviePlay: path=movie/01.wmv flag=True is_layer_effect=false
+[INFO] Movie: opened (Switch NVDEC H.264) asset=movie/01_h264.mp4
+[INFO] movie h264: decoded frame=1 pts=0 ms 1280x720 hw=0 decode_us=20714 convert_us=4694
+[INFO] movie: presented frame=1 1280x720 upload_us=393
+[INFO] movie h264: decoded frame=30 pts=967 ms 1280x720 hw=0 decode_us=16536 convert_us=2501
+[INFO] movie h264: decoded frame=60 pts=1968 ms 1280x720 hw=0 decode_us=23720 convert_us=2978
+[INFO] movie: presented frame=390 1280x720 upload_us=1
+[INFO] movie h264: decoded frame=600 pts=19986 ms 1280x720 hw=0 decode_us=12983 convert_us=2500
+[INFO] movie h264: decoded frame=1800 pts=60026 ms 1280x720 hw=0 decode_us=17225 convert_us=2683
+[INFO] movie h264: decoded frame=3510 pts=117083 ms 1280x720 hw=0 decode_us=4800 convert_us=2649
+[INFO] movie: presented frame=3510 1280x720 upload_us=1
+[INFO] movie: presented frame=3570 1280x720 upload_us=4
+[INFO] movie h264: end of stream after 3597 frames (0 hardware)
+[INFO] movie h264: finished flag set (eof=true stash=0 decoded=3597 hw=0)
+
+# 计数
+presented_log_lines=120
+decoded_log_lines=124
+convert_stats:
+  n=190 min=0 p50=2532 p95=3053 max=8260
+decode_stats (Citron 软解):
+  n=124 min=3457 p50=15011 p95=24972 max=36843
+errors:
+      1 [ERROR] id must be in range 0..256

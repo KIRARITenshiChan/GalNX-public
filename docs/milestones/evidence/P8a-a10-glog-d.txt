@@ -1,0 +1,10 @@
+[pad] key=1008 virt=0 uiChildren=0 gamemenu=0x20a2de500 cursor=0x0
+[tjs] sl-replace -> ok
+[tjs] loadui-nodlg -> ok
+[tjs] loadui-open -> ok
+[touch] began id=0x211de5840 loc=(677.7,520.8) virt=0 uiChildren=0
+[touch] ended id=0x211de5840 loc=(677.7,520.8) virt=0
+[pad] key=1022 virt=0 uiChildren=0 gamemenu=0x20a2de500 cursor=0x0
+[tjs] exit -> ok
+[touch] began id=0x20a22e3e0 loc=(439.6,276.0) virt=0 uiChildren=0
+[touch] ended id=0x20a22e3e0 loc=(439.6,276.0) virt=0

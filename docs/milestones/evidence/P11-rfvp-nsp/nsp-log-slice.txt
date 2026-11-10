@@ -1,0 +1,10 @@
+[   4.602628] Core <Info> core\core.cpp:392:Load: Loading IROSEKA FHD (010047420000A000) ...
+[   5.812102] Frontend <Info> citron\main.cpp:2475:BootGame: Booting game: 010047420000A000 | IROSEKA FHD (64-bit) | 1.0.0
+[   8.409127] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp: game root: 
+[   8.409140] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: romfs:/game
+[   8.409152] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString:  (romfs mounted)
+[   8.434035] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp [info] config.toml: GameConfig { hcb: Some(".iroseka.hcb"), nls: Some(GBK) }
+[   8.810621] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp: the game is loaded, running
+[   9.279286] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp: the first frame was drawn
+[ 182.028843] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp [info] quit requested by host event
+NSP EXCEPTION/panic count: 0

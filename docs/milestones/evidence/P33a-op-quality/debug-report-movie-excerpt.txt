@@ -1,0 +1,231 @@
+[INFO] MoviePlay: path=movie/01.wmv flag=True is_layer_effect=false
+[INFO] [diag t=31261276171us] vfs path="movie/01.ogg" bytes=2343033 us=38503 reads=0
+[INFO] movie audio: loaded movie/01.ogg (Ogg Vorbis, 2343033 bytes); queued for the audio thread
+[INFO] Movie: opened (Switch WMV video-only, streaming, P33 quality) name=movie/01_q480.wmv level=2 bytes=38610038
+[INFO] movie: decoded frame=1 pts=0 ms 854x480 decode_us=15134 convert_us=5764
+[INFO] [diag t=31261322208us] audio source id=8192 path=None
+[INFO] movie audio: playing movie/01.ogg (Ogg Vorbis, 2343033 bytes)
+[INFO] movie: presented frame=1 854x480 upload_us=410
+[ERROR] id must be in range 0..256
+[INFO] [diag t=31261368614us] audio type_volume label=SE type=1 volume=0.9
+[INFO] [diag t=31261369940us] audio type_volume label=SE type=0 volume=1
+[INFO] [diag t=31261370100us] audio type_volume label=SE type=4 volume=0.7
+[INFO] [diag t=31261370109us] audio type_volume label=SE type=2 volume=0.7
+[INFO] [diag t=31261370115us] audio type_volume label=SE type=3 volume=0.65
+[INFO] [diag t=31261372163us] audio source id=4111 path=Some("se_sys/001")
+[INFO] [diag t=31261378411us] audio source id=4112 path=Some("se_sys/002")
+[INFO] [diag t=31261379818us] audio source id=4113 path=Some("se_sys/003")
+[INFO] [diag t=31261381280us] audio source id=4114 path=Some("se_sys/004")
+[INFO] [diag t=31261381605us] audio source id=4115 path=Some("se_sys/005")
+[INFO] [diag t=31261382132us] audio source id=4116 path=Some("se_sys/006")
+[INFO] [diag t=31261383646us] audio source id=4117 path=Some("se_sys/007")
+[INFO] [diag t=31261384295us] audio source id=4118 path=Some("se_sys/008")
+[INFO] [diag t=31261385079us] audio source id=4119 path=Some("se_sys/009")
+[INFO] [diag t=31261386833us] audio source id=4120 path=Some("se_sys/010")
+[INFO] [diag t=31261389552us] audio source id=4121 path=Some("se_sys/011")
+[INFO] [diag t=31261391630us] audio source id=4122 path=Some("se_sys/012")
+[INFO] [diag t=31261392231us] audio source id=4123 path=Some("se_sys/013")
+[INFO] [diag t=31261405034us] graph decoded path="graph/main_window_mask" 1920x229 us=8254
+[WARN] float_to_int: Invalid value type
+[WARN] float_to_int: Invalid value type
+[INFO] [diag t=31261903726us] graph decoded path="graph/title_bg1_A" 2400x1350 us=77002
+[INFO] [diag t=31261919772us] graph decoded path="graph/title_bg1_B" 781x1350 us=15073
+[INFO] [diag t=31261972727us] graph decoded path="graph/title_bg1_C" 2400x1350 us=51508
+[INFO] [diag t=31262012986us] graph decoded path="graph/title_bg1_D" 1955x1230 us=38469
+[INFO] [diag t=31262027155us] graph decoded path="graph/title_logo1" 1150x283 us=8998
+[INFO] [diag t=31262085940us] graph decoded path="graph/logo_bg" 1920x1080 us=29036
+[INFO] movie: decoded frame=30 pts=1208 ms 854x480 decode_us=10302 convert_us=5918
+[INFO] movie: presented frame=30 854x480 upload_us=2
+[INFO] movie: decoded frame=60 pts=2458 ms 854x480 decode_us=9805 convert_us=3088
+[INFO] movie: presented frame=60 854x480 upload_us=1
+[INFO] movie: decoded frame=90 pts=3708 ms 854x480 decode_us=6774 convert_us=3100
+[INFO] movie: presented frame=90 854x480 upload_us=1
+[INFO] movie: decoded frame=120 pts=4958 ms 854x480 decode_us=7906 convert_us=3256
+[INFO] movie: presented frame=120 854x480 upload_us=1
+[INFO] [diag t=31266275322us] audio source id=1 path=Some("BGM2/002")
+[INFO] movie: decoded frame=150 pts=6208 ms 854x480 decode_us=8811 convert_us=3018
+[INFO] movie: presented frame=150 854x480 upload_us=0
+[INFO] movie: decoded frame=180 pts=7458 ms 854x480 decode_us=10864 convert_us=3314
+[INFO] movie: presented frame=180 854x480 upload_us=1
+[INFO] movie: decoded frame=210 pts=8708 ms 854x480 decode_us=14912 convert_us=3039
+[INFO] movie: presented frame=210 854x480 upload_us=1
+[INFO] movie: decoded frame=240 pts=9958 ms 854x480 decode_us=11250 convert_us=3003
+[INFO] movie: presented frame=240 854x480 upload_us=0
+[INFO] movie: decoded frame=270 pts=11208 ms 854x480 decode_us=12781 convert_us=4221
+[INFO] movie: presented frame=270 854x480 upload_us=1
+[INFO] movie: decoded frame=300 pts=12458 ms 854x480 decode_us=10466 convert_us=3001
+[INFO] movie: presented frame=300 854x480 upload_us=1
+[INFO] movie: decoded frame=330 pts=13708 ms 854x480 decode_us=10475 convert_us=3043
+[INFO] movie: presented frame=330 854x480 upload_us=1
+[INFO] movie: decoded frame=360 pts=14958 ms 854x480 decode_us=14607 convert_us=3300
+[INFO] movie: presented frame=360 854x480 upload_us=1
+[INFO] movie: decoded frame=390 pts=16208 ms 854x480 decode_us=12117 convert_us=3136
+[INFO] movie: presented frame=390 854x480 upload_us=2
+[INFO] movie: decoded frame=420 pts=17458 ms 854x480 decode_us=12543 convert_us=3047
+[INFO] movie: presented frame=420 854x480 upload_us=1
+[INFO] movie: decoded frame=450 pts=18708 ms 854x480 decode_us=11403 convert_us=3030
+[INFO] movie: presented frame=450 854x480 upload_us=1
+[INFO] movie: decoded frame=480 pts=19958 ms 854x480 decode_us=9711 convert_us=3023
+[INFO] movie: presented frame=480 854x480 upload_us=1
+[INFO] movie: decoded frame=510 pts=21208 ms 854x480 decode_us=14907 convert_us=3170
+[INFO] movie: presented frame=510 854x480 upload_us=0
+[INFO] movie: decoded frame=540 pts=22458 ms 854x480 decode_us=14397 convert_us=4246
+[INFO] movie: presented frame=540 854x480 upload_us=1
+[INFO] movie: decoded frame=570 pts=23708 ms 854x480 decode_us=15157 convert_us=3026
+[INFO] movie: presented frame=570 854x480 upload_us=1
+[INFO] movie: decoded frame=600 pts=24958 ms 854x480 decode_us=14200 convert_us=2993
+[INFO] movie: presented frame=600 854x480 upload_us=1
+[INFO] movie: decoded frame=630 pts=26208 ms 854x480 decode_us=12108 convert_us=3145
+[INFO] movie: presented frame=630 854x480 upload_us=1
+[INFO] movie: decoded frame=660 pts=27458 ms 854x480 decode_us=5918 convert_us=3064
+[INFO] movie: presented frame=660 854x480 upload_us=0
+[INFO] movie: decoded frame=690 pts=28708 ms 854x480 decode_us=13708 convert_us=3574
+[INFO] movie: presented frame=690 854x480 upload_us=2
+[INFO] movie: decoded frame=720 pts=29958 ms 854x480 decode_us=12726 convert_us=3269
+[INFO] movie: presented frame=720 854x480 upload_us=0
+[INFO] movie: decoded frame=750 pts=31208 ms 854x480 decode_us=14293 convert_us=3103
+[INFO] movie: presented frame=750 854x480 upload_us=1
+[INFO] movie: decoded frame=780 pts=32458 ms 854x480 decode_us=10833 convert_us=3202
+[INFO] movie: presented frame=780 854x480 upload_us=1
+[INFO] movie: decoded frame=810 pts=33708 ms 854x480 decode_us=13175 convert_us=3880
+[INFO] movie: presented frame=810 854x480 upload_us=1
+[INFO] movie: decoded frame=840 pts=34958 ms 854x480 decode_us=11123 convert_us=3162
+[INFO] movie: presented frame=840 854x480 upload_us=1
+[INFO] movie: decoded frame=870 pts=36208 ms 854x480 decode_us=11507 convert_us=3486
+[INFO] movie: presented frame=870 854x480 upload_us=1
+[INFO] movie: decoded frame=900 pts=37458 ms 854x480 decode_us=15274 convert_us=3279
+[INFO] movie: presented frame=900 854x480 upload_us=2
+[INFO] movie: decoded frame=930 pts=38708 ms 854x480 decode_us=11816 convert_us=3299
+[INFO] movie: presented frame=930 854x480 upload_us=1
+[INFO] movie: decoded frame=960 pts=39958 ms 854x480 decode_us=14448 convert_us=3284
+[INFO] movie: presented frame=960 854x480 upload_us=1
+[INFO] movie: decoded frame=990 pts=41208 ms 854x480 decode_us=11122 convert_us=3259
+[INFO] movie: presented frame=990 854x480 upload_us=1
+[INFO] movie: decoded frame=1020 pts=42458 ms 854x480 decode_us=12072 convert_us=3587
+[INFO] movie: presented frame=1020 854x480 upload_us=0
+[INFO] movie: decoded frame=1050 pts=43708 ms 854x480 decode_us=14113 convert_us=3008
+[INFO] movie: presented frame=1050 854x480 upload_us=1
+[INFO] movie: decoded frame=1080 pts=44958 ms 854x480 decode_us=13319 convert_us=3386
+[INFO] movie: presented frame=1080 854x480 upload_us=2
+[INFO] movie: decoded frame=1110 pts=46208 ms 854x480 decode_us=11931 convert_us=3038
+[INFO] movie: presented frame=1110 854x480 upload_us=1
+[INFO] movie: decoded frame=1140 pts=47458 ms 854x480 decode_us=9069 convert_us=3020
+[INFO] movie: presented frame=1140 854x480 upload_us=2
+[INFO] movie: decoded frame=1170 pts=48708 ms 854x480 decode_us=11478 convert_us=3158
+[INFO] movie: presented frame=1170 854x480 upload_us=1
+[INFO] movie: decoded frame=1200 pts=49958 ms 854x480 decode_us=9797 convert_us=3198
+[INFO] movie: presented frame=1200 854x480 upload_us=1
+[INFO] movie: decoded frame=1230 pts=51208 ms 854x480 decode_us=10995 convert_us=3302
+[INFO] movie: presented frame=1230 854x480 upload_us=1
+[INFO] movie: decoded frame=1260 pts=52458 ms 854x480 decode_us=10249 convert_us=3063
+[INFO] movie: presented frame=1260 854x480 upload_us=1
+[INFO] movie: decoded frame=1290 pts=53708 ms 854x480 decode_us=12599 convert_us=3079
+[INFO] movie: presented frame=1290 854x480 upload_us=1
+[INFO] movie: decoded frame=1320 pts=54958 ms 854x480 decode_us=12016 convert_us=3204
+[INFO] movie: presented frame=1320 854x480 upload_us=1
+[INFO] movie: decoded frame=1350 pts=56208 ms 854x480 decode_us=5455 convert_us=3430
+[INFO] movie: presented frame=1350 854x480 upload_us=1
+[INFO] movie: decoded frame=1380 pts=57458 ms 854x480 decode_us=12068 convert_us=3251
+[INFO] movie: presented frame=1380 854x480 upload_us=1
+[INFO] movie: decoded frame=1410 pts=58708 ms 854x480 decode_us=12793 convert_us=3444
+[INFO] movie: presented frame=1410 854x480 upload_us=1
+[INFO] movie: decoded frame=1440 pts=59958 ms 854x480 decode_us=9205 convert_us=3509
+[INFO] movie: presented frame=1440 854x480 upload_us=1
+[INFO] movie: decoded frame=1470 pts=61208 ms 854x480 decode_us=11155 convert_us=3452
+[INFO] movie: presented frame=1470 854x480 upload_us=2
+[INFO] movie: decoded frame=1500 pts=62458 ms 854x480 decode_us=12416 convert_us=3020
+[INFO] movie: presented frame=1500 854x480 upload_us=1
+[INFO] movie: decoded frame=1530 pts=63708 ms 854x480 decode_us=10675 convert_us=3990
+[INFO] movie: presented frame=1530 854x480 upload_us=1
+[INFO] movie: decoded frame=1560 pts=64958 ms 854x480 decode_us=12051 convert_us=3214
+[INFO] movie: presented frame=1560 854x480 upload_us=0
+[INFO] movie: decoded frame=1590 pts=66208 ms 854x480 decode_us=11917 convert_us=3406
+[INFO] movie: presented frame=1590 854x480 upload_us=1
+[INFO] movie: decoded frame=1620 pts=67458 ms 854x480 decode_us=10629 convert_us=3015
+[INFO] movie: presented frame=1620 854x480 upload_us=1
+[INFO] movie: decoded frame=1650 pts=68708 ms 854x480 decode_us=11666 convert_us=3299
+[INFO] movie: presented frame=1650 854x480 upload_us=1
+[INFO] movie: decoded frame=1680 pts=69958 ms 854x480 decode_us=11788 convert_us=4263
+[INFO] movie: presented frame=1680 854x480 upload_us=0
+[INFO] movie: decoded frame=1710 pts=71208 ms 854x480 decode_us=12307 convert_us=4178
+[INFO] movie: presented frame=1710 854x480 upload_us=1
+[INFO] movie: decoded frame=1740 pts=72458 ms 854x480 decode_us=10668 convert_us=3083
+[INFO] movie: presented frame=1740 854x480 upload_us=1
+[INFO] movie: decoded frame=1770 pts=73708 ms 854x480 decode_us=13062 convert_us=3018
+[INFO] movie: presented frame=1770 854x480 upload_us=1
+[INFO] movie: decoded frame=1800 pts=74958 ms 854x480 decode_us=11810 convert_us=3185
+[INFO] movie: presented frame=1800 854x480 upload_us=1
+[INFO] movie: decoded frame=1830 pts=76208 ms 854x480 decode_us=11165 convert_us=3035
+[INFO] movie: presented frame=1830 854x480 upload_us=1
+[INFO] movie: decoded frame=1860 pts=77458 ms 854x480 decode_us=17350 convert_us=3031
+[INFO] movie: presented frame=1860 854x480 upload_us=1
+[INFO] movie: decoded frame=1890 pts=78708 ms 854x480 decode_us=10726 convert_us=3228
+[INFO] movie: presented frame=1890 854x480 upload_us=0
+[INFO] movie: decoded frame=1920 pts=79958 ms 854x480 decode_us=11745 convert_us=3040
+[INFO] movie: presented frame=1920 854x480 upload_us=1
+[INFO] movie: decoded frame=1950 pts=81208 ms 854x480 decode_us=14509 convert_us=3139
+[INFO] movie: presented frame=1950 854x480 upload_us=1
+[INFO] movie: decoded frame=1980 pts=82458 ms 854x480 decode_us=10345 convert_us=3192
+[INFO] movie: presented frame=1980 854x480 upload_us=1
+[INFO] movie: decoded frame=2010 pts=83708 ms 854x480 decode_us=11214 convert_us=3020
+[INFO] movie: presented frame=2010 854x480 upload_us=1
+[INFO] movie: decoded frame=2040 pts=84958 ms 854x480 decode_us=11928 convert_us=3112
+[INFO] movie: presented frame=2040 854x480 upload_us=1
+[INFO] movie: decoded frame=2070 pts=86208 ms 854x480 decode_us=6910 convert_us=3471
+[INFO] movie: presented frame=2070 854x480 upload_us=1
+[INFO] movie: decoded frame=2100 pts=87458 ms 854x480 decode_us=12069 convert_us=4144
+[INFO] movie: presented frame=2100 854x480 upload_us=2
+[INFO] movie: decoded frame=2130 pts=88708 ms 854x480 decode_us=10427 convert_us=3469
+[INFO] movie: presented frame=2130 854x480 upload_us=1
+[INFO] movie: decoded frame=2160 pts=89958 ms 854x480 decode_us=12813 convert_us=3807
+[INFO] movie: presented frame=2160 854x480 upload_us=1
+[INFO] movie: decoded frame=2190 pts=91208 ms 854x480 decode_us=11387 convert_us=3130
+[INFO] movie: presented frame=2190 854x480 upload_us=2
+[INFO] movie: decoded frame=2220 pts=92458 ms 854x480 decode_us=11139 convert_us=3808
+[INFO] movie: presented frame=2220 854x480 upload_us=1
+[INFO] movie: decoded frame=2250 pts=93708 ms 854x480 decode_us=14940 convert_us=4508
+[INFO] movie: presented frame=2250 854x480 upload_us=1
+[INFO] movie: decoded frame=2280 pts=94958 ms 854x480 decode_us=10697 convert_us=3123
+[INFO] movie: presented frame=2280 854x480 upload_us=2
+[INFO] movie: decoded frame=2310 pts=96208 ms 854x480 decode_us=11031 convert_us=3004
+[INFO] movie: presented frame=2310 854x480 upload_us=1
+[INFO] movie: decoded frame=2340 pts=97458 ms 854x480 decode_us=11174 convert_us=3206
+[INFO] movie: presented frame=2340 854x480 upload_us=1
+[INFO] movie: decoded frame=2370 pts=98708 ms 854x480 decode_us=11502 convert_us=3055
+[INFO] movie: presented frame=2370 854x480 upload_us=1
+[INFO] movie: decoded frame=2400 pts=99958 ms 854x480 decode_us=13240 convert_us=3018
+[INFO] movie: presented frame=2400 854x480 upload_us=1
+[INFO] movie: decoded frame=2430 pts=101208 ms 854x480 decode_us=8028 convert_us=3129
+[INFO] movie: presented frame=2430 854x480 upload_us=1
+[INFO] movie: decoded frame=2460 pts=102458 ms 854x480 decode_us=11792 convert_us=3319
+[INFO] movie: presented frame=2460 854x480 upload_us=1
+[INFO] movie: decoded frame=2490 pts=103708 ms 854x480 decode_us=8755 convert_us=3305
+[INFO] movie: presented frame=2490 854x480 upload_us=2
+[INFO] movie: decoded frame=2520 pts=104958 ms 854x480 decode_us=11410 convert_us=3319
+[INFO] movie: presented frame=2520 854x480 upload_us=0
+[INFO] movie: decoded frame=2550 pts=106208 ms 854x480 decode_us=13726 convert_us=3501
+[INFO] movie: presented frame=2550 854x480 upload_us=1
+[INFO] movie: decoded frame=2580 pts=107458 ms 854x480 decode_us=11230 convert_us=3186
+[INFO] movie: presented frame=2580 854x480 upload_us=1
+[INFO] movie: decoded frame=2610 pts=108708 ms 854x480 decode_us=12796 convert_us=3758
+[INFO] movie: presented frame=2610 854x480 upload_us=1
+[INFO] movie: decoded frame=2640 pts=109958 ms 854x480 decode_us=13572 convert_us=3029
+[INFO] movie: presented frame=2640 854x480 upload_us=1
+[INFO] movie: decoded frame=2670 pts=111208 ms 854x480 decode_us=14235 convert_us=3016
+[INFO] movie: presented frame=2670 854x480 upload_us=2
+[INFO] movie: decoded frame=2700 pts=112458 ms 854x480 decode_us=13125 convert_us=3025
+[INFO] movie: presented frame=2700 854x480 upload_us=1
+[INFO] movie: decoded frame=2730 pts=113708 ms 854x480 decode_us=13227 convert_us=3001
+[INFO] movie: presented frame=2730 854x480 upload_us=1
+[INFO] movie: decoded frame=2760 pts=114958 ms 854x480 decode_us=12124 convert_us=2994
+[INFO] movie: presented frame=2760 854x480 upload_us=2
+[INFO] movie: decoded frame=2790 pts=116208 ms 854x480 decode_us=10563 convert_us=3007
+[INFO] movie: presented frame=2790 854x480 upload_us=1
+[INFO] movie: decoded frame=2820 pts=117458 ms 854x480 decode_us=9184 convert_us=3006
+[INFO] movie: presented frame=2820 854x480 upload_us=2
+[INFO] movie: decoded frame=2850 pts=118708 ms 854x480 decode_us=8419 convert_us=3041
+[INFO] movie: presented frame=2850 854x480 upload_us=0
+[INFO] movie: decoded frame=2880 pts=119958 ms 854x480 decode_us=9591 convert_us=3025
+[INFO] movie: presented frame=2880 854x480 upload_us=1
+[INFO] movie audio: stopped movie/01.ogg
+perf avg over 60 ticks: vm 0.17 ms, scene 0.02 ms, render 16.30 ms, total 16.49 ms

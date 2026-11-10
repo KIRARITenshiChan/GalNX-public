@@ -1,0 +1,29 @@
+Payload plan: /kirikiri/haruno -> romfs:/game
+  payload version: pilot01-r2
+  source:          E:\Othergames\Galgame\晴霁之后定是菜花盛开的好天气
+  ui dir:          E:\galnx-build\pilot-01\k2nx-ws\build\romfs
+  startup:         /kirikiri/haruno/data.xp3
+  marker:          sdmc:/switch/kirikiroid2/.galnx_extracted
+  payload files:   22 selected + 1 generated, 2870635309 bytes
+  ui files:        85, 7551013 bytes
+  romfs total:     2878186922 bytes
+  extraction list: game_files.txt, 28 lines, 600 bytes
+  keymap:          Kirikiroid2Preference.xml, 1293 bytes
+[OK  ] romfs link mode                        materialize will use copy
+[OK  ] payload source directory               E:\Othergames\Galgame\晴霁之后定是菜花盛开的好天气
+[OK  ] payload selection                      22 files, 2870634016 bytes
+[OK  ] generated keymap                       Kirikiroid2Preference.xml, 1293 B, sha256 aa4fa8aab256f73c6d73111a62305f7078bd9c1eca3cd9d9128d0a51abef9543
+[OK  ] keymap matches pilot-01 golden sample  sha256 aa4fa8aab256f73c6d73111a62305f7078bd9c1eca3cd9d9128d0a51abef9543
+[WARN] keymap vs input profile                advance_text=A; confirm_choice=A; back=B; open_menu=PLUS+X; show_history=MINUS+Y (unbound); auto_mode=R (unbound); skip_hold=L (unbound)
+       hint: Unbound actions cannot be triggered from the controller; add bindings or use a profile whose buttons are covered.
+[OK  ] game_files.txt                         28 lines, 600 B, sha256 0e6757d9901d4a4abb95a220f9d8e1714b0b858c421ec328e6802a10d4e3fd61
+[OK  ] startup file in payload                data.xp3
+[OK  ] case-insensitive name collisions       23 selected names are unique
+[OK  ] path length limit                      longest 42 chars (Kirikiroid2Preference.xml)
+[OK  ] FAT32 per-file limit                   all files fit FAT32
+[OK  ] symlinked payload files                none
+[OK  ] sparse payload files                   none
+[OK  ] engine UI files                        85 files, 7551013 bytes
+[OK  ] payload total                          23 payload files, 2870635309 bytes; ui 85 files, 7551013 bytes; manifest 600 B; romfs 2878186922 bytes
+
+15 checks: 0 fail, 1 warn

@@ -1,0 +1,300 @@
+# step: hacbrewpack
+# cwd: E:\galnx-build\pilot-01\p3\build\nsp
+# argv: ["E:\\galnx-build\\m3-tools\\hacBrewPack-745b16ecfc9ce055743067d200572204cb2aac6c\\hacbrewpack.exe", "--nologo", "-k", "E:\\Othergames\\Nintendo Switch\\Ryujinx-canary\\portable\\system\\prod.keys", "--romfsdir", "E:\\galnx-build\\pilot-01\\p3\\romfs"]
+# exit: 0
+# duration_s: 175.032
+--- stdout ---
+hacBrewPack v3.05 by The-4n
+
+Removing existing temp and nca directories
+Creating temp, nca, nsp and backup directories
+Loading 'E:\Othergames\Nintendo Switch\Ryujinx-canary\portable\system\prod.keys' keyset file
+
+----> Processing NPDM
+Validating NPDM
+Getting TitleID
+Validating TitleID
+Backing up main.npdm
+Patching ACID public key
+
+----> Processing NACP
+Validating Title Name
+Validating Title Publisher
+Changing logo handeling to auto
+Backing up control.nacp
+Writing control.nacp
+
+----> Creating Program NCA:
+===> Creating NCA header
+Writing NCA header placeholder to hacbrewpack_nca\program.nca
+
+---> Creating Section 0:
+===> Building ExeFS
+Writing exefs\main to hacbrewpack_temp\program_sec0_exefs
+Writing exefs\main.npdm to hacbrewpack_temp\program_sec0_exefs
+Calculating hash table
+
+===> Writing ExeFS
+Writing PFS0 hash table
+Writing PFS0
+
+===> Calculating Hashes:
+Calculating Master hash
+Calculating Section hash
+
+---> Creating Section 1:
+===> Building RomFS
+Visiting directories
+Calculating metadata
+Writing E:\galnx-build\pilot-01\p3\romfs\Default\AppIcon\Icon_72.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\Default\Button_Disable.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\Default\Button_Normal.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\Default\Button_Press.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\Default\SliderNode_Disable.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\Default\SliderNode_Normal.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\Default\SliderNode_Press.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\Default\Slider_Back.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\Default\Slider_PressBar.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\DroidSansFallback.ttf to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\default.cur to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\game\Kirikiroid2Preference.xml to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\game\data.xp3 to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\game\haruno.cf to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\game\image00.xp3 to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\game\image01.xp3 to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\game\image02.xp3 to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\game\image02_2.xp3 to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\game\image03.xp3 to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\game\image04.xp3 to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\game\image06.xp3 to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\game\media.xp3 to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\game\movie.xp3 to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\game\plugin\csvParser.tpm to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\game\plugin\extrans.tpm to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\game\plugin\fstat.tpm to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\game\plugin\layerExImage.tpm to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\game\plugin\windowEx.tpm to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\game\plugin\wumsadp.tpm to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\game\plugin\wuvorbis.tpm to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\game\scenario.xp3 to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\game\voice01.xp3 to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\game\voice02.xp3 to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\game\voice02_2.xp3 to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\game_files.txt to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\img\Cancel_Normal.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\img\Cancel_Press.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\img\CheckBoxNode_Normal.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\img\CheckBoxNode_Press.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\img\CheckBox_Disable.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\img\CheckBox_Normal.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\img\CheckBox_Press.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\img\about_icon.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\img\back_btn_off.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\img\back_btn_on.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\img\back_icon.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\img\circle_arrow.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\img\circle_arrow_normal.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\img\circle_arrow_press.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\img\circle_white.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\img\empty.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\img\exit_icon.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\img\gray.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\img\keyboard_icon.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\img\menu_handler.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\img\menu_icon.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\img\menu_press.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\img\mouse_2btn.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\img\mouse_icon.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\img\mouse_left_btn.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\img\mouse_right_btn.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\img\right_triangle.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\img\syssetting_btn_ff.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\img\syssetting_btn_on.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\img\touch1.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\img\touch2.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\img\touch_icon.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\img\triangle.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\img\white.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\img\windows_icon.png to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\locale\en_us.xml to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\locale\ja_jp.xml to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\locale\zh_cn.xml to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\locale\zh_tw.xml to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\ui\ArchiveRepacker.csb to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\ui\BottomBar.csb to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\ui\BottomBarTextInput.csb to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\ui\CheckListDialog.csb to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\ui\FileItem.csb to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\ui\FileManageMenu.csb to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\ui\GameMenu.csb to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\ui\KeySelect.csb to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\ui\ListItem.csb to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\ui\ListView.csb to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\ui\MainFileSelector.csb to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\ui\MediaPlayerBody.csb to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\ui\MediaPlayerFoot.csb to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\ui\MediaPlayerNavi.csb to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\ui\MenuList.csb to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\ui\MessageBox.csb to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\ui\NaviBar.csb to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\ui\NaviBarWithMenu.csb to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\ui\ProgressBox.csb to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\ui\RecentListItem.csb to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\ui\SelectList.csb to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\ui\SelectListItem.csb to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\ui\TableView.csb to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\ui\TextPairInput.csb to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\ui\WinMgrOverlay.csb to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\ui\comctrl\CheckBoxItem.csb to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\ui\comctrl\SelectListItem.csb to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\ui\comctrl\SeperateItem.csb to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\ui\comctrl\SliderIconItem.csb to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\ui\comctrl\SliderTextItem.csb to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\ui\comctrl\SubDirItem.csb to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\ui\help\AllTips.csb to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\ui\help\MouseModeTips.csb to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\ui\help\ScreenModeTips.csb to hacbrewpack_temp\program_sec1_ivfc_lvl6
+Writing E:\galnx-build\pilot-01\p3\romfs\ui\help\TouchModeTips.csb to hacbrewpack_temp\program_sec1_ivfc_lvl6
+
+===> Creating IVFC levels
+Writing hacbrewpack_temp\program_sec1_ivfc_lvl5
+Writing hacbrewpack_temp\program_sec1_ivfc_lvl4
+Writing hacbrewpack_temp\program_sec1_ivfc_lvl3
+Writing hacbrewpack_temp\program_sec1_ivfc_lvl2
+Writing hacbrewpack_temp\program_sec1_ivfc_lvl1
+
+===> Writing IVFC levels
+Writing hacbrewpack_temp\program_sec1_ivfc_lvl1 to hacbrewpack_nca\program.nca
+Writing hacbrewpack_temp\program_sec1_ivfc_lvl2 to hacbrewpack_nca\program.nca
+Writing hacbrewpack_temp\program_sec1_ivfc_lvl3 to hacbrewpack_nca\program.nca
+Writing hacbrewpack_temp\program_sec1_ivfc_lvl4 to hacbrewpack_nca\program.nca
+Writing hacbrewpack_temp\program_sec1_ivfc_lvl5 to hacbrewpack_nca\program.nca
+Writing hacbrewpack_temp\program_sec1_ivfc_lvl6 to hacbrewpack_nca\program.nca
+
+===> Calculating Hashes:
+Calculating Master hash
+Calculating Section hash
+
+---> Finalizing:
+===> Encrypting NCA
+Encrypting section 0
+Encrypting section 1
+Getting NCA file size
+Encrypting key area
+Signing nca header
+Encrypting header
+
+===> Writing NCA header
+Writing NCA header to hacbrewpack_nca\program.nca
+
+===> Post creation process
+Calculating NCA hash
+Renaming program.nca to 82f8227a4bac3f9d8c949667a43acc4d.nca
+
+----> Created Program NCA: hacbrewpack_nca\82f8227a4bac3f9d8c949667a43acc4d.nca
+
+----> Creating Control NCA:
+===> Creating NCA header
+Writing NCA header placeholder to hacbrewpack_nca\control.nca
+
+---> Creating Section 0:
+===> Building RomFS
+Visiting directories
+Calculating metadata
+Writing control\control.nacp to hacbrewpack_temp\control_sec0_ivfc_lvl6
+Writing control\icon_AmericanEnglish.dat to hacbrewpack_temp\control_sec0_ivfc_lvl6
+
+===> Creating IVFC levels
+Writing hacbrewpack_temp\control_sec0_ivfc_lvl5
+Writing hacbrewpack_temp\control_sec0_ivfc_lvl4
+Writing hacbrewpack_temp\control_sec0_ivfc_lvl3
+Writing hacbrewpack_temp\control_sec0_ivfc_lvl2
+Writing hacbrewpack_temp\control_sec0_ivfc_lvl1
+
+===> Writing IVFC levels
+Writing hacbrewpack_temp\control_sec0_ivfc_lvl1 to hacbrewpack_nca\control.nca
+Writing hacbrewpack_temp\control_sec0_ivfc_lvl2 to hacbrewpack_nca\control.nca
+Writing hacbrewpack_temp\control_sec0_ivfc_lvl3 to hacbrewpack_nca\control.nca
+Writing hacbrewpack_temp\control_sec0_ivfc_lvl4 to hacbrewpack_nca\control.nca
+Writing hacbrewpack_temp\control_sec0_ivfc_lvl5 to hacbrewpack_nca\control.nca
+Writing hacbrewpack_temp\control_sec0_ivfc_lvl6 to hacbrewpack_nca\control.nca
+
+===> Calculating Hashes:
+Calculating Master hash
+Calculating Section hash
+
+---> Finalizing:
+===> Encrypting NCA
+Encrypting section 0
+Getting NCA file size
+Encrypting key area
+Encrypting header
+
+===> Writing NCA header
+Writing NCA header to hacbrewpack_nca\control.nca
+
+===> Post creation process
+Calculating NCA hash
+Renaming control.nca to adb1490486ef4aab9705cced5b97e6cd.nca
+
+----> Created Control NCA: hacbrewpack_nca\adb1490486ef4aab9705cced5b97e6cd.nca
+
+----> Creating Metadata NCA:
+===> Creating NCA header
+Writing NCA header placeholder to hacbrewpack_nca\meta.nca
+
+===> Creating Metadata file
+Writing metadata header
+Writing content records
+
+===> Building PFS0
+Writing hacbrewpack_temp\cnmt\Application_010047410000a000.cnmt to hacbrewpack_temp\meta_sec0_pfs0
+Calculating hash table
+
+===> Writing PFS0 section
+Writing PFS0 hash table
+Writing PFS0
+
+===> Calculating Hashes:
+Calculating Master hash
+Calculating Section hash
+
+---> Finalizing:
+===> Encrypting NCA
+Encrypting section 0
+Getting NCA file size
+Encrypting key area
+Encrypting header
+
+===> Writing NCA header
+Writing NCA header to hacbrewpack_nca\meta.nca
+
+===> Post creation process
+Calculating NCA hash
+Renaming meta.nca to 510312aebe184972f73959b1cae651fd.cnmt.nca
+
+----> Created Metadata NCA: hacbrewpack_nca\510312aebe184972f73959b1cae651fd.cnmt.nca
+
+----> Creating NSP:
+Writing hacbrewpack_nca\510312aebe184972f73959b1cae651fd.cnmt.nca to hacbrewpack_nsp\010047410000a000.nsp
+Writing hacbrewpack_nca\82f8227a4bac3f9d8c949667a43acc4d.nca to hacbrewpack_nsp\010047410000a000.nsp
+Writing hacbrewpack_nca\adb1490486ef4aab9705cced5b97e6cd.nca to hacbrewpack_nsp\010047410000a000.nsp
+
+----> Created NSP: hacbrewpack_nsp\010047410000a000.nsp
+
+Removing created temp and nca directories
+
+
+Summary:
+
+Title ID: 010047410000a000
+SDK Version: 0.12.17.0
+Section Crypto Type: Regular Crypto
+Keygeneration: 1
+<redacted: key material line>
+Program NCA RomFS Section: Yes
+Program NCA Logo Section: No
+HtmlDoc NCA: No
+LegalInfo NCA: No
+Created NSP: hacbrewpack_nsp\010047410000a000.nsp
+--- stderr ---

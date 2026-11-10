@@ -1,0 +1,4007 @@
+frame 9600: 59.9 fps over the last 60 frames, slowest frame 18.7 ms
+stages (ms per frame): text 0.01 tree 0.11 submit 0.33 end_frame 13.86 vm 0.95 syscalls 0.24
+virtual frame 1920x1080
+
+log:
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] history_set: unexpected value for set_voice : Nil
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[INFO] [diag t=144392587534us] audio source id=3 path=Some("voice/00000130")
+[INFO] [diag t=144392587556us] voice resource path="voice/00000130"
+[INFO] [diag t=144392587590us] voice resource path="voice/00000130"
+[INFO] [diag t=144392595620us] [cache] bytes put size=33545 total=49441341/201326592
+[INFO] Playing BGM slot 3
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] history_set: unexpected value for set_voice : Nil
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] history_set: unexpected value for set_name : Nil
+[ERROR] history_set: unexpected value for set_voice : Nil
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] history_set: unexpected value for set_voice : Nil
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] history_set: unexpected value for set_name : Nil
+[ERROR] history_set: unexpected value for set_voice : Nil
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[INFO] [diag t=144399521596us] audio source id=4096 path=Some("se/050")
+[INFO] [diag t=144399548605us] [cache] bytes put size=173916 total=49615257/201326592
+[INFO] [diag t=144399548615us] vfs path="se/050" bytes=173916 us=26953
+[INFO] Playing SE slot 0
+[ERROR] history_set: unexpected value for set_name : Nil
+[ERROR] history_set: unexpected value for set_voice : Nil
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[ERROR] Invalid duration
+[INFO] [diag t=144400770399us] audio source id=4100 path=Some("se_env/021")
+[INFO] Playing SE slot 4
+[INFO] [diag t=144400770498us] audio source id=4101 path=Some("se_env/005")
+[INFO] [diag t=144400877053us] [cache] bytes put size=766568 total=50381825/201326592
+[INFO] [diag t=144400877062us] vfs path="se_env/005" bytes=766568 us=106536
+[INFO] Playing SE slot 5
+[INFO] [diag t=144400877130us] audio source id=4102 path=Some("se_env/051")
+[INFO] [diag t=144400981197us] [cache] bytes put size=753552 total=51135377/201326592
+[INFO] [diag t=144400981206us] vfs path="se_env/051" bytes=753552 us=104054
+[INFO] Playing SE slot 6
+[INFO] [diag t=144401492245us] [cache] bytes put size=3838866 total=54974243/201326592
+[INFO] [diag t=144401492255us] vfs path="graph_bg/BG043_000" bytes=3838866 us=510898
+[INFO] [diag t=144401492266us] graph decode path="graph_bg/BG043_000" bytes=3838866
+[INFO] [diag t=144401652580us] [cache] texture put size=12960000 total=100480560/167772160
+[INFO] [diag t=144401652590us] graph decoded path="graph_bg/BG043_000" 2400x1350 us=160324
+[INFO] [diag t=144401950099us] [cache] bytes put size=2223174 total=57197417/201326592
+[INFO] [diag t=144401950110us] vfs path="graph_bg/BG043_000b" bytes=2223174 us=296579
+[INFO] [diag t=144401950123us] graph decode path="graph_bg/BG043_000b" bytes=2223174
+[INFO] [diag t=144402068664us] [cache] texture put size=12960000 total=113440560/167772160
+[INFO] [diag t=144402068675us] graph decoded path="graph_bg/BG043_000b" 2400x1350 us=118552
+[INFO] [diag t=144402288752us] [cache] bytes put size=1597718 total=58795135/201326592
+[INFO] [diag t=144402288762us] vfs path="graph_bs/CHR_恀峠_婎_敀堖惂暈L" bytes=1597718 us=219165
+[INFO] [diag t=144402288790us] graph decode path="graph_bs/CHR_恀峠_婎_敀堖惂暈L" bytes=1597718
+[INFO] [diag t=144402402253us] [cache] texture put size=13036184 total=126476744/167772160
+[INFO] [diag t=144402402263us] graph decoded path="graph_bs/CHR_恀峠_婎_敀堖惂暈L" 1897x1718 us=113472
+[INFO] [diag t=144402913333us] [cache] bytes put size=3826273 total=62621408/201326592
+[INFO] [diag t=144402913342us] vfs path="graph_bs/CHR_恀峠_婎_敀堖惂暈L_昞忣" bytes=3826273 us=510778
+[INFO] [diag t=144402913368us] parts decode path="graph_bs/CHR_恀峠_婎_敀堖惂暈L_昞忣" bytes=3826273
+[INFO] [diag t=144403071667us] [cache] parts put size=10599432 total=10599432/50331648
+[INFO] [diag t=144403071944us] parts select id=1 entry=13
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[INFO] [diag t=144403073598us] vfs cache hit path="graph/diss00" bytes=3468
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[INFO] [diag t=144403284728us] parts select id=1 entry=13
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[INFO] [diag t=144403420855us] audio source id=3 path=Some("voice/00000140")
+[INFO] [diag t=144403420874us] voice resource path="voice/00000140"
+[INFO] [diag t=144403420911us] voice resource path="voice/00000140"
+[INFO] [diag t=144403431875us] [cache] bytes put size=65517 total=62686925/201326592
+[INFO] [diag t=144403431883us] vfs path="voice/00000140" bytes=65517 us=10973
+[INFO] Playing BGM slot 3
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [diag t=144404870895us] audio source id=4097 path=Some("se/078")
+[INFO] [diag t=144404924024us] [cache] bytes put size=360784 total=63047709/201326592
+[INFO] [diag t=144404924036us] vfs path="se/078" bytes=360784 us=53099
+[INFO] Playing SE slot 1
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] history_set: unexpected value for set_voice : Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[INFO] [diag t=144406739165us] audio source id=3 path=Some("voice/00000150")
+[INFO] [diag t=144406739182us] voice resource path="voice/00000150"
+[INFO] [diag t=144406739220us] voice resource path="voice/00000150"
+[INFO] [diag t=144406746956us] [cache] bytes put size=28391 total=63076100/201326592
+[INFO] Playing BGM slot 3
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [diag t=144406856342us] parts select id=1 entry=7
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] history_set: unexpected value for set_voice : Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[INFO] [diag t=144408888194us] audio source id=3 path=Some("voice/00000160")
+[INFO] [diag t=144408888211us] voice resource path="voice/00000160"
+[INFO] [diag t=144408888250us] voice resource path="voice/00000160"
+[INFO] [diag t=144408896724us] [cache] bytes put size=34241 total=63110341/201326592
+[INFO] Playing BGM slot 3
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [diag t=144409019941us] parts select id=1 entry=5
+[INFO] [diag t=144409898152us] [cache] bytes put size=1289945 total=64400286/201326592
+[INFO] [diag t=144409898163us] vfs path="graph_bs/CHR_恀峠_斶_敀堖惂暈L" bytes=1289945 us=176547
+[INFO] [diag t=144409898191us] graph decode path="graph_bs/CHR_恀峠_斶_敀堖惂暈L" bytes=1289945
+[INFO] [diag t=144409989488us] [cache] texture put size=10441420 total=136918164/167772160
+[INFO] [diag t=144409989499us] graph decoded path="graph_bs/CHR_恀峠_斶_敀堖惂暈L" 1531x1705 us=91308
+[INFO] [diag t=144410160776us] [cache] bytes put size=1267387 total=65667673/201326592
+[INFO] [diag t=144410160786us] vfs path="graph_bs/CHR_恀峠_斶_敀堖惂暈L_昞忣" bytes=1267387 us=170982
+[INFO] [diag t=144410160812us] parts decode path="graph_bs/CHR_恀峠_斶_敀堖惂暈L_昞忣" bytes=1267387
+[INFO] [diag t=144410214541us] [cache] parts put size=3916528 total=14515960/50331648
+[INFO] [diag t=144410214825us] parts select id=2 entry=7
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[INFO] [diag t=144410339421us] audio source id=3 path=Some("voice/00000170")
+[INFO] [diag t=144410339440us] voice resource path="voice/00000170"
+[INFO] [diag t=144410339478us] voice resource path="voice/00000170"
+[INFO] [diag t=144410356765us] [cache] bytes put size=113175 total=65780848/201326592
+[INFO] [diag t=144410356775us] vfs path="voice/00000170" bytes=113175 us=17297
+[INFO] Playing BGM slot 3
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [diag t=144410539371us] parts select id=2 entry=7
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] history_set: unexpected value for set_voice : Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[INFO] [diag t=144412576404us] audio source id=3 path=Some("voice/00000180")
+[INFO] [diag t=144412576426us] voice resource path="voice/00000180"
+[INFO] [diag t=144412576473us] voice resource path="voice/00000180"
+[INFO] [diag t=144412579209us] [cache] bytes put size=16218 total=65797066/201326592
+[INFO] Playing BGM slot 3
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [diag t=144412706048us] parts select id=2 entry=1
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[INFO] [diag t=144414454090us] [cache] bytes put size=2972253 total=68769319/201326592
+[INFO] [diag t=144414454104us] vfs path="graph_bg/BG062_000" bytes=2972253 us=398764
+[INFO] [diag t=144414454120us] graph decode path="graph_bg/BG062_000" bytes=2972253
+[INFO] [diag t=144414588102us] [cache] texture put size=12960000 total=149878164/167772160
+[INFO] [diag t=144414588113us] graph decoded path="graph_bg/BG062_000" 2400x1350 us=133993
+[INFO] [diag t=144414832680us] [cache] bytes put size=1809959 total=70579278/201326592
+[INFO] [diag t=144414832691us] vfs path="graph_bg/BG062_000b" bytes=1809959 us=243629
+[INFO] [diag t=144414832766us] graph decode path="graph_bg/BG062_000b" bytes=1809959
+[INFO] [diag t=144414935620us] [cache] texture put size=12960000 total=162838164/167772160
+[INFO] [diag t=144414935630us] graph decoded path="graph_bg/BG062_000b" 2400x1350 us=102864
+[INFO] [diag t=144414936583us] vfs cache hit path="graph/diss00" bytes=3468
+[ERROR] history_set: unexpected value for set_name : Nil
+[ERROR] history_set: unexpected value for set_voice : Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] history_set: unexpected value for set_name : Nil
+[ERROR] history_set: unexpected value for set_voice : Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] history_set: unexpected value for set_voice : Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[INFO] [diag t=144419821672us] audio source id=4098 path=Some("se/002")
+[INFO] [diag t=144419879394us] [cache] bytes put size=389624 total=70968902/201326592
+[INFO] [diag t=144419879405us] vfs path="se/002" bytes=389624 us=57681
+[INFO] Playing SE slot 2
+[INFO] [diag t=144419904576us] audio source id=3 path=Some("voice/02000010")
+[INFO] [diag t=144419904594us] voice resource path="voice/02000010"
+[INFO] [diag t=144419904634us] voice resource path="voice/02000010"
+[INFO] [diag t=144419911914us] [cache] bytes put size=26747 total=70995649/201326592
+[INFO] Playing BGM slot 3
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [diag t=144422586848us] audio source id=4100 path=Some("se_env/021")
+[INFO] Playing SE slot 4
+[INFO] [diag t=144422586954us] audio source id=4101 path=Some("se_env/005")
+[INFO] [diag t=144422586997us] vfs cache hit path="se_env/005" bytes=766568
+[INFO] Playing SE slot 5
+[INFO] [diag t=144422587548us] audio source id=4102 path=Some("se_env/051")
+[INFO] [diag t=144422587582us] vfs cache hit path="se_env/051" bytes=753552
+[INFO] Playing SE slot 6
+[INFO] [diag t=144422588301us] graph cache hit path="graph_bg/BG043_000"
+[INFO] [diag t=144422593869us] graph cache hit path="graph_bg/BG043_000b"
+[INFO] [diag t=144422599214us] vfs cache hit path="graph/diss00" bytes=3468
+[ERROR] history_set: unexpected value for set_voice : Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] history_set: unexpected value for set_name : Nil
+[ERROR] history_set: unexpected value for set_voice : Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [diag t=144424843918us] [cache] bytes put size=1369631 total=72365280/201326592
+[INFO] [diag t=144424843930us] vfs path="graph_bs/CHR_郰_婎_壞惂暈L" bytes=1369631 us=189909
+[INFO] [diag t=144424843955us] graph decode path="graph_bs/CHR_郰_婎_壞惂暈L" bytes=1369631
+[INFO] [diag t=144424932504us] [cache] texture put size=9860000 total=162726888/167772160
+[INFO] [diag t=144424932513us] graph decoded path="graph_bs/CHR_郰_婎_壞惂暈L" 1250x1972 us=88558
+[INFO] [diag t=144425397171us] [cache] bytes put size=3447414 total=75812694/201326592
+[INFO] [diag t=144425397189us] vfs path="graph_bs/CHR_郰_婎_壞惂暈L_昞忣" bytes=3447414 us=464378
+[INFO] [diag t=144425397219us] parts decode path="graph_bs/CHR_郰_婎_壞惂暈L_昞忣" bytes=3447414
+[INFO] [diag t=144425544884us] [cache] parts put size=10478160 total=24994120/50331648
+[INFO] [diag t=144425545174us] parts select id=5 entry=5
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] history_set: unexpected value for set_voice : Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [diag t=144425856824us] parts select id=5 entry=5
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] history_set: unexpected value for set_name : Nil
+[ERROR] history_set: unexpected value for set_voice : Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [diag t=144427904271us] audio source id=0 path=Some("BGM2/005")
+[INFO] Playing BGM slot 0
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[INFO] [diag t=144428469954us] parts select id=5 entry=11
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[INFO] [diag t=144428491080us] audio source id=3 path=Some("voice/02000020")
+[INFO] [diag t=144428491095us] voice resource path="voice/02000020"
+[INFO] [diag t=144428491145us] voice resource path="voice/02000020"
+[INFO] [diag t=144428507015us] [cache] bytes put size=102043 total=75914737/201326592
+[INFO] [diag t=144428507022us] vfs path="voice/02000020" bytes=102043 us=15878
+[INFO] Playing BGM slot 3
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] history_set: unexpected value for set_voice : Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] history_set: unexpected value for set_name : Nil
+[ERROR] history_set: unexpected value for set_voice : Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] history_set: unexpected value for set_voice : Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] history_set: unexpected value for set_name : Nil
+[ERROR] history_set: unexpected value for set_voice : Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] history_set: unexpected value for set_name : Nil
+[ERROR] history_set: unexpected value for set_voice : Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[INFO] [diag t=144436317343us] graph cache hit path="graph_bg/BG062_000"
+[INFO] [diag t=144436322635us] graph cache hit path="graph_bg/BG062_000b"
+[INFO] [diag t=144436327860us] vfs cache hit path="graph/diss00" bytes=3468
+[INFO] [diag t=144437087367us] audio source id=4098 path=Some("se/134")
+[INFO] [diag t=144437101430us] [cache] bytes put size=65716 total=75980453/201326592
+[INFO] [diag t=144437101439us] vfs path="se/134" bytes=65716 us=14017
+[INFO] Playing SE slot 2
+[ERROR] history_set: unexpected value for set_voice : Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] history_set: unexpected value for set_name : Nil
+[ERROR] history_set: unexpected value for set_voice : Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] history_set: unexpected value for set_name : Nil
+[ERROR] history_set: unexpected value for set_voice : Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [diag t=144440520949us] graph cache hit path="graph_bg/BG043_000"
+[INFO] [diag t=144440526732us] graph cache hit path="graph_bg/BG043_000b"
+[INFO] [diag t=144440532002us] graph cache hit path="graph_bs/CHR_郰_婎_壞惂暈L"
+[INFO] [diag t=144440535657us] parts cache hit path="graph_bs/CHR_郰_婎_壞惂暈L_昞忣"
+[INFO] [diag t=144440539586us] parts select id=5 entry=13
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[INFO] [diag t=144440541324us] vfs cache hit path="graph/diss00" bytes=3468
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[INFO] [diag t=144441870878us] parts select id=5 entry=13
+[ERROR] history_set: unexpected value for set_voice : Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[INFO] [diag t=144443754921us] audio source id=3 path=Some("voice/02000030")
+[INFO] [diag t=144443754940us] voice resource path="voice/02000030"
+[INFO] [diag t=144443754989us] voice resource path="voice/02000030"
+[INFO] [diag t=144443762720us] [cache] bytes put size=30206 total=76010659/201326592
+[INFO] Playing BGM slot 3
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [diag t=144443905971us] parts select id=5 entry=7
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] history_set: unexpected value for set_voice : Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] history_set: unexpected value for set_name : Nil
+[ERROR] history_set: unexpected value for set_voice : Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [diag t=144447825037us] [cache] bytes put size=1237593 total=77248252/201326592
+[INFO] [diag t=144447825049us] vfs path="graph_bs/CHR_郰_婌_壞惂暈L" bytes=1237593 us=170322
+[INFO] [diag t=144447825073us] graph decode path="graph_bs/CHR_郰_婌_壞惂暈L" bytes=1237593
+[INFO] [diag t=144447908803us] [cache] texture put size=9818480 total=159585368/167772160
+[INFO] [diag t=144447908812us] graph decoded path="graph_bs/CHR_郰_婌_壞惂暈L" 1246x1970 us=83739
+[INFO] [diag t=144448361942us] [cache] bytes put size=3380169 total=80628421/201326592
+[INFO] [diag t=144448361953us] vfs path="graph_bs/CHR_郰_婌_壞惂暈L_昞忣" bytes=3380169 us=452834
+[INFO] [diag t=144448361977us] parts decode path="graph_bs/CHR_郰_婌_壞惂暈L_昞忣" bytes=3380169
+[INFO] [diag t=144448506303us] [cache] parts put size=10378368 total=35372488/50331648
+[INFO] [diag t=144448506590us] parts select id=6 entry=5
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] Invalid id
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[ERROR] graph_load: invalid id : Nil
+[INFO] [diag t=144448605079us] audio source id=3 path=Some("voice/02000040")
+[INFO] [diag t=144448605098us] voice resource path="voice/02000040"
+[INFO] [diag t=144448605150us] voice resource path="voice/02000040"
+[INFO] [diag t=144448615346us] [cache] bytes put size=58976 total=80687397/201326592
+[INFO] [diag t=144448615354us] vfs path="voice/02000040" bytes=58976 us=10205
+[INFO] Playing BGM slot 3
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [diag t=144448789514us] parts select id=6 entry=5
+[INFO] [diag t=144453921010us] graph cache hit path="graph/sys_save_1"
+[INFO] [diag t=144453921395us] graph cache hit path="graph/sys_save_2"
+[INFO] [diag t=144453921824us] graph cache hit path="graph/sys_save_M"
+[INFO] [diag t=144453922338us] graph cache hit path="graph/sys_load_1"
+[INFO] [diag t=144453922689us] graph cache hit path="graph/sys_load_2"
+[INFO] [diag t=144453923069us] graph cache hit path="graph/sys_load_M"
+[INFO] [diag t=144453923486us] graph cache hit path="graph/sys_hidewin_1"
+[INFO] [diag t=144453923817us] graph cache hit path="graph/sys_hidewin_2"
+[INFO] [diag t=144453924153us] graph cache hit path="graph/sys_hidewin_M"
+[INFO] [diag t=144453924581us] graph cache hit path="graph/sys_undo_1"
+[INFO] [diag t=144453924933us] graph cache hit path="graph/sys_undo_2"
+[INFO] [diag t=144453925274us] graph cache hit path="graph/sys_undo_M"
+[INFO] [diag t=144453925677us] graph cache hit path="graph/sys_config_1"
+[INFO] [diag t=144453926032us] graph cache hit path="graph/sys_config_2"
+[INFO] [diag t=144453926367us] graph cache hit path="graph/sys_config_M"
+[INFO] [diag t=144453926793us] graph cache hit path="graph/sys_title_1"
+[INFO] [diag t=144453927124us] graph cache hit path="graph/sys_title_2"
+[INFO] [diag t=144453927461us] graph cache hit path="graph/sys_title_M"
+[INFO] [diag t=144453927869us] graph cache hit path="graph/sys_exit_1"
+[INFO] [diag t=144453928206us] graph cache hit path="graph/sys_exit_2"
+[INFO] [diag t=144453928546us] graph cache hit path="graph/sys_exit_M"
+[INFO] [diag t=144453928950us] graph cache hit path="graph/sys_return_1"
+[INFO] [diag t=144453929298us] graph cache hit path="graph/sys_return_2"
+[INFO] [diag t=144453929667us] graph cache hit path="graph/sys_return_M"
+[INFO] [diag t=144453930453us] graph cache hit path="graph/sys_window_right"
+[WARN] float_to_int: Invalid value type
+[INFO] [diag t=144453931743us] graph cache hit path="graph/sys_window_left"
+[WARN] float_to_int: Invalid value type
+[INFO] [diag t=144453933631us] graph cache hit path="graph/sys_window_title"
+[WARN] float_to_int: Invalid value type
+[INFO] Playing SE slot 21
+[INFO] Playing SE slot 17
+[INFO] [diag t=144455676362us] graph cache hit path="graph/slf_prt_sheet"
+[INFO] [diag t=144455679013us] vfs cache hit path="graph/slf_save_bg" bytes=1542658
+[INFO] [diag t=144455679614us] graph decode path="graph/slf_save_bg" bytes=1542658
+[INFO] [diag t=144455759906us] [cache] texture put size=8294400 total=163662368/167772160
+[INFO] [diag t=144455759915us] graph decoded path="graph/slf_save_bg" 1920x1080 us=80301
+[INFO] [diag t=144455805760us] vfs cache hit path="graph/diss00" bytes=3468
+[INFO] Playing SE slot 17
+[INFO] [save] SaveWrite slot=9
+[INFO] [save] state total=10226274B
+[INFO] [diag t=144457482799us] [save] materialize thumb=200x113 encode_ms=61.68 len=10316739
+[INFO] [diag t=144457712182us] [save] commit slot=9 len=10316739 write_ms=225.40 ok=true
+[INFO] [diag t=144459337587us] vfs cache hit path="graph/menu_bg" bytes=23414
+[INFO] [diag t=144459337623us] graph decode path="graph/menu_bg" bytes=23414
+[INFO] [diag t=144459342041us] [cache] texture put size=626400 total=164288768/167772160
+[INFO] [diag t=144459342050us] graph decoded path="graph/menu_bg" 783x200 us=4427
+[INFO] [diag t=144459342427us] vfs cache hit path="graph/menu_chk" bytes=1033
+[INFO] [diag t=144459342441us] graph decode path="graph/menu_chk" bytes=1033
+[INFO] [diag t=144459342540us] [cache] texture put size=2700 total=164291468/167772160
+[INFO] [diag t=144459342929us] vfs cache hit path="graph/menu_ow_mes" bytes=15576
+[INFO] [diag t=144459342953us] graph decode path="graph/menu_ow_mes" bytes=15576
+[INFO] [diag t=144459343957us] [cache] texture put size=86044 total=164377512/167772160
+[INFO] [diag t=144459344366us] vfs cache hit path="graph/menu_yes_1" bytes=4877
+[INFO] [diag t=144459344381us] graph decode path="graph/menu_yes_1" bytes=4877
+[INFO] [diag t=144459344759us] [cache] texture put size=32000 total=164409512/167772160
+[INFO] [diag t=144459345154us] vfs cache hit path="graph/menu_yes_2" bytes=10425
+[INFO] [diag t=144459345171us] graph decode path="graph/menu_yes_2" bytes=10425
+[INFO] [diag t=144459345813us] [cache] texture put size=45440 total=164454952/167772160
+[INFO] [diag t=144459346196us] vfs cache hit path="graph/menu_no_1" bytes=5344
+[INFO] [diag t=144459346209us] graph decode path="graph/menu_no_1" bytes=5344
+[INFO] [diag t=144459346606us] [cache] texture put size=33280 total=164488232/167772160
+[INFO] [diag t=144459346999us] vfs cache hit path="graph/menu_no_2" bytes=10893
+[INFO] [diag t=144459347019us] graph decode path="graph/menu_no_2" bytes=10893
+[INFO] [diag t=144459347750us] [cache] texture put size=62320 total=164550552/167772160
+[INFO] Playing SE slot 16
+[INFO] [save] SaveWrite slot=5
+[INFO] [diag t=144460648523us] [save] commit slot=5 len=10316739 write_ms=226.79 ok=true
+[INFO] [diag t=144464310091us] vfs cache hit path="graph/diss00" bytes=3468
+[INFO] [diag t=144465737126us] graph cache hit path="graph/sys_save_1"
+[INFO] [diag t=144465737507us] graph cache hit path="graph/sys_save_2"
+[INFO] [diag t=144465737920us] graph cache hit path="graph/sys_save_M"
+[INFO] [diag t=144465738478us] graph cache hit path="graph/sys_load_1"
+[INFO] [diag t=144465738852us] graph cache hit path="graph/sys_load_2"
+[INFO] [diag t=144465739213us] graph cache hit path="graph/sys_load_M"
+[INFO] [diag t=144465739751us] graph cache hit path="graph/sys_hidewin_1"
+[INFO] [diag t=144465740090us] graph cache hit path="graph/sys_hidewin_2"
+[INFO] [diag t=144465740431us] graph cache hit path="graph/sys_hidewin_M"
+[INFO] [diag t=144465740843us] graph cache hit path="graph/sys_undo_1"
+[INFO] [diag t=144465741175us] graph cache hit path="graph/sys_undo_2"
+[INFO] [diag t=144465741506us] graph cache hit path="graph/sys_undo_M"
+[INFO] [diag t=144465741928us] graph cache hit path="graph/sys_config_1"
+[INFO] [diag t=144465742280us] graph cache hit path="graph/sys_config_2"
+[INFO] [diag t=144465742622us] graph cache hit path="graph/sys_config_M"
+[INFO] [diag t=144465743028us] graph cache hit path="graph/sys_title_1"
+[INFO] [diag t=144465743410us] graph cache hit path="graph/sys_title_2"
+[INFO] [diag t=144465743737us] graph cache hit path="graph/sys_title_M"
+[INFO] [diag t=144465744128us] graph cache hit path="graph/sys_exit_1"
+[INFO] [diag t=144465744486us] graph cache hit path="graph/sys_exit_2"
+[INFO] [diag t=144465744827us] graph cache hit path="graph/sys_exit_M"
+[INFO] [diag t=144465745234us] graph cache hit path="graph/sys_return_1"
+[INFO] [diag t=144465745584us] graph cache hit path="graph/sys_return_2"
+[INFO] [diag t=144465745926us] graph cache hit path="graph/sys_return_M"
+[INFO] [diag t=144465746706us] graph cache hit path="graph/sys_window_right"
+[WARN] float_to_int: Invalid value type
+[INFO] [diag t=144465747940us] graph cache hit path="graph/sys_window_left"
+[WARN] float_to_int: Invalid value type
+[INFO] [diag t=144465749826us] graph cache hit path="graph/sys_window_title"
+[WARN] float_to_int: Invalid value type
+[INFO] [diag t=144466787378us] graph cache hit path="graph/sys_save_1"
+[INFO] [diag t=144466787762us] graph cache hit path="graph/sys_save_2"
+[INFO] [diag t=144466788190us] graph cache hit path="graph/sys_save_M"
+[INFO] [diag t=144466788742us] graph cache hit path="graph/sys_load_1"
+[INFO] [diag t=144466789141us] graph cache hit path="graph/sys_load_2"
+[INFO] [diag t=144466789514us] graph cache hit path="graph/sys_load_M"
+[INFO] [diag t=144466789978us] graph cache hit path="graph/sys_hidewin_1"
+[INFO] [diag t=144466790319us] graph cache hit path="graph/sys_hidewin_2"
+[INFO] [diag t=144466790652us] graph cache hit path="graph/sys_hidewin_M"
+[INFO] [diag t=144466791056us] graph cache hit path="graph/sys_undo_1"
+[INFO] [diag t=144466791396us] graph cache hit path="graph/sys_undo_2"
+[INFO] [diag t=144466791728us] graph cache hit path="graph/sys_undo_M"
+[INFO] [diag t=144466792132us] graph cache hit path="graph/sys_config_1"
+[INFO] [diag t=144466792493us] graph cache hit path="graph/sys_config_2"
+[INFO] [diag t=144466792835us] graph cache hit path="graph/sys_config_M"
+[INFO] [diag t=144466793244us] graph cache hit path="graph/sys_title_1"
+[INFO] [diag t=144466793578us] graph cache hit path="graph/sys_title_2"
+[INFO] [diag t=144466793915us] graph cache hit path="graph/sys_title_M"
+[INFO] [diag t=144466794333us] graph cache hit path="graph/sys_exit_1"
+[INFO] [diag t=144466794696us] graph cache hit path="graph/sys_exit_2"
+[INFO] [diag t=144466795046us] graph cache hit path="graph/sys_exit_M"
+[INFO] [diag t=144466795468us] graph cache hit path="graph/sys_return_1"
+[INFO] [diag t=144466795827us] graph cache hit path="graph/sys_return_2"
+[INFO] [diag t=144466796173us] graph cache hit path="graph/sys_return_M"
+[INFO] [diag t=144466796954us] graph cache hit path="graph/sys_window_right"
+[WARN] float_to_int: Invalid value type
+[INFO] [diag t=144466798216us] graph cache hit path="graph/sys_window_left"
+[WARN] float_to_int: Invalid value type
+[INFO] [diag t=144466800110us] graph cache hit path="graph/sys_window_title"
+[WARN] float_to_int: Invalid value type
+[INFO] Playing SE slot 21
+[INFO] Playing SE slot 21
+[INFO] Playing SE slot 21
+[INFO] Playing SE slot 17
+[INFO] [diag t=144469292253us] [cache] bytes put size=1907575 total=82594972/201326592
+[INFO] [diag t=144469292276us] vfs path="graph/opt_sheet1" bytes=1907575 us=204883
+[INFO] [diag t=144469292291us] graph decode path="graph/opt_sheet1" bytes=1907575
+[INFO] [diag t=144469383242us] [cache] texture put size=8294400 total=159884952/167772160
+[INFO] [diag t=144469383262us] graph decoded path="graph/opt_sheet1" 1920x1080 us=90970
+[INFO] [diag t=144469440384us] [cache] bytes put size=520210 total=83115182/201326592
+[INFO] [diag t=144469440403us] vfs path="graph/opt_parts" bytes=520210 us=56834
+[INFO] [diag t=144469440415us] graph decode path="graph/opt_parts" bytes=520210
+[INFO] [diag t=144469500950us] [cache] texture put size=7850880 total=167735832/167772160
+[INFO] [diag t=144469500970us] graph decoded path="graph/opt_parts" 1740x1128 us=60554
+[INFO] [diag t=144469505627us] [cache] bytes put size=4802 total=83119984/201326592
+[INFO] [diag t=144469505647us] graph decode path="graph/opt_parts_w1" bytes=4802
+[INFO] [diag t=144469506497us] [cache] texture put size=126464 total=158243696/167772160
+[INFO] [diag t=144469520855us] vfs cache hit path="graph/diss00" bytes=3468
+[INFO] [diag t=144469639921us] [cache] bytes put size=3976 total=83123960/201326592
+[INFO] [diag t=144469639960us] graph decode path="graph/opt_029" bytes=3976
+[INFO] [diag t=144469640866us] [cache] texture put size=119004 total=158362700/167772160
+[INFO] [diag t=144471742696us] vfs cache hit path="graph/diss00" bytes=3468
+[INFO] Playing SE slot 21
+[INFO] Playing SE slot 21
+[INFO] Playing SE slot 21
+[INFO] Playing SE slot 17
+[INFO] [diag t=144473247779us] graph cache hit path="graph/slf_prt_sheet"
+[INFO] [diag t=144473250465us] graph cache hit path="graph/slf_save_bg"
+[INFO] [diag t=144473310419us] vfs cache hit path="graph/diss00" bytes=3468
+[INFO] [diag t=144475462179us] vfs cache hit path="graph/diss00" bytes=3468
+[INFO] Playing SE slot 19
+[INFO] [diag t=144476477887us] [cache] bytes put size=9001 total=83132961/201326592
+[INFO] [diag t=144476477912us] graph decode path="graph/x1.0" bytes=9001
+[INFO] [diag t=144476478397us] [cache] texture put size=29412 total=158392112/167772160
+[INFO] [diag t=144476479591us] [cache] bytes put size=8791 total=83141752/201326592
+[INFO] [diag t=144476479601us] graph decode path="graph/x1.2" bytes=8791
+[INFO] [diag t=144476480118us] [cache] texture put size=29184 total=158421296/167772160
+[INFO] [diag t=144476482099us] [cache] bytes put size=8428 total=83150180/201326592
+[INFO] [diag t=144476482109us] graph decode path="graph/x1.4" bytes=8428
+[INFO] [diag t=144476482619us] [cache] texture put size=29640 total=158450936/167772160
+[INFO] [diag t=144476483883us] [cache] bytes put size=8997 total=83159177/201326592
+[INFO] [diag t=144476483891us] graph decode path="graph/x1.6" bytes=8997
+[INFO] [diag t=144476484407us] [cache] texture put size=29928 total=158480864/167772160
+[INFO] [diag t=144476486977us] [cache] bytes put size=8969 total=83168146/201326592
+[INFO] [diag t=144476486986us] graph decode path="graph/x1.8" bytes=8969
+[INFO] [diag t=144476487497us] [cache] texture put size=29928 total=158510792/167772160
+[INFO] [diag t=144476488863us] [cache] bytes put size=9218 total=83177364/201326592
+[INFO] [diag t=144476488872us] graph decode path="graph/x2.0" bytes=9218
+[INFO] [diag t=144476489380us] [cache] texture put size=29412 total=158540204/167772160
+[INFO] [diag t=144476491094us] [cache] bytes put size=7475 total=83184839/201326592
+[INFO] [diag t=144476491104us] graph decode path="graph/x2.2" bytes=7475
+[INFO] [diag t=144476491557us] [cache] texture put size=29184 total=158569388/167772160
+[INFO] [diag t=144476492750us] [cache] bytes put size=7475 total=83192314/201326592
+[INFO] [diag t=144476492759us] graph decode path="graph/x2.4" bytes=7475
+[INFO] [diag t=144476493212us] [cache] texture put size=29184 total=158598572/167772160
+[INFO] [diag t=144476495151us] [cache] bytes put size=9076 total=83201390/201326592
+[INFO] [diag t=144476495162us] graph decode path="graph/x2.6" bytes=9076
+[INFO] [diag t=144476495670us] [cache] texture put size=29928 total=158628500/167772160
+[INFO] [diag t=144476496795us] [cache] bytes put size=8978 total=83210368/201326592
+[INFO] [diag t=144476496812us] graph decode path="graph/x2.8" bytes=8978
+[INFO] [diag t=144476497319us] [cache] texture put size=29928 total=158658428/167772160
+[INFO] [diag t=144476499230us] [cache] bytes put size=8895 total=83219263/201326592
+[INFO] [diag t=144476499239us] graph decode path="graph/x嬛巭" bytes=8895
+[INFO] [diag t=144476499725us] [cache] texture put size=35084 total=158693512/167772160
+[INFO] [diag t=144476505648us] [cache] bytes put size=37367 total=83256630/201326592
+[INFO] [diag t=144476505662us] graph decode path="graph/yajirusi1" bytes=37367
+[INFO] [diag t=144476537130us] [cache] texture put size=6264000 total=164957512/167772160
+[INFO] [diag t=144476537147us] graph decoded path="graph/yajirusi1" 1740x900 us=31485
+[INFO] [diag t=144476543534us] [cache] bytes put size=38098 total=83294728/201326592
+[INFO] [diag t=144476543550us] graph decode path="graph/yajirusi2" bytes=38098
+[INFO] [diag t=144476577312us] [cache] texture put size=6692800 total=159556652/167772160
+[INFO] [diag t=144476577321us] graph decoded path="graph/yajirusi2" 1780x940 us=33771
+[INFO] [diag t=144476583149us] [cache] bytes put size=38733 total=83333461/201326592
+[INFO] [diag t=144476583165us] graph decode path="graph/yajirusi3" bytes=38733
+[INFO] [diag t=144476618746us] [cache] texture put size=7134400 total=166691052/167772160
+[INFO] [diag t=144476618758us] graph decoded path="graph/yajirusi3" 1820x980 us=35593
+perf avg over 60 ticks: vm 0.95 ms, scene 0.02 ms, render 14.54 ms, total 15.52 ms
+host avg over 60 frames: begin 0.04 ms, upload 0.00 ms (0 calls), present 13.86 ms, thumb 0.00 ms (0 calls), draws 18.0, flushes 18.0

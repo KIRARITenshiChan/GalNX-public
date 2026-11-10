@@ -1,0 +1,44 @@
+0	wait	wait:18000	ok	waited 18000ms		18337
+1	click	click:1390,694	ok	focus_ok=1		2020
+2	wait	wait:9000	ok	waited 9000ms		9336
+3	click	click:1390,281	ok	focus_ok=1		1946
+4	wait	wait:9000	ok	waited 9000ms		9360
+5	click	click:540,270	ok	focus_ok=1		1928
+6	wait	wait:12000	ok	waited 12000ms		12364
+7	capture	capture:b0-cg1	ok	bytes=1775989 nonblack=0.9018	E:\galnx-build\p26\run-lead-album\20261106-052325-rfvp\step-08-b0-cg1.png	1877
+8	key	key:C	ok	keys_sent=1		1558
+9	wait	wait:5000	ok	waited 5000ms		5368
+10	capture	capture:b1-next	ok	bytes=1768499 nonblack=0.9018	E:\galnx-build\p26\run-lead-album\20261106-052325-rfvp\step-11-b1-next.png	1907
+11	key	key:C	ok	keys_sent=1		1572
+12	wait	wait:5000	ok	waited 5000ms		5346
+13	capture	capture:b2-next	ok	bytes=1775048 nonblack=0.9018	E:\galnx-build\p26\run-lead-album\20261106-052325-rfvp\step-14-b2-next.png	1876
+14	key	key:C	ok	keys_sent=1		1602
+15	wait	wait:5000	ok	waited 5000ms		5361
+16	capture	capture:b3-next	ok	bytes=1515877 nonblack=0.9018	E:\galnx-build\p26\run-lead-album\20261106-052325-rfvp\step-17-b3-next.png	1863
+17	key	key:C	ok	keys_sent=1		1571
+18	wait	wait:5000	ok	waited 5000ms		5362
+19	capture	capture:b4-next	ok	bytes=1775991 nonblack=0.9018	E:\galnx-build\p26\run-lead-album\20261106-052325-rfvp\step-20-b4-next.png	1882
+20	key	key:C	ok	keys_sent=1		1569
+21	wait	wait:5000	ok	waited 5000ms		5346
+22	capture	capture:b5-next	ok	bytes=1768489 nonblack=0.9018	E:\galnx-build\p26\run-lead-album\20261106-052325-rfvp\step-23-b5-next.png	1853
+23	key	key:C	ok	keys_sent=1		1561
+24	wait	wait:5000	ok	waited 5000ms		5361
+25	capture	capture:b6-next	ok	bytes=1775048 nonblack=0.9018	E:\galnx-build\p26\run-lead-album\20261106-052325-rfvp\step-26-b6-next.png	1864
+26	key	key:C	ok	keys_sent=1		1562
+27	wait	wait:5000	ok	waited 5000ms		5362
+28	capture	capture:b7-next	ok	bytes=1515877 nonblack=0.9018	E:\galnx-build\p26\run-lead-album\20261106-052325-rfvp\step-29-b7-next.png	1898
+29	key	key:C	ok	keys_sent=1		1583
+30	wait	wait:5000	ok	waited 5000ms		5356
+31	capture	capture:b8-next	ok	bytes=1775989 nonblack=0.9018	E:\galnx-build\p26\run-lead-album\20261106-052325-rfvp\step-32-b8-next.png	1845
+32	key	key:C	ok	keys_sent=1		1564
+33	wait	wait:5000	ok	waited 5000ms		5357
+34	capture	capture:b9-next	ok	bytes=1768489 nonblack=0.9018	E:\galnx-build\p26\run-lead-album\20261106-052325-rfvp\step-35-b9-next.png	1897
+35	key	key:C	ok	keys_sent=1		1578
+36	wait	wait:5000	ok	waited 5000ms		5373
+37	capture	capture:b10-next	ok	bytes=1775048 nonblack=0.9018	E:\galnx-build\p26\run-lead-album\20261106-052325-rfvp\step-38-b10-next.png	1876
+38	click	click:860,500	ok	focus_ok=1		1908
+39	wait	wait:4000	ok	waited 4000ms		4365
+40	capture	capture:b11-leftclick-zoom	ok	bytes=1806012 nonblack=0.9018	E:\galnx-build\p26\run-lead-album\20261106-052325-rfvp\step-41-b11-leftclick-zoom.png	1851
+41	key	key:C	ok	keys_sent=1		1552
+42	wait	wait:5000	ok	waited 5000ms		5351
+43	capture	capture:b12-after	ok	bytes=1774963 nonblack=0.9018	E:\galnx-build\p26\run-lead-album\20261106-052325-rfvp\step-44-b12-after.png	1894

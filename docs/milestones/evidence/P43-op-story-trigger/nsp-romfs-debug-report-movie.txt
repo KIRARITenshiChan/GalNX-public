@@ -1,0 +1,63 @@
+# P43 · NSP(romfs) 冒烟 debug_report 节选（20261109-235305 run）
+# 原文 97446 B / 1176 行，这里保留 movie 段与回正文段
+
+[INFO] [diag t=11198329093us] vfs cache hit path="se_sys/013" bytes=128380
+[INFO] [async] tick seen=1 pending=0
+[INFO] [diag t=11213525622us] vfs cache hit path="graph/diss00" bytes=3468
+[INFO] [diag t=11219525834us] vfs cache hit path="graph/diss00" bytes=3468
+[INFO] MoviePlay: path=movie/01.wmv flag=Nil is_layer_effect=true
+[INFO] Movie: opened (Switch NVDEC H.264) asset=movie/01_h264.mp4
+[INFO] [diag t=11221658905us] [cache] bytes put size=2343033 total=36828121/201326592
+[INFO] [diag t=11221658919us] vfs path="movie/01.ogg" bytes=2343033 us=28952 reads=0
+[INFO] movie audio: loaded movie/01.ogg (Ogg Vorbis, 2343033 bytes); queued for the audio thread
+[INFO] movie h264: decoded frame=1 pts=0 ms 1280x720 hw=0 decode_us=18568 convert_us=5899
+[INFO] [diag t=11221687611us] audio source id=8192 path=None
+[INFO] movie audio: playing movie/01.ogg (Ogg Vorbis, 2343033 bytes)
+[INFO] movie: presented frame=1 1280x720 upload_us=79
+[INFO] movie h264: decoded frame=2 pts=33 ms 1280x720 hw=0 decode_us=21340 convert_us=3325
+[INFO] movie h264: decoded frame=3 pts=66 ms 1280x720 hw=0 decode_us=37177 convert_us=2645
+[INFO] movie h264: decoded frame=4 pts=100 ms 1280x720 hw=0 decode_us=11810 convert_us=2647
+[INFO] movie h264: decoded frame=5 pts=133 ms 1280x720 hw=0 decode_us=13656 convert_us=2858
+[INFO] movie h264: decoded frame=30 pts=967 ms 1280x720 hw=0 decode_us=16416 convert_us=2840
+[INFO] movie: presented frame=30 1280x720 upload_us=1
+[INFO] movie h264: decoded frame=60 pts=1968 ms 1280x720 hw=0 decode_us=25324 convert_us=2925
+[INFO] movie: presented frame=60 1280x720 upload_us=1
+[INFO] movie h264: decoded frame=90 pts=2969 ms 1280x720 hw=0 decode_us=11906 convert_us=2520
+[INFO] movie: presented frame=90 1280x720 upload_us=1
+[INFO] movie h264: decoded frame=120 pts=3970 ms 1280x720 hw=0 decode_us=11306 convert_us=2486
+[INFO] movie: presented frame=120 1280x720 upload_us=1
+[INFO] movie h264: decoded frame=150 pts=4971 ms 1280x720 hw=0 decode_us=12108 convert_us=2522
+[INFO] movie: presented frame=150 1280x720 upload_us=1
+[INFO] movie h264: decoded frame=180 pts=5972 ms 1280x720 hw=0 decode_us=14525 convert_us=2681
+[INFO] movie: presented frame=180 1280x720 upload_us=1
+[INFO] movie h264: decoded frame=210 pts=6973 ms 1280x720 hw=0 decode_us=14170 convert_us=2498
+[INFO] movie: presented frame=210 1280x720 upload_us=1
+[INFO] movie h264: decoded frame=240 pts=7974 ms 1280x720 hw=0 decode_us=12017 convert_us=2515
+[INFO] movie: presented frame=240 1280x720 upload_us=2
+[INFO] movie h264: decoded frame=270 pts=8975 ms 1280x720 hw=0 decode_us=15138 convert_us=2592
+[INFO] movie: presented frame=270 1280x720 upload_us=1
+[INFO] movie h264: decoded frame=300 pts=9976 ms 1280x720 hw=0 decode_us=12113 convert_us=2580
+[INFO] movie: presented frame=300 1280x720 upload_us=1
+[INFO] movie h264: decoded frame=330 pts=10977 ms 1280x720 hw=0 decode_us=17665 convert_us=2523
+[INFO] movie: presented frame=330 1280x720 upload_us=1
+[INFO] movie h264: decoded frame=360 pts=11978 ms 1280x720 hw=0 decode_us=24699 convert_us=2501
+[INFO] movie: presented frame=360 1280x720 upload_us=1
+[INFO] movie h264: decoded frame=390 pts=12979 ms 1280x720 hw=0 decode_us=11531 convert_us=3228
+[INFO] movie: presented frame=390 1280x720 upload_us=1
+[INFO] movie h264: decoded frame=420 pts=13980 ms 1280x720 hw=0 decode_us=6186 convert_us=2855
+[INFO] movie: presented frame=420 1280x720 upload_us=1
+[INFO] movie h264: decoded frame=450 pts=14981 ms 1280x720 hw=0 decode_us=23956 convert_us=2547
+[INFO] movie: presented frame=450 1280x720 upload_us=2
+[INFO] movie audio: stopped movie/01.ogg
+[INFO] [probe] graph_load path="graph/eyecatch_title_BG_01"
+[INFO] [diag t=11237311714us] [cache] bytes put size=650055 total=37478176/201326592
+[INFO] [diag t=11237311752us] graph decode path="graph/eyecatch_title_BG_01" bytes=650055
+[INFO] [diag t=11237344080us] [cache] texture put path="graph/eyecatch_title_BG_01" size=8294400 evicted=0 evicted_bytes=0 total=125259760/268435456
+[INFO] [diag t=11237344097us] graph decoded path="graph/eyecatch_title_BG_01" 1920x1080 us=32346
+# ...
+1:frame 7260: 60.0 fps over the last 60 frames, slowest frame 17.0 ms
+1170:[ERROR] history_set: unexpected value for set_voice : Nil
+1171:[ERROR] history_set: unexpected value for set_name : Nil
+1172:[ERROR] history_set: unexpected value for set_voice : Nil
+1173:[ERROR] history_set: unexpected value for set_name : Nil
+1174:[ERROR] history_set: unexpected value for set_voice : Nil

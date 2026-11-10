@@ -1,0 +1,37 @@
+# Example manifest for the third built-in adapter (ONScripter-NX, M4-f).
+# The descriptor is referenced explicitly so this file also demonstrates
+# engine.descriptor resolution (the same descriptor is built into galnx).
+schema_version: 1
+game:
+  id: sample-onscripter-game
+  title: "Sample ONScripter game"
+  publisher: "Example Publisher"
+  version: "1.0.0"
+  source_dir: "E:/Othergames/Galgame/SampleOnsGame"
+  notes: >-
+    Place the extracted ONScripter game here: the directory must contain the
+    *define / game / *start script and at least one arc.nsa or arc.sar archive.
+engine:
+  adapter: onscripter-nx
+  adapter_version: "ONScripter-NX@a8439a86 (v0.3.1)"
+  descriptor: engines/onscripter-nx.yaml
+  profile: default
+  entry: ons-content
+switch:
+  title_id: "0100B2C3D4E60000"
+  title: "SampleONS"
+  author: "GalNX"
+  icon: "artifacts/icon.jpg"
+  target: nro
+  display_mode: both
+  save_policy: per-title-isolated
+input:
+  default_mode: keyboard_mouse
+  toggle_combo: "L+R+PLUS"
+  profile: generic-vn
+build:
+  output_dir: "E:/galnx-build/sample-onscripter-game"
+  reproducible: true
+  clean_workspace_before_build: true
+  keys_env: GALNX_PROD_KEYS
+  romfs_mode: embedded

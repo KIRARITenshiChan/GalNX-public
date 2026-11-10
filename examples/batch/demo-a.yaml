@@ -1,0 +1,19 @@
+schema_version: 1
+game:
+  id: batch-demo-a
+  title: "Batch Demo A"
+  source_dir: examples/batch/games/demo-a
+engine:
+  adapter: krkrsdl2
+  adapter_version: "krkrsdl2@124bdf84 (2026-10-01)"
+  profile: default
+  entry: data.xp3
+switch:
+  title_id: "010047410000A001"
+  target: nro
+  display_mode: handheld
+build:
+  output_dir: "E:/galnx-build/batch-examples/demo-a"
+  clean_workspace_before_build: true
+  reproducible: true
+  keys_env: GALNX_PROD_KEYS

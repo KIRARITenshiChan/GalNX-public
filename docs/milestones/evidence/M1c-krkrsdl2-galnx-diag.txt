@@ -1,0 +1,2558 @@
+main: entered
+convert_args: argc=1 a0len=26
+init_platform: before romfsInit
+init_platform: after romfsInit
+probe: romfs:/data.xp3 OK size=6628897
+init_platform: after socketInitializeDefault
+init_platform: skipped nxlinkStdio
+init_platform: before StartApplication
+StartApplication: enter
+StartApplication: after CheckConsole
+init_script_engine: enter
+init_script_engine: before command line options
+init_args: enter
+init_args: before options1
+sdmc:/switch/galnx/app.nro
+init_args: after options1
+init_args: before push cmdline
+init_args: after push cmdline
+init_args: before GetDataPathDirectory
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+storage: GetLocallyAccessibleName -> GetMediaRecord
+media: GetMediaRecord found
+locally: switch strip native prefix
+?/sdmc:/switch/galnx/
+sdmc:/switch/galnx/
+init_args: after GetDataPathDirectory
+sdmc:/switch/galnx//savedata/
+storage: GetLocallyAccessibleName -> GetMediaRecord
+media: GetMediaRecord found
+locally: switch strip native prefix
+?/sdmc:/switch/galnx/
+sdmc:/switch/galnx/
+init_args: before push cmdline
+init_args: after push cmdline
+init_args: before normalize datapath
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+init_args: after normalize datapath
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+storage: GetLocallyAccessibleName -> GetMediaRecord
+media: GetMediaRecord found
+locally: switch strip native prefix
+?/sdmc:/switch/galnx/savedata/
+sdmc:/switch/galnx/savedata/
+init_script_engine: after evalcontext
+init_script_engine: after unaryaster
+init_script_engine: after debug option
+init_script_engine: before default read encoding
+init_script_engine: after default read encoding
+init_script_engine: before new tTJS
+init_script_engine: after new tTJS
+init_script_engine: before ExecScript
+init_script_engine: after ExecScript
+init_script_engine: after SetConsoleOutput
+init_script_engine: after stream gateways
+init_script_engine: before class registration
+init_script_engine: before extension classes
+init_script_engine: after extension classes
+init_script_engine: done
+StartApplication: after TVPInitScriptEngine
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+storage: SetCurrentDirectory -> GetMediaRecord
+media: GetMediaRecord found
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/sdmc:/switch/galnx/msgmap.tjs
+storage: CheckExistentStorage -> GetMediaRecord
+file://?/sdmc:/switch/galnx/msgmap.tjs
+media: GetMediaRecord found
+storage: CheckExistentStorage rec ok
+storage: CheckExistentStorage before media call
+filemedia: check enter
+?/sdmc:/switch/galnx/msgmap.tjs
+locally: switch strip native prefix
+?/sdmc:/switch/galnx/msgmap.tjs
+sdmc:/switch/galnx/msgmap.tjs
+filemedia: check local
+sdmc:/switch/galnx/msgmap.tjs
+filemedia: check fail
+storage: CheckExistentStorage media=0
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: before init options
+init_opts: enter
+init_opts: done
+rebuild: after init options
+rebuild: after clear
+rebuild: before loop
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+StartApplication: after TVPInitializeBaseSystems
+StartApplication: before TVPCheckPrintDataPath
+StartApplication: before TVPExecuteUserConfig
+StartApplication: after TVPExecuteUserConfig
+base pre: []
+base: SDL_GetBasePath NULL -> fallback romfs:/ (galnx patch)
+base switch: [romfs:/]
+base: found_dir=romfs:/data.xp3>
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+storage: SetCurrentDirectory -> GetMediaRecord
+media: GetMediaRecord found
+projectdir: selected=1
+projectdir:
+file://?/romfs:/data.xp3>
+StartApplication: after TVPSystemInit
+StartApplication: after SetTitle
+StartApplication: project dir selected -> startup script
+startup: before TVPExecuteStorage
+exec_storage: enter
+startup.tjs
+bytecode: before search placed path
+search: enter
+startup.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>startup.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+storage: CheckExistentStorage -> GetMediaRecord
+file://?/romfs:/data.xp3
+media: GetMediaRecord found
+storage: CheckExistentStorage rec ok
+storage: CheckExistentStorage before media call
+filemedia: check enter
+?/romfs:/data.xp3
+locally: switch strip native prefix
+?/romfs:/data.xp3
+romfs:/data.xp3
+filemedia: check local
+romfs:/data.xp3
+filemedia: check ok
+storage: CheckExistentStorage media=1
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3
+storage: CheckExistentStorage -> GetMediaRecord
+file://?/romfs:/data.xp3
+media: GetMediaRecord found
+storage: CheckExistentStorage rec ok
+storage: CheckExistentStorage before media call
+filemedia: check enter
+?/romfs:/data.xp3
+locally: switch strip native prefix
+?/romfs:/data.xp3
+romfs:/data.xp3
+filemedia: check local
+romfs:/data.xp3
+filemedia: check ok
+storage: CheckExistentStorage media=1
+placed: found locally
+storage: Open -> GetMediaRecord
+file://?/romfs:/data.xp3
+media: GetMediaRecord found
+locally: switch strip native prefix
+?/romfs:/data.xp3
+romfs:/data.xp3
+placed: found locally
+search: found
+search: returning place
+bytecode: after search placed path
+file://?/romfs:/data.xp3>startup.tjs
+bytecode: before create binary stream
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>startup.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: found locally
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+storage: Open -> GetMediaRecord
+file://?/romfs:/data.xp3
+media: GetMediaRecord found
+locally: switch strip native prefix
+?/romfs:/data.xp3
+romfs:/data.xp3
+bytecode: binary stream ok
+bytecode: before LoadByteCode
+bytecode: after LoadByteCode
+search: enter
+startup.tjs
+search: found
+search: returning place
+exec_storage: before read
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+exec_storage: text stream ok
+exec_storage: after read
+exec_storage: before ExecScript
+startup.tjs
+exec_storage: enter
+system_polyfill/PolyfillInitialize.tjs
+bytecode: before search placed path
+search: enter
+system_polyfill/PolyfillInitialize.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>system_polyfill/polyfillinitialize.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: found locally
+search: found
+search: returning place
+bytecode: after search placed path
+file://?/romfs:/data.xp3>system_polyfill/polyfillinitialize.tjs
+bytecode: before create binary stream
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>system_polyfill/polyfillinitialize.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: found locally
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+bytecode: binary stream ok
+bytecode: before LoadByteCode
+bytecode: after LoadByteCode
+search: enter
+system_polyfill/PolyfillInitialize.tjs
+search: found
+search: returning place
+exec_storage: before read
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+exec_storage: text stream ok
+exec_storage: after read
+exec_storage: before ExecScript
+polyfillinitialize.tjs
+exec_storage: enter
+system_polyfill/MenuItem_stub.tjs
+bytecode: before search placed path
+search: enter
+system_polyfill/MenuItem_stub.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>system_polyfill/menuitem_stub.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: found locally
+search: found
+search: returning place
+bytecode: after search placed path
+file://?/romfs:/data.xp3>system_polyfill/menuitem_stub.tjs
+bytecode: before create binary stream
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>system_polyfill/menuitem_stub.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: found locally
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+bytecode: binary stream ok
+bytecode: before LoadByteCode
+bytecode: after LoadByteCode
+search: enter
+system_polyfill/MenuItem_stub.tjs
+search: found
+search: returning place
+exec_storage: before read
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+exec_storage: text stream ok
+exec_storage: after read
+exec_storage: before ExecScript
+menuitem_stub.tjs
+exec_storage: after ExecScript
+exec_storage: enter
+system_polyfill/KAGParser.tjs
+bytecode: before search placed path
+search: enter
+system_polyfill/KAGParser.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>system_polyfill/kagparser.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: found locally
+search: found
+search: returning place
+bytecode: after search placed path
+file://?/romfs:/data.xp3>system_polyfill/kagparser.tjs
+bytecode: before create binary stream
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>system_polyfill/kagparser.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: found locally
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+bytecode: binary stream ok
+bytecode: before LoadByteCode
+bytecode: after LoadByteCode
+search: enter
+system_polyfill/KAGParser.tjs
+search: found
+search: returning place
+exec_storage: before read
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+exec_storage: text stream ok
+exec_storage: after read
+exec_storage: before ExecScript
+kagparser.tjs
+exec_storage: after ExecScript
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>system_polyfill/font.ttf
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: found locally
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+storage: Open -> GetMediaRecord
+file://?/romfs:/data.xp3
+media: GetMediaRecord found
+locally: switch strip native prefix
+?/romfs:/data.xp3
+romfs:/data.xp3
+exec_storage: after ExecScript
+exec_storage: enter
+system/Initialize.tjs
+bytecode: before search placed path
+search: enter
+system/Initialize.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>system/initialize.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: found locally
+search: found
+search: returning place
+bytecode: after search placed path
+file://?/romfs:/data.xp3>system/initialize.tjs
+bytecode: before create binary stream
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>system/initialize.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: found locally
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+bytecode: binary stream ok
+bytecode: before LoadByteCode
+bytecode: after LoadByteCode
+search: enter
+system/Initialize.tjs
+search: found
+search: returning place
+exec_storage: before read
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+exec_storage: text stream ok
+exec_storage: after read
+exec_storage: before ExecScript
+initialize.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/sdmc:/switch/galnx/video.xp3
+storage: CheckExistentStorage -> GetMediaRecord
+file://?/sdmc:/switch/galnx/video.xp3
+media: GetMediaRecord found
+storage: CheckExistentStorage rec ok
+storage: CheckExistentStorage before media call
+filemedia: check enter
+?/sdmc:/switch/galnx/video.xp3
+locally: switch strip native prefix
+?/sdmc:/switch/galnx/video.xp3
+sdmc:/switch/galnx/video.xp3
+filemedia: check local
+sdmc:/switch/galnx/video.xp3
+filemedia: check fail
+storage: CheckExistentStorage media=0
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: before init options
+init_opts: already
+rebuild: after init options
+rebuild: after clear
+rebuild: before loop
+rebuild: item
+file://?/sdmc:/switch/galnx/video/
+rebuild: folder branch
+rebuild: before GetListAt
+storage: GetListAt -> GetMediaRecord
+media: GetMediaRecord found
+locally: switch strip native prefix
+?/sdmc:/switch/galnx/video/
+sdmc:/switch/galnx/video/
+rebuild: after GetListAt
+rebuild: item
+file://?/romfs:/data.xp3>video/
+rebuild: archive branch
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+rebuild: item
+file://?/romfs:/data.xp3>others/
+rebuild: archive branch
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+rebuild: item
+file://?/romfs:/data.xp3>rule/
+rebuild: archive branch
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+rebuild: item
+file://?/romfs:/data.xp3>sound/
+rebuild: archive branch
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+rebuild: item
+file://?/romfs:/data.xp3>bgm/
+rebuild: archive branch
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+rebuild: item
+file://?/romfs:/data.xp3>fgimage/
+rebuild: archive branch
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+rebuild: item
+file://?/romfs:/data.xp3>bgimage/
+rebuild: archive branch
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+rebuild: item
+file://?/romfs:/data.xp3>scenario/
+rebuild: archive branch
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+rebuild: item
+file://?/romfs:/data.xp3>image/
+rebuild: archive branch
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+rebuild: item
+file://?/romfs:/data.xp3>system/
+rebuild: archive branch
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/sdmc:/switch/galnx/others.xp3
+storage: CheckExistentStorage -> GetMediaRecord
+file://?/sdmc:/switch/galnx/others.xp3
+media: GetMediaRecord found
+storage: CheckExistentStorage rec ok
+storage: CheckExistentStorage before media call
+filemedia: check enter
+?/sdmc:/switch/galnx/others.xp3
+locally: switch strip native prefix
+?/sdmc:/switch/galnx/others.xp3
+sdmc:/switch/galnx/others.xp3
+filemedia: check local
+sdmc:/switch/galnx/others.xp3
+filemedia: check fail
+storage: CheckExistentStorage media=0
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/sdmc:/switch/galnx/rule.xp3
+storage: CheckExistentStorage -> GetMediaRecord
+file://?/sdmc:/switch/galnx/rule.xp3
+media: GetMediaRecord found
+storage: CheckExistentStorage rec ok
+storage: CheckExistentStorage before media call
+filemedia: check enter
+?/sdmc:/switch/galnx/rule.xp3
+locally: switch strip native prefix
+?/sdmc:/switch/galnx/rule.xp3
+sdmc:/switch/galnx/rule.xp3
+filemedia: check local
+sdmc:/switch/galnx/rule.xp3
+filemedia: check fail
+storage: CheckExistentStorage media=0
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/sdmc:/switch/galnx/sound.xp3
+storage: CheckExistentStorage -> GetMediaRecord
+file://?/sdmc:/switch/galnx/sound.xp3
+media: GetMediaRecord found
+storage: CheckExistentStorage rec ok
+storage: CheckExistentStorage before media call
+filemedia: check enter
+?/sdmc:/switch/galnx/sound.xp3
+locally: switch strip native prefix
+?/sdmc:/switch/galnx/sound.xp3
+sdmc:/switch/galnx/sound.xp3
+filemedia: check local
+sdmc:/switch/galnx/sound.xp3
+filemedia: check fail
+storage: CheckExistentStorage media=0
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/sdmc:/switch/galnx/bgm.xp3
+storage: CheckExistentStorage -> GetMediaRecord
+file://?/sdmc:/switch/galnx/bgm.xp3
+media: GetMediaRecord found
+storage: CheckExistentStorage rec ok
+storage: CheckExistentStorage before media call
+filemedia: check enter
+?/sdmc:/switch/galnx/bgm.xp3
+locally: switch strip native prefix
+?/sdmc:/switch/galnx/bgm.xp3
+sdmc:/switch/galnx/bgm.xp3
+filemedia: check local
+sdmc:/switch/galnx/bgm.xp3
+filemedia: check fail
+storage: CheckExistentStorage media=0
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/sdmc:/switch/galnx/fgimage.xp3
+storage: CheckExistentStorage -> GetMediaRecord
+file://?/sdmc:/switch/galnx/fgimage.xp3
+media: GetMediaRecord found
+storage: CheckExistentStorage rec ok
+storage: CheckExistentStorage before media call
+filemedia: check enter
+?/sdmc:/switch/galnx/fgimage.xp3
+locally: switch strip native prefix
+?/sdmc:/switch/galnx/fgimage.xp3
+sdmc:/switch/galnx/fgimage.xp3
+filemedia: check local
+sdmc:/switch/galnx/fgimage.xp3
+filemedia: check fail
+storage: CheckExistentStorage media=0
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/sdmc:/switch/galnx/bgimage.xp3
+storage: CheckExistentStorage -> GetMediaRecord
+file://?/sdmc:/switch/galnx/bgimage.xp3
+media: GetMediaRecord found
+storage: CheckExistentStorage rec ok
+storage: CheckExistentStorage before media call
+filemedia: check enter
+?/sdmc:/switch/galnx/bgimage.xp3
+locally: switch strip native prefix
+?/sdmc:/switch/galnx/bgimage.xp3
+sdmc:/switch/galnx/bgimage.xp3
+filemedia: check local
+sdmc:/switch/galnx/bgimage.xp3
+filemedia: check fail
+storage: CheckExistentStorage media=0
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/sdmc:/switch/galnx/scenario.xp3
+storage: CheckExistentStorage -> GetMediaRecord
+file://?/sdmc:/switch/galnx/scenario.xp3
+media: GetMediaRecord found
+storage: CheckExistentStorage rec ok
+storage: CheckExistentStorage before media call
+filemedia: check enter
+?/sdmc:/switch/galnx/scenario.xp3
+locally: switch strip native prefix
+?/sdmc:/switch/galnx/scenario.xp3
+sdmc:/switch/galnx/scenario.xp3
+filemedia: check local
+sdmc:/switch/galnx/scenario.xp3
+filemedia: check fail
+storage: CheckExistentStorage media=0
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/sdmc:/switch/galnx/image.xp3
+storage: CheckExistentStorage -> GetMediaRecord
+file://?/sdmc:/switch/galnx/image.xp3
+media: GetMediaRecord found
+storage: CheckExistentStorage rec ok
+storage: CheckExistentStorage before media call
+filemedia: check enter
+?/sdmc:/switch/galnx/image.xp3
+locally: switch strip native prefix
+?/sdmc:/switch/galnx/image.xp3
+sdmc:/switch/galnx/image.xp3
+filemedia: check local
+sdmc:/switch/galnx/image.xp3
+filemedia: check fail
+storage: CheckExistentStorage media=0
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/sdmc:/switch/galnx/system.xp3
+storage: CheckExistentStorage -> GetMediaRecord
+file://?/sdmc:/switch/galnx/system.xp3
+media: GetMediaRecord found
+storage: CheckExistentStorage rec ok
+storage: CheckExistentStorage before media call
+filemedia: check enter
+?/sdmc:/switch/galnx/system.xp3
+locally: switch strip native prefix
+?/sdmc:/switch/galnx/system.xp3
+sdmc:/switch/galnx/system.xp3
+filemedia: check local
+sdmc:/switch/galnx/system.xp3
+filemedia: check fail
+storage: CheckExistentStorage media=0
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/sdmc:/switch/galnx/patch.xp3
+storage: CheckExistentStorage -> GetMediaRecord
+file://?/sdmc:/switch/galnx/patch.xp3
+media: GetMediaRecord found
+storage: CheckExistentStorage rec ok
+storage: CheckExistentStorage before media call
+filemedia: check enter
+?/sdmc:/switch/galnx/patch.xp3
+locally: switch strip native prefix
+?/sdmc:/switch/galnx/patch.xp3
+sdmc:/switch/galnx/patch.xp3
+filemedia: check local
+sdmc:/switch/galnx/patch.xp3
+filemedia: check fail
+storage: CheckExistentStorage media=0
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/sdmc:/switch/galnx/patch2.xp3
+storage: CheckExistentStorage -> GetMediaRecord
+file://?/sdmc:/switch/galnx/patch2.xp3
+media: GetMediaRecord found
+storage: CheckExistentStorage rec ok
+storage: CheckExistentStorage before media call
+filemedia: check enter
+?/sdmc:/switch/galnx/patch2.xp3
+locally: switch strip native prefix
+?/sdmc:/switch/galnx/patch2.xp3
+sdmc:/switch/galnx/patch2.xp3
+filemedia: check local
+sdmc:/switch/galnx/patch2.xp3
+filemedia: check fail
+storage: CheckExistentStorage media=0
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>config.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table hit
+exec_storage: enter
+Config.tjs
+bytecode: before search placed path
+search: enter
+Config.tjs
+search: found
+search: returning place
+bytecode: after search placed path
+file://?/romfs:/data.xp3>system/config.tjs
+bytecode: before create binary stream
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>system/config.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: found locally
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+bytecode: binary stream ok
+bytecode: before LoadByteCode
+bytecode: after LoadByteCode
+search: enter
+Config.tjs
+search: found
+search: returning place
+exec_storage: before read
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+exec_storage: text stream ok
+exec_storage: after read
+exec_storage: before ExecScript
+config.tjs
+exec_storage: after ExecScript
+exec_storage: enter
+UpdateConfig.tjs
+bytecode: before search placed path
+search: enter
+UpdateConfig.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>updateconfig.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table hit
+search: found
+search: returning place
+bytecode: after search placed path
+file://?/romfs:/data.xp3>system/updateconfig.tjs
+bytecode: before create binary stream
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>system/updateconfig.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: found locally
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+bytecode: binary stream ok
+bytecode: before LoadByteCode
+bytecode: after LoadByteCode
+search: enter
+UpdateConfig.tjs
+search: found
+search: returning place
+exec_storage: before read
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+exec_storage: text stream ok
+exec_storage: after read
+exec_storage: before ExecScript
+updateconfig.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>config.~new
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+exec_storage: after ExecScript
+exec_storage: enter
+Utils.tjs
+bytecode: before search placed path
+search: enter
+Utils.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>utils.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table hit
+search: found
+search: returning place
+bytecode: after search placed path
+file://?/romfs:/data.xp3>system/utils.tjs
+bytecode: before create binary stream
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>system/utils.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: found locally
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+bytecode: binary stream ok
+bytecode: before LoadByteCode
+bytecode: after LoadByteCode
+search: enter
+Utils.tjs
+search: found
+search: returning place
+exec_storage: before read
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+exec_storage: text stream ok
+exec_storage: after read
+exec_storage: before ExecScript
+utils.tjs
+exec_storage: after ExecScript
+exec_storage: enter
+KAGLayer.tjs
+bytecode: before search placed path
+search: enter
+KAGLayer.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>kaglayer.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table hit
+search: found
+search: returning place
+bytecode: after search placed path
+file://?/romfs:/data.xp3>system/kaglayer.tjs
+bytecode: before create binary stream
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>system/kaglayer.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: found locally
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+bytecode: binary stream ok
+bytecode: before LoadByteCode
+bytecode: after LoadByteCode
+search: enter
+KAGLayer.tjs
+search: found
+search: returning place
+exec_storage: before read
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+exec_storage: text stream ok
+exec_storage: after read
+exec_storage: before ExecScript
+kaglayer.tjs
+exec_storage: after ExecScript
+exec_storage: enter
+HistoryLayer.tjs
+bytecode: before search placed path
+search: enter
+HistoryLayer.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>historylayer.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table hit
+search: found
+search: returning place
+bytecode: after search placed path
+file://?/romfs:/data.xp3>system/historylayer.tjs
+bytecode: before create binary stream
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>system/historylayer.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: found locally
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+bytecode: binary stream ok
+bytecode: before LoadByteCode
+bytecode: after LoadByteCode
+search: enter
+HistoryLayer.tjs
+search: found
+search: returning place
+exec_storage: before read
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+exec_storage: text stream ok
+exec_storage: after read
+exec_storage: before ExecScript
+historylayer.tjs
+exec_storage: after ExecScript
+exec_storage: enter
+BGM.tjs
+bytecode: before search placed path
+search: enter
+BGM.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>bgm.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table hit
+search: found
+search: returning place
+bytecode: after search placed path
+file://?/romfs:/data.xp3>system/bgm.tjs
+bytecode: before create binary stream
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>system/bgm.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: found locally
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+bytecode: binary stream ok
+bytecode: before LoadByteCode
+bytecode: after LoadByteCode
+search: enter
+BGM.tjs
+search: found
+search: returning place
+exec_storage: before read
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+exec_storage: text stream ok
+exec_storage: after read
+exec_storage: before ExecScript
+bgm.tjs
+exec_storage: after ExecScript
+exec_storage: enter
+SE.tjs
+bytecode: before search placed path
+search: enter
+SE.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>se.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table hit
+search: found
+search: returning place
+bytecode: after search placed path
+file://?/romfs:/data.xp3>system/se.tjs
+bytecode: before create binary stream
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>system/se.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: found locally
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+bytecode: binary stream ok
+bytecode: before LoadByteCode
+bytecode: after LoadByteCode
+search: enter
+SE.tjs
+search: found
+search: returning place
+exec_storage: before read
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+exec_storage: text stream ok
+exec_storage: after read
+exec_storage: before ExecScript
+se.tjs
+exec_storage: after ExecScript
+exec_storage: enter
+Movie.tjs
+bytecode: before search placed path
+search: enter
+Movie.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>movie.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table hit
+search: found
+search: returning place
+bytecode: after search placed path
+file://?/romfs:/data.xp3>system/movie.tjs
+bytecode: before create binary stream
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>system/movie.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: found locally
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+bytecode: binary stream ok
+bytecode: before LoadByteCode
+bytecode: after LoadByteCode
+search: enter
+Movie.tjs
+search: found
+search: returning place
+exec_storage: before read
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+exec_storage: text stream ok
+exec_storage: after read
+exec_storage: before ExecScript
+movie.tjs
+exec_storage: after ExecScript
+exec_storage: enter
+Conductor.tjs
+bytecode: before search placed path
+search: enter
+Conductor.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>conductor.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table hit
+search: found
+search: returning place
+bytecode: after search placed path
+file://?/romfs:/data.xp3>system/conductor.tjs
+bytecode: before create binary stream
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>system/conductor.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: found locally
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+bytecode: binary stream ok
+bytecode: before LoadByteCode
+bytecode: after LoadByteCode
+search: enter
+Conductor.tjs
+search: found
+search: returning place
+exec_storage: before read
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+exec_storage: text stream ok
+exec_storage: after read
+exec_storage: before ExecScript
+conductor.tjs
+exec_storage: after ExecScript
+exec_storage: enter
+AnimationLayer.tjs
+bytecode: before search placed path
+search: enter
+AnimationLayer.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>animationlayer.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table hit
+search: found
+search: returning place
+bytecode: after search placed path
+file://?/romfs:/data.xp3>system/animationlayer.tjs
+bytecode: before create binary stream
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>system/animationlayer.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: found locally
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+bytecode: binary stream ok
+bytecode: before LoadByteCode
+bytecode: after LoadByteCode
+search: enter
+AnimationLayer.tjs
+search: found
+search: returning place
+exec_storage: before read
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+exec_storage: text stream ok
+exec_storage: after read
+exec_storage: before ExecScript
+animationlayer.tjs
+exec_storage: after ExecScript
+exec_storage: enter
+GraphicLayer.tjs
+bytecode: before search placed path
+search: enter
+GraphicLayer.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>graphiclayer.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table hit
+search: found
+search: returning place
+bytecode: after search placed path
+file://?/romfs:/data.xp3>system/graphiclayer.tjs
+bytecode: before create binary stream
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>system/graphiclayer.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: found locally
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+bytecode: binary stream ok
+bytecode: before LoadByteCode
+bytecode: after LoadByteCode
+search: enter
+GraphicLayer.tjs
+search: found
+search: returning place
+exec_storage: before read
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+exec_storage: text stream ok
+exec_storage: after read
+exec_storage: before ExecScript
+graphiclayer.tjs
+exec_storage: after ExecScript
+exec_storage: enter
+MessageLayer.tjs
+bytecode: before search placed path
+search: enter
+MessageLayer.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>messagelayer.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table hit
+search: found
+search: returning place
+bytecode: after search placed path
+file://?/romfs:/data.xp3>system/messagelayer.tjs
+bytecode: before create binary stream
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>system/messagelayer.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: found locally
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+bytecode: binary stream ok
+bytecode: before LoadByteCode
+bytecode: after LoadByteCode
+search: enter
+MessageLayer.tjs
+search: found
+search: returning place
+exec_storage: before read
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+exec_storage: text stream ok
+exec_storage: after read
+exec_storage: before ExecScript
+messagelayer.tjs
+exec_storage: after ExecScript
+exec_storage: enter
+Menus.tjs
+bytecode: before search placed path
+search: enter
+Menus.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>menus.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table hit
+search: found
+search: returning place
+bytecode: after search placed path
+file://?/romfs:/data.xp3>system/menus.tjs
+bytecode: before create binary stream
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>system/menus.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: found locally
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+bytecode: binary stream ok
+bytecode: before LoadByteCode
+bytecode: after LoadByteCode
+search: enter
+Menus.tjs
+search: found
+search: returning place
+exec_storage: before read
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+exec_storage: text stream ok
+exec_storage: after read
+exec_storage: before ExecScript
+menus.tjs
+exec_storage: after ExecScript
+exec_storage: enter
+DefaultMover.tjs
+bytecode: before search placed path
+search: enter
+DefaultMover.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>defaultmover.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table hit
+search: found
+search: returning place
+bytecode: after search placed path
+file://?/romfs:/data.xp3>system/defaultmover.tjs
+bytecode: before create binary stream
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>system/defaultmover.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: found locally
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+bytecode: binary stream ok
+bytecode: before LoadByteCode
+bytecode: after LoadByteCode
+search: enter
+DefaultMover.tjs
+search: found
+search: returning place
+exec_storage: before read
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+exec_storage: text stream ok
+exec_storage: after read
+exec_storage: before ExecScript
+defaultmover.tjs
+exec_storage: after ExecScript
+exec_storage: enter
+MainWindow.tjs
+bytecode: before search placed path
+search: enter
+MainWindow.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>mainwindow.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table hit
+search: found
+search: returning place
+bytecode: after search placed path
+file://?/romfs:/data.xp3>system/mainwindow.tjs
+bytecode: before create binary stream
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>system/mainwindow.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: found locally
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+bytecode: binary stream ok
+bytecode: before LoadByteCode
+bytecode: after LoadByteCode
+search: enter
+MainWindow.tjs
+search: found
+search: returning place
+exec_storage: before read
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+exec_storage: text stream ok
+exec_storage: after read
+exec_storage: before ExecScript
+mainwindow.tjs
+exec_storage: after ExecScript
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>override.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/sdmc:/switch/galnx/override2.tjs
+storage: CheckExistentStorage -> GetMediaRecord
+file://?/sdmc:/switch/galnx/override2.tjs
+media: GetMediaRecord found
+storage: CheckExistentStorage rec ok
+storage: CheckExistentStorage before media call
+filemedia: check enter
+?/sdmc:/switch/galnx/override2.tjs
+locally: switch strip native prefix
+?/sdmc:/switch/galnx/override2.tjs
+sdmc:/switch/galnx/override2.tjs
+filemedia: check local
+sdmc:/switch/galnx/override2.tjs
+filemedia: check fail
+storage: CheckExistentStorage media=0
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+window: before SDL_CreateWindow
+window: after SDL_CreateWindow
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+storage: GetLocallyAccessibleName -> GetMediaRecord
+media: GetMediaRecord found
+locally: switch strip native prefix
+?/sdmc:/switch/galnx/savedata/
+sdmc:/switch/galnx/savedata/
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/sdmc:/switch/galnx/savedata/datasc.ksd
+storage: CheckExistentStorage -> GetMediaRecord
+file://?/sdmc:/switch/galnx/savedata/datasc.ksd
+media: GetMediaRecord found
+storage: CheckExistentStorage rec ok
+storage: CheckExistentStorage before media call
+filemedia: check enter
+?/sdmc:/switch/galnx/savedata/datasc.ksd
+locally: switch strip native prefix
+?/sdmc:/switch/galnx/savedata/datasc.ksd
+sdmc:/switch/galnx/savedata/datasc.ksd
+filemedia: check local
+sdmc:/switch/galnx/savedata/datasc.ksd
+filemedia: check fail
+storage: CheckExistentStorage media=0
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/sdmc:/switch/galnx/savedata/datasu.ksd
+storage: CheckExistentStorage -> GetMediaRecord
+file://?/sdmc:/switch/galnx/savedata/datasu.ksd
+media: GetMediaRecord found
+storage: CheckExistentStorage rec ok
+storage: CheckExistentStorage before media call
+filemedia: check enter
+?/sdmc:/switch/galnx/savedata/datasu.ksd
+locally: switch strip native prefix
+?/sdmc:/switch/galnx/savedata/datasu.ksd
+sdmc:/switch/galnx/savedata/datasu.ksd
+filemedia: check local
+sdmc:/switch/galnx/savedata/datasu.ksd
+filemedia: check fail
+storage: CheckExistentStorage media=0
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+storage: Open -> GetMediaRecord
+file://?/sdmc:/switch/galnx/savedata/datasc.ksd
+media: GetMediaRecord found
+locally: switch strip native prefix
+?/sdmc:/switch/galnx/savedata/datasc.ksd
+sdmc:/switch/galnx/savedata/datasc.ksd
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+storage: Open -> GetMediaRecord
+file://?/sdmc:/switch/galnx/savedata/datasu.ksd
+media: GetMediaRecord found
+locally: switch strip native prefix
+?/sdmc:/switch/galnx/savedata/datasu.ksd
+sdmc:/switch/galnx/savedata/datasu.ksd
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>afterinit.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: before init options
+init_opts: already
+rebuild: after init options
+rebuild: after clear
+rebuild: before loop
+rebuild: item
+file://?/sdmc:/switch/galnx/video/
+rebuild: folder branch
+rebuild: before GetListAt
+storage: GetListAt -> GetMediaRecord
+media: GetMediaRecord found
+locally: switch strip native prefix
+?/sdmc:/switch/galnx/video/
+sdmc:/switch/galnx/video/
+rebuild: after GetListAt
+rebuild: item
+file://?/romfs:/data.xp3>video/
+rebuild: archive branch
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+rebuild: item
+file://?/romfs:/data.xp3>others/
+rebuild: archive branch
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+rebuild: item
+file://?/romfs:/data.xp3>rule/
+rebuild: archive branch
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+rebuild: item
+file://?/romfs:/data.xp3>sound/
+rebuild: archive branch
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+rebuild: item
+file://?/romfs:/data.xp3>bgm/
+rebuild: archive branch
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+rebuild: item
+file://?/romfs:/data.xp3>fgimage/
+rebuild: archive branch
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+rebuild: item
+file://?/romfs:/data.xp3>bgimage/
+rebuild: archive branch
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+rebuild: item
+file://?/romfs:/data.xp3>scenario/
+rebuild: archive branch
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+rebuild: item
+file://?/romfs:/data.xp3>image/
+rebuild: archive branch
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+rebuild: item
+file://?/romfs:/data.xp3>system/
+rebuild: archive branch
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/sdmc:/switch/galnx/afterinit2.tjs
+storage: CheckExistentStorage -> GetMediaRecord
+file://?/sdmc:/switch/galnx/afterinit2.tjs
+media: GetMediaRecord found
+storage: CheckExistentStorage rec ok
+storage: CheckExistentStorage before media call
+filemedia: check enter
+?/sdmc:/switch/galnx/afterinit2.tjs
+locally: switch strip native prefix
+?/sdmc:/switch/galnx/afterinit2.tjs
+sdmc:/switch/galnx/afterinit2.tjs
+filemedia: check local
+sdmc:/switch/galnx/afterinit2.tjs
+filemedia: check fail
+storage: CheckExistentStorage media=0
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>first.ks
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table hit
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+exec_storage: after ExecScript
+exec_storage: after ExecScript
+exec_storage: nest zero
+startup: after TVPExecuteStorage
+StartApplication: after TVPInitializeStartupScript
+init_platform: StartApplication returned false
+main: run_main_loop
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>snow.ks
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table hit
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+exec_storage: enter
+Plugin.tjs
+bytecode: before search placed path
+search: enter
+Plugin.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>plugin.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table hit
+search: found
+search: returning place
+bytecode: after search placed path
+file://?/romfs:/data.xp3>system/plugin.tjs
+bytecode: before create binary stream
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>system/plugin.tjs
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: found locally
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+bytecode: binary stream ok
+bytecode: before LoadByteCode
+bytecode: after LoadByteCode
+search: enter
+Plugin.tjs
+search: found
+search: returning place
+exec_storage: before read
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+exec_storage: text stream ok
+exec_storage: after read
+exec_storage: before ExecScript
+plugin.tjs
+exec_storage: after ExecScript
+exec_storage: nest zero
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+storage: Open -> GetMediaRecord
+file://?/sdmc:/switch/galnx/savedata/data999.ksd
+media: GetMediaRecord found
+locally: switch strip native prefix
+?/sdmc:/switch/galnx/savedata/data999.ksd
+sdmc:/switch/galnx/savedata/data999.ksd
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>_24_5.tlg6
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: before init options
+init_opts: already
+rebuild: after init options
+rebuild: after clear
+rebuild: before loop
+rebuild: item
+file://?/sdmc:/switch/galnx/video/
+rebuild: folder branch
+rebuild: before GetListAt
+storage: GetListAt -> GetMediaRecord
+media: GetMediaRecord found
+locally: switch strip native prefix
+?/sdmc:/switch/galnx/video/
+sdmc:/switch/galnx/video/
+rebuild: after GetListAt
+rebuild: item
+file://?/romfs:/data.xp3>video/
+rebuild: archive branch
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+rebuild: item
+file://?/romfs:/data.xp3>others/
+rebuild: archive branch
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+rebuild: item
+file://?/romfs:/data.xp3>rule/
+rebuild: archive branch
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+rebuild: item
+file://?/romfs:/data.xp3>sound/
+rebuild: archive branch
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+rebuild: item
+file://?/romfs:/data.xp3>bgm/
+rebuild: archive branch
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+rebuild: item
+file://?/romfs:/data.xp3>fgimage/
+rebuild: archive branch
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+rebuild: item
+file://?/romfs:/data.xp3>bgimage/
+rebuild: archive branch
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+rebuild: item
+file://?/romfs:/data.xp3>scenario/
+rebuild: archive branch
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+rebuild: item
+file://?/romfs:/data.xp3>image/
+rebuild: archive branch
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+rebuild: item
+file://?/romfs:/data.xp3>system/
+rebuild: archive branch
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>_24_5.tlg5
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>_24_5.tlg
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>_24_5.png
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>_24_5.jif
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>_24_5.jpg
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table hit
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>_24_5_p.tlg6
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>_24_5_p.tlg5
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>_24_5_p.tlg
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>_24_5_p.png
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>_24_5_p.jif
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>_24_5_p.jpg
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>_24_5_p.jpeg
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>_24_5_p.dib
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>_24_5_p.bmp
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>_24_5_m.tlg6
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>_24_5_m.tlg5
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>_24_5_m.tlg
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>_24_5_m.png
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>_24_5_m.jif
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>_24_5_m.jpg
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>_24_5_m.jpeg
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>_24_5_m.dib
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>_24_5_m.bmp
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>_24_5.asd
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: after normalize
+file://?/romfs:/data.xp3>_24_5.ma
+storage: NormalizeStorageName -> GetMediaRecord
+file
+media: GetMediaRecord found
+placed: not found locally
+placed: before rebuild
+rebuild: enter
+rebuild: already init
+placed: after rebuild
+placed: before table find
+placed: table miss
+placed: not found -> cache add
+placed: returning empty

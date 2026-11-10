@@ -1,0 +1,17 @@
+{
+  "with_content_nro": {
+    "path": "E:/galnx-build/m4-ons/m4-ons.nro",
+    "bytes": 10449140,
+    "sha256": "d8f9bb116e11c25b0850890202e4c4e7de0e21f830c212f40ce6d54c527f828d"
+  },
+  "elf": {
+    "path": "E:/galnx-build/m4-ons/m4-ons.elf",
+    "bytes": 23565056,
+    "sha256": "888f32c7f06513ca9c55996033cc71e13691c8246370c23df98c7a4594eca4cd"
+  },
+  "nacp": {
+    "path": "E:/galnx-build/m4-ons/m4-ons.nacp",
+    "bytes": 16384,
+    "sha256": "3cd7982c424b7048a86c08522b6c2a77914241756bb139ad4fd2881c4b035b7f"
+  }
+}

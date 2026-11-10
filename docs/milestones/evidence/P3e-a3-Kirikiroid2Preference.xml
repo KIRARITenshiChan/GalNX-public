@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GlobalPreference>
+  <!-- GalNX pilot-01: default gamepad -> keyboard keymap for Kirikiroid2-NX.
+       The engine resolves pad buttons to VK_PAD* (CCKeyCodeConv.cpp TVPConvertPadKeyCodeToVKCode,
+       VK_PAD1=0x1C0=448 ... VK_PADLEFT=0x1B5=437), but the game scripts only handle VK_* values,
+       so without this file pad buttons are ignored. MainScene.cpp:1749-1756 builds _keymap from
+       IndividualConfigManager::GetKeyMap(); this file is read by UsePreferenceAt(folder) where
+       folder = PathSplit(startup).first, i.e. <sd>/kirikiri/haruno/Kirikiroid2Preference.xml. -->
+  <KeyMap key="448" value="13"/>   <!-- A     (VK_PAD1)  -> VK_RETURN: confirm / advance -->
+  <KeyMap key="449" value="27"/>   <!-- B     (VK_PAD2)  -> VK_ESCAPE: menu / back     -->
+  <KeyMap key="451" value="32"/>   <!-- X     (VK_PAD4)  -> VK_SPACE : advance alt      -->
+  <KeyMap key="437" value="37"/>   <!-- D-pad LEFT        -> VK_LEFT                     -->
+  <KeyMap key="438" value="38"/>   <!-- D-pad UP          -> VK_UP                       -->
+  <KeyMap key="439" value="39"/>   <!-- D-pad RIGHT       -> VK_RIGHT                    -->
+  <KeyMap key="440" value="40"/>   <!-- D-pad DOWN        -> VK_DOWN                     -->
+</GlobalPreference>

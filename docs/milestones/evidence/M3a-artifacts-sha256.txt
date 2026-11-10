@@ -1,0 +1,89 @@
+# M3-a 证据 E3: 产物与工具哈希元数据
+# 采集时间: 2026-10-30 02:16–02:18 (Asia/Shanghai)
+# 采集人: audit-package (task-19)
+# 说明: 所有 SHA-256 由 sha256sum 实算；大产物不入库，位于 /e/galnx-build/m3-tools/out/。
+
+## 1. 工具链（版本与哈希）
+| 工具 | 版本/来源 | 文件大小 | SHA-256 |
+| --- | --- | ---: | --- |
+| nstool.exe | NSTool v1.9.2 (C) jakcron / Built 01:34:03 Oct 14 2024 | 1,050,112 B | 844648190dd8688098887a369da1126c1b3ab1c2a664fb603b01cb22e76b6ca9 |
+| nstool release zip | https://github.com/jakcron/nstool/releases/download/v1.9.2/nstool-v1.9.2-win_x64.zip | 487,087 B | 34659dc47249a3c00f7fc88a11f4e5ba14dfbec0a6a96b4f3f71368a7e1c9374 |
+| hacbrewpack.exe | 自源码构建（GCC 16.2.0，-O2，mbedtls） | 508,983 B | 5623fd2b51225b91d18e23f252bc8d21e440b94be53701f39e514358fecf2c7b |
+| hacBrewPack source zip | v3.05 / 745b16ecfc9ce055743067d200572204cb2aac6c | 3,164,885 B | 77d7c65976f5a4161219a0447a54a4fd40f18b9ee579d9325fa48986dc61e601 |
+| nx-hbloader source zip | v2.4.5 / 82b95122c5ae8dc059bf23893ba7623c72c86773（参考模板） | 11,990 B | 98a59fb255e0419fc3699ef36268d9da5189029df4161a408f02dad60c43fa68 |
+| hbl.nsp | nx-hbloader v2.4.5 release（参考，非可安装 NSP） | 40,946 B | 853df8526557b82c6b2018a8a102d22e8306687415e49653530dfd9a1d603b32 |
+| elf2nso.exe | devkitPro 2024-10-23 23:42:13 | 94,720 B | d41476f5f16f66345b2911b28ea8aabde2ea6ddfaf54d27e08f2ac98a794d99f |
+| npdmtool.exe | devkitPro 2024-10-23 23:42:13 | 106,496 B | 7fbce9299a0d17fee0c396bfbd09e63cfaf97cfa8e153c0d1fe6d6ca318c8fde |
+| nacptool.exe | devkitPro 2024-10-23 23:42:13 | 74,240 B | d899dd3753f05a9a837fcc4877d52c052128d772977de6c3cfeb4607885fa034 |
+| libnx/default_icon.jpg | devkitPro libnx（默认图标，256x256 JPEG） | 6,285 B | 0b942950df9fb30f08336b681e24a3ceeeaa6f0915d7dd404d5ebb9bd4e15214 |
+
+- 编译环境: gcc.exe (x86_64-posix-seh-rev1, Built by MinGW-Builds project) 16.2.0；GNU Make 4.4.1。
+- devkitPro 工具 mtime 均为 2024-10-23 23:42:13（与 switch-tools v1.13.1 提交日期 2024-10-23 相符）。
+
+## 2. 构建输入（暂存树与提取结果一致）
+### m0-hello（/e/galnx-build/m3-tools/script-work-real-r/）
+| 路径 | 大小 | SHA-256 |
+| --- | ---: | --- |
+| exefs/main（elf2nso ← /e/galnx-build/m0-hello/m0-hello.elf） | 84,060 B | 1d9e7568166f69f7dcbb4f4ca773698b6e8ae80d19ff1e280ff2fd54716f99db |
+| exefs/main.npdm（npdmtool） | 972 B | 7296b4c97af1f90cc8556bf8b65cba5cb0cadfa6c5f4f2394da3cd2c35574d22 |
+| control/control.nacp（nacptool） | 16,384 B | 062e130ffb6f6727f43e947c7c772c210cf081280be9bb7d458d1dcdc52e9b48 |
+| control/icon_AmericanEnglish.dat（= libnx default_icon.jpg） | 6,285 B | 0b942950df9fb30f08336b681e24a3ceeeaa6f0915d7dd404d5ebb9bd4e15214 |
+| romfs/hello.txt（fixture） | 31 B | 03912248c2f59f77146b65b1f5f8c87774a3f7eb15902e06b9cbd28d9d09e7a7 |
+
+### m1-sdl2（/e/galnx-build/m3-tools/script-work-real-m1/）
+| 路径 | 大小 | SHA-256 |
+| --- | ---: | --- |
+| exefs/main（elf2nso ← /e/galnx-build/m1-sdl2/m1-sdl2.elf 15,503,664 B） | 3,836,556 B | d8f841d0f2a81b5bb944f57cd859eb5871ce516221cf386e58cae5a966c70d2e |
+| exefs/main.npdm | 972 B | 564a2b44fcf2132c5be9c510b338a4e0b2a6e2da3aec8ddcdc408536019902d1 |
+| control/control.nacp | 16,384 B | 4acdc9a7a6916fd25620079b6dd88f32b74ea77a2281b2fb4e6309c9380a7ca1 |
+| control/icon_AmericanEnglish.dat | 6,285 B | 0b942950df9fb30f08336b681e24a3ceeeaa6f0915d7dd404d5ebb9bd4e15214 |
+
+## 3. 产物 NSP（/e/galnx-build/m3-tools/out/，不入库）
+| 构建 | 命令/模式 | 大小 | SHA-256 |
+| --- | --- | ---: | --- |
+| script-synth（m0） | --keyset synthetic（NOT INSTALLABLE） | 309,464 B | 0441af687061312d19028e0a629664e60b9f8c8a8b008117fda3c75d973be219 |
+| script-real-a（m0） | 真实 keyset，第一次 | 309,464 B | cd7ff7492b5358a64b8ad9097eb547fe9ab79faf64ffda31fb4331c5fb706354 |
+| script-real-b（m0） | 真实 keyset，第二次（同输入） | 309,464 B | 9a915ef2f41152aef25eee4780db67f5d51e752a2d8594a7c9bf28f557fdfc4d |
+| script-real-r（m0+romfs） | 真实 keyset，含 romfs/hello.txt | 309,464 B | f89f7063d2fa9ba8a51c930f00c0a1993e230e1fbaf4dd0f83cb816ff9baa60f |
+| script-real-m1 | 真实 keyset，m1-sdl2.elf，TitleID …1001 | 4,063,448 B | 6f17a387cf0b045fd40625271b43dc46712b872897f16a8acf9d26945e804128 |
+| 手工 build1（更早） | 真实 keyset | 309,464 B | cb6d061c4dbc60e6c858d51075de38639eb078f03c4328de292dfb9c9aca5be7 |
+| 手工 build2（更早） | 真实 keyset，同输入 | 309,464 B | 818fcc0b6c148a4382d67c8f540b2dfe6d24ffb106ac5d4eefc89917a061db00 |
+
+非确定性证据: 同一输入树的全部 m0 NSP 均为 309,464 B，但 SHA-256 互不相同。
+原因（源码核实）: rsa.c rsa_sign() 使用 mbedtls_rsa_set_padding(MBEDTLS_RSA_PKCS_V21, MBEDTLS_MD_SHA256)
+（即 RSA-PSS）+ ctr_drbg 随机盐 → 同一个 NCA 每次签名不同；nca.c:667-670 在 nosignncasig2==0 时调用。
+Control NCA 内容/文件名/HASH 跨构建恒定（d5bcc2f62e1f6e8852ba230b67179c13.nca →
+sha256 d5bcc2f62e1f6e8852ba230b67179c1353119c8c009ea54f090886d31378230e），可作对照。
+
+## 4. 产物内 NSP 布局（PFS0，详见 M3a-nsp-script-output.txt）
+### script-real-a
+fileCount 3 / stringTableSize 128 / dataStart 0xd8 / nspSize 309,464
+| 顺序 | 文件名 | offset | size | SHA-256 |
+| --- | --- | ---: | ---: | --- |
+| 1 | 5464a5d000b2dbace943b597d6ec6959.cnmt.nca | 0x0 | 4,096 | 5464a5d000b2dbace943b597d6ec695925b08b24622a05a9b33372767a1ae01b |
+| 2 | c19149fbb0d815c1515799e945f82831.nca | 0x1000 | 187,392 | c19149fbb0d815c1515799e945f82831ca5fe1239083fab0c85bb9aed5383986 |
+| 3 | d5bcc2f62e1f6e8852ba230b67179c13.nca | 0x2ec00 | 117,760 | d5bcc2f62e1f6e8852ba230b67179c1353119c8c009ea54f090886d31378230e |
+
+### script-real-r（含 romfs）
+| 顺序 | 文件名 | offset | size | SHA-256 |
+| --- | --- | ---: | ---: | --- |
+| 1 | 3528a1deaa977a1f681d18363d93702d.nca | 0x0 | 187,392 | 3528a1deaa977a1f681d18363d93702d58427168a6bb5338246dad413bc1809d |
+| 2 | 77fad85376ac8fcfbcea55dedf8cae23.cnmt.nca | 0x2dc00 | 4,096 | 77fad85376ac8fcfbcea55dedf8cae23e0019db17223c48c4cdb87c03bb3817a |
+| 3 | d5bcc2f62e1f6e8852ba230b67179c13.nca | 0x2ec00 | 117,760 | d5bcc2f62e1f6e8852ba230b67179c1353119c8c009ea54f090886d31378230e |
+
+注意: 两次构建的 entry 顺序不同（A: cnmt→program→control；R: program→cnmt→control），
+      不能依赖 NSP 内 NCA 固定偏移/固定顺序；应按 cnmt/类型识别。
+
+## 5. 独立复核（Lead，2026-10-30，/e/galnx-build/lead-verify/VERIFICATION-M3a-nsp.md）
+- m0-real-build1.nsp: PFS0 FileNum=3；program 88c0886b…187,392 B / control d5bcc2f6…117,760 B /
+  cnmt dd8c04e8….cnmt.nca 4,096 B。
+- NCA 头: Program/Control/Meta；ProgID 均 0x0100000000001000；KeyGen 0；Kaek Index Application(0)。
+- program NCA: partition0=main+main.npdm，partition1=romfs hello.txt。
+- CNMT: TitleId 0x0100000000001000，Version 0.0.0(v0)，Type Application(128)；
+  ContentInfo Program hash=88c0886b7d8c745a13f1ffb69abcedb1a400f4ebf625f0a5da9b9396f88c8bd6、
+  Control hash=d5bcc2f62e1f6e8852ba230b67179c1353119c8c009ea54f090886d31378230e —— 与实际 NCA sha256 一致。
+  ApplicationExtendedHeader PatchId 0x0100000000001800。
+- control.nacp: name=m0-hello、publisher=GalNX、startup_user_account=0；
+  DisplayVersion 为 ASCII 字符串 "1.0."（字节 31 2e 30 2e）；AppVersion(u32)=0（v0），CNMT Version=0.0.0；Citron 标题栏显示 1.0.0（见 005 §2 第 7 条）。
+- icon_AmericanEnglish.dat 6,285 B JPEG RGB 256x256，sha256 0b942950…（当前用 libnx 默认图标）。
+- NSP 内无 ticket/cert（PFS0 只有 cnmt + program + control）→ homebrew NSP 形态，真机需 sigpatches/Atmosphère。

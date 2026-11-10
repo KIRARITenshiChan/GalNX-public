@@ -1,0 +1,7 @@
+[pad] key=1013 virt=0 uiChildren=0 gamemenu=0x20a3ae7a0 cursor=0x0
+[pad] key=1004 virt=0 uiChildren=0 gamemenu=0x20a3ae7a0 cursor=0x0
+[pad] key=1004 virt=0 uiChildren=0 gamemenu=0x20a3ae7a0 cursor=0x0
+[pad] key=1004 virt=0 uiChildren=0 gamemenu=0x20a3ae7a0 cursor=0x0
+[pad] key=1004 virt=0 uiChildren=0 gamemenu=0x20a3ae7a0 cursor=0x0
+[pad] key=1013 virt=0 uiChildren=0 gamemenu=0x211008fc40 cursor=0x0
+[pad] key=1004 virt=0 uiChildren=0 gamemenu=0x211008fc40 cursor=0x0

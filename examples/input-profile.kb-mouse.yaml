@@ -1,0 +1,31 @@
+# GalNX input profile example: the built-in kb_mouse profile in YAML form.
+#
+# Keyboard/mouse simulation mode: the right stick drives the virtual pointer,
+# A acts as the left mouse button, B as back / right click. The L+R+PLUS combo
+# is reserved for the framework hotkey (soft reset in this profile).
+#
+# Validate with:
+#   PYTHONPATH=src python -m galnx input validate examples/input-profile.kb-mouse.yaml
+name: kb_mouse
+description: "Keyboard and mouse simulation: right stick moves the pointer, A = left click, B = back / right click, L+R+PLUS = soft reset."
+button_map:
+  advance_text: [A]
+  confirm_choice: [A]
+  back: [B]
+  open_menu: [PLUS, X]
+  show_history: [MINUS, Y]
+  auto_mode: [R]
+  skip_hold: [L]
+hotkeys:
+  soft_reset: L+R+PLUS
+mouse:
+  pointer: RSTICK
+  left_click: A
+  right_click: B
+  middle_click: Y
+  wheel_up: DUP
+  wheel_down: DDOWN
+analog:
+  deadzone: 0.25
+  pointer_speed: 1.0
+  invert_y: false

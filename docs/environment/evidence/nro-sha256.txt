@@ -1,0 +1,9 @@
+# M0 hello 构建产物哈希（SHA-256）
+# 审计日期: 2026-10-29
+# 命令: cd Workspace/GalNX/workspaces/m0-hello && sha256sum m0-hello.nro m0-hello.elf m0-hello.nacp
+
+a341e7750e099da94c12541d8fb173793cc348688824c69f5f76c7ce29b9318b  166085 bytes  m0-hello.nro
+71179a97c0c556b7433101e6f6525f8d8ba84ae439a0740f085c815e1ef8ef6c  2878832 bytes  m0-hello.elf
+88115686a4c3eb71efdee214ad42bfc107865403c50b6ec35b948b62894e360f  16384 bytes  m0-hello.nacp
+
+build.log  4692f60fb68aae291ee7e84b493628a114cda7b1ada4480d01ac935b18c8b737  356 bytes

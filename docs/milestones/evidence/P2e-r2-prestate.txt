@@ -1,0 +1,5 @@
+second_boot_pre_at=2026-10-29T23:59:29Z
+kirikiri_before=present
+marker_before=pilot01-r2
+autostart_before=/kirikiri/haruno/data.xp3
+pref_sha_before=aa4fa8aab256f73c6d73111a62305f7078bd9c1eca3cd9d9128d0a51abef9543

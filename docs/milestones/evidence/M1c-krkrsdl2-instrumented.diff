@@ -1,0 +1,497 @@
+diff --git a/external/krkrz b/external/krkrz
+--- a/external/krkrz
++++ b/external/krkrz
+@@ -1 +1 @@
+-Subproject commit b11c43a07543756fcb943a60ff0a949a7f470f10
++Subproject commit b11c43a07543756fcb943a60ff0a949a7f470f10-dirty
+diff --git a/src/core/base/sdl2/StorageImpl.cpp b/src/core/base/sdl2/StorageImpl.cpp
+index 9a7e687..7dbd889 100644
+--- a/src/core/base/sdl2/StorageImpl.cpp
++++ b/src/core/base/sdl2/StorageImpl.cpp
+@@ -27,6 +27,22 @@
+ #include "StringUtil.h"
+ #include "FilePathUtil.h"
+ #include "TickCount.h"
++#ifdef __SWITCH__
++extern "C" void GXDiag(const char *msg);
++static void GXDiagM2(const ttstr &s)
++{
++	char buf[1024]; int n = 0; const tjs_char *q = s.c_str();
++	for(; q && *q && n < 1000; q++) buf[n++] = (*q >= 32 && *q < 127) ? (char)*q : (char)63;
++	buf[n] = 0; GXDiag(buf);
++}
++#define GXDIAGM(m) GXDiag(m)
++#define GXDIAG(m) GXDiag(m)
++#define GXDIAGMT(s) GXDiagM2(s)
++#else
++#define GXDIAGM(m) ((void)0)
++#define GXDIAGMT(s) ((void)0)
++#define GXDIAG(m) ((void)0)
++#endif
+ 
+ #ifndef _WIN32
+ #include <sys/types.h>
+@@ -125,10 +141,13 @@ bool TJS_INTF_METHOD tTVPFileMedia::CheckExistentStorage(const ttstr &name)
+ {
+ 	if(name.IsEmpty()) return false;
+ 
++	GXDIAGM("filemedia: check enter"); GXDIAGMT(name);
+ 	ttstr _name(name);
+ 	GetLocalName(_name);
+-
+-	return TVPCheckExistentLocalFile(_name);
++	GXDIAGM("filemedia: check local"); GXDIAGMT(_name);
++	bool gx_ce = TVPCheckExistentLocalFile(_name);
++	GXDIAGM(gx_ce ? "filemedia: check ok" : "filemedia: check fail");
++	return gx_ce;
+ }
+ //---------------------------------------------------------------------------
+ tTJSBinaryStream * TJS_INTF_METHOD tTVPFileMedia::Open(const ttstr & name, tjs_uint32 flags)
+@@ -268,6 +287,21 @@ void TJS_INTF_METHOD tTVPFileMedia::GetListAt(const ttstr &_name, iTVPStorageLis
+ //---------------------------------------------------------------------------
+ void TJS_INTF_METHOD tTVPFileMedia::GetLocallyAccessibleName(ttstr &name)
+ {
++#ifdef __SWITCH__
++	{
++		tjs_string gxwn(name.AsStdString());
++		std::string gxnn;
++		if (TVPUtf16ToUtf8(gxnn, gxwn) && gxnn.size() >= 2 && gxnn[0] == (char)63 && gxnn[1] == (char)47)
++		{
++			GXDIAGM("locally: switch strip native prefix");
++			GXDIAG(gxnn.c_str());
++			tjs_string gxsub = gxwn.substr(2);
++			name = ttstr(gxsub);
++			GXDIAGMT(ttstr(gxsub));
++			return;
++		}
++	}
++#endif
+ #ifdef _WIN32
+ 	ttstr newname;
+ 
+@@ -321,6 +355,7 @@ void TJS_INTF_METHOD tTVPFileMedia::GetLocallyAccessibleName(ttstr &name)
+ 		name.Clear();
+ 		return;
+ 	}
++	GXDIAGM("locally: after utf16to8"); GXDIAG(nname.c_str());
+ 
+ #if 0
+ 	ttstr newname;
+@@ -457,10 +492,12 @@ void TJS_INTF_METHOD tTVPFileMedia::GetLocallyAccessibleName(ttstr &name)
+ 
+ 	if (path_entries == 1 && domain_name == "?")
+ 	{
++		GXDIAGM("locally: early return ./");
+ 		name = ttstr(TJS_W("./"));
+ 		return;
+ 	}
+ 
++	GXDIAGM("locally: result"); GXDIAG(nnewname.c_str());
+ 	tjs_string wnewname;
+ 	if (!TVPUtf8ToUtf16(wnewname, nnewname))
+ 	{
+diff --git a/src/core/base/sdl2/SysInitImpl.cpp b/src/core/base/sdl2/SysInitImpl.cpp
+index bea8d95..4e4bb1b 100644
+--- a/src/core/base/sdl2/SysInitImpl.cpp
++++ b/src/core/base/sdl2/SysInitImpl.cpp
+@@ -45,6 +45,16 @@
+ #include "Application.h"
+ #include "Exception.h"
+ #include "ApplicationSpecialPath.h"
++#ifdef __SWITCH__
++extern "C" void GXDiag(const char *msg);
++static void GXDiagT(const tjs_string &s_) { char b_[600]; int n_=0; for(size_t i_=0;i_<s_.size() && n_<590;i_++){ unsigned long c_=(unsigned long)s_[i_]; b_[n_++]=(c_>=0x20&&c_<0x7f)?(char)c_:(char)63; } b_[n_]=0; GXDiag(b_); }
++#define GXDIAG(x) GXDiag(x)
++#define GXDIAGT(s) GXDiagT(s)
++#else
++static void GXDiagT(const tjs_string &) {}
++#define GXDIAG(x) ((void)0)
++#define GXDIAGT(s) ((void)0)
++#endif
+ #if 0
+ #include "resource.h"
+ #include "ConfigFormUnit.h"
+@@ -1288,6 +1298,7 @@ void TVPBeforeSystemInit()
+ 	if (base_path)
+ 	{
+ 		base_path_utf8 = base_path;
++		GXDIAG((std::string("base: SDL_GetBasePath=[") + base_path_utf8 + "]").c_str());
+ 		SDL_free(base_path);
+ 	}
+ #ifdef __ANDROID__
+@@ -1297,6 +1308,15 @@ void TVPBeforeSystemInit()
+ 		base_path_utf8 = "/";
+ 	}
+ #endif
++	#ifdef __SWITCH__
++		GXDIAG((std::string("base pre: [") + base_path_utf8 + "]").c_str());
++		if (base_path_utf8.length() == 0)
++		{
++			base_path_utf8 = "romfs:/";
++			GXDIAG("base: SDL_GetBasePath NULL -> fallback romfs:/ (galnx patch)");
++		}
++		GXDIAG((std::string("base switch: [") + base_path_utf8 + "]").c_str());
++	#endif
+ 	tjs_string base_path_utf16;
+ 	TVPUtf8ToUtf16(base_path_utf16, base_path_utf8);
+ 	if (base_path_utf16.length() != 0 && !TVPGetCommandLine(TJS_W("-nosel")))
+@@ -1350,6 +1370,7 @@ void TVPBeforeSystemInit()
+ 				found_dir = tmp_search_dir + TJS_W(">");
+ 			}
+ 		}
++		GXDIAGT(tjs_string(TJS_W("base: found_dir=")) + found_dir);
+ 		if (found_dir.length() != 0)
+ 		{
+ 			TVPProjectDir = TVPNormalizeStorageName(found_dir);
+@@ -1395,6 +1416,7 @@ void TVPBeforeSystemInit()
+ 			dir_utf8 = dir;
+ 		}
+ 		TVPUtf8ToUtf16( dir_utf16, dir_utf8 );
++		GXDIAGT(tjs_string(TJS_W("getcwd: dir=")) + dir_utf16);
+ #endif
+ 		if (buf)
+ 		{
+@@ -1444,6 +1466,8 @@ void TVPBeforeSystemInit()
+ 
+ 	if (TVPProjectDirSelected)
+ 	{
++		GXDIAG(TVPProjectDirSelected ? "projectdir: selected=1" : "projectdir: selected=0");
++		GXDIAG("projectdir:"); GXDIAGT(TVPProjectDir.AsStdString());
+ 		TVPAddImportantLog( TVPFormatMessage(TVPInfoSelectedProjectDirectory, TVPProjectDir) );
+ 	}
+ }
+@@ -1899,6 +1923,7 @@ static void TVPInitProgramArgumentsAndDataPath(bool stop_after_datapath_got)
+ 	if(!TVPProgramArgumentsInit)
+ 	{
+ 		TVPProgramArgumentsInit = true;
++		GXDIAG("init_args: enter");
+ 
+ 
+ 		// find options from self executable image
+@@ -1911,11 +1936,15 @@ static void TVPInitProgramArgumentsAndDataPath(bool stop_after_datapath_got)
+ #if 0
+ 			options[0] = TVPGetEmbeddedOptions();
+ #endif
++			GXDIAG("init_args: before options1"); GXDIAGT(ExePath());
+ 			options[1] = TVPGetConfigFileOptions(ApplicationSpecialPath::GetConfigFileName(ExePath()));
++			GXDIAG("init_args: after options1");
+ 
+ 			// at this point, we need to push all exsting known options
+ 			// to be able to see datapath
++			GXDIAG("init_args: before push cmdline");
+ 			PushAllCommandlineArguments();
++			GXDIAG("init_args: after push cmdline");
+ 			PushConfigFileOptions(options[1]); // has more priority
+ #if 0
+ 			PushConfigFileOptions(options[0]); // has lesser priority
+@@ -1926,7 +1955,9 @@ static void TVPInitProgramArgumentsAndDataPath(bool stop_after_datapath_got)
+ 			tjs_string config_datapath;
+ 			if(TVPGetCommandLine(TJS_W("-datapath"), &val))
+ 				config_datapath = ((ttstr)val).AsStdString();
++			GXDIAG("init_args: before GetDataPathDirectory");
+ 			TVPNativeDataPath = ApplicationSpecialPath::GetDataPathDirectory(config_datapath, ExePath());
++			GXDIAG("init_args: after GetDataPathDirectory"); GXDIAGT(TVPNativeDataPath);
+ 
+ 			if(stop_after_datapath_got) return;
+ 
+@@ -1937,7 +1968,9 @@ static void TVPInitProgramArgumentsAndDataPath(bool stop_after_datapath_got)
+ 			// we need to clear TVPProgramArguments first because of the
+ 			// option priority order.
+ 			TVPProgramArguments.clear();
++			GXDIAG("init_args: before push cmdline");
+ 			PushAllCommandlineArguments();
++			GXDIAG("init_args: after push cmdline");
+ 			PushConfigFileOptions(options[2]); // has more priority
+ 			PushConfigFileOptions(options[1]); // has more priority
+ #if 0
+@@ -1953,7 +1986,9 @@ static void TVPInitProgramArgumentsAndDataPath(bool stop_after_datapath_got)
+ 
+ 
+ 		// set data path
++		GXDIAG("init_args: before normalize datapath");
+ 		TVPDataPath = TVPNormalizeStorageName(TVPNativeDataPath);
++		GXDIAG("init_args: after normalize datapath");
+ 		TVPAddImportantLog( TVPFormatMessage( TVPInfoDataPath, TVPDataPath) );
+ 
+ 		// set log output directory
+diff --git a/src/core/environ/sdl2/Application.cpp b/src/core/environ/sdl2/Application.cpp
+index daf2ed5..7256f8f 100644
+--- a/src/core/environ/sdl2/Application.cpp
++++ b/src/core/environ/sdl2/Application.cpp
+@@ -34,6 +34,9 @@
+ #include "PluginImpl.h"
+ #include "SystemIntf.h"
+ 
++extern "C" void GXDiag(const char *msg);
++extern "C" void GXDiagW(const unsigned short *msg);
++
+ #include "Exception.h"
+ #if 0
+ #include "WindowFormUnit.h"
+@@ -184,7 +187,11 @@ tjs_string ExePath() {
+ #ifndef __EMSCRIPTEN__
+ 	if (exepath.empty())
+ 	{
++#ifdef __SWITCH__
++		exepath = tjs_string(TJS_W("sdmc:/switch/galnx/app.nro"));
++#else
+ 		exepath = tjs_string(_wargv[0]);
++#endif
+ 	}
+ #endif
+ 	return exepath;
+@@ -449,8 +456,10 @@ bool tTVPApplication::StartApplication( int argc, tjs_char* argv[] ) {
+ 	}
+ #endif
+ 	TVPTerminateCode = 0;
++	GXDiag("StartApplication: enter");
+ 
+ 	CheckConsole();
++	GXDiag("StartApplication: after CheckConsole");
+ 
+ 	// try starting the program!
+ 	bool engine_init = false;
+@@ -461,29 +470,36 @@ bool tTVPApplication::StartApplication( int argc, tjs_char* argv[] ) {
+ 
+ 		TVPInitScriptEngine();
+ 		engine_init = true;
++		GXDiag("StartApplication: after TVPInitScriptEngine");
+ 
+ 		// banner
+ 		TVPAddImportantLog( TVPFormatMessage(TVPProgramStartedOn, TVPGetOSName(), TVPGetPlatformName()) );
+ 
+ 		// TVPInitializeBaseSystems
+ 		TVPInitializeBaseSystems();
++		GXDiag("StartApplication: after TVPInitializeBaseSystems");
+ 
+ #if 0
+ 		Initialize();
+ #endif
+ 
++		GXDiag("StartApplication: before TVPCheckPrintDataPath");
+ 		if(TVPCheckPrintDataPath()) return true;
++		GXDiag("StartApplication: before TVPExecuteUserConfig");
+ 		if(TVPExecuteUserConfig()) return true;
++		GXDiag("StartApplication: after TVPExecuteUserConfig");
+ 
+ #ifdef KRKRSDL2_ENABLE_ASYNC_IMAGE_LOAD
+ 		image_load_thread_ = new tTVPAsyncImageLoader();
+ #endif
+ 
+ 		TVPSystemInit();
++		GXDiag("StartApplication: after TVPSystemInit");
+ 
+ 		if(TVPCheckAbout()) return true; // version information dialog box;
+ 
+ 		SetTitle( tjs_string(TVPKirikiri) );
++		GXDiag("StartApplication: after SetTitle");
+ 		TVPSystemControl = new tTVPSystemControl();
+ #if 0
+ #ifndef TVP_IGNORE_LOAD_TPM_PLUGIN
+@@ -498,7 +514,9 @@ bool tTVPApplication::StartApplication( int argc, tjs_char* argv[] ) {
+ 		image_load_thread_->StartTread();
+ #endif
+ 
++		GXDiag(TVPProjectDirSelected ? "StartApplication: project dir selected -> startup script" : "StartApplication: NO project dir selected");
+ 		if(TVPProjectDirSelected) TVPInitializeStartupScript();
++		GXDiag("StartApplication: after TVPInitializeStartupScript");
+ 
+ #if 0
+ 		Run();
+@@ -520,24 +538,33 @@ bool tTVPApplication::StartApplication( int argc, tjs_char* argv[] ) {
+ #endif
+ 		return false;
+ 	} catch( const EAbort & ) {
++		GXDiag("StartApplication: caught EAbort");
+ 		// nothing to do
+ 	} catch( const Exception &exception ) {
++		GXDiag("StartApplication: caught Exception");
+ 		TVPOnError();
+ 		if(!TVPSystemUninitCalled)
+ 			ShowException(exception.what());
+ 	} catch( const TJS::eTJSScriptError &e ) {
++		GXDiag("StartApplication: caught eTJSScriptError");
+ 		TVPOnError();
+ 		if(!TVPSystemUninitCalled)
+ 			ShowException( e.GetMessage().c_str() );
+ 	} catch( const TJS::eTJS &e) {
++		GXDiag("StartApplication: caught eTJS");
++		GXDiagW(reinterpret_cast<const unsigned short *>(e.GetMessage().c_str()));
+ 		TVPOnError();
+ 		if(!TVPSystemUninitCalled)
+ 			ShowException( e.GetMessage().c_str() );
+ 	} catch( const std::exception &e ) {
++		GXDiag("StartApplication: caught std::exception");
++		GXDiag(e.what());
+ 		ShowException( ttstr(e.what()).c_str() );
+ 	} catch( const char* e ) {
++		GXDiag("StartApplication: caught const char*");
+ 		ShowException( ttstr(e).c_str() );
+ 	} catch( const tjs_char* e ) {
++		GXDiag("StartApplication: caught tjs_char*");
+ 		ShowException( e );
+ #if 0
+ 	} catch( const SEHException& e ) {
+@@ -550,6 +577,7 @@ bool tTVPApplication::StartApplication( int argc, tjs_char* argv[] ) {
+ 		ShowException( text.c_str() );
+ #endif
+ 	} catch(...) {
++		GXDiag("StartApplication: caught ...");
+ 		ShowException( (const tjs_char*)TVPUnknownError );
+ 	}
+ 
+diff --git a/src/core/sdl2/SDLApplication.cpp b/src/core/sdl2/SDLApplication.cpp
+index 5c16a31..47b38c3 100644
+--- a/src/core/sdl2/SDLApplication.cpp
++++ b/src/core/sdl2/SDLApplication.cpp
+@@ -43,6 +43,55 @@
+ 
+ #ifdef __SWITCH__
+ #include <switch.h>
++#include <stdio.h>
++
++/* GALNX-DIAG: temporary instrumentation for Citron/Ryujinx smoke tests. */
++extern "C" void GXDiag(const char *msg)
++{
++	FILE *f = fopen("sdmc:/galnx-diag.txt", "a");
++	if (!f) return;
++	fprintf(f, "%s\n", msg);
++	fflush(f);
++	fclose(f);
++}
++
++extern "C" void GXDiagW(const unsigned short *s)
++{
++	if (!s) return;
++	char buf[2048];
++	int n = 0;
++	for (; *s && n < 2000; ++s)
++	{
++		unsigned int c = *s;
++		if (c < 0x80) buf[n++] = (char)c;
++		else if (c < 0x800) { buf[n++] = (char)(0xC0 | (c >> 6)); buf[n++] = (char)(0x80 | (c & 0x3F)); }
++		else { buf[n++] = (char)(0xE0 | (c >> 12)); buf[n++] = (char)(0x80 | ((c >> 6) & 0x3F)); buf[n++] = (char)(0x80 | (c & 0x3F)); }
++	}
++	buf[n] = 0;
++	GXDiag(buf);
++}
++
++extern "C" void GXDiagRomfs(void)
++{
++	char buf[256];
++	FILE *f = fopen("romfs:/data.xp3", "rb");
++	if (f)
++	{
++		fseek(f, 0, SEEK_END);
++		long sz = ftell(f);
++		fclose(f);
++		snprintf(buf, sizeof(buf), "probe: romfs:/data.xp3 OK size=%ld", sz);
++	}
++	else
++	{
++		snprintf(buf, sizeof(buf), "probe: romfs:/data.xp3 FAILED");
++	}
++	GXDiag(buf);
++}
++#else
++extern "C" void GXDiag(const char *) {}
++extern "C" void GXDiagW(const unsigned short *) {}
++extern "C" void GXDiagRomfs(void) {}
+ #endif
+ 
+ #ifdef __EMSCRIPTEN__
+@@ -786,7 +835,9 @@ TVPWindowWindow::TVPWindowWindow(tTJSNI_Window *w)
+ 	window_flags |= SDL_WINDOW_HIDDEN;
+ #endif
+ 
++	GXDiag("window: before SDL_CreateWindow");
+ 	this->window = SDL_CreateWindow("krkrsdl2", new_window_x, new_window_y, new_window_w, new_window_h, window_flags);
++	GXDiag("window: after SDL_CreateWindow");
+ 	if (!this->window)
+ 	{
+ 		TVPThrowExceptionMessage(TJS_W("Cannot create SDL window: %1"), ttstr(SDL_GetError()));
+@@ -2967,6 +3018,15 @@ void krkrsdl2_set_args(int argc, tjs_char **argv)
+ 
+ void krkrsdl2_convert_set_args(int argc, char **argv)
+ {
++#ifdef __SWITCH__
++	if (argc <= 0 || argv == NULL || argv[0] == NULL || argv[0][0] == 0)
++	{
++		static char *gx_default_argv[1] = { (char*)"sdmc:/switch/galnx/app.nro" };
++		argc = 1;
++		argv = gx_default_argv;
++	}
++	{ char gxmb[80]; SDL_snprintf(gxmb, sizeof(gxmb), "convert_args: argc=%d a0len=%d", argc, (int)(argv[0]?(int)strlen(argv[0]):-1)); GXDiag(gxmb); }
++#endif
+ 	_argc = argc;
+ 	_wargv = new tjs_char*[argc];
+ 
+@@ -3009,9 +3069,14 @@ void krkrsdl2_convert_set_args(int argc, char **argv)
+ bool krkrsdl2_init_platform(void)
+ {
+ #ifdef __SWITCH__
++	GXDiag("init_platform: before romfsInit");
+ 	romfsInit();
++	GXDiag("init_platform: after romfsInit");
++	GXDiagRomfs();
+ 	socketInitializeDefault();
+-	nxlinkStdio();
++	GXDiag("init_platform: after socketInitializeDefault");
++	/* GALNX-DIAG: nxlinkStdio skipped; it blocks when no nxlink host is listening. */
++	GXDiag("init_platform: skipped nxlinkStdio");
+ #endif
+ 
+ 	SDL_setenv("VITA_DISABLE_TOUCH_BACK", "1", 1);
+@@ -3039,7 +3104,10 @@ bool krkrsdl2_init_platform(void)
+ 	SDL_AddEventWatch(sdl_event_watch, nullptr);
+ #endif
+ 	::Application = new tTVPApplication();
+-	return !!::Application->StartApplication(_argc, _wargv);
++	GXDiag("init_platform: before StartApplication");
++	bool app_result = !!::Application->StartApplication(_argc, _wargv);
++	GXDiag(app_result ? "init_platform: StartApplication returned true" : "init_platform: StartApplication returned false");
++	return app_result;
+ }
+ 
+ void krkrsdl2_run_main_loop(void)
+diff --git a/src/core/sdl2/SDLEntrypoint.cpp b/src/core/sdl2/SDLEntrypoint.cpp
+index a4453a9..2f1a966 100644
+--- a/src/core/sdl2/SDLEntrypoint.cpp
++++ b/src/core/sdl2/SDLEntrypoint.cpp
+@@ -3,6 +3,8 @@
+ 
+ #include "SDLApplication.h"
+ #include "SysInitImpl.h"
++
++extern "C" void GXDiag(const char *msg);
+ #ifdef USE_SDL_MAIN
+ #include <SDL_main.h>
+ #endif
+@@ -18,6 +20,7 @@ extern "C" int main(int argc, char **argv)
+ 	try
+ 	{
+ 		krkrsdl2_pre_init_platform();
++		GXDiag("main: entered");
+ 
+ #if defined(_WIN32) && defined(_UNICODE)
+ 		krkrsdl2_set_args(argc, argv);
+@@ -28,9 +31,11 @@ extern "C" int main(int argc, char **argv)
+ 		if (krkrsdl2_init_platform())
+ 		{
+ 			TVPTerminateCode = 0;
++			GXDiag("main: init_platform true -> exit 0");
+ 			return TVPTerminateCode;
+ 		}
+ 
++		GXDiag("main: run_main_loop");
+ 		krkrsdl2_run_main_loop();
+ 
+ #ifndef __EMSCRIPTEN__
+@@ -39,6 +44,7 @@ extern "C" int main(int argc, char **argv)
+ 	}
+ 	catch (...)
+ 	{
++		GXDiag("main: caught exception -> exit 2");
+ 		TVPTerminateCode = 2;
+ 		return TVPTerminateCode;
+ 	}

@@ -1,0 +1,11 @@
+# P3-a payload 生成器证据归档（task-40）
+# 采集时间: 2026-10-30 09:05 (Asia/Shanghai)
+# 采集人: audit-switch
+# 命令: PYTHONPATH=src python -m galnx payload {verify|plan|--help}（正式入口，P3-e 前采集）
+# 说明: 源文件在 E:/galnx-build/p3a-evidence/，此处为原样副本；SHA-256 由 sha256sum 实算。
+
+d3c0f60e9c5c4b01cfc84103c7fe3f853b9794a73abbac74e83ed614a424a1bf  684 bytes  P3a-payload-cli-verify.json
+db504b57d8d0e8482bffc22fa5a4b5869a52b64b4b229c9a47d130bf61936f45  240 bytes  P3a-payload-cli-verify.txt
+c84c38fccaa58c8f697ce0954ccaab94df3f455a9c81ad0f25cc32ea6d41875d  5478 bytes  P3a-payload-cli-plan.json
+dfe55d415dd05b970d3f55ed30ae28396c58d241c7a7ea1687591888fb0d5004  2213 bytes  P3a-payload-cli-plan.txt
+733af09804a5f3023022936683e92195ad64a3807c4a1337c033a50a1f416650  502 bytes  P3a-payload-cli-help.txt

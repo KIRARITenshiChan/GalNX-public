@@ -1,0 +1,221 @@
+{
+  "tool": "package nsp",
+  "mode": "verify",
+  "manifest": "E:\\Othergames\\Nintendo Switch\\Workspace\\GalNX\\examples\\pilot02-iroseka.yaml",
+  "nsp": "E:\\galnx-build\\p11\\out\\IROSEKA_FHD-010047420000a000.nsp",
+  "expected_title_id": "010047420000A000",
+  "nstool": {
+    "path": "E:\\galnx-build\\m3-tools\\nstool.exe",
+    "source": "explicit"
+  },
+  "keyset": {
+    "mode": "real",
+    "path": "E:\\Othergames\\Nintendo Switch\\Ryujinx-canary\\portable\\system\\prod.keys",
+    "size": 12007,
+    "sha256": "7bb3b6d2a2eedc83c9f244ee2ed2eaa4d59eb9ad95b66df575f7dfffa71a2a40",
+    "note": "explicitly supplied keyset; contents intentionally not recorded"
+  },
+  "work_dir": "D:\\devkitPro\\msys2\\tmp\\galnx-nsp-verify-6wpu4vs9",
+  "provenance": null,
+  "verify": {
+    "ok": true,
+    "nsp": "E:\\galnx-build\\p11\\out\\IROSEKA_FHD-010047420000a000.nsp",
+    "nstool": "E:\\galnx-build\\m3-tools\\nstool.exe",
+    "ncas": 3,
+    "error": "",
+    "artifact": {
+      "path": "E:\\galnx-build\\p11\\out\\IROSEKA_FHD-010047420000a000.nsp",
+      "size": 9979435224,
+      "sha256": "4592385c1c3e6b166172315a1c79c574b9241f6f8c57244b2e050e0292549189"
+    },
+    "checks": [
+      {
+        "id": "verify.nstool.nsp",
+        "name": "nstool NSP layer",
+        "status": "ok",
+        "detail": "nstool parsed the NSP container",
+        "hint": ""
+      },
+      {
+        "id": "nstool.partition.type",
+        "name": "PFS0 type",
+        "status": "ok",
+        "detail": "Type: PFS0",
+        "hint": ""
+      },
+      {
+        "id": "nstool.partition.files",
+        "name": "PFS0 files",
+        "status": "ok",
+        "detail": "FileNum: 3",
+        "hint": ""
+      },
+      {
+        "id": "nstool.nca.0",
+        "name": "NCA 0",
+        "status": "ok",
+        "detail": "Meta, ProgID 0x010047420000a000, Size 0x1000",
+        "hint": ""
+      },
+      {
+        "id": "nstool.nca.1",
+        "name": "NCA 1",
+        "status": "ok",
+        "detail": "Control, ProgID 0x010047420000a000, Size 0x20c00",
+        "hint": ""
+      },
+      {
+        "id": "nstool.nca.2",
+        "name": "NCA 2",
+        "status": "ok",
+        "detail": "Program, ProgID 0x010047420000a000, Size 0x252cffc00",
+        "hint": ""
+      },
+      {
+        "id": "nstool.nca.type.program",
+        "name": "NCA type Program",
+        "status": "ok",
+        "detail": "Program NCA present",
+        "hint": ""
+      },
+      {
+        "id": "nstool.nca.type.control",
+        "name": "NCA type Control",
+        "status": "ok",
+        "detail": "Control NCA present",
+        "hint": ""
+      },
+      {
+        "id": "nstool.nca.type.meta",
+        "name": "NCA type Meta",
+        "status": "ok",
+        "detail": "Meta NCA present",
+        "hint": ""
+      },
+      {
+        "id": "nstool.progid.consistent",
+        "name": "NCA ProgID consistency",
+        "status": "ok",
+        "detail": "all 3 NCAs share ProgID 0x010047420000A000",
+        "hint": ""
+      },
+      {
+        "id": "nstool.progid.expected",
+        "name": "expected ProgID",
+        "status": "ok",
+        "detail": "ProgID matches 0x010047420000A000",
+        "hint": ""
+      },
+      {
+        "id": "verify.signature",
+        "name": "NCA signature",
+        "status": "warn",
+        "detail": "4 'Signature: FAIL' line(s): expected for unsigned homebrew NSP; hacBrewPack's RSA key is not Nintendo's, so signatures cannot validate",
+        "hint": ""
+      },
+      {
+        "id": "verify.summary",
+        "name": "nstool verify",
+        "status": "ok",
+        "detail": "12 checks: 0 fail, 1 warn, 3 NCAs",
+        "hint": ""
+      }
+    ]
+  },
+  "checks": [
+    {
+      "id": "verify.nstool.nsp",
+      "name": "nstool NSP layer",
+      "status": "ok",
+      "detail": "nstool parsed the NSP container",
+      "hint": ""
+    },
+    {
+      "id": "nstool.partition.type",
+      "name": "PFS0 type",
+      "status": "ok",
+      "detail": "Type: PFS0",
+      "hint": ""
+    },
+    {
+      "id": "nstool.partition.files",
+      "name": "PFS0 files",
+      "status": "ok",
+      "detail": "FileNum: 3",
+      "hint": ""
+    },
+    {
+      "id": "nstool.nca.0",
+      "name": "NCA 0",
+      "status": "ok",
+      "detail": "Meta, ProgID 0x010047420000a000, Size 0x1000",
+      "hint": ""
+    },
+    {
+      "id": "nstool.nca.1",
+      "name": "NCA 1",
+      "status": "ok",
+      "detail": "Control, ProgID 0x010047420000a000, Size 0x20c00",
+      "hint": ""
+    },
+    {
+      "id": "nstool.nca.2",
+      "name": "NCA 2",
+      "status": "ok",
+      "detail": "Program, ProgID 0x010047420000a000, Size 0x252cffc00",
+      "hint": ""
+    },
+    {
+      "id": "nstool.nca.type.program",
+      "name": "NCA type Program",
+      "status": "ok",
+      "detail": "Program NCA present",
+      "hint": ""
+    },
+    {
+      "id": "nstool.nca.type.control",
+      "name": "NCA type Control",
+      "status": "ok",
+      "detail": "Control NCA present",
+      "hint": ""
+    },
+    {
+      "id": "nstool.nca.type.meta",
+      "name": "NCA type Meta",
+      "status": "ok",
+      "detail": "Meta NCA present",
+      "hint": ""
+    },
+    {
+      "id": "nstool.progid.consistent",
+      "name": "NCA ProgID consistency",
+      "status": "ok",
+      "detail": "all 3 NCAs share ProgID 0x010047420000A000",
+      "hint": ""
+    },
+    {
+      "id": "nstool.progid.expected",
+      "name": "expected ProgID",
+      "status": "ok",
+      "detail": "ProgID matches 0x010047420000A000",
+      "hint": ""
+    },
+    {
+      "id": "verify.signature",
+      "name": "NCA signature",
+      "status": "warn",
+      "detail": "4 'Signature: FAIL' line(s): expected for unsigned homebrew NSP; hacBrewPack's RSA key is not Nintendo's, so signatures cannot validate",
+      "hint": ""
+    },
+    {
+      "id": "verify.summary",
+      "name": "nstool verify",
+      "status": "ok",
+      "detail": "12 checks: 0 fail, 1 warn, 3 NCAs",
+      "hint": ""
+    }
+  ],
+  "ok": true,
+  "errors": []
+}
+EXIT:0

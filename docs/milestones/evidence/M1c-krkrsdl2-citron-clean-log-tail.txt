@@ -1,0 +1,120 @@
+[   1.834396] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:94:SynthesizeSystemArchive:     - System archive generation successful!
+[   1.834403] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:76:SynthesizeSystemArchive: Synthesizing system archive 'FontNintendoExtension' (0x0100000000000810).
+[   1.834408] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:94:SynthesizeSystemArchive:     - System archive generation successful!
+[   1.838334] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:76:SynthesizeSystemArchive: Synthesizing system archive 'FontStandard' (0x0100000000000811).
+[   1.838433] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:94:SynthesizeSystemArchive:     - System archive generation successful!
+[   1.838499] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:76:SynthesizeSystemArchive: Synthesizing system archive 'FontChineseSimple' (0x0100000000000814).
+[   1.838720] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:94:SynthesizeSystemArchive:     - System archive generation successful!
+[   1.838773] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:76:SynthesizeSystemArchive: Synthesizing system archive 'FontChineseSimple' (0x0100000000000814).
+[   1.838863] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:94:SynthesizeSystemArchive:     - System archive generation successful!
+[   1.839022] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:76:SynthesizeSystemArchive: Synthesizing system archive 'FontChineseTraditional' (0x0100000000000813).
+[   1.839068] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:94:SynthesizeSystemArchive:     - System archive generation successful!
+[   1.839118] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:76:SynthesizeSystemArchive: Synthesizing system archive 'FontKorean' (0x0100000000000812).
+[   1.839164] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:94:SynthesizeSystemArchive:     - System archive generation successful!
+[   1.839227] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:76:SynthesizeSystemArchive: Synthesizing system archive 'FontNintendoExtension' (0x0100000000000810).
+[   1.839236] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:94:SynthesizeSystemArchive:     - System archive generation successful!
+[   1.839241] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:76:SynthesizeSystemArchive: Synthesizing system archive 'FontNintendoExtension' (0x0100000000000810).
+[   1.839245] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:94:SynthesizeSystemArchive:     - System archive generation successful!
+[   1.919769] Service.SET <Info> core\hle\service\set\system_settings_server.cpp:647:GetVibrationMasterVolume: called, vibration_master_volume=1
+[   1.921611] Service.SET <Info> core\hle\service\set\system_settings_server.cpp:647:GetVibrationMasterVolume: called, vibration_master_volume=1
+[   1.921622] Service.SET <Info> core\hle\service\set\system_settings_server.cpp:647:GetVibrationMasterVolume: called, vibration_master_volume=1
+[   3.447831] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:76:SynthesizeSystemArchive: Synthesizing system archive 'SystemVersion' (0x0100000000000809).
+[   3.447836] Common.Filesystem <Warning> core\file_sys\system_archive\system_version.cpp:17:SystemVersion: called - Using hardcoded firmware version 'NintendoSDK Firmware for NX 22.0.0-3.0'
+[   3.447843] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:94:SynthesizeSystemArchive:     - System archive generation successful!
+[   3.449686] Service.VI <Warning> core\hle\service\vi\application_display_service.cpp:80:GetManagerDisplayService: (STUBBED) called
+[   3.449877] Service.AM <Info> core\hle\service\am\service\window_controller.cpp:35:GetAppletResourceUserId: called
+[   3.450676] Service.AM <Info> core\hle\service\am\service\window_controller.cpp:54:AcquireForegroundRights: called
+[   3.450847] Service.AM <Info> core\hle\service\am\service\self_controller.cpp:207:SetFocusHandlingMode: called, notify=false background=false suspend=true
+[   3.450994] Service.AM <Info> core\hle\service\am\service\self_controller.cpp:237:SetOutOfFocusSuspendingEnabled: called, enabled=false
+[   3.451127] Service.AM <Warning> core\hle\service\am\service\application_functions.cpp:365:NotifyRunning: (STUBBED) called
+[   3.451406] Service.AM <Info> core\hle\service\am\service\self_controller.cpp:189:SetOperationModeChangedNotification: called, enabled=true
+[   3.451453] Service.AM <Info> core\hle\service\am\service\self_controller.cpp:198:SetPerformanceModeChangedNotification: called, enabled=true
+[   3.451851] Service.SET <Info> core\hle\service\set\system_settings_server.cpp:1306:GetTouchScreenMode: called, touch_screen_mode=1
+[   3.459223] Service.VI <Warning> core\hle\service\vi\application_display_service.cpp:67:GetRelayService: (STUBBED) called
+[   3.459569] Service.VI <Warning> core\hle\service\vi\application_display_service.cpp:73:GetSystemDisplayService: (STUBBED) called
+[   3.459698] Service.VI <Warning> core\hle\service\vi\application_display_service.cpp:80:GetManagerDisplayService: (STUBBED) called
+[   3.459829] Service.VI <Warning> core\hle\service\vi\application_display_service.cpp:87:GetIndirectDisplayTransactionService: (STUBBED) called
+[   3.460193] Service.VI <Warning> core\hle\service\vi\application_display_service.cpp:92:OpenDisplay: (STUBBED) called
+[   3.460594] Service.AM <Info> core\hle\service\am\service\self_controller.cpp:281:CreateManagedDisplayLayer: called
+[   3.460596] Service.VI <Warning> core\hle\service\vi\application_display_service.cpp:92:OpenDisplay: (STUBBED) called
+[   3.483377] Service <Info> core\hle\service\sockets\bsd.cpp:171:RegisterClient: called, version=9 pid=81 transfer_memory_size=0x0
+[   3.483629] Service <Info> core\hle\service\sockets\bsd.cpp:184:StartMonitoring: called
+[   3.854973] Service.HID <Info> hid_core\frontend\emulated_controller.cpp:1392:SetPollingMode: Set polling mode 0, device_index=3
+[   3.867966] Service.NVDRV <Warning> core\hle\service\nvdrv\nvdrv_interface.cpp:155:Initialize: (STUBBED) called
+[   3.871869] Service.NVDRV <Warning> core\hle\service\nvdrv\nvdrv_interface.cpp:211:SetAruid: (STUBBED) called, pid=0x51
+[   3.881418] Service.NVDRV <Warning> core\hle\service\nvdrv\devices\nvhost_gpu.cpp:162:SetErrorNotifier: (STUBBED) called, offset=0, size=0, mem=1
+[   4.380325] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/galnx/savedata/datasc.ksd
+[   4.381764] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/galnx/savedata/datasc.ksd
+[   4.382621] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/galnx/savedata/datasc.ksd
+[   4.384799] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/galnx/savedata/datasc.ksd
+[   4.388789] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/galnx/savedata/datasu.ksd
+[   4.389845] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/galnx/savedata/datasu.ksd
+[   4.390226] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/galnx/savedata/datasu.ksd
+[   4.390980] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/galnx/savedata/datasu.ksd
+[   4.397713] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/galnx/savedata/datasc.ksd
+[   4.403032] Service.FS <Warning> core\hle\service\filesystem\fsp\fs_i_filesystem.cpp:194:GetFileTimeStampRaw: (Partial Implementation) called. file=/switch/galnx/savedata/datasu.ksd
+[   4.546362] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000020461
+[   4.546374] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[   4.546375] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x00000000000000f3
+[   4.546376] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[   4.546377] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[   4.546378] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[   4.546380] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[   4.546381] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[   4.547160] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000021462
+[   4.547166] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[   4.547167] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x00000000000000aa
+[   4.547168] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[   4.547171] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[   4.547171] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[   4.547172] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[   4.547173] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x000000000000000f
+[   4.547295] Render.Vulkan <Info> video_core\renderer_vulkan\vk_pipeline_cache.cpp:694:CreateGraphicsPipeline: 0xe4293c6a7c010f16
+[   4.552464] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000020461
+[   4.552472] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[   4.552473] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x00000000000003f3
+[   4.552474] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[   4.552476] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[   4.552478] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[   4.552479] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[   4.552480] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[   4.553186] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000021462
+[   4.553191] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[   4.553192] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000aaa
+[   4.553193] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[   4.553193] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[   4.553194] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[   4.553196] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x0000000000000000
+[   4.553198] Debug <Critical> shader_recompiler\frontend\maxwell\decode.cpp:49:operator (): Assertion Failed!
+Invalid insn 0x000000000000000f

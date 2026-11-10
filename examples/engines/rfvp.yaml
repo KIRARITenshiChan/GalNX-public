@@ -1,0 +1,427 @@
+# Engine descriptor for the rfvp adapter (docs/engines/README.md).
+# rfvp is a Rust re-implementation of the FVP engine; GalNX adds one patch that
+# replaces the CPU software rasterizer with an SDL2/GLES2 backend (60 fps in
+# Citron, up from 17-19 fps). Chains: docs/builds/008-rfvp-evaluation.md (base
+# build + software-rasterizer baseline), docs/builds/016-rfvp-sdl2-backend.md
+# (SDL2 backend), docs/builds/017-rfvp-input.md (pad + quick save/load),
+# docs/builds/018-rfvp-nsp.md (self-contained NSP via romfs), and
+# docs/milestones/M5-fvp.md (M5-a..M5-m).
+# Later feature lines: docs/builds/046-rfvp-h264-movie.md (H.264 + nvtegra
+# movie pipeline), 047-nv12-color.md (NEON colour conversion), 048 (OP story
+# trigger), 049-p41-snow-particles.md (snow particles), 050 (AKASEKA FD pilot,
+# zero extra engine patches).
+id: rfvp
+display_name: rfvp (FVP Rust re-implementation)
+upstream_url: https://github.com/xmoezzz/rfvp
+pinned_commit: 9f07adef2eb5d559777f9bf59a67b756875cb24f
+pinned_version: "HEAD 9f07adef (2026-10-25); version tag 0.7.0 = 99435f22"
+license_spdx: MPL-2.0
+license_url: https://github.com/xmoezzz/rfvp/blob/main/LICENSE
+license_notes: >-
+  MPL-2.0 covers the Rust crates and the platform/switch host crate. Bundled
+  third-party assets (demo games, fonts) keep their own licenses and are not
+  shipped by GalNX. A redistributed binary that contains GalNX patches must
+  publish the corresponding source under MPL-2.0 (per-file copyleft).
+target_kind: self_contained_nsp
+build_backend: custom-script
+capabilities:
+  video:
+    supported: true
+    note: >-
+      SDL2/GLES2 backend via patch (patchG): SDL_RenderGeometry for sprites,
+      custom blend modes for Multiply/Screen, and RenderReadPixels for the
+      save thumbnail / debug screenshot. Citron Nightly 0237a9b88 renders the
+      title screen and the Chinese narration at a locked 60.0 fps
+      (debug_report perf avg: vm 0.56 ms, scene 0.23 ms, render 15.57 ms
+      including the vsync wait).
+  audio:
+    supported: false
+    note: >-
+      libnx audren path (audio_init/audio_pump) is linked and unchanged by the
+      SDL2 patch, but no run has verified sound output or mixer timing.
+  input:
+    supported: true
+    note: >-
+      Rewritten for the user's hand-held mapping (docs/builds/019-rfvp-input-mapping.md,
+      patch `rfvp-input-remap.patch`): A=Enter, B=Escape (opens the in-game clock
+      menu), X=toolbar AUTO, Y=menu LOAD, PLUS=menu SAVE, MINUS=menu EXIT + confirm,
+      ZR=left mouse held, ZL=right mouse held (right-click closes the menu), R=Ctrl
+      (skip while held), D-Pad=arrow keys, left stick vertical=wheel (up opens
+      BACKLOG), right stick moves the pointer. Menu entries are reached with a
+      synthetic open-menu/move/click macro (MENU_SAVE=(1117,171), MENU_LOAD=(960,217),
+      MENU_EXIT=(654,608), TOOLBAR_AUTO=(1079,700), EXIT_CONFIRM=(560,379) - all
+      measured at 1280x720 by Citron hover scans; the macro waits 90 polls for the
+      menu fade-in before clicking). Verified in Citron one item at a time
+      (p12-c/d/f/g/h/i/n/o/p, 0 exceptions): A advances and completes the typewriter,
+      B opens the pause menu, ZL closes it (Esc cannot - the game is pointer-only),
+      ZR advances the text, Y/PLUS/MINUS open FILE LOAD / FILE SAVE / exit-confirm
+      and MINUS leaves a black window with no exception, X turns on AUTO, D-Pad and
+      left stick feed arrows/wheel, right stick moves the visible pointer.
+      Open: U1 R=Ctrl reaches the engine input state but Citron showed no
+      fast-forward (game-side use unproven) - re-check on hardware; U2 anchors are
+      layout-specific to this title; U3 hardware run of the whole map pending.
+  save:
+    supported: true
+    note: >-
+      Quick save / quick load to slot 0 verified in Citron (patch J):
+      sdmc:/switch/rfvp/saves/<game-id>/save/rfvp_s000.bin (490,104 B) is
+      written and read back, logged as "quick save: wrote slot 0" / "quick
+      load: read slot 0". The engine also consumes pending legacy
+      save/load requests by falling back to quick slot 0, because the desktop
+      slot UI (legacy_save_load_ui.rs) does not exist on this target; without
+      that fallback the VM halts forever after an in-game SAVE click. Only
+      slot 0 is exposed and the PLUS+ZR / PLUS+ZL chords still need a real
+      hardware run (harness cannot press two keys at once).
+  touch:
+    supported: false
+    note: hidGetTouchScreenStates is forwarded; the game was never driven by touch.
+default_input_profile: generic-vn
+artifact_naming: "{id}-{version}.nsp"
+content_layout:
+  mode: romfs
+  entry: default.ttf
+  destination: romfs:/game
+  notes: >-
+    Self-contained NSP (P11, docs/builds/018-rfvp-nsp.md): the whole extracted
+    game tree is packed into romfs at /game and the Switch runtime selects it
+    at boot when romfs is mounted and sdmc:/switch/rfvp/game has no .hcb
+    (platform/switch/runtime/main.c). The engine reads default.ttf from that
+    tree as its only font (the IROSEKA_FHD data ships Sarasa Gothic SC Bold,
+    which covers CJK). Saves are unaffected: they stay on SD at
+    sdmc:/switch/rfvp/saves/<game-id>/. The NRO form still works and falls back
+    to sdmc:/switch/rfvp/game when romfs is absent.
+status: research
+status_reason: >-
+  Simulator-level only, but now playable end to end in Citron. Patch 016 gives
+  a locked 60.0 fps SDL2/GLES2 backend; patch 017 (doc 017) calibrates the full
+  pad mapping (pointer, A/B, X/Y, MINUS, Ctrl skip, right-stick wheel, PLUS
+  quit) and adds quick save/load to slot 0 plus a fallback consumer for the
+  engine's pending save/load requests, so an in-game SAVE click no longer
+  wedges the VM. Verified: title menu, story advance, backlog, skip, quick
+  save -> restart -> quick load, clean quit; the final NRO was re-verified
+  without any diagnostic mapping (P10-i: pointer hover, A click, Enter
+  advance, right-stick wheel -> BACKLOG, PLUS quit, 0 exceptions). Open items: no Switch hardware
+  run yet (the PLUS+ZR / PLUS+ZL chords are untested), audio, in-game system
+  menu still needs pointer clicks (U2), NSP packaging, memory headroom on 4 GB
+  hardware unmeasured. Upstream still calls the port experimental. P11 closes the
+  packaging item: a self-contained NSP boots entirely from
+  romfs with no game data on SD, enters the Chinese story text and exits cleanly
+  in Citron, and the NRO form still passes its regression. Remaining before
+  "ready": the NSP has not been installed on real hardware (9.98 GB needs an
+  exFAT SD card or NAND; DBI FTP upload is ~25-30 min), audio/movie playback,
+  in-game system menu (pointer-only, U2), and the PLUS+ZR / PLUS+ZL chords.
+  P12 (docs/builds/019-rfvp-input-mapping.md) then replaced the whole pad layer
+  with the user's requested hand-held mapping and drove the native menus through
+  measured screen anchors, verified item by item in Citron; the remaining open
+  item is the hardware run plus the R=Ctrl fast-forward (U1). P13
+  (docs/builds/020-rfvp-device-fixes.md) answers the first hardware feedback
+  round: the console path now draws its own pointer and quit-confirmation
+  overlay in the video shim (the engine only renders its cursor through the
+  desktop host), consumes the game's own ExitDialog / ExitMode(3) so a native
+  quit really terminates instead of sitting on a black screen, reuses graph
+  textures instead of recreating them every frame, and rebinds MINUS to that
+  overlay dialog rather than synthesising in-game clicks. Verified in Citron:
+  cursor follows the right stick, MINUS shows QUIT GAME? (A confirms, B
+  cancels), native EXIT returns to the emulator's game list, 60.0 fps with
+  15.75 ms render. The hardware re-run is the only open item for this round.
+  P14 (docs/builds/021-rfvp-perf-gpu-prev-frame.md) removed the per-frame
+  1920x1080 readback that powered the engine's "previous frame" texture: the SDL
+  shim keeps two off-screen targets and samples the previous one on the GPU, and
+  the periodic debug_screen.bmp readback is compiled out. Same probe: slow frames
+  154 to 19, frames over 7 ms 151 to 15, frames with a 20 ms-plus thumbnail
+  readback 142 to 0. P15 fed the remaining device log back in; P16
+  (docs/builds/022-rfvp-save-latency.md) fixes the last per-line hitch: the game
+  issues two slot-less SaveCreate(3) calls per line and each one used to encode
+  the full 10.2 MB save snapshot (99.8% motion textures) only to throw it away.
+  Encoding is now deferred to a real commit, so a per-line pair costs 5.27-5.67 ms
+  instead of about 200 ms, and the system-slot commits still materialize and write
+  correctly in Citron. The NSP v1.0.4 artifact is built from this tree; the
+  hardware re-run is the remaining acceptance step.
+  P17 (docs/builds/023-rfvp-resource-cache.md, patch rfvp-cache.patch) then
+  attacked the remaining "CG expression / background switch / opening any game UI
+  stalls": the engine had no resource cache at all, so every graph_load/parts_load
+  re-read and re-inflated its texture. A process-wide LRU layer (decoded textures
+  160 MiB, parts 48 MiB, raw bytes 192 MiB) plus 5 call-site hooks, a boot-time
+  prefetch of 66 graph/ UI textures, chunked pixel conversion and devkitPro zlib
+  instead of miniz make the UI reopen stall-free in Citron (two ESC-menu
+  screenshots are byte-identical, graph cache hit 193, vfs cache hit 106, 66
+  textures inflate 204.4 -> 133.7 ms). Remaining Citron spikes are first-time
+  loads of big CG/parts sheets (0.1-0.8 s, U27) that are not prefetched yet;
+  hardware re-run of v1.0.5 is the acceptance step.
+  P20 (docs/builds/026-rfvp-async-watchdog.md, patch rfvp-async-watchdog.patch)
+  closes the black-screen question with hardware evidence: with async enabled the
+  console wrote async_status.txt enabled=1 create=0x0 start=0x0 hb=4 and froze
+  within 60 frames (the periodic report never advanced), so the worker thread does
+  start but the process hangs inside the first decode; the crash reports on the SD
+  card belong to hbloader/sphaira and not to this title. The switch now also
+  records a stage marker (0 idle, 1 pop, 2 read, 3 decode, 4 publish) into
+  async_status.txt every 600 frames, a 3 s watchdog on the main thread detects a
+  stalled queue and drains it inline so the picture recovers, and the worker stack
+  grew from 128 KiB to 1 MiB. Citron verifies the async-on path end to end
+  (hb=77000 stage=0, 30 submits/decodes with the expected byte counts); the
+  hardware A/B run is the acceptance step and async still defaults to off.
+  P19 (docs/builds/025-rfvp-async-toggle.md, patch rfvp-async-toggle.patch)
+  answers the first hardware regression: v1.0.6 (P18) booted to a black screen on
+  the console. The P18 worker thread was created unconditionally and graph_load
+  returned Nil for big loads as soon as submit_graph succeeded, so a device
+  where the thread fails to start would never show any big texture. Async decode
+  is now behind a runtime switch (sdmc:/switch/rfvp/async.txt, default off),
+  threadCreate/threadStart results are checked with an automatic fallback to the
+  synchronous path, and async_status.txt records enabled/create/start/heartbeat
+  for A/B diagnosis. Default-off behaviour equals v1.0.5, so the P18 CG gain is
+  off on hardware until the A/B run proves the thread healthy; NSP v1.0.7
+  (9,979,495,640 B) is built from this tree. The black-screen mechanism itself is
+  still inferred (U2) because no hardware log has been captured yet.
+  P18 (docs/builds/024-rfvp-async-decode.md, patch rfvp-async-decode.patch)
+  removed the remaining first-time big-image stall: a 2400x1350 background costs
+  133-160 ms of zlib inflate plus format conversion and an expression switch
+  decodes 2-4 such sheets, while the save-restore path re-read and re-decoded
+  them synchronously. Big resources (1 MiB and up) are now decoded on a worker
+  thread behind a four-table queue while the main thread keeps the previous
+  texture, restore snapshots carry an async id, and the UI textures decoded at
+  restore stay cached. The CG entry frame went 632.2 -> 299.1 -> 273.4 ms in
+  Citron with byte-identical screenshots, and the NSP v1.0.6 (9,979,494,616 B)
+  is built from this tree; hardware re-run is the acceptance step.
+  P34 (docs/builds/040-wmv2-left-edge.md, patch rfvp-wmv2-padding.patch)
+  fixes the mosaic column the v1.1.9-test hardware run saw on the left edge of
+  the OP: the bundled WMV2 decoder had no row guard in its IDCT write path, so
+  the last macroblock column of the 854-wide (non 16-aligned) frame spilled
+  into the first pixels of the following row. It now decodes on an 864x480
+  macroblock-aligned surface and crops back to 854x480. Host oracle vs ffmpeg:
+  mean |dY| 2.918 -> 1.470, |dY|>32 pixels 6,777 -> 30, left 12 columns
+  63.35 -> 3.36, spill rows 58 -> 0; Citron keeps 8.1-15.2 ms decode on the
+  854x480 path with a clean left edge. NSP v1.1.10-test (9,977,492,696 B,
+  sha256 fc35fa98...) verifies 13 checks / 0 fail / 1 unsigned warn. The OP
+  blur is the 480p upscale itself and is evaluated separately through the
+  video.txt quality tiers.
+artifact_sha256: fc35fa9880ba9e38db737f2648bfa309b4e54ab0dd2571265af58d7156c4ee1d
+evidence_urls:
+  - docs/builds/008-rfvp-evaluation.md
+  - docs/builds/016-rfvp-sdl2-backend.md
+  - docs/builds/017-rfvp-input.md
+  - docs/builds/018-rfvp-nsp.md
+  - docs/builds/019-rfvp-input-mapping.md
+  - docs/builds/020-rfvp-device-fixes.md
+  - docs/builds/021-rfvp-perf-gpu-prev-frame.md
+  - docs/builds/022-rfvp-save-latency.md
+  - docs/builds/023-rfvp-resource-cache.md
+  - docs/builds/024-rfvp-async-decode.md
+  - docs/builds/025-rfvp-async-toggle.md
+  - docs/builds/026-rfvp-async-watchdog.md
+  - docs/builds/040-wmv2-left-edge.md
+  - docs/milestones/evidence/P34-wmv2-left-edge/SHA256SUMS
+  - docs/milestones/evidence/P19-rfvp-async-toggle/SHA256SUMS.txt
+  - docs/milestones/evidence/P19b-rfvp-nsp107/SHA256SUMS.txt
+  - docs/milestones/evidence/P20-rfvp-async-watchdog/SHA256SUMS.txt
+  - docs/milestones/evidence/P20b-device-crash/SHA256SUMS.txt
+  - docs/milestones/evidence/P20c-rfvp-nsp108/SHA256SUMS.txt
+  - docs/milestones/evidence/P20d-device-mtp-upload/SHA256SUMS.txt
+  - docs/milestones/evidence/P19c-device-logs/README.md
+  - docs/milestones/evidence/P19c-device-logs/SHA256SUMS.txt
+  - docs/milestones/evidence/P18-rfvp-async/SHA256SUMS.txt
+  - docs/milestones/evidence/P17-rfvp-cache/SHA256SUMS.txt
+  - docs/milestones/evidence/P16-rfvp-save-latency/SHA256SUMS.txt
+  - docs/builds/patches/rfvp-switch/README.md
+  - docs/milestones/M5-fvp.md
+  - docs/milestones/evidence/P9a-rfvp-sdl2/SHA256SUMS.txt
+  - docs/milestones/evidence/P10-rfvp-input/SHA256SUMS.txt
+  - docs/milestones/evidence/P12b-rfvp-device-fixes/SHA256SUMS.txt
+notes: >-
+  Pin HEAD 9f07adef (tag pre-release; version tag 0.7.0 points at 99435f22).
+  Upstream platform/switch already ships a Switch host crate and a build
+  script; GalNX applies one patch that (a) switches the display path from the
+  CPU software rasterizer plus libnx framebuffer to SDL2/GLES2, keeping libnx
+  input and audren audio, (b) makes the C texture shim an upsert because the
+  engine recreates graph textures under the same id on every generation change
+  (crates/rfvp/src/rendering/prim_commands.rs:224), and (c) captures the
+  performance counters used as acceptance evidence. The Switch SDL2 portlib
+  comes from devkitPro; libEGL links against libnx, so -lnx must follow
+  -ldrm_nouveau on the link line. Build needs the pinned nightly-2026-02-01
+  toolchain plus rust-src, and the Windows build needs the .exe tool probe fix
+  included in the patch. Verification screenshots must be taken at least 90 s
+  after boot: this title shows a long white fade plus a typewriter reveal, and
+  the narration only appears at about t=63.5 s. P11 packs the game tree into
+  romfs (docs/builds/018-rfvp-nsp.md); the current build (v1.0.8) is
+  9,979,496,664 B and boots from romfs with zero game data on SD; a real-hardware install is still pending
+  (9.98 GB needs an exFAT SD card or NAND).
+source:
+  url: https://github.com/xmoezzz/rfvp
+  commit: 9f07adef2eb5d559777f9bf59a67b756875cb24f
+patches:
+  - path: docs/builds/patches/rfvp-switch/rfvp-sdl2-backend.patch
+    notes: >-
+      6 files, 1,238 lines. platform/switch/runtime/sdl_video.c (new) is the
+      SDL2 video shim (texture upsert, pixel-format conversion, blend mapping,
+      SDL_RenderGeometry quads, read-pixels thumbnail and BMP screenshot);
+      runtime/main.c moves the main loop onto SDL (no appletMainLoop, no libnx
+      framebuffer); host/src/render.rs forwards RfvpRenderer to the shim;
+      host/src/ffi.rs reports perf averages; host/build.rs fixes the Windows
+      tool probe; build_switch.sh adds SDL2/EGL flags and the link order.
+  - path: docs/builds/patches/rfvp-switch/rfvp-input.patch
+    notes: >-
+      Incremental patch on top of rfvp-sdl2-backend.patch: 4 files +124/-4
+      (crates/rfvp/src/host_api/event.rs gains QuickSave/QuickLoad;
+      crates/rfvp/src/no_std_core.rs handles those events and consumes
+      take_pending_save_load_request() into quick slot 0;
+      platform/switch/runtime/main.c forwards the right stick;
+      platform/switch/host/src/event.rs makes PLUS a hotkey modifier, emits
+      wheel events from the right stick, and speeds the pointer up). The full
+      HEAD-to-working-tree diff is also kept as rfvp-full.diff.
+  - path: docs/builds/patches/rfvp-switch/rfvp-romfs.patch
+    notes: >-
+      Incremental patch on top of rfvp-sdl2-backend.patch and rfvp-input.patch:
+      1 file +38/-1. platform/switch/runtime/main.c mounts romfs, detects a
+      valid game root by looking for .hcb, switches to romfs:/game only when the
+      SD path has no game, and logs the selected root. The matching full diff is
+      57,536 B / 9 files.
+  - path: docs/builds/patches/rfvp-switch/rfvp-input-remap.patch
+    notes: >-
+      Incremental patch on top of the previous three: 1 file +264/-56
+      (platform/switch/host/src/event.rs rewritten). Rebinds the pad for the
+      hand-held build (P12, docs/builds/019-rfvp-input-mapping.md). The in-game
+      menus are driven by a small stage machine (Esc down/up, wait 90 polls for
+      the fade-in, move the pointer to a measured anchor, left click, optional
+      second anchor for the exit confirm) instead of injecting TJS. Full diff
+      after this patch is rfvp-full.diff 68,536 B / 9 files.
+  - path: docs/builds/patches/rfvp-switch/rfvp-device-fixes.patch
+    notes: >-
+      Incremental patch on top of the previous four (P13, docs/builds/020): 7
+      files. platform/switch/runtime/sdl_video.c gains a console overlay (the
+      pointer is drawn by GalNX because the engine only renders its cursor on
+      the desktop host) plus a reusable texture/scratch path; runtime/main.c
+      feeds it the pointer/dialog state every frame; host/src/event.rs turns
+      MINUS into a host-side quit dialog and tracks pointer visibility;
+      host/src/app.rs, host/src/ffi.rs expose and consume that state;
+      crates/rfvp/src/no_std_core.rs consumes the engine's pending ExitDialog
+      request and the ExitMode(3) main-script-exited condition so a native quit
+      actually terminates. Full diff after this patch is rfvp-full.diff
+      85,712 B / 10 files.
+  - path: docs/builds/patches/rfvp-switch/rfvp-save-lazy.patch
+    notes: >-
+      Incremental patch on top of P14 (docs/builds/022-rfvp-save-latency.md):
+      6 files +162/-19. crates/rfvp/src/subsystem/resources/save_manager.rs
+      gains PendingPrepare (thumbnail + SaveStateSnapshotV1 kept unencoded until
+      a real commit) and materialize_pending_local_savedata; save_state.rs drops
+      the four diagnostic encodes that doubled the encoded volume; no_std_core.rs
+      and app.rs follow the new signature; ring_log capacity grows to 1200 for
+      the [save] trace; sdl_video.c captures the thumbnail through a small GPU
+      target instead of a full 1280x720 readback. Measured on the same complex
+      save: a per-line save pair went from 2x99-108 ms of postcard encoding to
+      no encoding at all (5.27-5.67 ms per frame), while the real system-slot
+      commits still materialize and write (commit ... ok=true).
+  - path: docs/builds/patches/rfvp-switch/rfvp-cache.patch
+    notes: >-
+      Incremental patch on top of P16 (docs/builds/023-rfvp-resource-cache.md):
+      28 files / 849 lines. Adds crates/rfvp/src/subsystem/resources/resource_cache.rs
+      (process-wide LRU caches: decoded textures 160 MiB, parts 48 MiB, raw bytes
+      192 MiB, 16 MiB per entry), wires it into graph_buff/load_texture +
+      graph_load, parts_manager/parts_load and Vfs::read_file, prefetches the
+      graph/ UI textures at boot through Vfs::list_by_prefix, converts the BGRA
+      ->RGBA pixel loops to chunked copies + ImageBuffer::from_raw, and switches
+      the inflate backend to devkitPro zlib via the switch-zlib feature
+      (build_switch.sh links -lz). Result in Citron with the real complex save:
+      reopening the ESC menu twice produces byte-identical screenshots with no
+      decode/save slow frames (graph cache hit 193, vfs cache hit 106), and the
+      66-texture prefetch decode drops from 204.4 ms (miniz) to 133.7 ms (zlib).
+      Full diff after this patch is rfvp-full.diff 154,886 B / 3,950 lines.
+  - path: docs/builds/patches/rfvp-switch/rfvp-async-decode.patch
+    notes: >-
+      Incremental patch on top of P17 (docs/builds/024): 17 files / 1,090 lines.
+      Adds crates/rfvp/src/subsystem/resources/async_decode.rs (REQUESTED /
+      QUEUE / PENDING / DONE tables, KIND_GRAPH / KIND_PARTS / KIND_GRAPH_PREFETCH,
+      ASYNC_INLINE_MIN_BYTES = 1 MiB) and wires it into vfs.rs (pack_location),
+      graph.rs / parts.rs (submit instead of decode) and graph_buff.rs /
+      parts_manager.rs (apply_snapshot_v1 takes an async id, so a restore queues
+      big textures instead of decoding them inline). no_std_core.rs gains
+      apply_async_decodes with a requested_ok guard against stale results;
+      platform/switch/host/src/decode.rs exports rfvp_switch_decode_step and
+      runtime/main.c runs it on a threadCreate worker. Measured in Citron: CG
+      entry 632.2 -> 299.1 -> 273.4 ms on byte-identical screenshots, restore
+      queues big sheets while small UI textures stay cached. Full diff after this
+      patch is rfvp-full.diff 190,338 B / 4,859 lines. Two negative results are
+      documented: returning Nil for big loads broke the load ordering, and
+      libdeflate crashed at start-up (reverted to zlib).
+  - path: docs/builds/patches/rfvp-switch/rfvp-async-toggle.patch
+    notes: >-
+      Incremental patch on top of P18 (docs/builds/025-rfvp-async-toggle.md):
+      4 files +189/-137. crates/rfvp/src/subsystem/resources/async_decode.rs gains
+      async_enabled() (extern C rfvp_switch_async_enabled() under no_std) and
+      guards the five entry points so a disabled switch falls back to synchronous
+      decode; platform/switch/runtime/main.c reads sdmc:/switch/rfvp/async.txt
+      (on/ON/1 = enabled, default off), checks threadCreate/threadStart results,
+      writes sdmc:/switch/rfvp/async_status.txt (enabled/create/start/heartbeat)
+      and keeps a worker heartbeat; platform/switch/host/Cargo.toml bumps the
+      artifact version to 1.0.7. Citron NRO smoke with the default off:
+      nonblack 0.9018, exception 0, async_status enabled=0 create=0x0 start=0x0.
+      Full diff after this patch is rfvp-full.diff 194,079 B / 4,968 lines.
+  - path: docs/builds/patches/rfvp-switch/rfvp-async-watchdog.patch
+    notes: >-
+      Incremental patch on top of P19 (docs/builds/026-rfvp-async-watchdog.md):
+      5 files +145/-31. crates/rfvp/src/subsystem/resources/async_decode.rs gains
+      report_stage (0 idle / 1 pop / 2 read / 3 decode / 4 publish),
+      watchdog_stalled (3 s without pending-count progress) and drain_inline
+      (decodes the queue on the main thread), and routes every job through a
+      shared finish_job; no_std_core::apply_async_decodes runs the watchdog before
+      applying results; platform/switch/runtime/main.c exposes
+      rfvp_switch_async_stage / rfvp_switch_async_disable, writes stage= into
+      async_status.txt every 600 frames, and raises the worker stack to 0x100000;
+      platform/switch/host/Cargo.toml bumps the version to 1.0.8. Citron with async
+      forced on: nonblack 0.9018, async_status enabled=1 hb=77000 stage=0, no
+      last_error.txt. Full diff after this patch is rfvp-full.diff 198,586 B /
+      5,082 lines / 33 files.
+  - path: docs/builds/patches/rfvp-switch/rfvp-wmv2-padding.patch
+    notes: >-
+      Incremental patch on top of P33 (docs/builds/040-wmv2-left-edge.md):
+      1 file / 101 lines (crates/na_wmv_player/src/api.rs). WMV2 frames are now
+      decoded on a 16-pixel macroblock-aligned surface (coded_width/height,
+      854 -> 864) and cropped back to the display size, the same pattern
+      Wmv3/WVC1 already used in this crate. The WMV2 IDCT write path had no row
+      guard, so the last macroblock column of the 854-wide frame spilled into
+      the first pixels of the next row - that was the vertical mosaic column on
+      the left edge of the OP. Host oracle vs ffmpeg on the same frame:
+      mean |dY| 2.918 -> 1.470, |dY|>32 pixels 6,777 -> 30, left 12 columns
+      63.35 -> 3.36, spill rows 58 -> 0; the visible size stays 854x480.
+  - path: docs/builds/patches/rfvp-switch/P40-op-h264.diff
+    notes: >-
+      H.264 OP movie pipeline on top of P33 (docs/builds/046-rfvp-h264-movie.md):
+      platform/switch/runtime/rfvp_movie_h264.c/.h (FFmpeg + nvtegra, get_format
+      prefers AV_PIX_FMT_NVTEGRA), NEON NV12/YUV420P -> RGBA converter
+      rfvp_movie_color.c, Rust crates/rfvp/src/subsystem/resources/videoplayer/
+      horizon_h264.rs (MovieSource), horizon.rs tries movie/NN_h264.mp4 first and
+      falls back to WMV2, build_switch.sh links three static FFmpeg libs. The
+      movie debug markers (movie_debug.txt "movie=1", h264_sw.txt for CPU-only
+      emulator runs) live in the same C file.
+  - path: docs/builds/patches/rfvp-switch/P40b-nv12-color.diff
+    notes: >-
+      Fixes the NEON chroma addressing in rfvp_movie_color.c (uvr+(i>>1) ->
+      uvr+i / uvr+i+8) so colour frames are no longer horizontally stretched;
+      device-verified on iroseka/moyu OP (v1.2.1-test).
+  - path: docs/builds/patches/rfvp-switch/P40c-op-story-trigger.diff
+    notes: >-
+      Removes the debug auto-play of movie/01 at boot; the OP now plays through
+      the game's own story trigger and is skippable (v1.2.2-test).
+  - path: docs/builds/patches/rfvp-switch/P41-snow-particles.diff
+    notes: >-
+      Three-layer snow particle fix on top of P40c (docs/builds/049,
+      232 lines / 7 files): subtitle/components/syscalls/other_anm.rs widens the
+      snow arg10 range to -65535..=65535 (moyu passes 2000/2500),
+      rendering/prim_commands.rs uses the snow mode as texture id
+      (prim_set_texture_id(id, mode)) so both snow prims no longer share
+      texture 0, and emit_snow falls back to base_tex when a variant graph has
+      not been uploaded yet. Time-differential density 1.33 -> 5.52 -> 39.46.
+portlibs:
+  - name: sdl2
+    version: "2.28.5-4"
+    source_url: https://github.com/devkitPro/pacman-packages
+    recipe: devkitPro pacman switch-sdl2
+    notes: >-
+      devkitPro portlib rather than an in-tree recipe; provide
+      include/SDL2/SDL.h and lib/libSDL2.a under $DEVKITPRO/portlibs/switch.
+      Do not use sdl2-config output: it hard-codes MSYS paths.
+build:
+  workdir: "."
+  env:
+    DEVKITPRO: D:/devkitPro
+    RFVP_CONSOLE_NIGHTLY: nightly-2026-02-01
+  commands:
+    - bash platform/switch/build_switch.sh

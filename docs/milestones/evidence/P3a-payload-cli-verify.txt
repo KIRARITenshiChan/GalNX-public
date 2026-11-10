@@ -1,0 +1,5 @@
+[OK  ] keymap-template-size    1293 B (golden 1293 B)
+[OK  ] keymap-template-sha256  aa4fa8aab256f73c... (golden aa4fa8aab256f73c...)
+[OK  ] keymap-default-render   1293 B rendered, sha256 aa4fa8aab256f73c...
+
+3 checks: 0 fail, 0 warn

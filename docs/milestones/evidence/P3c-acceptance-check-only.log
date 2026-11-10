@@ -1,0 +1,10 @@
+RC 0
+
+STDERR:
+engine prepare checked: e96b6034c292c6ccdb099823ab6a0a6b505f77f3 at E:\galnx-build\pilot-01\k2nx-src (3 patch(es), 7 portlib(s))
+  patch docs/builds/patches/k2nx-switch/A-autostart.patch e6a07534b51be5b996af9098df273fd8062404e9a4622239d55a26ebd859e2f2
+  patch docs/builds/patches/k2nx-switch/B-extract-v2.patch bafa71effedd2d6d52bd896a3676a2c25332256f5e19969108cd0185c98f7b5e
+  patch docs/builds/patches/k2nx-switch/C-plugin-alias.patch 9806b23f304ffc1fe1371c2a7d4510f00f87d2a3310d52e70781758402b3b186
+
+HEAD e96b6034c292c6ccdb099823ab6a0a6b505f77f3
+STATUS_LINES_AFTER 0

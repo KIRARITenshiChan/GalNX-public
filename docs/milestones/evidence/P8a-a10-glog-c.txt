@@ -1,0 +1,13 @@
+[pad] key=1013 virt=0 uiChildren=0 gamemenu=0x20a2e5d60 cursor=0x0
+[pad] key=1013 virt=0 uiChildren=0 gamemenu=0x20a2e5d60 cursor=0x0
+[pad] key=1013 virt=0 uiChildren=0 gamemenu=0x20a2e5d60 cursor=0x0
+[pad] key=1013 virt=0 uiChildren=0 gamemenu=0x20a2e5d60 cursor=0x0
+[pad] key=1004 virt=0 uiChildren=0 gamemenu=0x20a2e5d60 cursor=0x0
+[pad] key=1022 virt=0 uiChildren=0 gamemenu=0x20a2e5d60 cursor=0x0
+[tjs] exit -> ok
+[touch] began id=0x20ad2d0a0 loc=(439.6,276.0) virt=0 uiChildren=0
+[touch] ended id=0x20ad2d0a0 loc=(439.6,276.0) virt=0
+[touch] began id=0x20a85c3a0 loc=(430.6,267.0) virt=0 uiChildren=0
+[touch] ended id=0x20a85c3a0 loc=(430.6,267.0) virt=0
+[close] persisted system data (TraceSave + SystemSave)
+[close] main window close confirmed; terminating application after save

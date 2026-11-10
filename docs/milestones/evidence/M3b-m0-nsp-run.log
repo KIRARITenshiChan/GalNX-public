@@ -1,0 +1,16 @@
+launch mode : runas-deelevated
+wrapper     : C:\Users\ACETaffy\AppData\Local\Temp\galnx-harness\launch-20261030-021746-m0-real-build1.cmd
+cmdline     : "E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\web-02\citron\citron.exe" -g "C:\Users\ACETaffy\AppData\Roaming\citron\sdmc\switch\galnx-harness\m0-real-build1.nsp"
+game type   : nsp
+game path   : /e/galnx-build/m3-tools/out/m0-real-build1.nsp
+stage path  : /c/Users/ACETaffy/AppData/Roaming/citron/sdmc/switch/galnx-harness/m0-real-build1.nsp
+status      : loaded
+game        : /e/galnx-build/m3-tools/out/m0-real-build1.nsp (type nsp)
+window title: citron Nightly | 0237a9b88 | m0-hello (64-bit) | 1.0.0 | NVIDIA
+pid         : 37072
+elapsed_s   : 27
+boot line   : [   1.766935] Frontend <Info> citron\main.cpp:2475:BootGame: Booting game: 0100000000001000 | m0-hello (64-bit) | 1.0.0
+signals     : title_match=1 boot_line=1 app_output=1 (app_log_regex)
+screenshot  : E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\citron-harness\runs\20261030-021746-m0-real-build1\window.png (printwindow, 73300 bytes, nonblack=0.1797)
+log         : E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\citron-harness\runs\20261030-021746-m0-real-build1\citron_log.txt
+error       : 

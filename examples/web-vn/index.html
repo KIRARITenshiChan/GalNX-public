@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="author" content="GalNX Project">
+<meta name="license" content="MIT">
+<meta name="description" content="Minimal web visual novel used as the GalNX M4-b Brewser adapter smoke test.">
+<title>GALNX Web VN - Fragment of the Night Sky</title>
+<style>
+html, body { margin: 0; padding: 0; background-color: #05060f; color: #e8f0ff; font-family: sans-serif; }
+#bar { font-size: 20px; color: #77ccff; padding: 6px 10px; background-color: #101830; }
+#stage { display: block; margin: 6px 10px; border: 3px solid #3b5a8f; background-color: #000000; }
+#text { font-size: 24px; color: #ffffff; padding: 8px 12px; min-height: 34px; }
+.row { padding: 4px 12px; }
+button { font-size: 24px; color: #ffffff; border: none; padding: 12px 18px; margin-right: 10px; }
+#btnStart { background-color: #2a6f4f; }
+#btnContinue { background-color: #2f5f9f; }
+#btnReset { background-color: #3a3f4a; font-size: 18px; padding: 8px 12px; }
+#btnA { background-color: #224488; }
+#btnB { background-color: #8a2f4f; }
+#meta { font-size: 18px; color: #ffd54f; padding: 6px 12px; }
+#hint { font-size: 18px; color: #9fb4d8; padding: 4px 12px; }
+#dbg { display: none; font-size: 14px; color: #9fb4d8; padding: 2px 12px; }
+</style>
+</head>
+<body>
+<div id="bar">GALNX WEB VN / FRAGMENT OF THE NIGHT SKY / MIT</div>
+<canvas id="stage" width="1180" height="360"></canvas>
+<div id="text">TITLE - A tiny web visual novel for the GalNX Brewser adapter test.</div>
+<div class="row">
+<button id="btnStart">START</button>
+<button id="btnContinue">CONTINUE</button>
+<button id="btnReset">RESET SAVE</button>
+</div>
+<div class="row">
+<button id="btnA">CHOICE A - FOLLOW THE STAR</button>
+<button id="btnB">CHOICE B - STAY ON THE SHORE</button>
+</div>
+<div id="meta">STATE=title SAVE=absent CLICKS=0</div>
+<div id="hint">Click anywhere (or press A) to advance. Choice buttons only work at scene 3.</div>
+<div id="dbg">DBG=waiting</div>
+<script>
+(function () {
+  var SAVE_KEY = "galnx.webvn.save";
+  var canvas = document.getElementById("stage");
+  var ctx = canvas.getContext("2d");
+  var textEl = document.getElementById("text");
+  var metaEl = document.getElementById("meta");
+  var debugEnabled = String(window.location.search || "").indexOf("debug=1") >= 0;
+  var dbgEl = document.getElementById("dbg");
+  if (debugEnabled) { dbgEl.style.display = "block"; }
+  function showDbg(e) {
+    if (!debugEnabled) { return; }
+    var t = e && e.target ? (e.target.tagName || "?") : "?";
+    var tid = e && e.target && e.target.id ? e.target.id : "-";
+    var cx = (e && typeof e.clientX === "number") ? Math.round(e.clientX) : -1;
+    var cy = (e && typeof e.clientY === "number") ? Math.round(e.clientY) : -1;
+    dbgEl.textContent = "DBG=" + e.type + " css=" + cx + "," + cy + " inner=" + window.innerWidth + "x" + window.innerHeight + " dpr=" + window.devicePixelRatio + " tgt=" + t + "#" + tid;
+  }
+  ["pointerdown", "mousedown", "touchstart", "click", "keydown"].forEach(function (n) { window.addEventListener(n, showDbg, true); });
+  var W = canvas.width;
+  var H = canvas.height;
+  var stars = [];
+  var i;
+  for (i = 0; i < 90; i = i + 1) {
+    stars.push({ x: Math.random() * W, y: Math.random() * (H * 0.72), r: 0.6 + Math.random() * 1.6, p: Math.random() * 6.28 });
+  }
+  var state = "title";
+  var scene = 1;
+  var branch = "";
+  var clicks = 0;
+  var frame = 0;
+  var lastClickAt = 0;
+  var save = null;
+  try {
+    var raw = localStorage.getItem(SAVE_KEY);
+    if (raw) { save = JSON.parse(raw); }
+  } catch (e1) { save = null; }
+
+  var SCENES = [
+    "SCENE 1 - The night train stopped at a station that should not exist.",
+    "SCENE 2 - Beyond the platform, a single star hung above the dark sea.",
+    "SCENE 3 - A path of light crossed the water. Which way do you walk?"
+  ];
+  var END_A = "ENDING A - You followed the star. Morning found you on a road that was not there before.";
+  var END_B = "ENDING B - You stayed on the shore. The star dimmed, but the sound of waves remained.";
+
+  function saveNow() {
+    save = { state: state, scene: scene, branch: branch, updated: Date.now() };
+    try { localStorage.setItem(SAVE_KEY, JSON.stringify(save)); } catch (e2) {}
+  }
+
+  function describe() {
+    var s = "STATE=" + state;
+    if (state === "story") { s = s + " SCENE=" + scene; }
+    if (branch) { s = s + " BRANCH=" + branch; }
+    if (save) { s = s + " SAVE=present"; } else { s = s + " SAVE=absent"; }
+    s = s + " CLICKS=" + clicks;
+    return s;
+  }
+
+  function render() {
+    if (state === "title") {
+      textEl.textContent = "TITLE - A tiny web visual novel for the GalNX Brewser adapter test. Click START to begin.";
+    } else if (state === "story") {
+      textEl.textContent = SCENES[scene - 1];
+    } else if (state === "endingA") {
+      textEl.textContent = END_A;
+    } else if (state === "endingB") {
+      textEl.textContent = END_B;
+    }
+    metaEl.textContent = describe();
+  }
+
+  function advance() {
+    if (state === "title") {
+      state = "story"; scene = 1; saveNow();
+    } else if (state === "story") {
+      if (scene < 3) { scene = scene + 1; saveNow(); }
+    } else if (state === "endingA" || state === "endingB") {
+      state = "title"; scene = 1; branch = ""; saveNow();
+    }
+    render();
+  }
+
+  function onPointer(e) {
+    var tag = e && e.target && e.target.tagName ? e.target.tagName : "";
+    if (tag === "BUTTON") { return; }
+    var now = Date.now();
+    if (now - lastClickAt < 350) { return; }
+    lastClickAt = now;
+    if (state === "story" && scene === 3) {
+      var mid = (window.innerWidth || 1280) / 2;
+      var cx = (e && typeof e.clientX === "number") ? e.clientX : mid;
+      if (cx < mid) { branch = "A"; state = "endingA"; } else { branch = "B"; state = "endingB"; }
+      clicks = clicks + 1;
+      saveNow();
+      render();
+      return;
+    }
+    clicks = clicks + 1;
+    advance();
+  }
+
+  document.addEventListener("click", onPointer, false);
+  document.addEventListener("pointerdown", onPointer, false);
+
+  function bind(id, fn) {
+    var b = document.getElementById(id);
+    if (b && b.addEventListener) {
+      b.addEventListener("click", function (e) {
+        var now = Date.now();
+        if (now - lastClickAt < 350) { return; }
+        lastClickAt = now;
+        clicks = clicks + 1;
+        fn();
+      });
+    }
+  }
+
+  bind("btnStart", function () { state = "story"; scene = 1; branch = ""; saveNow(); render(); });
+  bind("btnContinue", function () {
+    if (save && save.state && save.state !== "title") {
+      state = save.state; scene = save.scene || 1; branch = save.branch || "";
+    } else {
+      state = "story"; scene = 1; branch = "";
+    }
+    saveNow(); render();
+  });
+  bind("btnReset", function () {
+    save = null; state = "title"; scene = 1; branch = "";
+    try { localStorage.removeItem(SAVE_KEY); } catch (e3) {}
+    render();
+  });
+  bind("btnA", function () {
+    if (state === "story" && scene === 3) { branch = "star"; state = "endingA"; saveNow(); render(); }
+  });
+  bind("btnB", function () {
+    if (state === "story" && scene === 3) { branch = "shore"; state = "endingB"; saveNow(); render(); }
+  });
+
+  function draw() {
+    frame = frame + 1;
+    var g;
+    if (state === "endingA") {
+      g = ctx.createLinearGradient(0, 0, 0, H);
+      g.addColorStop(0, "#1a2a55"); g.addColorStop(0.6, "#8a4a3a"); g.addColorStop(1, "#ffb066");
+    } else if (state === "endingB") {
+      g = ctx.createLinearGradient(0, 0, 0, H);
+      g.addColorStop(0, "#03040c"); g.addColorStop(0.7, "#0a2340"); g.addColorStop(1, "#184a5a");
+    } else if (state === "title") {
+      g = ctx.createLinearGradient(0, 0, 0, H);
+      g.addColorStop(0, "#02030a"); g.addColorStop(0.75, "#0b1b3a"); g.addColorStop(1, "#16355c");
+    } else {
+      g = ctx.createLinearGradient(0, 0, 0, H);
+      g.addColorStop(0, "#050a1a"); g.addColorStop(0.7, "#12294a"); g.addColorStop(1, "#2a4a6a");
+    }
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, W, H);
+    for (i = 0; i < stars.length; i = i + 1) {
+      var st = stars[i];
+      var a = 0.35 + 0.65 * Math.abs(Math.sin(st.p + frame * 0.03));
+      ctx.fillStyle = "rgba(220,235,255," + a.toFixed(3) + ")";
+      ctx.beginPath();
+      ctx.arc(st.x, st.y, st.r, 0, 6.2832, false);
+      ctx.fill();
+    }
+    if (state === "title") {
+      ctx.fillStyle = "#f5f0d0";
+      ctx.beginPath();
+      ctx.arc(W * 0.5, H * 0.42, 58, 0, 6.2832, false);
+      ctx.fill();
+      ctx.fillStyle = "#05060f";
+      ctx.beginPath();
+      ctx.arc(W * 0.5 + 30, H * 0.38, 52, 0, 6.2832, false);
+      ctx.fill();
+    }
+    if (state === "story" || state === "endingA" || state === "endingB") {
+      ctx.fillStyle = "#0a1526";
+      ctx.fillRect(0, H * 0.78, W, H * 0.22);
+      ctx.fillStyle = "#10233d";
+      for (i = 0; i < 24; i = i + 1) {
+        var wx = (i * 97 + frame * 0.8) % (W + 120) - 60;
+        ctx.fillRect(wx, H * 0.82 + (i % 3) * 8, 70, 4);
+      }
+    }
+    if (state === "story" && scene === 3) {
+      ctx.strokeStyle = "rgba(255,230,150,0.85)";
+      ctx.lineWidth = 5;
+      ctx.beginPath();
+      ctx.moveTo(W * 0.35, H * 0.78);
+      ctx.lineTo(W * 0.2, H * 0.2);
+      ctx.stroke();
+      ctx.strokeStyle = "rgba(120,200,255,0.85)";
+      ctx.beginPath();
+      ctx.moveTo(W * 0.65, H * 0.78);
+      ctx.lineTo(W * 0.82, H * 0.24);
+      ctx.stroke();
+    }
+    requestAnimationFrame(draw);
+  }
+
+  render();
+  if (save) {
+    metaEl.textContent = describe() + " RESUMABLE=" + (save.state || "?") + "/" + (save.scene || 0);
+  }
+  requestAnimationFrame(draw);
+})();
+</script>
+</body>
+</html>

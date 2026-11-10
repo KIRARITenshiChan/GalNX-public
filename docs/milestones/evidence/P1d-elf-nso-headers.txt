@@ -1,0 +1,43 @@
+# P1d ELF/NSO 程序头与加载基址说明（E1/E4）
+日期: 2026-10-30
+
+## 1) 重建 r2 ELF 的真实程序头（readelf -l E:/galnx-build/pilot-01/out/K2NX-rebuilt-galnx-r2.elf）
+ELF64 AArch64 DYN (PIE)，Entry point 0x0；4 个程序头：
+  LOAD  Offset 0x0000000000010000  VirtAddr 0x0           PhysAddr 0x0
+        FileSiz 0x1774968           MemSiz 0x1774968     Flags R E  Align 0x10000
+  LOAD  Offset 0x0000000001785000  VirtAddr 0x1775000    PhysAddr 0x1775000
+        FileSiz 0x8403a0            MemSiz 0x8403a0      Flags R    Align 0x10000
+  LOAD  Offset 0x0000000001fc6000  VirtAddr 0x1fb6000    PhysAddr 0x1fb6000
+        FileSiz 0x16d040            MemSiz 0xdb79d8      Flags RW   Align 0x10000
+  DYNAMIC ...
+Section mapping: .text/.init/.plt/.fini; .rodata/.eh_frame/.note.gnu.build-id; .data/.bss/.tdata...
+
+## 2) 合成 ELF（NRO -> ELF 转换）的程序头（readelf -l out/m0-synthetic.elf）
+ELF64 AArch64 EXEC，Entry point 0x0；3 个 PT_LOAD：
+  LOAD Offset 0x1000   VirtAddr 0x0       PhysAddr 0x0       FileSiz 0x17000 MemSiz 0x17000 Flags R E Align 0x1000
+  LOAD Offset 0x18000  VirtAddr 0x17000   PhysAddr 0x17000   FileSiz 0x7000  MemSiz 0x7000  Flags R   Align 0x1000
+  LOAD Offset 0x1f000  VirtAddr 0x1e000   PhysAddr 0x1e000   FileSiz 0x5000  MemSiz 0x9000  Flags RW  Align 0x1000
+合成规则：p_vaddr = p_paddr = NRO FileOff（0 / 0x17000 / 0x1e000），p_filesz = NRO 段大小，第 3 段 p_memsz += NRO bssSize；GNU build-id note = NRO BuildId。
+理由（源码依据 switch-tools）：
+- elf2nro.c：NroHeader{magic,version,size,flags,Segments[3]{FileOff,Size},bssSize,Unk3,BuildId,Padding}；ASET 资产写在文件末尾；段数据写入 FileOff 位置（绝对偏移）。
+- elf2nso.c：NsoSegment{u32 FileOff,u32 DstOff,u32 DecompSz,u32 AlignOrTotalSz}；DstOff = p_vaddr；DecompSz = p_filesz；AlignOrTotalSz = (i==2 ? p_memsz-p_filesz : 1)；CompSz = LZ4 压缩大小；Hashes = SHA256(未压缩 p_filesz 数据)。elf2nso 完全不使用 e_entry，也不使用 p_paddr 决定加载基址。
+
+## 3) NSO 头实测（m0 合成 ELF 经 devkitPro elf2nso）
+magic NSO0；unk1=0、unk2=0、unk3=0x3f
+seg0 FileOff=0x100 DstOff=0x0 DecompSz=0x17000 AlignOrTotalSz=1
+seg1 FileOff=0x106e4 DstOff=0x17000 DecompSz=0x7000 Align=1
+seg2 FileOff=0x1418d DstOff=0x1e000 DecompSz=0x5000 AlignOrTotalSz=0x4000（bss）
+BuildId = NRO BuildId 3ea0bca5…；CompSz [0x105e4,0x3aa9,0x739]
+hash0（NSO 偏移 0xa0 起）= be72132416fd38cee0b964401a561cee4e68bde6f42ffcbe565dcb6b89533554 = sha256(m0 NRO text raw[0:0x17000]) → 与 elf2nso 规则一致
+nstool -t nso：ModuleId=BuildId，.text/.ro/.data MemoryOffset 0/0x17000/0x1e000、MemorySize 0x17000/0x7000/0x5000、.bss 0x4000。
+
+## 4) 加载基址 0x80000000(vs) 0x8000000 的解释（回答 Lead 问题 2）
+- 该值由 loader 按模块类型决定，不来自 ELF/NSO 头：NRO homebrew 走 hbloader 默认 0x80000000；已安装 application（NSP 的 Program NSO）由系统加载到 0x8000000。
+- 合成 ELF 的 p_vaddr/p_paddr 只影响 elf2nso 的 DstOff（相对段偏移），不影响加载基址；elf2nso 不读 e_entry/p_paddr。
+- 因此 NSP 形态 k2s_boot 打印 image base 0x8000000 属 NRO 与 NSP application 的固有差异，不是合成 ELF 的 bug，也不影响运行（P2 已在 Citron 跑通标题画面）。
+
+## 5) NRO -> NSP 转换链路要点
+- NRO 文件 = 0x10 前缀 + NRO0 头（0x10 起 0x70 B）+ 段数据（位于绝对 FileOff）+ 尾部 ASET（icon/nacp/romfs）。
+- 段数据绝对偏移：m0 text[0:0x17000] 与原始 ELF .text 匹配（首个差异 0x10 起 0x70 B 为 NRO 头槽位）；rodata/data 完全一致 → 证明段数据在绝对偏移，ASET 绝对偏移 = NroHeader.size。
+- NRO -> 合成 ELF -> elf2nso（LZ4+哈希）→ exefs/main；NRO ASET 的 icon/NACP/内嵌 romfs 分别抽取复用。
+- 该链路对 m0/m1/K2NX 三个 NRO 实测通过；K2NX 预编译 NRO 版 NSP 已被 Citron 加载（audit-web），修复根级文件后 b0b3 版可供 CJK 复测。

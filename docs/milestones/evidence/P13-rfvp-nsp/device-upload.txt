@@ -1,0 +1,16 @@
+GalNX P13 - device upload record (DBI FTP)
+==========================================
+date: 2026-10-31 (Asia/Shanghai)
+host: Windows PC, script E:/galnx-build/p12/ftp_upload_nsp.py (Python ftplib, STOR, anonymous, 1 MiB blocks, SIZE/REST resume probe)
+target: ftp://192.168.31.254:5000 (Switch running DBI -> FTP server)
+file: IROSEKA_FHD-010047420000a000.nsp
+size: 9979437784 bytes
+sha256: ff259aa49780b6c93e79762c6db5c670c6a979ffb6ddcd7c6ab4ce95e09c0d9b
+started: 2026-10-31T22:50:16+08:00
+finished: 2026-10-31T23:16:06+08:00
+elapsed: 1548.7 s (25 min 48.7 s)
+average rate: 6443712 B/s = 6.15 MiB/s
+result: UPLOAD_DONE (RC=0); LIST_AFTER = ['/Place NSP, NSZ, XCI, XCZ or MSP files here']
+note: DBI returned to the drop placeholder directory after STOR completed, i.e. the NSP was accepted and auto-installed on the console;
+      upload ran in a single connection with no retries, no error_perm, no timeout.
+log: E:/galnx-build/p12/upload.log (18 lines, SIZE probe 550 on resume check, PROGRESS every ~40 s)

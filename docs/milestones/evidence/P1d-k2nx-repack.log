@@ -1,0 +1,172 @@
+PROVENANCE keyset=E:/Othergames/Nintendo Switch/Ryujinx-canary/portable/system/prod.keys size=12007 sha256=7bb3b6d2a2eedc83c9f244ee2ed2eaa4d59eb9ad95b66df575f7dfffa71a2a40 mtime=2026-03-19 07:25:45.902258500 +0800
+
+== STEP 1: exefs/main
+extracted icon: E:/galnx-build/pilot-01/build/k2nx-fixed/in/icon.jpg (27350 bytes, sha256 dff2e7943e0ce130)
+extracted control.nacp: E:/galnx-build/pilot-01/build/k2nx-fixed/in/control.nacp (16384 bytes, sha256 5c8bf82d9aef4c80)
+extracted embedded romfs: E:/galnx-build/pilot-01/build/k2nx-fixed/in/extracted-romfs (85 files, 7551013 payload bytes of 7556968 image bytes)
+nro: E:/Othergames/Nintendo Switch/Workspace/GalNX/workspaces/pilot-01/Kirikiroid2-NX-v1.0.1.nro (42338934 bytes, hdr size 34738176, build id e3181864542bc0065e5ccd19a935dd77)
+synthetic ELF: E:/galnx-build/pilot-01/build/k2nx-fixed/synthetic.elf (34742448 bytes)
+nro summary:
+  NRO_PATH=E:/Othergames/Nintendo Switch/Workspace/GalNX/workspaces/pilot-01/Kirikiroid2-NX-v1.0.1.nro
+  NRO_FILE_SIZE=42338934
+  NRO_HDR_VERSION=0
+  NRO_HDR_SIZE=34738176
+  NRO_FLAGS=0
+  NRO_BSS_SIZE=11837440
+  NRO_BUILD_ID=e3181864542bc0065e5ccd19a935dd77371e0b7b000000000000000000000000
+  NRO_TEXT_SIZE=24588288
+  NRO_RODATA_SIZE=8650752
+  NRO_DATA_SIZE=1499136
+  SYNTH_ELF=E:/galnx-build/pilot-01/build/k2nx-fixed/synthetic.elf
+  SYNTH_ELF_SIZE=34742448
+  ASET_VERSION=0
+  ASET_ABS=34738176
+  ASET_ICON_OFFSET=56
+  ASET_ICON_ABS=34738232
+  ASET_ICON_SIZE=27350
+  ASET_NACP_OFFSET=27406
+  ASET_NACP_ABS=34765582
+  ASET_NACP_SIZE=16384
+exefs/main: 22072316 bytes sha256=07742ad99d643743af833cdc80e6aaf1b210194b15c8545b095a04821689f55d
+
+== STEP 2: main.npdm
+Failed to get system_resource_size (field not present).
+Failed to get version (field not present).
+Failed to get process_category (field not present).
+Failed to get optimize_memory_allocation (field not present).
+Failed to get disable_device_address_space_merge (field not present).
+Failed to get enable_alias_region_extra_size (field not present).
+Failed to get prevent_code_reads (field not present).
+Failed to get signature_key_generation (field not present).
+Failed to get program_id_range_min (field not present).
+Failed to get program_id_range_max (field not present).
+Failed to get program_id (field not present).
+npdm: generated from examples/nsp/npdm.json (title_id 0x010047410000b0b3)
+exefs/main.npdm: 972 bytes sha256=3273521e5f04db3310d6353398d48f0e85374caa7173d6dc8076a88e5bec37bf
+
+== STEP 3: control NACP and icon
+control.nacp: 16384 bytes sha256=5c8bf82d9aef4c8066dfde456aaf45691d81ef430d09332fe48a19bd1cdbd57e (extracted from NRO: E:/galnx-build/pilot-01/build/k2nx-fixed/in/control.nacp)
+icon: extracted from NRO E:/galnx-build/pilot-01/build/k2nx-fixed/in/icon.jpg
+icon check: format=JPEG size=(256, 256) mode=RGB
+control/icon_AmericanEnglish.dat: 27350 bytes sha256=dff2e7943e0ce1306d243d314b2bcb7f1e7308fadd4e3ecb0053e181fdf80354
+
+== STEP 4: RomFS
+romfs: 85 files, 7551013 payload bytes, longest path 90 chars
+
+== STEP 5: hacBrewPack
+hacBrewPack exit code: 0
+NSP: E:/galnx-build/pilot-01/out/Kirikiroid2-NX-fixed-010047410000b0b3.nsp (29877976 bytes, sha256 2bc724555ffa5c3f229748c68e6f06a1b13326619bf8162f045eb5964008dead)
+
+== nstool: NSP layer
+[WARNING] Failed to load "title.keys" keyfile.
+[PartitionFs]
+  Type:        PFS0
+  FileNum:     3
+nstool NSP exit code: 0 (log: E:/galnx-build/pilot-01/build/k2nx-fixed/nstool-nsp.log)
+
+== nstool: NCA layer
+nstool extract exit code: 0
+--- 6c26bfcc3b2795d6ef439eae2edca1ac.nca (rc 0) ---
+[WARNING] NCA Header Main Signature: FAIL
+  Format Type:     NCA3
+  Content Type:    Control
+  Key Generation:  0
+  Kaek Index:      Application (0)
+  Size:            0x20c00
+  ProgID:          0x010047410000b0b3
+  SdkAddon Ver.:   0.12.17 (v790784)
+--- 978efad6cf0471758e3fb8515de13a6f.nca (rc 0) ---
+[WARNING] NCA Header Main Signature: FAIL
+[WARNING] ACID Signature: FAIL (Failed to verify Access Control Info Desc)
+  Format Type:     NCA3
+  Content Type:    Program
+  Key Generation:  0
+  Kaek Index:      Application (0)
+  Size:            0x1c5ca00
+  ProgID:          0x010047410000b0b3
+  SdkAddon Ver.:   0.12.17 (v790784)
+--- c782f5d9057a0882239286057761a24f.cnmt.nca (rc 0) ---
+[WARNING] NCA Header Main Signature: FAIL
+  Format Type:     NCA3
+  Content Type:    Meta
+  Key Generation:  0
+  Kaek Index:      Application (0)
+  Size:            0x1000
+  ProgID:          0x010047410000b0b3
+  SdkAddon Ver.:   0.12.17 (v790784)
+
+===EXIT
+0
+===ARTIFACTS
+Kirikiroid2-NX-fixed-010047410000b0b3.nsp 29877976 2bc724555ffa5c3f229748c68e6f06a1b13326619bf8162f045eb5964008dead
+===INPUTS
+keyset_mode real
+title_id 010047410000b0b3
+exefs_main 22072316 07742ad99d643743af833cdc80e6aaf1b210194b15c8545b095a04821689f55d
+npdm 972 a8d2a53a914eaa50887cade58b25796787b686f7bcd23a36a24785a026054e23
+nacp 16384 e189c3eca6fc5b09cd6a7b19216c9fe9d01a49e9a3213a131da344fdcf723013
+icon 27350 dff2e7943e0ce1306d243d314b2bcb7f1e7308fadd4e3ecb0053e181fdf80354
+===NRO
+  NRO_PATH=E:/Othergames/Nintendo Switch/Workspace/GalNX/workspaces/pilot-01/Kirikiroid2-NX-v1.0.1.nro
+  NRO_FILE_SIZE=42338934
+  NRO_HDR_VERSION=0
+  NRO_HDR_SIZE=34738176
+  NRO_FLAGS=0
+  NRO_BSS_SIZE=11837440
+  NRO_BUILD_ID=e3181864542bc0065e5ccd19a935dd77371e0b7b000000000000000000000000
+  NRO_TEXT_SIZE=24588288
+  NRO_RODATA_SIZE=8650752
+  NRO_DATA_SIZE=1499136
+  SYNTH_ELF=E:/galnx-build/pilot-01/build/k2nx-fixed/synthetic.elf
+  SYNTH_ELF_SIZE=34742448
+  ASET_VERSION=0
+  ASET_ABS=34738176
+  ASET_ICON_OFFSET=56
+  ASET_ICON_ABS=34738232
+  ASET_ICON_SIZE=27350
+  ASET_NACP_OFFSET=27406
+  ASET_NACP_ABS=34765582
+  ASET_NACP_SIZE=16384
+  ASET_ROMFS_OFFSET=43790
+  ASET_ROMFS_ABS=34781966
+  ASET_ROMFS_SIZE=7556968
+  ASET_ICON_FILE=E:/galnx-build/pilot-01/build/k2nx-fixed/in/icon.jpg
+  ASET_ICON_SHA256=dff2e7943e0ce1306d243d314b2bcb7f1e7308fadd4e3ecb0053e181fdf80354
+  ASET_NACP_FILE=E:/galnx-build/pilot-01/build/k2nx-fixed/in/control.nacp
+  ASET_NACP_SHA256=5c8bf82d9aef4c8066dfde456aaf45691d81ef430d09332fe48a19bd1cdbd57e
+  ROMFS_EMBEDDED_SIZE=7556968
+  ROMFS_EMBEDDED_DIR=E:/galnx-build/pilot-01/build/k2nx-fixed/in/extracted-romfs
+  ROMFS_EMBEDDED_FILES=85
+  ROMFS_EMBEDDED_BYTES=7551013
+  EXTRACTED_ICON=E:/galnx-build/pilot-01/build/k2nx-fixed/in/icon.jpg
+  EXTRACTED_NACP=E:/galnx-build/pilot-01/build/k2nx-fixed/in/control.nacp
+  EXTRACTED_ROMFS_DIR=E:/galnx-build/pilot-01/build/k2nx-fixed/in/extracted-romfs
+  ROMFS_SOURCE_DIR=E:/galnx-build/pilot-01/build/k2nx-fixed/in/extracted-romfs
+  ROMFS_COUNT=85
+  ROMFS_BYTES=7551013
+  ROMFS_MAXPATH_LEN=90
+  ROMFS_MAXPATH=E:/galnx-build/pilot-01/build/k2nx-fixed/in/extracted-romfs/Default/SliderNode_Disable.png
+===ROMFS
+source extracted from NRO: E:/galnx-build/pilot-01/build/k2nx-fixed/in/extracted-romfs
+files 85 bytes 7551013 max_path_len 90
+===LOG
+E:/galnx-build/pilot-01/build/k2nx-fixed/hacbrewpack.log
+===LOGTAIL
+Writing hacbrewpack_nca\c782f5d9057a0882239286057761a24f.cnmt.nca to hacbrewpack_nsp\010047410000b0b3.nsp
+
+----> Created NSP: hacbrewpack_nsp\010047410000b0b3.nsp
+
+Removing created temp and nca directories
+
+
+Summary:
+
+Title ID: 010047410000b0b3
+SDK Version: 0.12.17.0
+Section Crypto Type: Regular Crypto
+Keygeneration: 1
+Program NCA RomFS Section: Yes
+Program NCA Logo Section: No
+HtmlDoc NCA: No
+LegalInfo NCA: No
+Created NSP: hacbrewpack_nsp\010047410000b0b3.nsp

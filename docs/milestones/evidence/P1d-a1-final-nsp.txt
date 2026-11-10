@@ -1,0 +1,58 @@
+# P1d A1 最终自包含 NSP 构建与校验记录（E1/E3）
+日期: 2026-10-30 06:44-06:52 (+08:00)
+执行: audit-package（task-35 / P1-d）
+
+## 输入
+- ELF: E:/galnx-build/pilot-01/out/K2NX-rebuilt-galnx-r2.elf 113,874,760 B sha256 4b4515837d0239ee2e7448dd5dbed65e8fdda72c37fb0bac0d0dd10ef849b882（Lead 重建 v2 解包补丁）
+- NRO（对照）: E:/galnx-build/pilot-01/out/K2NX-rebuilt-galnx-r2.nro 42,351,222 B sha256 f6134790c56ddb97b6a50b0160f69a0ba3cbf97216c3b15661f86f7ef6bbb7e8（未参与打包）
+- NACP: E:/galnx-build/pilot-01/out/K2NX-rebuilt-galnx-r2.nacp 16,384 B sha256 5c8bf82d9aef4c8066dfde456aaf45691d81ef430d09332fe48a19bd1cdbd57e
+- icon: E:/galnx-build/pilot-01/assets/icon.jpg 27,350 B sha256 dff2e7943e0ce1306d243d314b2bcb7f1e7308fadd4e3ecb0053e181fdf80354（512x512? 实为 256x256 JPEG RGB，PIL 校验）
+- romfs: E:/galnx-build/pilot-01/nsp/romfs-a1 108 files / 2,878,185,598 B / 最长绝对路径 67；game_files.txt 569 B / 27 行（bytes=2870634016、startup=/kirikiri/haruno/data.xp3、22 条 file=）
+- keyset metadata only: E:/Othergames/Nintendo Switch/Ryujinx-canary/portable/system/prod.keys size=12,007 sha256=7bb3b6d2a2eedc83c9f244ee2ed2eaa4d59eb9ad95b66df575f7dfffa71a2a40 mtime=2026-03-19 07:25:45.902258500 +0800（内容未读取、未复制）
+
+## 命令
+bash scripts/build_pilot_nsp.sh --elf <r2.elf> --title-id 010047410000b0b2 --name K2NX-A1-selfcontained --author Erige005 --version 1.0.1 --nacp <r2.nacp> --icon assets/icon.jpg --romfs-dir nsp/romfs-a1 --hacbrewpack <hacbrewpack.exe> --nstool <nstool.exe> --keyset <prod.keys 显式路径> --out E:/galnx-build/pilot-01/out --work E:/galnx-build/pilot-01/build/a1-final
+
+## 构建指标
+- hacBrewPack v3.05；端到端耗时 288.4 s（PowerShell Start-Job + Stopwatch 计时；含 elf2nso/npdmtool/nacp/romfs 打包）
+- hacBrewPack 峰值工作集 111 MiB（300 ms 采样 Get-Process PeakWorkingSet64）
+- 磁盘峰值约 8.4 GB（romfs 临时镜像 2.878 GB + Program NCA 2.906 GB + NSP 2.906 GB 阶段叠加）
+- 退出码 0；无 WARN/ERROR（仅 npdmtool 对可选 NPDM 字段的 "Failed to get X (field not present)" 提示，属已知无害）
+
+## 产物
+- NSP: E:/galnx-build/pilot-01/out/K2NX-A1-selfcontained-010047410000b0b2.nsp
+  2,906,131,672 B；sha256 9678e992c07bcbe46aa70695957b948badd6f2adaf97e39401060ad196efc3d3
+- exefs/main 22,082,152 B sha256 91d87fc93f89627d65b7627272a3ee8feadf0c024abcc926ba3386e424ee7b7f
+- exefs/main.npdm 972 B sha256 0ed7ea3d4b0826d89956a324abf8e73eb636574eebc0afe06f5b3f4a348ba494（npdmtool 生成，title_id 0x010047410000b0b2）
+- control/control.nacp 16,384 B sha256 e189c3eca6fc5b09cd6a7b19216c9fe9d01a49e9a3213a131da344fdcf723013（源 NACP 5c8bf82d… 经 hacBrewPack 就地改写；NACP 内名称保持 ASCII "Kirikiroid2-NX"）
+- control/icon_AmericanEnglish.dat 27,350 B sha256 dff2e794…（256x256 JPEG RGB）
+
+## nstool v1.9.2 校验（-y -k <prod.keys>）
+NSP 层 rc=0：
+[PartitionFs]
+  Type:        PFS0
+  FileNum:     3
+NCA 抽取（nstool -x nca）rc=0：
+- 0fc8affcf4495d9163d9043ac0d7a9b0.nca 134,144 B (0x20c00) Content Type Control
+- 89896bdd14016df9b33c11c699c674cf.nca 2,905,993,216 B (0xad35f000) Content Type Program
+- c12f94c96d6044ea39c5aec5b232b75d.cnmt.nca 4,096 B (0x1000) Content Type Meta
+三个 NCA 头均：Format NCA3 / Dist. Type Download / Key Generation 0 / Sig. Generation 0 / Kaek Index Application(0) / ProgID 0x010047410000b0b2 / Content Index 0 / SdkAddon 0.12.17 (v790784)；签名 [WARNING] NCA Header Main Signature: FAIL（Program 另 ACID Signature FAIL）属预期（无任天堂私钥）。
+
+## RomFS 抽回与逐文件校验
+- nstool --part1 romfs-extracted -k <prod.keys> <Program NCA> rc=0
+- cmp_tree.py 比对 romfs-a1 vs 抽回目录：
+  A files=108 bytes=2878185598
+  B files=108 bytes=2878185598
+  only_in_A=0 [] / only_in_B=0 [] / content_diff=0 [] → MATCH
+- payload 22 文件（romfs:/game/ 下）A/B 逐文件 sha256：22/22 OK（清单见 P1d-romfs-roundtrip.txt）
+- 根级关键文件：DroidSansFallback.ttf 7,287,728 B sha256 76aafe35…7c048f；default.cur 4,286 B sha256 0f35ae91…ec6a927；game_files.txt 569 B sha256 8dac5eaa…680259
+
+## 限制/告警
+- NSP 2,906,131,672 B < FAT32 4 GiB 单文件上限（4,294,967,296），余量约 1.39 GB
+- Program NCA 2,905,993,216 B，单 NCA 与单 romfs 镜像（2,878,185,598 B）均 < 4 GiB uint32 上限
+- nstool -t cnmt 对 hacBrewPack CNMT 仍报 "Invalid extended header size"（已知限制，不影响结构合法性；NCA 头可读 Content Type Meta/ProgID）
+
+## U11 更新（2026-10-30 06:53-06:54，Lead 在 Citron 验证首启解包通过）
+- A1 NSP（010047410000b0b2）首启：5 romfs ok → 5b galnx payload → first boot copying 22 payload file(s) → payload copy finished: 22 copied, 0 kept, 0 failed, 2737 MiB total（14 s，约 205 MB/s）→ autostart data.xp3 → 06:54:43 Scenario loaded : title.ks；status=loaded、窗口标题含 1.0.1；首次窗口先过 CAUTION/18禁 再自动进标题。
+- sdmc:/kirikiri/haruno/ 顶层 16 项 2,870,634,016 B（= game_files.txt bytes）；其中 plugin/ 7 个 .tpm 1,066,496 B，顶层文件合计 2,869,567,520 B；marker .galnx_extracted=pilot01-r1；autostart.txt=/kirikiri/haruno/data.xp3；标题 3 张截图逐字节相同（2,551,781 B，sha256 3fa32cd3…，nonblank 0.9008）。
+- 详证：docs/milestones/evidence/P1d-a1-firstboot-citron.txt；U11 关闭，U12/U13/U14 仍未验证。

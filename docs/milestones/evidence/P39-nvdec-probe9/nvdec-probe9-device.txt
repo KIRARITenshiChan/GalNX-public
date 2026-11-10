@@ -1,0 +1,306 @@
+=== GalNX NVDEC probe9 (probe8 without the log bottleneck; read/recv split, clock + SD read baseline, H.264 cross-check) ===
+pcv: initialize rc=0x00000000
+build: Nov  9 2026 03:32:40
+LOOP facts: single thread; galnx_nvdec_next() does send_packet + receive_frame (NVTEGRA waits its syncpt inside receive via post_process), then optional transfer and optional RGBA; SDL upload/render follow on the same thread; no frame queue, no decode-ahead; the frame is released before the next call; this probe has no MAX_DECODE_PER_TICK limit.
+hw mode: strict hardware 1 (any software fallback is a failure)
+sdl: window=0x573a3e0ea0 renderer=0x573a461980 driver=Switch (vsync off)
+input: sdmc:/nvdec-poc.wmv
+[io] before: 256 x 64KiB = 16.0 MiB in 530.3 ms = 30.2 MiB/s (2.072 ms/read)
+[io] before: 1024 x 4KiB mid-file = 4.0 MiB in 429.2 ms (0.419 ms/read)
+
+=== STAGE A-verify: strict hardware frame verification | stage=0 frames<=60 upload=0 render=0 pace=0 ===
+frmrtq_postproc=7, bitrtq_postproc=31
+LoopFilter=0, ChromaFormat=1, Pulldown=1, Interlace: 0
+TFCTRflag=0, FINTERPflag=0
+BrokenLink=0, ClosedEntry=0, PanscanFlag=0
+RefDist=1, Postproc=1, FastUVMC=0, ExtMV=1
+DQuant=0, VSTransform=1, Overlap=0, Qmode=0
+hw: nvtegra device created
+hw: avctx->hw_device_ctx set; decoder derives its frames ctx
+frame pool: not negotiated at open (lazy; logged at first frame)
+[A-verify] info: 1920x1080 codec=vc1(70) fps=59.940 duration=25130ms frames_hint=-1 hw_requested=1
+[A-verify] clocks: cpu=0.0 MHz (rc=0x00004b59) emc=0.0 MHz (rc=0x00004b59) gpu=0.0 MHz (rc=0x00004b59)
+pkt[0] size=9198 head=c0 82 00 00 03 00 00 03 00 00 03 00 00 03 01 06 07 ee e1 f0 f8 7c 3e 1f 0f 87 c3 e1 f0 f8 7c 3e 
+get_format candidates: nvtegra, yuv420p
+get_format chosen: nvtegra (hardware)
+pkt[1] size=1 head=f2 
+frame pool: 1920x1080 format=nvtegra sw=nv12 pool_size=0
+[A-verify] frame idx=1 1920x1080 pts=33ms next=5.75 dec=2.89 read=0.00 recv=0.01 reads=3 recvs=3 eagain=2 xfer=0.00 conv=0.00 upload=0.00 render=0.00 hw=1
+[A-verify] clocks: cpu=0.0 MHz (rc=0x00004b59) emc=0.0 MHz (rc=0x00004b59) gpu=0.0 MHz (rc=0x00004b59)
+pkt[2] size=11774 head=c0 83 00 00 03 00 00 03 00 00 03 02 00 00 03 00 00 03 00 80 00 00 10 00 00 03 00 06 00 00 03 00 
+[A-verify] frame idx=2 1920x1080 pts=66ms next=3.57 dec=1.08 read=0.00 recv=0.00 reads=1 recvs=2 eagain=1 xfer=0.00 conv=0.00 upload=0.00 render=0.00 hw=1
+pkt[3] size=13562 head=c0 83 00 00 03 00 04 00 00 03 00 20 00 00 03 00 00 20 00 00 03 01 00 00 03 00 00 03 01 40 00 00 
+pkt[4] size=16306 head=c0 80 89 7f fb ff c0 b1 85 ff ff ff ff 57 16 b5 af ff fd 38 3f fe 06 85 75 7f ff ff db ff 07 c6 
+pkt[5] size=20168 head=c0 80 ff ed b3 8c 33 0c 30 c4 06 2e d0 79 b8 07 e2 38 8e 23 88 e2 38 8e 21 81 fc e5 21 0c 66 25 
+pkt[6] size=23628 head=12 10 ff a0 c8 17 ff 84 0b 05 fd c1 3f ff 43 ff ee 2b 09 7f dc 5c ff ff ff ff fc d7 ff ff 73 ff 
+pkt[7] size=20436 head=02 10 fc 0b e2 37 ff fe 1c 09 c1 70 4f fd e1 80 7e dc 56 ff 04 e0 b8 b9 ff f4 03 ff 02 fe 8b 84 
+[A-verify] frame idx=60 1920x1080 pts=2002ms next=5.73 dec=2.67 read=3.05 recv=0.00 reads=1 recvs=2 eagain=1 xfer=0.00 conv=0.00 upload=0.00 render=0.00 hw=1
+[A-verify] STAGE RESULT: frames=60 hw=60 sw=0 wall=218.3 ms fps=274.84 rc=0
+  next     mean=3.62 p50=3.43 p95=4.75 p99=6.34 max=7.20 ms
+  decode   mean=2.78 p50=2.92 p95=3.96 p99=4.07 max=4.17 ms
+  read     mean=0.75 p50=0.00 p95=4.20 p99=5.33 max=6.79 ms
+  recv     mean=0.00 p50=0.00 p95=0.00 p99=0.01 max=0.01 ms
+[A-verify] decoder stats: total=60 hw=60 sw=0 first_sw=0 strict_failed=0 pool=0 last_fmt=?
+[A-verify] calls: av_read_frame=70 avcodec_receive_frame=121 EAGAIN=61 ffmpeg_messages=4214
+[A-verify] clocks: cpu=0.0 MHz (rc=0x00004b59) emc=0.0 MHz (rc=0x00004b59) gpu=0.0 MHz (rc=0x00004b59)
+
+HARDWARE PROOF: PASS - every decoded frame is NVTEGRA (frames=60 hw=60 sw=0 strict_failed=0 pool=0)
+
+=== STAGE B-decode600: decode-only throughput (600 frames) | stage=0 frames<=600 upload=0 render=0 pace=0 ===
+hw: nvtegra device created
+hw: avctx->hw_device_ctx set; decoder derives its frames ctx
+frame pool: not negotiated at open (lazy; logged at first frame)
+[B-decode600] info: 1920x1080 codec=vc1(70) fps=59.940 duration=25130ms frames_hint=-1 hw_requested=1
+[B-decode600] clocks: cpu=0.0 MHz (rc=0x00004b59) emc=0.0 MHz (rc=0x00004b59) gpu=0.0 MHz (rc=0x00004b59)
+pkt[0] size=9198 head=c0 82 00 00 03 00 00 03 00 00 03 00 00 03 01 06 07 ee e1 f0 f8 7c 3e 1f 0f 87 c3 e1 f0 f8 7c 3e 
+get_format candidates: nvtegra, yuv420p
+get_format chosen: nvtegra (hardware)
+pkt[1] size=1 head=f2 
+frame pool: 1920x1080 format=nvtegra sw=nv12 pool_size=0
+[B-decode600] frame idx=1 1920x1080 pts=33ms next=5.73 dec=2.89 read=0.00 recv=0.01 reads=3 recvs=3 eagain=2 xfer=0.00 conv=0.00 upload=0.00 render=0.00 hw=1
+[B-decode600] clocks: cpu=0.0 MHz (rc=0x00004b59) emc=0.0 MHz (rc=0x00004b59) gpu=0.0 MHz (rc=0x00004b59)
+pkt[2] size=11774 head=c0 83 00 00 03 00 00 03 00 00 03 02 00 00 03 00 00 03 00 80 00 00 10 00 00 03 00 06 00 00 03 00 
+[B-decode600] frame idx=2 1920x1080 pts=66ms next=0.92 dec=0.89 read=0.00 recv=0.00 reads=1 recvs=2 eagain=1 xfer=0.00 conv=0.00 upload=0.00 render=0.00 hw=1
+pkt[3] size=13562 head=c0 83 00 00 03 00 04 00 00 03 00 20 00 00 03 00 00 20 00 00 03 01 00 00 03 00 00 03 01 40 00 00 
+pkt[4] size=16306 head=c0 80 89 7f fb ff c0 b1 85 ff ff ff ff 57 16 b5 af ff fd 38 3f fe 06 85 75 7f ff ff db ff 07 c6 
+pkt[5] size=20168 head=c0 80 ff ed b3 8c 33 0c 30 c4 06 2e d0 79 b8 07 e2 38 8e 23 88 e2 38 8e 21 81 fc e5 21 0c 66 25 
+pkt[6] size=23628 head=12 10 ff a0 c8 17 ff 84 0b 05 fd c1 3f ff 43 ff ee 2b 09 7f dc 5c ff ff ff ff fc d7 ff ff 73 ff 
+pkt[7] size=20436 head=02 10 fc 0b e2 37 ff fe 1c 09 c1 70 4f fd e1 80 7e dc 56 ff 04 e0 b8 b9 ff f4 03 ff 02 fe 8b 84 
+[B-decode600] frame idx=60 1920x1080 pts=2002ms next=4.37 dec=1.16 read=3.20 recv=0.00 reads=1 recvs=2 eagain=1 xfer=0.00 conv=0.00 upload=0.00 render=0.00 hw=1
+[B-decode600] frame idx=120 1920x1080 pts=4004ms next=3.20 dec=2.13 read=1.07 recv=0.00 reads=1 recvs=2 eagain=1 xfer=0.00 conv=0.00 upload=0.00 render=0.00 hw=1
+[B-decode600] frame idx=180 1920x1080 pts=6006ms next=3.17 dec=1.27 read=1.89 recv=0.00 reads=1 recvs=2 eagain=1 xfer=0.00 conv=0.00 upload=0.00 render=0.00 hw=1
+[B-decode600] frame idx=240 1920x1080 pts=8008ms next=3.09 dec=1.69 read=1.40 recv=0.00 reads=1 recvs=2 eagain=1 xfer=0.00 conv=0.00 upload=0.00 render=0.00 hw=1
+[B-decode600] frame idx=300 1920x1080 pts=10010ms next=3.04 dec=1.98 read=1.05 recv=0.00 reads=1 recvs=2 eagain=1 xfer=0.00 conv=0.00 upload=0.00 render=0.00 hw=1
+[B-decode600] clocks: cpu=0.0 MHz (rc=0x00004b59) emc=0.0 MHz (rc=0x00004b59) gpu=0.0 MHz (rc=0x00004b59)
+[B-decode600] frame idx=360 1920x1080 pts=12012ms next=3.80 dec=0.57 read=3.22 recv=0.00 reads=2 recvs=2 eagain=1 xfer=0.00 conv=0.00 upload=0.00 render=0.00 hw=1
+[B-decode600] frame idx=420 1920x1080 pts=14014ms next=5.22 dec=0.61 read=4.61 recv=0.00 reads=1 recvs=2 eagain=1 xfer=0.00 conv=0.00 upload=0.00 render=0.00 hw=1
+[B-decode600] frame idx=480 1920x1080 pts=16016ms next=5.21 dec=4.07 read=1.13 recv=0.00 reads=1 recvs=2 eagain=1 xfer=0.00 conv=0.00 upload=0.00 render=0.00 hw=1
+[B-decode600] frame idx=540 1920x1080 pts=18018ms next=3.49 dec=2.49 read=0.99 recv=0.00 reads=1 recvs=2 eagain=1 xfer=0.00 conv=0.00 upload=0.00 render=0.00 hw=1
+[B-decode600] frame idx=600 1920x1080 pts=20020ms next=3.09 dec=1.94 read=1.14 recv=0.00 reads=1 recvs=2 eagain=1 xfer=0.00 conv=0.00 upload=0.00 render=0.00 hw=1
+[B-decode600] clocks: cpu=0.0 MHz (rc=0x00004b59) emc=0.0 MHz (rc=0x00004b59) gpu=0.0 MHz (rc=0x00004b59)
+[B-decode600] STAGE RESULT: frames=600 hw=600 sw=0 wall=2014.8 ms fps=297.80 rc=0
+  next     mean=3.33 p50=2.93 p95=5.23 p99=7.77 max=10.25 ms
+  decode   mean=1.59 p50=1.76 p95=3.07 p99=3.94 max=4.16 ms
+  read     mean=1.73 p50=1.15 p95=4.48 p99=7.23 max=8.45 ms
+  recv     mean=0.00 p50=0.00 p95=0.00 p99=0.00 max=0.01 ms
+[B-decode600] decoder stats: total=600 hw=600 sw=0 first_sw=0 strict_failed=0 pool=0 last_fmt=?
+[B-decode600] calls: av_read_frame=662 avcodec_receive_frame=1201 EAGAIN=601 ffmpeg_messages=36679
+[B-decode600] clocks: cpu=0.0 MHz (rc=0x00004b59) emc=0.0 MHz (rc=0x00004b59) gpu=0.0 MHz (rc=0x00004b59)
+[io] after-B: 256 x 64KiB = 16.0 MiB in 530.6 ms = 30.2 MiB/s (2.073 ms/read)
+[io] after-B: 1024 x 4KiB mid-file = 4.0 MiB in 426.8 ms (0.417 ms/read)
+
+=== STAGE B2-h264: decode-only throughput, H.264 cross-check (200 frames) | stage=0 frames<=200 upload=0 render=0 pace=0 ===
+hw: nvtegra device created
+hw: avctx->hw_device_ctx set; decoder derives its frames ctx
+frame pool: not negotiated at open (lazy; logged at first frame)
+[B2-h264] info: 1920x1080 codec=h264(27) fps=59.940 duration=25025ms frames_hint=1500 hw_requested=1
+[B2-h264] clocks: cpu=0.0 MHz (rc=0x00004b59) emc=0.0 MHz (rc=0x00004b59) gpu=0.0 MHz (rc=0x00004b59)
+pkt[0] size=1123 head=00 00 02 ae 06 05 ff ff aa dc 45 e9 bd e6 d9 48 b7 96 2c d8 20 d9 23 ee ef 78 32 36 34 20 2d 20 
+pkt[1] size=70 head=00 00 00 42 41 9a 24 18 8f ff fe 38 40 00 00 03 00 00 03 00 00 03 00 00 03 00 00 03 00 00 03 00 
+get_format candidates: nvtegra, yuv420p
+get_format chosen: nvtegra (hardware)
+pkt[2] size=68 head=00 00 00 40 41 9e 42 42 11 ff 00 00 03 00 00 03 00 00 03 00 00 03 00 00 03 00 00 03 00 00 03 00 
+pkt[3] size=67 head=00 00 00 3f 01 9e 61 44 7f 00 00 03 00 00 03 00 00 03 00 00 03 00 00 03 00 00 03 00 00 03 00 00 
+pkt[4] size=67 head=00 00 00 3f 01 9e 63 44 7f 00 00 03 00 00 03 00 00 03 00 00 03 00 00 03 00 00 03 00 00 03 00 00 
+pkt[5] size=10387 head=00 00 28 8f 41 88 99 40 af d6 78 1e ff bd e8 32 f4 20 3c 16 4d 22 77 99 8a 47 df 6d 06 53 f7 6a 
+frame pool: 1920x1088 format=nvtegra sw=nv12 pool_size=0
+[B2-h264] frame idx=1 1920x1080 pts=0ms next=11.64 dec=1.07 read=0.14 recv=0.02 reads=6 recvs=7 eagain=6 xfer=0.00 conv=0.00 upload=0.00 render=0.00 hw=1
+[B2-h264] clocks: cpu=0.0 MHz (rc=0x00004b59) emc=0.0 MHz (rc=0x00004b59) gpu=0.0 MHz (rc=0x00004b59)
+pkt[6] size=13504 head=00 00 34 bc 41 9a 88 39 31 1f ff 98 08 7e d7 63 63 41 fe 5b ff fc ec 54 86 ae 71 14 c7 0e 63 a6 
+[B2-h264] frame idx=2 1920x1080 pts=17ms next=8.29 dec=8.23 read=0.03 recv=0.01 reads=1 recvs=2 eagain=1 xfer=0.00 conv=0.00 upload=0.00 render=0.00 hw=1
+pkt[7] size=83 head=00 00 00 4f 41 9e a6 45 34 4c 7f f5 d8 59 c2 6c 00 00 03 00 00 03 01 3f 64 40 81 21 39 53 59 75 
+[B2-h264] frame idx=60 1920x1080 pts=984ms next=4.53 dec=4.51 read=0.02 recv=0.00 reads=1 recvs=2 eagain=1 xfer=0.00 conv=0.00 upload=0.00 render=0.00 hw=1
+[B2-h264] frame idx=120 1920x1080 pts=1985ms next=8.57 dec=8.55 read=0.01 recv=0.00 reads=1 recvs=2 eagain=1 xfer=0.00 conv=0.00 upload=0.00 render=0.00 hw=1
+[B2-h264] frame idx=180 1920x1080 pts=2986ms next=1.66 dec=0.32 read=1.33 recv=0.00 reads=1 recvs=2 eagain=1 xfer=0.00 conv=0.00 upload=0.00 render=0.00 hw=1
+[B2-h264] STAGE RESULT: frames=200 hw=200 sw=0 wall=600.6 ms fps=332.98 rc=0
+  next     mean=2.99 p50=2.83 p95=5.72 p99=8.30 max=11.64 ms
+  decode   mean=2.01 p50=1.52 p95=4.82 p99=7.97 max=8.55 ms
+  read     mean=0.91 p50=1.31 p95=1.94 p99=2.33 max=3.17 ms
+  recv     mean=0.00 p50=0.00 p95=0.00 p99=0.01 max=0.02 ms
+[B2-h264] decoder stats: total=200 hw=200 sw=0 first_sw=0 strict_failed=0 pool=0 last_fmt=?
+[B2-h264] calls: av_read_frame=205 avcodec_receive_frame=405 EAGAIN=205 ffmpeg_messages=5547
+[B2-h264] clocks: cpu=0.0 MHz (rc=0x00004b59) emc=0.0 MHz (rc=0x00004b59) gpu=0.0 MHz (rc=0x00004b59)
+
+=== STAGE C1-transfer: + av_hwframe_transfer_data | stage=1 frames<=120 upload=0 render=0 pace=0 ===
+hw: nvtegra device created
+hw: avctx->hw_device_ctx set; decoder derives its frames ctx
+frame pool: not negotiated at open (lazy; logged at first frame)
+[C1-transfer] info: 1920x1080 codec=vc1(70) fps=59.940 duration=25130ms frames_hint=-1 hw_requested=1
+[C1-transfer] clocks: cpu=0.0 MHz (rc=0x00004b59) emc=0.0 MHz (rc=0x00004b59) gpu=0.0 MHz (rc=0x00004b59)
+pkt[0] size=9198 head=c0 82 00 00 03 00 00 03 00 00 03 00 00 03 01 06 07 ee e1 f0 f8 7c 3e 1f 0f 87 c3 e1 f0 f8 7c 3e 
+get_format candidates: nvtegra, yuv420p
+get_format chosen: nvtegra (hardware)
+pkt[1] size=1 head=f2 
+frame pool: 1920x1080 format=nvtegra sw=nv12 pool_size=0
+[C1-transfer] frame idx=1 1920x1080 pts=33ms next=9.87 dec=2.85 read=0.00 recv=0.01 reads=3 recvs=3 eagain=2 xfer=3.83 conv=0.00 upload=0.00 render=0.00 hw=1
+[C1-transfer] clocks: cpu=0.0 MHz (rc=0x00004b59) emc=0.0 MHz (rc=0x00004b59) gpu=0.0 MHz (rc=0x00004b59)
+pkt[2] size=11774 head=c0 83 00 00 03 00 00 03 00 00 03 02 00 00 03 00 00 03 00 80 00 00 10 00 00 03 00 06 00 00 03 00 
+[C1-transfer] frame idx=2 1920x1080 pts=66ms next=10.53 dec=0.93 read=0.00 recv=0.01 reads=1 recvs=2 eagain=1 xfer=3.63 conv=0.00 upload=0.00 render=0.00 hw=1
+pkt[3] size=13562 head=c0 83 00 00 03 00 04 00 00 03 00 20 00 00 03 00 00 20 00 00 03 01 00 00 03 00 00 03 01 40 00 00 
+pkt[4] size=16306 head=c0 80 89 7f fb ff c0 b1 85 ff ff ff ff 57 16 b5 af ff fd 38 3f fe 06 85 75 7f ff ff db ff 07 c6 
+pkt[5] size=20168 head=c0 80 ff ed b3 8c 33 0c 30 c4 06 2e d0 79 b8 07 e2 38 8e 23 88 e2 38 8e 21 81 fc e5 21 0c 66 25 
+pkt[6] size=23628 head=12 10 ff a0 c8 17 ff 84 0b 05 fd c1 3f ff 43 ff ee 2b 09 7f dc 5c ff ff ff ff fc d7 ff ff 73 ff 
+pkt[7] size=20436 head=02 10 fc 0b e2 37 ff fe 1c 09 c1 70 4f fd e1 80 7e dc 56 ff 04 e0 b8 b9 ff f4 03 ff 02 fe 8b 84 
+[C1-transfer] frame idx=60 1920x1080 pts=2002ms next=8.18 dec=0.64 read=3.71 recv=0.01 reads=1 recvs=2 eagain=1 xfer=3.82 conv=0.00 upload=0.00 render=0.00 hw=1
+[C1-transfer] frame idx=120 1920x1080 pts=4004ms next=5.72 dec=0.71 read=1.24 recv=0.00 reads=1 recvs=2 eagain=1 xfer=3.76 conv=0.00 upload=0.00 render=0.00 hw=1
+[C1-transfer] STAGE RESULT: frames=120 hw=120 sw=0 wall=704.7 ms fps=170.29 rc=0
+  next     mean=5.82 p50=5.51 p95=8.68 p99=10.41 max=11.26 ms
+  decode   mean=0.44 p50=0.37 p95=0.71 p99=1.41 max=2.85 ms
+  read     mean=1.51 p50=1.24 p95=4.31 p99=4.83 max=7.02 ms
+  recv     mean=0.00 p50=0.00 p95=0.01 p99=0.01 max=0.01 ms
+  transfer mean=3.79 p50=3.80 p95=3.87 p99=3.90 max=3.93 ms
+[C1-transfer] decoder stats: total=120 hw=120 sw=0 first_sw=0 strict_failed=0 pool=0 last_fmt=?
+[C1-transfer] calls: av_read_frame=136 avcodec_receive_frame=241 EAGAIN=121 ffmpeg_messages=8143
+[C1-transfer] clocks: cpu=0.0 MHz (rc=0x00004b59) emc=0.0 MHz (rc=0x00004b59) gpu=0.0 MHz (rc=0x00004b59)
+
+=== STAGE C2-rgba: + NV12 -> RGBA (probe7 pipeline) | stage=2 frames<=60 upload=0 render=0 pace=0 ===
+hw: nvtegra device created
+hw: avctx->hw_device_ctx set; decoder derives its frames ctx
+frame pool: not negotiated at open (lazy; logged at first frame)
+[C2-rgba] info: 1920x1080 codec=vc1(70) fps=59.940 duration=25130ms frames_hint=-1 hw_requested=1
+[C2-rgba] clocks: cpu=0.0 MHz (rc=0x00004b59) emc=0.0 MHz (rc=0x00004b59) gpu=0.0 MHz (rc=0x00004b59)
+pkt[0] size=9198 head=c0 82 00 00 03 00 00 03 00 00 03 00 00 03 01 06 07 ee e1 f0 f8 7c 3e 1f 0f 87 c3 e1 f0 f8 7c 3e 
+get_format candidates: nvtegra, yuv420p
+get_format chosen: nvtegra (hardware)
+pkt[1] size=1 head=f2 
+frame pool: 1920x1080 format=nvtegra sw=nv12 pool_size=0
+[C2-rgba] frame idx=1 1920x1080 pts=33ms next=53.40 dec=2.89 read=0.00 recv=0.01 reads=3 recvs=3 eagain=2 xfer=3.74 conv=43.54 upload=0.00 render=0.00 hw=1
+[C2-rgba] clocks: cpu=0.0 MHz (rc=0x00004b59) emc=0.0 MHz (rc=0x00004b59) gpu=0.0 MHz (rc=0x00004b59)
+[C2-rgba] bmp: sdmc:/probe9-f001.bmp rc=0
+pkt[2] size=11774 head=c0 83 00 00 03 00 00 03 00 00 03 02 00 00 03 00 00 03 00 80 00 00 10 00 00 03 00 06 00 00 03 00 
+[C2-rgba] frame idx=2 1920x1080 pts=66ms next=48.63 dec=1.18 read=0.00 recv=0.01 reads=1 recvs=2 eagain=1 xfer=3.84 conv=43.55 upload=0.00 render=0.00 hw=1
+pkt[3] size=13562 head=c0 83 00 00 03 00 04 00 00 03 00 20 00 00 03 00 00 20 00 00 03 01 00 00 03 00 00 03 01 40 00 00 
+pkt[4] size=16306 head=c0 80 89 7f fb ff c0 b1 85 ff ff ff ff 57 16 b5 af ff fd 38 3f fe 06 85 75 7f ff ff db ff 07 c6 
+pkt[5] size=20168 head=c0 80 ff ed b3 8c 33 0c 30 c4 06 2e d0 79 b8 07 e2 38 8e 23 88 e2 38 8e 21 81 fc e5 21 0c 66 25 
+pkt[6] size=23628 head=12 10 ff a0 c8 17 ff 84 0b 05 fd c1 3f ff 43 ff ee 2b 09 7f dc 5c ff ff ff ff fc d7 ff ff 73 ff 
+pkt[7] size=20436 head=02 10 fc 0b e2 37 ff fe 1c 09 c1 70 4f fd e1 80 7e dc 56 ff 04 e0 b8 b9 ff f4 03 ff 02 fe 8b 84 
+[C2-rgba] bmp: sdmc:/probe9-f030.bmp rc=0
+[C2-rgba] frame idx=60 1920x1080 pts=2002ms next=51.45 dec=0.39 read=3.70 recv=0.01 reads=1 recvs=2 eagain=1 xfer=3.82 conv=43.54 upload=0.00 render=0.00 hw=1
+[C2-rgba] STAGE RESULT: frames=60 hw=60 sw=0 wall=10900.2 ms fps=5.50 rc=0
+  next     mean=48.65 p50=47.72 p95=52.33 p99=54.08 max=55.06 ms
+  decode   mean=0.44 p50=0.38 p95=0.49 p99=1.88 max=2.89 ms
+  read     mean=0.84 p50=0.00 p95=4.54 p99=5.72 max=7.22 ms
+  recv     mean=0.01 p50=0.01 p95=0.01 p99=0.01 max=0.01 ms
+  transfer mean=3.76 p50=3.76 p95=3.85 p99=3.86 max=3.87 ms
+  rgba     mean=43.54 p50=43.54 p95=43.56 p99=43.57 max=43.57 ms
+[C2-rgba] decoder stats: total=60 hw=60 sw=0 first_sw=0 strict_failed=0 pool=0 last_fmt=?
+[C2-rgba] calls: av_read_frame=70 avcodec_receive_frame=121 EAGAIN=61 ffmpeg_messages=4331
+[C2-rgba] clocks: cpu=0.0 MHz (rc=0x00004b59) emc=0.0 MHz (rc=0x00004b59) gpu=0.0 MHz (rc=0x00004b59)
+
+=== STAGE C3-upload: + SDL_UpdateTexture | stage=2 frames<=60 upload=1 render=0 pace=0 ===
+hw: nvtegra device created
+hw: avctx->hw_device_ctx set; decoder derives its frames ctx
+frame pool: not negotiated at open (lazy; logged at first frame)
+[C3-upload] info: 1920x1080 codec=vc1(70) fps=59.940 duration=25130ms frames_hint=-1 hw_requested=1
+[C3-upload] clocks: cpu=0.0 MHz (rc=0x00004b59) emc=0.0 MHz (rc=0x00004b59) gpu=0.0 MHz (rc=0x00004b59)
+[C3-upload] sdl texture=0x574047b180 (1920x1080)
+pkt[0] size=9198 head=c0 82 00 00 03 00 00 03 00 00 03 00 00 03 01 06 07 ee e1 f0 f8 7c 3e 1f 0f 87 c3 e1 f0 f8 7c 3e 
+get_format candidates: nvtegra, yuv420p
+get_format chosen: nvtegra (hardware)
+pkt[1] size=1 head=f2 
+frame pool: 1920x1080 format=nvtegra sw=nv12 pool_size=0
+[C3-upload] frame idx=1 1920x1080 pts=33ms next=53.21 dec=2.89 read=0.00 recv=0.01 reads=3 recvs=3 eagain=2 xfer=3.75 conv=43.54 upload=6.60 render=0.00 hw=1
+[C3-upload] clocks: cpu=0.0 MHz (rc=0x00004b59) emc=0.0 MHz (rc=0x00004b59) gpu=0.0 MHz (rc=0x00004b59)
+pkt[2] size=11774 head=c0 83 00 00 03 00 00 03 00 00 03 02 00 00 03 00 00 03 00 80 00 00 10 00 00 03 00 06 00 00 03 00 
+[C3-upload] frame idx=2 1920x1080 pts=66ms next=48.72 dec=1.32 read=0.00 recv=0.01 reads=1 recvs=2 eagain=1 xfer=3.82 conv=43.54 upload=6.86 render=0.00 hw=1
+pkt[3] size=13562 head=c0 83 00 00 03 00 04 00 00 03 00 20 00 00 03 00 00 20 00 00 03 01 00 00 03 00 00 03 01 40 00 00 
+pkt[4] size=16306 head=c0 80 89 7f fb ff c0 b1 85 ff ff ff ff 57 16 b5 af ff fd 38 3f fe 06 85 75 7f ff ff db ff 07 c6 
+pkt[5] size=20168 head=c0 80 ff ed b3 8c 33 0c 30 c4 06 2e d0 79 b8 07 e2 38 8e 23 88 e2 38 8e 21 81 fc e5 21 0c 66 25 
+pkt[6] size=23628 head=12 10 ff a0 c8 17 ff 84 0b 05 fd c1 3f ff 43 ff ee 2b 09 7f dc 5c ff ff ff ff fc d7 ff ff 73 ff 
+pkt[7] size=20436 head=02 10 fc 0b e2 37 ff fe 1c 09 c1 70 4f fd e1 80 7e dc 56 ff 04 e0 b8 b9 ff f4 03 ff 02 fe 8b 84 
+[C3-upload] frame idx=60 1920x1080 pts=2002ms next=51.70 dec=0.51 read=3.77 recv=0.01 reads=1 recvs=2 eagain=1 xfer=3.86 conv=43.55 upload=7.92 render=0.00 hw=1
+[C3-upload] STAGE RESULT: frames=60 hw=60 sw=0 wall=3427.6 ms fps=17.50 rc=0
+  next     mean=48.82 p50=47.78 p95=53.07 p99=54.46 max=54.90 ms
+  decode   mean=0.48 p50=0.40 p95=0.61 p99=1.96 max=2.89 ms
+  read     mean=0.92 p50=0.00 p95=5.23 p99=6.60 max=6.95 ms
+  recv     mean=0.01 p50=0.01 p95=0.01 p99=0.02 max=0.02 ms
+  transfer mean=3.80 p50=3.81 p95=3.86 p99=3.88 max=3.88 ms
+  rgba     mean=43.54 p50=43.54 p95=43.56 p99=43.57 max=43.58 ms
+  upload   mean=8.16 p50=8.11 p95=8.63 p99=10.26 max=11.29 ms
+[C3-upload] decoder stats: total=60 hw=60 sw=0 first_sw=0 strict_failed=0 pool=0 last_fmt=?
+[C3-upload] calls: av_read_frame=70 avcodec_receive_frame=121 EAGAIN=61 ffmpeg_messages=4331
+[C3-upload] clocks: cpu=0.0 MHz (rc=0x00004b59) emc=0.0 MHz (rc=0x00004b59) gpu=0.0 MHz (rc=0x00004b59)
+
+=== STAGE C4-render: + SDL render/present (no vsync) | stage=2 frames<=60 upload=1 render=1 pace=0 ===
+hw: nvtegra device created
+hw: avctx->hw_device_ctx set; decoder derives its frames ctx
+frame pool: not negotiated at open (lazy; logged at first frame)
+[C4-render] info: 1920x1080 codec=vc1(70) fps=59.940 duration=25130ms frames_hint=-1 hw_requested=1
+[C4-render] clocks: cpu=0.0 MHz (rc=0x00004b59) emc=0.0 MHz (rc=0x00004b59) gpu=0.0 MHz (rc=0x00004b59)
+[C4-render] sdl texture=0x574045c8e0 (1920x1080)
+pkt[0] size=9198 head=c0 82 00 00 03 00 00 03 00 00 03 00 00 03 01 06 07 ee e1 f0 f8 7c 3e 1f 0f 87 c3 e1 f0 f8 7c 3e 
+get_format candidates: nvtegra, yuv420p
+get_format chosen: nvtegra (hardware)
+pkt[1] size=1 head=f2 
+frame pool: 1920x1080 format=nvtegra sw=nv12 pool_size=0
+[C4-render] frame idx=1 1920x1080 pts=33ms next=53.37 dec=2.88 read=0.00 recv=0.01 reads=3 recvs=3 eagain=2 xfer=3.71 conv=43.55 upload=8.00 render=6.33 hw=1
+[C4-render] clocks: cpu=0.0 MHz (rc=0x00004b59) emc=0.0 MHz (rc=0x00004b59) gpu=0.0 MHz (rc=0x00004b59)
+pkt[2] size=11774 head=c0 83 00 00 03 00 00 03 00 00 03 02 00 00 03 00 00 03 00 80 00 00 10 00 00 03 00 06 00 00 03 00 
+[C4-render] frame idx=2 1920x1080 pts=66ms next=48.16 dec=0.85 read=0.00 recv=0.01 reads=1 recvs=2 eagain=1 xfer=3.71 conv=43.54 upload=6.22 render=2.67 hw=1
+pkt[3] size=13562 head=c0 83 00 00 03 00 04 00 00 03 00 20 00 00 03 00 00 20 00 00 03 01 00 00 03 00 00 03 01 40 00 00 
+pkt[4] size=16306 head=c0 80 89 7f fb ff c0 b1 85 ff ff ff ff 57 16 b5 af ff fd 38 3f fe 06 85 75 7f ff ff db ff 07 c6 
+pkt[5] size=20168 head=c0 80 ff ed b3 8c 33 0c 30 c4 06 2e d0 79 b8 07 e2 38 8e 23 88 e2 38 8e 21 81 fc e5 21 0c 66 25 
+pkt[6] size=23628 head=12 10 ff a0 c8 17 ff 84 0b 05 fd c1 3f ff 43 ff ee 2b 09 7f dc 5c ff ff ff ff fc d7 ff ff 73 ff 
+pkt[7] size=20436 head=02 10 fc 0b e2 37 ff fe 1c 09 c1 70 4f fd e1 80 7e dc 56 ff 04 e0 b8 b9 ff f4 03 ff 02 fe 8b 84 
+[C4-render] frame idx=60 1920x1080 pts=2002ms next=52.08 dec=0.39 read=3.90 recv=0.01 reads=1 recvs=2 eagain=1 xfer=4.23 conv=43.54 upload=6.22 render=2.73 hw=1
+[C4-render] STAGE RESULT: frames=60 hw=60 sw=0 wall=3495.9 ms fps=17.16 rc=0
+  next     mean=49.15 p50=48.21 p95=53.10 p99=54.06 max=55.05 ms
+  decode   mean=0.50 p50=0.42 p95=0.79 p99=1.68 max=2.88 ms
+  read     mean=0.89 p50=0.00 p95=4.99 p99=6.09 max=7.33 ms
+  recv     mean=0.01 p50=0.01 p95=0.01 p99=0.01 max=0.01 ms
+  transfer mean=4.15 p50=4.18 p95=4.40 p99=4.46 max=4.47 ms
+  rgba     mean=43.54 p50=43.54 p95=43.56 p99=43.57 max=43.57 ms
+  upload   mean=6.46 p50=6.37 p95=6.70 p99=8.55 max=9.33 ms
+  render   mean=2.44 p50=2.32 p95=2.83 p99=4.28 max=6.33 ms
+[C4-render] decoder stats: total=60 hw=60 sw=0 first_sw=0 strict_failed=0 pool=0 last_fmt=?
+[C4-render] calls: av_read_frame=70 avcodec_receive_frame=121 EAGAIN=61 ffmpeg_messages=4331
+[C4-render] clocks: cpu=0.0 MHz (rc=0x00004b59) emc=0.0 MHz (rc=0x00004b59) gpu=0.0 MHz (rc=0x00004b59)
+
+=== STAGE C5-pace: + 59.94 fps frame pacing | stage=2 frames<=120 upload=1 render=1 pace=1 ===
+hw: nvtegra device created
+hw: avctx->hw_device_ctx set; decoder derives its frames ctx
+frame pool: not negotiated at open (lazy; logged at first frame)
+[C5-pace] info: 1920x1080 codec=vc1(70) fps=59.940 duration=25130ms frames_hint=-1 hw_requested=1
+[C5-pace] clocks: cpu=0.0 MHz (rc=0x00004b59) emc=0.0 MHz (rc=0x00004b59) gpu=0.0 MHz (rc=0x00004b59)
+[C5-pace] sdl texture=0x574044c3e0 (1920x1080)
+pkt[0] size=9198 head=c0 82 00 00 03 00 00 03 00 00 03 00 00 03 01 06 07 ee e1 f0 f8 7c 3e 1f 0f 87 c3 e1 f0 f8 7c 3e 
+get_format candidates: nvtegra, yuv420p
+get_format chosen: nvtegra (hardware)
+pkt[1] size=1 head=f2 
+frame pool: 1920x1080 format=nvtegra sw=nv12 pool_size=0
+[C5-pace] frame idx=1 1920x1080 pts=33ms next=53.41 dec=2.89 read=0.00 recv=0.01 reads=3 recvs=3 eagain=2 xfer=3.77 conv=43.54 upload=7.87 render=8.55 hw=1
+[C5-pace] clocks: cpu=0.0 MHz (rc=0x00004b59) emc=0.0 MHz (rc=0x00004b59) gpu=0.0 MHz (rc=0x00004b59)
+pkt[2] size=11774 head=c0 83 00 00 03 00 00 03 00 00 03 02 00 00 03 00 00 03 00 80 00 00 10 00 00 03 00 06 00 00 03 00 
+[C5-pace] frame idx=2 1920x1080 pts=66ms next=48.05 dec=0.83 read=0.00 recv=0.01 reads=1 recvs=2 eagain=1 xfer=3.63 conv=43.54 upload=6.63 render=2.13 hw=1
+pkt[3] size=13562 head=c0 83 00 00 03 00 04 00 00 03 00 20 00 00 03 00 00 20 00 00 03 01 00 00 03 00 00 03 01 40 00 00 
+pkt[4] size=16306 head=c0 80 89 7f fb ff c0 b1 85 ff ff ff ff 57 16 b5 af ff fd 38 3f fe 06 85 75 7f ff ff db ff 07 c6 
+pkt[5] size=20168 head=c0 80 ff ed b3 8c 33 0c 30 c4 06 2e d0 79 b8 07 e2 38 8e 23 88 e2 38 8e 21 81 fc e5 21 0c 66 25 
+pkt[6] size=23628 head=12 10 ff a0 c8 17 ff 84 0b 05 fd c1 3f ff 43 ff ee 2b 09 7f dc 5c ff ff ff ff fc d7 ff ff 73 ff 
+pkt[7] size=20436 head=02 10 fc 0b e2 37 ff fe 1c 09 c1 70 4f fd e1 80 7e dc 56 ff 04 e0 b8 b9 ff f4 03 ff 02 fe 8b 84 
+[C5-pace] frame idx=60 1920x1080 pts=2002ms next=52.26 dec=0.49 read=3.90 recv=0.01 reads=1 recvs=2 eagain=1 xfer=4.33 conv=43.52 upload=6.71 render=2.15 hw=1
+[C5-pace] frame idx=120 1920x1080 pts=4004ms next=50.11 dec=0.35 read=1.67 recv=0.01 reads=1 recvs=2 eagain=1 xfer=4.55 conv=43.52 upload=6.71 render=2.41 hw=1
+[C5-pace] STAGE RESULT: frames=120 hw=120 sw=0 wall=7089.4 ms fps=16.93 rc=0
+  next     mean=50.05 p50=50.13 p95=52.86 p99=53.47 max=55.43 ms
+  decode   mean=0.45 p50=0.40 p95=0.69 p99=1.07 max=2.89 ms
+  read     mean=1.77 p50=1.70 p95=4.80 p99=5.61 max=7.69 ms
+  recv     mean=0.01 p50=0.01 p95=0.01 p99=0.01 max=0.01 ms
+  transfer mean=4.26 p50=4.25 p95=4.56 p99=4.62 max=4.64 ms
+  rgba     mean=43.53 p50=43.52 p95=43.54 p99=43.55 max=43.55 ms
+  upload   mean=6.51 p50=6.39 p95=6.79 p99=10.91 max=11.49 ms
+  render   mean=2.41 p50=2.33 p95=2.77 p99=2.94 max=8.55 ms
+  pace-sleep mean=0.00 p50=0.00 p95=0.00 p99=0.00 max=0.00 ms
+[C5-pace] decoder stats: total=120 hw=120 sw=0 first_sw=0 strict_failed=0 pool=0 last_fmt=?
+[C5-pace] calls: av_read_frame=136 avcodec_receive_frame=241 EAGAIN=121 ffmpeg_messages=8137
+[C5-pace] clocks: cpu=0.0 MHz (rc=0x00004b59) emc=0.0 MHz (rc=0x00004b59) gpu=0.0 MHz (rc=0x00004b59)
+
+=== PROBE9 SUMMARY ===
+decode-only : 600 frames in 2014.8 ms = 297.80 fps (dec mean=1.59 p95=3.07 ms)
+h264 cross  : 200 frames in 600.6 ms = 332.98 fps (dec mean=2.01 p95=4.82 ms)
+rgba stage  : conv mean=43.54 ms, next mean=48.65 ms -> 5.50 fps
+upload stage: upload mean=8.16 ms -> 17.50 fps
+render stage: render mean=2.44 ms -> 17.16 fps
+paced stage : 120 frames in 7089.4 ms -> 16.93 fps (pace sleeps mean=0.00 ms)
+PROBE9 verdict: hardware_decode=CONFIRMED decode_only_fps=297.80 rgba_fps=5.50 render_fps=17.16 paced_fps=16.93 h264_fps=332.98
+next step: CPU NV12->RGBA dominates (conv 43.54 ms vs transfer 3.79 ms) - replace it with a GLES YUV shader and/or bind the hardware surface without a CPU copy
+files on sdmc: nvdec-probe9.txt / probe9-f001.bmp / probe9-f030.bmp
+=== DONE ===

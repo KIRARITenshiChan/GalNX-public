@@ -1,0 +1,6 @@
+0	wait	wait:18000	ok	waited 18000ms		18356
+1	capture	capture:t1-title	ok	bytes=1418750 nonblack=0.9018	E:\galnx-build\p21\run-nsp\20261105-060924-IROSEKA_FHD-010047420000a000\step-02-t1-title.png	1823
+2	wait	wait:12000	ok	waited 12000ms		12343
+3	capture	capture:t2	ok	bytes=1418750 nonblack=0.9018	E:\galnx-build\p21\run-nsp\20261105-060924-IROSEKA_FHD-010047420000a000\step-04-t2.png	1818
+4	wait	wait:12000	ok	waited 12000ms		12359
+5	capture	capture:t3	ok	bytes=1418745 nonblack=0.9018	E:\galnx-build\p21\run-nsp\20261105-060924-IROSEKA_FHD-010047420000a000\step-06-t3.png	1832

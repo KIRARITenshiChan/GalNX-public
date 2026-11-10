@@ -1,0 +1,51 @@
+PROVENANCE keyset=E:/Othergames/Nintendo Switch/Ryujinx-canary/portable/system/prod.keys size=12007 sha256=7bb3b6d2a2eedc83c9f244ee2ed2eaa4d59eb9ad95b66df575f7dfffa71a2a40 mtime=2026-03-19 07:25:45.902258500 +0800
+STEP 1/6 elf2nso -> exefs/main
+STEP 2/6 npdmtool -> exefs/main.npdm (title_id=0x010047420000c200)
+Failed to get system_resource_size (field not present).
+Failed to get version (field not present).
+Failed to get process_category (field not present).
+Failed to get optimize_memory_allocation (field not present).
+Failed to get disable_device_address_space_merge (field not present).
+Failed to get enable_alias_region_extra_size (field not present).
+Failed to get prevent_code_reads (field not present).
+Failed to get signature_key_generation (field not present).
+Failed to get program_id_range_min (field not present).
+Failed to get program_id_range_max (field not present).
+Failed to get program_id (field not present).
+STEP 3/6 nacptool -> control/control.nacp
+STEP 4/6 stage romfs/game (mode=hardlink)
+romfs/game staged: hardlinked=77 copied=0
+STEP 5/6 hacBrewPack
+hacBrewPack OK in 458s
+STEP 6/6 nstool structure check
+nstool exit=0 (see /e/galnx-build/p23/cn-work-v2/hacbrewpack.log)
+
+===EXIT=0
+===ARTIFACTS
+SAKURA_MOYU_CN-010047420000c200.nsp 8004355288 5708da95640b91928829a746c36a73571025c1db5ec83a8e4ce47bc9e64bad8b
+===ROMFS
+romfs_bytes=7983836906 game_entries=77
+===INPUTS
+main 4672898 b1744cd30a8e2de8266adb3cb4e4ce996c6268082d95803c267e027e3c928cb6
+main.npdm 972 f95ebe2a37e2c98c1228c1b1d655a4274bf1da145783a1de8ae7f6ac302da238
+control.nacp 16384 e1a85b03908b97543319e3a5bab5484402e2f18160e757e59d66b1c547de6dbf
+icon_AmericanEnglish.dat 21109 2fba43c63e3c4730cf1f17413a52384b448ec80dad0c1b87c06824bddda1eeb7
+===LOG
+/e/galnx-build/p23/cn-work-v2/hacbrewpack.log
+===LOGTAIL
+Summary:
+
+Title ID: 010047420000c200
+SDK Version: 0.12.17.0
+Section Crypto Type: Regular Crypto
+Keygeneration: 1
+Program NCA RomFS Section: Yes
+Program NCA Logo Section: No
+HtmlDoc NCA: No
+LegalInfo NCA: No
+Created NSP: hacbrewpack_nsp\010047420000c200.nsp
+[WARNING] Failed to load "title.keys" keyfile.
+[PartitionFs]
+  Type:        PFS0
+  FileNum:     3
+BUILD_EXIT=0

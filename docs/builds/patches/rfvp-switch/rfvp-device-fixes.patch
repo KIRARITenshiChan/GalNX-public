@@ -1,0 +1,2932 @@
+--- a/crates/rfvp/src/host_api/event.rs
++++ b/crates/rfvp/src/host_api/event.rs
+@@ -74,6 +74,13 @@
+ #[derive(Debug, Clone, Copy, PartialEq)]
+ pub enum RfvpEvent {
+     Quit,
++    /// Save the current game state to quick slot 0.
++    ///
++    /// The desktop build opens its own save/load slot UI; a console target has no such UI,
++    /// so its host emits this event instead.
++    QuickSave,
++    /// Load the game state stored in quick slot 0.
++    QuickLoad,
+     FocusGained,
+     FocusLost,
+     KeyDown {
+--- a/crates/rfvp/src/no_std_core.rs
++++ b/crates/rfvp/src/no_std_core.rs
+@@ -509,9 +509,34 @@
+         let consumed_events = self.pending_events.len();
+         self.apply_pending_events_to_game_data();
+         let mut quit_requested = false;
++        let mut quick_save_requested = false;
++        let mut quick_load_requested = false;
+         for event in self.pending_events.drain(..) {
+-            if matches!(event, RfvpEvent::Quit) {
+-                quit_requested = true;
++            match event {
++                RfvpEvent::Quit => quit_requested = true,
++                RfvpEvent::QuickSave => quick_save_requested = true,
++                RfvpEvent::QuickLoad => quick_load_requested = true,
++                _ => {}
++            }
++        }
++        // The desktop build opens its own slot UI for the quick save/load keys; a console has
++        // no such UI, so the host asks for quick slot 0 directly.
++        if quick_save_requested {
++            match crate::subsystem::components::syscalls::legacy::save_quick(
++                &mut self.game_data,
++                &crate::script::Variant::Int(0),
++            ) {
++                Ok(_) => host.log(RfvpLogLevel::Info, "quick save: wrote slot 0"),
++                Err(err) => host.log(RfvpLogLevel::Warn, &format!("quick save failed: {err:#}")),
++            }
++        }
++        if quick_load_requested {
++            match crate::subsystem::components::syscalls::legacy::load_quick(
++                &mut self.game_data,
++                &crate::script::Variant::Int(0),
++            ) {
++                Ok(_) => host.log(RfvpLogLevel::Info, "quick load: read slot 0"),
++                Err(err) => host.log(RfvpLogLevel::Warn, &format!("quick load failed: {err:#}")),
+             }
+         }
+         if quit_requested {
+@@ -558,6 +583,40 @@
+             crate::perf::mark(300);
+             let t2 = host.clock().ticks_us();
+ 
++            // A script asked for the file save/load slot UI, which only the desktop build has.
++            // Without a consumer the VM stays broken and the game looks frozen, so use quick slot 0.
++            if let Some(request) =
++                crate::subsystem::components::syscalls::legacy::take_pending_save_load_request()
++            {
++                use crate::subsystem::components::syscalls::legacy::LegacySaveLoadRequest;
++                let slot = crate::script::Variant::Int(0);
++                let (what, result) = match request {
++                    LegacySaveLoadRequest::SaveFile | LegacySaveLoadRequest::SaveTitle => (
++                        "save",
++                        crate::subsystem::components::syscalls::legacy::save_quick(
++                            &mut self.game_data,
++                            &slot,
++                        ),
++                    ),
++                    LegacySaveLoadRequest::LoadFile | LegacySaveLoadRequest::LoadTitle => (
++                        "load",
++                        crate::subsystem::components::syscalls::legacy::load_quick(
++                            &mut self.game_data,
++                            &slot,
++                        ),
++                    ),
++                };
++                match result {
++                    Ok(_) => host.log(
++                        RfvpLogLevel::Info,
++                        &format!("{what} request: used quick slot 0 (no slot UI on this target)"),
++                    ),
++                    Err(err) => host.log(
++                        RfvpLogLevel::Warn,
++                        &format!("{what} request failed: {err:#}"),
++                    ),
++                }
++            }
+             let t = crate::perf::start();
+             self.flush_audio(host)?;
+             crate::perf::stop(18, t);
+@@ -584,6 +643,36 @@
+         } else if self.run_state == RfvpCoreRunState::BootFailed {
+             return Err(self.last_error.unwrap_or(RfvpError::InvalidData));
+         }
++        // The game's own quit path ends in ExitDialog(), which only marks a pending request for
++        // the desktop window loop to consume (the retail engine shows a message box and posts a
++        // close message). A console has no such consumer here, so without this the game plays its
++        // exit animation and then sits on a black screen forever. Treat it as a confirmed exit.
++        if crate::subsystem::components::syscalls::utils::take_pending_exit_dialog_request() {
++            if !self.quit_requested {
++                host.log(
++                    RfvpLogLevel::Info,
++                    "quit requested by the game (ExitDialog confirmed)",
++                );
++            }
++            self.quit_requested = true;
++            self.save_global_if_changed(host);
++        }
++        // ExitMode(1/3) and the native window-close path are desktop-loop concerns: the retail
++        // engine terminates its event loop once the designated main script context has exited.
++        // A console has no window loop to notice that, so mirror the desktop condition here:
++        // lock_scripter is only set by ExitMode(3), and main_thread_exited is set by the VM
++        // runner once that context is really gone.
++        if !self.quit_requested
++            && self.game_data.get_lock_scripter()
++            && self.game_data.get_main_thread_exited()
++        {
++            host.log(
++                RfvpLogLevel::Info,
++                "quit requested by the game (ExitMode(3) main script exited)",
++            );
++            self.quit_requested = true;
++            self.save_global_if_changed(host);
++        }
+         self.frame_index = self.frame_index.wrapping_add(1);
+ 
+         Ok(RfvpTickResult {
+--- a/platform/switch/host/src/app.rs
++++ b/platform/switch/host/src/app.rs
+@@ -90,4 +90,29 @@
+     pub fn quit_requested(&self) -> bool {
+         self.core.quit_requested()
+     }
++
++    /// Ask the engine to shut the game down through its normal close path.
++    pub fn request_quit(&mut self) -> RfvpResult<()> {
++        self.core.push_event(RfvpEvent::Quit)
++    }
++
++    /// Overlay pointer position (screen pixels) and whether it should be drawn.
++    pub fn pointer_state(&self) -> (i32, i32, bool) {
++        self.input.pointer()
++    }
++
++    /// Whether the console's own exit confirmation is on screen.
++    pub fn quit_dialog_open(&self) -> bool {
++        self.input.quit_dialog_open()
++    }
++
++    /// Take the "player confirmed the exit" edge, if there is one.
++    pub fn take_quit_confirmed(&mut self) -> bool {
++        self.input.take_quit_confirmed()
++    }
++
++    /// Cursor, macro stage, pointer-seen flag, buttons, quit-dialog flag - for the device trace.
++    pub fn input_debug_line(&self) -> (i32, i32, i32, i32, u64, u8) {
++        self.input.debug_line()
++    }
+ }
+--- a/platform/switch/host/src/event.rs
++++ b/platform/switch/host/src/event.rs
+@@ -1,404 +1,471 @@
+-//! Controller and touch input, as the runtime reads it each frame, turned into engine events.
+-//!
+-//! Layout requested for the GalNX IROSEKA pilot (see docs/builds/019-rfvp-input-mapping.md):
+-//! A = Enter, B = Esc (the in-game pause menu), X = auto mode, Y = load, Plus = save,
+-//! Minus = exit, ZR = left mouse button, ZL = right mouse button, R = Ctrl (skip while held),
+-//! D-pad = arrow keys, left stick up/down = mouse wheel (text backlog), right stick = pointer.
+-//!
+-//! X/Y/Plus/Minus are implemented as short synthetic click macros into the game's own pause
+-//! menu, so the game keeps owning save/load/exit confirmation UI.
+-//!
+-//! Touch keeps its own path: a finger always drives the pointer and the left button.
+-
+-use alloc::vec::Vec;
+-
+-use rfvp::host_api::{InputModifiers, KeyCode, PointerButton, RfvpEvent};
+-
+-const SCREEN_WIDTH: i32 = 1280;
+-const SCREEN_HEIGHT: i32 = 720;
+-const STICK_DEADZONE: i32 = 8_000;
+-/// Right stick deflection to pointer pixels: full tilt is about 11 px per poll (660 px/s).
+-const POINTER_DIVISOR: i32 = 3_000;
+-const WHEEL_STEP: i32 = 120;
+-/// Polls between wheel events while the left stick is held: about ten lines a second at 60 Hz.
+-const WHEEL_REPEAT_POLLS: u32 = 6;
+-
+-/// Pause-menu anchor points in 1280x720 game coordinates. The menu is the clock face shown by
+-/// Esc; every entry is a mouse target, so the macros park the pointer on one and click it.
+-const MENU_SAVE: (i32, i32) = (1117, 171);
+-const MENU_LOAD: (i32, i32) = (960, 217);
+-const MENU_EXIT: (i32, i32) = (654, 608);
+-
+-/// Message-window toolbar AUTO button (bottom-right diamond row), in 1280x720 game coordinates.
+-const TOOLBAR_AUTO: (i32, i32) = (1079, 700);
+-
+-/// Confirm button of the 「确定退出游戏？」 dialog, in 1280x720 game coordinates.
+-const EXIT_CONFIRM: (i32, i32) = (560, 379);
+-
+-/// A synthetic pause-menu macro, run one stage per poll: Esc opens the menu, the pointer then
+-/// parks on an entry and clicks it, so the game keeps owning its save/load/exit screens.
+-struct MenuMacro {
+-    x: i32,
+-    y: i32,
+-    stage: u8,
+-    waits: u8,
+-    /// True when the macro must open the pause menu first; false for a plain toolbar click.
+-    open_menu: bool,
+-    /// Optional second left-click (e.g. the confirm button of the exit dialog).
+-    click2: Option<(i32, i32)>,
+-}
+-
+-/// `struct RfvpSwitchInput` in main.c.
+-#[repr(C)]
+-pub struct SwitchInput {
+-    /// libnx `HidNpadButton` bits.
+-    pub buttons: u64,
+-    pub stick_x: i32,
+-    pub stick_y: i32,
+-    pub right_stick_x: i32,
+-    pub right_stick_y: i32,
+-    pub touch_count: u32,
+-    pub touch_id: u32,
+-    pub touch_x: i32,
+-    pub touch_y: i32,
+-}
+-
+-// libnx `HidNpadButton`.
+-const A: u64 = 1 << 0;
+-const B: u64 = 1 << 1;
+-const X: u64 = 1 << 2;
+-const Y: u64 = 1 << 3;
+-#[allow(dead_code)]
+-const L: u64 = 1 << 6; // reserved; the requested mapping table leaves L unused
+-const R: u64 = 1 << 7;
+-const ZL: u64 = 1 << 8;
+-const ZR: u64 = 1 << 9;
+-const PLUS: u64 = 1 << 10;
+-const MINUS: u64 = 1 << 11;
+-const LEFT: u64 = 1 << 12;
+-const UP: u64 = 1 << 13;
+-const RIGHT: u64 = 1 << 14;
+-const DOWN: u64 = 1 << 15;
+-
+-const KEYS: [(u64, KeyCode); 6] = [
+-    (UP, KeyCode::Up),
+-    (DOWN, KeyCode::Down),
+-    (LEFT, KeyCode::Left),
+-    (RIGHT, KeyCode::Right),
+-    (A, KeyCode::Return),
+-    (B, KeyCode::Escape),
+-];
+-
+-pub struct HorizonInput {
+-    cursor_x: i32,
+-    cursor_y: i32,
+-    previous_buttons: u64,
+-    wheel_polls: u32,
+-    pending: Option<MenuMacro>,
+-    touch_active: bool,
+-    touch_id: u64,
+-    touch_x: i32,
+-    touch_y: i32,
+-}
+-
+-impl HorizonInput {
+-    pub fn new() -> Self {
+-        Self {
+-            cursor_x: SCREEN_WIDTH / 2,
+-            cursor_y: SCREEN_HEIGHT / 2,
+-            previous_buttons: 0,
+-            wheel_polls: 0,
+-            pending: None,
+-            touch_active: false,
+-            touch_id: 0,
+-            touch_x: 0,
+-            touch_y: 0,
+-        }
+-    }
+-
+-    pub fn poll(&mut self, input: &SwitchInput, out: &mut Vec<RfvpEvent>) {
+-        let buttons = input.buttons;
+-        let down = !self.previous_buttons & buttons;
+-        let up = self.previous_buttons & !buttons;
+-        let held_before = self.previous_buttons;
+-        self.previous_buttons = buttons;
+-
+-        // R is the skip key: held down it reports Ctrl, exactly like the keyboard binding.
+-        let skip = R & buttons;
+-        let skip_before = R & held_before;
+-        if skip != 0 && skip_before == 0 {
+-            self.key_down(KeyCode::Control, out);
+-        } else if skip == 0 && skip_before != 0 {
+-            self.key_up(KeyCode::Control, out);
+-        }
+-
+-        for (mask, key) in KEYS {
+-            let was = held_before & mask != 0;
+-            let is = buttons & mask != 0;
+-            if is && !was {
+-                self.key_down(key, out);
+-            } else if was && !is {
+-                self.key_up(key, out);
+-            }
+-        }
+-
+-        // X/Y/Plus/Minus queue one menu click each; while a macro runs the poll still serves
+-        // the pointer macros below so a queued click finishes even if the button is long gone.
+-        if down & X != 0 {
+-            self.queue_pointer_click(TOOLBAR_AUTO.0, TOOLBAR_AUTO.1);
+-        }
+-        if down & Y != 0 {
+-            self.queue_menu_click(MENU_LOAD.0, MENU_LOAD.1);
+-        }
+-        if down & PLUS != 0 {
+-            self.queue_menu_click(MENU_SAVE.0, MENU_SAVE.1);
+-        }
+-        if down & MINUS != 0 {
+-            self.queue_menu_click_then(MENU_EXIT.0, MENU_EXIT.1, EXIT_CONFIRM.0, EXIT_CONFIRM.1);
+-        }
+-
+-        self.move_pointer(input.right_stick_x, input.right_stick_y, out);
+-        self.scroll(input.stick_y, out);
+-        self.click_buttons(down, up, out);
+-        self.run_macro(out);
+-        self.update_touch(input, out);
+-    }
+-
+-    fn key_down(&self, key: KeyCode, out: &mut Vec<RfvpEvent>) {
+-        out.push(RfvpEvent::KeyDown {
+-            key,
+-            repeat: false,
+-            modifiers: InputModifiers::empty(),
+-        });
+-    }
+-
+-    fn key_up(&self, key: KeyCode, out: &mut Vec<RfvpEvent>) {
+-        out.push(RfvpEvent::KeyUp {
+-            key,
+-            modifiers: InputModifiers::empty(),
+-        });
+-    }
+-
+-    fn pointer_move(&self, out: &mut Vec<RfvpEvent>) {
+-        out.push(RfvpEvent::PointerMove {
+-            x: self.cursor_x,
+-            y: self.cursor_y,
+-            in_screen: true,
+-        });
+-    }
+-
+-    /// Queue a pause-menu macro; ignored while another macro is still running.
+-    fn queue_menu_click(&mut self, x: i32, y: i32) {
+-        self.queue_click(x, y, true, None);
+-    }
+-
+-    /// Queue a pause-menu macro followed by a confirmation click (exit dialog).
+-    fn queue_menu_click_then(&mut self, x: i32, y: i32, cx: i32, cy: i32) {
+-        self.queue_click(x, y, true, Some((cx, cy)));
+-    }
+-
+-    /// Queue a plain left-click at a game-UI coordinate (no pause menu involved).
+-    fn queue_pointer_click(&mut self, x: i32, y: i32) {
+-        self.queue_click(x, y, false, None);
+-    }
+-
+-    fn queue_click(&mut self, x: i32, y: i32, open_menu: bool, click2: Option<(i32, i32)>) {
+-        if self.pending.is_none() {
+-            self.pending = Some(MenuMacro {
+-                x,
+-                y,
+-                stage: 0,
+-                waits: 0,
+-                open_menu,
+-                click2,
+-            });
+-        }
+-    }
+-
+-    fn run_macro(&mut self, out: &mut Vec<RfvpEvent>) {
+-        // Copy the macro state out before calling &self helpers: holding a &mut borrow of
+-        // self.pending across self.key_down()/pointer_move() does not borrow-check.
+-        let Some((stage, x, y, waits, open_menu, click2)) = self
+-            .pending
+-            .as_ref()
+-            .map(|m| (m.stage, m.x, m.y, m.waits, m.open_menu, m.click2))
+-        else {
+-            return;
+-        };
+-        if waits > 0 {
+-            if let Some(m) = self.pending.as_mut() {
+-                m.waits = waits - 1;
+-            }
+-            return;
+-        }
+-        let mut next_stage = stage + 1;
+-        let mut next_waits = 0;
+-        let mut done = false;
+-        // Second click target for stages 5..=7; only used when a follow-up click is configured.
+-        let (x2, y2) = click2.unwrap_or((x, y));
+-        match stage {
+-            // Open the pause menu; its fade needs a moment before the entries are clickable.
+-            0 => {
+-                if open_menu {
+-                    self.key_down(KeyCode::Escape, out);
+-                } else {
+-                    self.cursor_x = x;
+-                    self.cursor_y = y;
+-                    self.pointer_move(out);
+-                    next_waits = 3;
+-                    next_stage = 2;
+-                }
+-            }
+-            1 => {
+-                self.key_up(KeyCode::Escape, out);
+-                // The pause menu fades in; clicking before it settles is swallowed by the UI.
+-                next_waits = 90;
+-                next_stage = 2;
+-            }
+-            // Park the pointer on the target, then press and release the left button.
+-            2 => {
+-                self.cursor_x = x;
+-                self.cursor_y = y;
+-                self.pointer_move(out);
+-                next_waits = 3;
+-            }
+-            3 => {
+-                out.push(RfvpEvent::PointerDown {
+-                    button: PointerButton::Left,
+-                    x: self.cursor_x,
+-                    y: self.cursor_y,
+-                });
+-                next_waits = 3;
+-            }
+-            4 => {
+-                out.push(RfvpEvent::PointerUp {
+-                    button: PointerButton::Left,
+-                    x: self.cursor_x,
+-                    y: self.cursor_y,
+-                });
+-                if click2.is_some() {
+-                    // Let the game's confirmation dialog appear before hitting its OK button.
+-                    next_waits = 30;
+-                } else {
+-                    done = true;
+-                }
+-            }
+-            // Optional follow-up click (game exit confirmation).
+-            5 => {
+-                self.cursor_x = x2;
+-                self.cursor_y = y2;
+-                self.pointer_move(out);
+-                next_waits = 3;
+-            }
+-            6 => {
+-                out.push(RfvpEvent::PointerDown {
+-                    button: PointerButton::Left,
+-                    x: self.cursor_x,
+-                    y: self.cursor_y,
+-                });
+-                next_waits = 3;
+-            }
+-            7 => {
+-                out.push(RfvpEvent::PointerUp {
+-                    button: PointerButton::Left,
+-                    x: self.cursor_x,
+-                    y: self.cursor_y,
+-                });
+-                done = true;
+-            }
+-            _ => done = true,
+-        }
+-        if done {
+-            self.pending = None;
+-        } else if let Some(m) = self.pending.as_mut() {
+-            m.stage = next_stage;
+-            m.waits = next_waits;
+-        }
+-    }
+-
+-    fn move_pointer(&mut self, stick_x: i32, stick_y: i32, out: &mut Vec<RfvpEvent>) {
+-        let mut dx = 0;
+-        let mut dy = 0;
+-        if stick_x.abs() >= STICK_DEADZONE {
+-            dx += stick_x / POINTER_DIVISOR;
+-        }
+-        if stick_y.abs() >= STICK_DEADZONE {
+-            dy -= stick_y / POINTER_DIVISOR;
+-        }
+-        if dx != 0 || dy != 0 {
+-            self.cursor_x = (self.cursor_x + dx).clamp(0, SCREEN_WIDTH - 1);
+-            self.cursor_y = (self.cursor_y + dy).clamp(0, SCREEN_HEIGHT - 1);
+-            self.pointer_move(out);
+-        }
+-    }
+-
+-    /// Left stick up scrolls back through the text (mouse wheel up), down goes forward.
+-    fn scroll(&mut self, stick_y: i32, out: &mut Vec<RfvpEvent>) {
+-        if stick_y.abs() < STICK_DEADZONE {
+-            self.wheel_polls = 0;
+-            return;
+-        }
+-        self.wheel_polls = self.wheel_polls.wrapping_add(1);
+-        // The first poll fires at once so a short stick tap scrolls one line; holding then
+-        // repeats at the regular rate.
+-        if self.wheel_polls != 1 && self.wheel_polls % WHEEL_REPEAT_POLLS != 0 {
+-            return;
+-        }
+-        let delta_y = if stick_y > 0 { WHEEL_STEP } else { -WHEEL_STEP };
+-        out.push(RfvpEvent::Wheel {
+-            delta_x: 0,
+-            delta_y,
+-        });
+-    }
+-
+-    fn click_buttons(&self, down: u64, up: u64, out: &mut Vec<RfvpEvent>) {
+-        let (x, y) = (self.cursor_x, self.cursor_y);
+-        for (mask, button) in [(ZR, PointerButton::Left), (ZL, PointerButton::Right)] {
+-            if down & mask != 0 {
+-                out.push(RfvpEvent::PointerDown { button, x, y });
+-            }
+-            if up & mask != 0 {
+-                out.push(RfvpEvent::PointerUp { button, x, y });
+-            }
+-        }
+-    }
+-
+-    fn update_touch(&mut self, input: &SwitchInput, out: &mut Vec<RfvpEvent>) {
+-        if input.touch_count == 0 {
+-            if self.touch_active {
+-                let (id, x, y) = (self.touch_id, self.touch_x, self.touch_y);
+-                out.push(RfvpEvent::TouchUp { id, x, y });
+-                out.push(RfvpEvent::PointerUp {
+-                    button: PointerButton::Left,
+-                    x,
+-                    y,
+-                });
+-                self.touch_active = false;
+-            }
+-            return;
+-        }
+-
+-        let id = input.touch_id as u64;
+-        let x = input.touch_x.clamp(0, SCREEN_WIDTH - 1);
+-        let y = input.touch_y.clamp(0, SCREEN_HEIGHT - 1);
+-        self.cursor_x = x;
+-        self.cursor_y = y;
+-        self.pointer_move(out);
+-        if !self.touch_active || self.touch_id != id {
+-            self.touch_active = true;
+-            self.touch_id = id;
+-            self.touch_x = x;
+-            self.touch_y = y;
+-            out.push(RfvpEvent::TouchDown { id, x, y });
+-            out.push(RfvpEvent::PointerDown {
+-                button: PointerButton::Left,
+-                x,
+-                y,
+-            });
+-        } else if self.touch_x != x || self.touch_y != y {
+-            self.touch_x = x;
+-            self.touch_y = y;
+-            out.push(RfvpEvent::TouchMove { id, x, y });
+-        }
+-    }
+-}
++//! Controller and touch input, as the runtime reads it each frame, turned into engine events.
++//!
++//! Layout requested for the GalNX IROSEKA pilot (see docs/builds/019-rfvp-input-mapping.md):
++//! A = Enter, B = Esc (the in-game pause menu), X = auto mode, Y = load, Plus = save,
++//! Minus = exit, ZR = left mouse button, ZL = right mouse button, R = Ctrl (skip while held),
++//! D-pad = arrow keys, left stick up/down = mouse wheel (text backlog), right stick = pointer.
++//!
++//! X/Y/Plus/Minus are implemented as short synthetic click macros into the game's own pause
++//! menu, so the game keeps owning save/load/exit confirmation UI.
++//!
++//! Touch keeps its own path: a finger always drives the pointer and the left button.
++
++use alloc::vec::Vec;
++
++use rfvp::host_api::{InputModifiers, KeyCode, PointerButton, RfvpEvent};
++
++const SCREEN_WIDTH: i32 = 1280;
++const SCREEN_HEIGHT: i32 = 720;
++const STICK_DEADZONE: i32 = 8_000;
++/// Right stick deflection to pointer pixels: full tilt is about 11 px per poll (660 px/s).
++const POINTER_DIVISOR: i32 = 3_000;
++const WHEEL_STEP: i32 = 120;
++/// Polls between wheel events while the left stick is held: about ten lines a second at 60 Hz.
++const WHEEL_REPEAT_POLLS: u32 = 6;
++
++/// Pause-menu anchor points in 1280x720 game coordinates. The menu is the clock face shown by
++/// Esc; every entry is a mouse target, so the macros park the pointer on one and click it.
++const MENU_SAVE: (i32, i32) = (1117, 171);
++const MENU_LOAD: (i32, i32) = (960, 217);
++const MENU_EXIT: (i32, i32) = (654, 608);
++
++/// Message-window toolbar AUTO button (bottom-right diamond row), in 1280x720 game coordinates.
++const TOOLBAR_AUTO: (i32, i32) = (1079, 700);
++
++/// Confirm button of the 「确定退出游戏？」 dialog, in 1280x720 game coordinates.
++const EXIT_CONFIRM: (i32, i32) = (560, 379);
++
++/// A synthetic pause-menu macro, run one stage per poll: Esc opens the menu, the pointer then
++/// parks on an entry and clicks it, so the game keeps owning its save/load/exit screens.
++struct MenuMacro {
++    x: i32,
++    y: i32,
++    stage: u8,
++    waits: u8,
++    /// True when the macro must open the pause menu first; false for a plain toolbar click.
++    open_menu: bool,
++    /// Optional second left-click (e.g. the confirm button of the exit dialog).
++    click2: Option<(i32, i32)>,
++}
++
++/// `struct RfvpSwitchInput` in main.c.
++#[repr(C)]
++pub struct SwitchInput {
++    /// libnx `HidNpadButton` bits.
++    pub buttons: u64,
++    pub stick_x: i32,
++    pub stick_y: i32,
++    pub right_stick_x: i32,
++    pub right_stick_y: i32,
++    pub touch_count: u32,
++    pub touch_id: u32,
++    pub touch_x: i32,
++    pub touch_y: i32,
++}
++
++// libnx `HidNpadButton`.
++const A: u64 = 1 << 0;
++const B: u64 = 1 << 1;
++const X: u64 = 1 << 2;
++const Y: u64 = 1 << 3;
++#[allow(dead_code)]
++const L: u64 = 1 << 6; // reserved; the requested mapping table leaves L unused
++const R: u64 = 1 << 7;
++const ZL: u64 = 1 << 8;
++const ZR: u64 = 1 << 9;
++const PLUS: u64 = 1 << 10;
++const MINUS: u64 = 1 << 11;
++const LEFT: u64 = 1 << 12;
++const UP: u64 = 1 << 13;
++const RIGHT: u64 = 1 << 14;
++const DOWN: u64 = 1 << 15;
++
++/// D-pad -> arrow keys.
++const DIRECTIONS: [(u64, KeyCode); 4] = [
++    (UP, KeyCode::Up),
++    (DOWN, KeyCode::Down),
++    (LEFT, KeyCode::Left),
++    (RIGHT, KeyCode::Right),
++];
++
++/// A/B -> the game's confirm/back keys (skipped while the console confirmation is up).
++const ACTIONS: [(u64, KeyCode); 2] = [(A, KeyCode::Return), (B, KeyCode::Escape)];
++
++pub struct HorizonInput {
++    cursor_x: i32,
++    cursor_y: i32,
++    previous_buttons: u64,
++    wheel_polls: u32,
++    pending: Option<MenuMacro>,
++    /// Set once the right stick has moved the pointer, so the overlay cursor only appears after
++    /// the player actually used it.
++    pointer_seen: bool,
++    /// The console's own exit confirmation is up: A confirms, B cancels, the game sees neither.
++    quit_dialog: bool,
++    quit_confirmed: bool,
++    touch_active: bool,
++    touch_id: u64,
++    touch_x: i32,
++    touch_y: i32,
++}
++
++impl HorizonInput {
++    pub fn new() -> Self {
++        Self {
++            cursor_x: SCREEN_WIDTH / 2,
++            cursor_y: SCREEN_HEIGHT / 2,
++            previous_buttons: 0,
++            wheel_polls: 0,
++            pending: None,
++            pointer_seen: false,
++            quit_dialog: false,
++            quit_confirmed: false,
++            touch_active: false,
++            touch_id: 0,
++            touch_x: 0,
++            touch_y: 0,
++        }
++    }
++
++    pub fn poll(&mut self, input: &SwitchInput, out: &mut Vec<RfvpEvent>) {
++        let buttons = input.buttons;
++        let down = !self.previous_buttons & buttons;
++        let up = self.previous_buttons & !buttons;
++        let held_before = self.previous_buttons;
++        self.previous_buttons = buttons;
++
++        // R is the skip key: held down it reports Ctrl, exactly like the keyboard binding.
++        let skip = R & buttons;
++        let skip_before = R & held_before;
++        if skip != 0 && skip_before == 0 {
++            self.key_down(KeyCode::Control, out);
++        } else if skip == 0 && skip_before != 0 {
++            self.key_up(KeyCode::Control, out);
++        }
++
++            // The console's own exit confirmation owns A and B while it is up, so the game never sees
++        // those two presses in that state.
++        let confirming = self.quit_dialog;
++        for (mask, key) in DIRECTIONS {
++            let was = held_before & mask != 0;
++            let is = buttons & mask != 0;
++            if is && !was {
++                self.key_down(key, out);
++            } else if was && !is {
++                self.key_up(key, out);
++            }
++        }
++        if !confirming {
++            for (mask, key) in ACTIONS {
++                let was = held_before & mask != 0;
++                let is = buttons & mask != 0;
++                if is && !was {
++                    self.key_down(key, out);
++                } else if was && !is {
++                    self.key_up(key, out);
++                }
++            }
++        }
++
++        // X/Y/Plus queue one game-UI click each; Minus opens the console's escape hatch.
++        // The game's own pause menu is only reachable from some screens (never the title), so
++        // leaving is handled by the console itself: confirm, save, quit.
++        if down & X != 0 {
++            self.queue_pointer_click(TOOLBAR_AUTO.0, TOOLBAR_AUTO.1);
++        }
++        if down & Y != 0 {
++            self.queue_menu_click(MENU_LOAD.0, MENU_LOAD.1);
++        }
++        if down & PLUS != 0 {
++            self.queue_menu_click(MENU_SAVE.0, MENU_SAVE.1);
++        }
++        if confirming {
++            if down & A != 0 {
++                self.quit_dialog = false;
++                self.quit_confirmed = true;
++            } else if down & B != 0 {
++                self.quit_dialog = false;
++            }
++        } else if down & MINUS != 0 {
++            self.quit_dialog = true;
++        }
++
++        self.move_pointer(input.right_stick_x, input.right_stick_y, out);
++        self.scroll(input.stick_y, out);
++        self.click_buttons(down, up, out);
++        self.run_macro(out);
++        self.update_touch(input, out);
++    }
++
++    fn key_down(&self, key: KeyCode, out: &mut Vec<RfvpEvent>) {
++        out.push(RfvpEvent::KeyDown {
++            key,
++            repeat: false,
++            modifiers: InputModifiers::empty(),
++        });
++    }
++
++    fn key_up(&self, key: KeyCode, out: &mut Vec<RfvpEvent>) {
++        out.push(RfvpEvent::KeyUp {
++            key,
++            modifiers: InputModifiers::empty(),
++        });
++    }
++
++    fn pointer_move(&mut self, out: &mut Vec<RfvpEvent>) {
++        self.pointer_seen = true;
++        out.push(RfvpEvent::PointerMove {
++            x: self.cursor_x,
++            y: self.cursor_y,
++            in_screen: true,
++        });
++    }
++
++    /// Queue a pause-menu macro; ignored while another macro is still running.
++    fn queue_menu_click(&mut self, x: i32, y: i32) {
++        self.queue_click(x, y, true, None);
++    }
++
++    /// Queue a pause-menu macro followed by a confirmation click (exit dialog).
++    fn queue_menu_click_then(&mut self, x: i32, y: i32, cx: i32, cy: i32) {
++        self.queue_click(x, y, true, Some((cx, cy)));
++    }
++
++    /// Queue a plain left-click at a game-UI coordinate (no pause menu involved).
++    fn queue_pointer_click(&mut self, x: i32, y: i32) {
++        self.queue_click(x, y, false, None);
++    }
++
++    fn queue_click(&mut self, x: i32, y: i32, open_menu: bool, click2: Option<(i32, i32)>) {
++        if self.pending.is_none() {
++            self.pending = Some(MenuMacro {
++                x,
++                y,
++                stage: 0,
++                waits: 0,
++                open_menu,
++                click2,
++            });
++        }
++    }
++
++    fn run_macro(&mut self, out: &mut Vec<RfvpEvent>) {
++        // Copy the macro state out before calling &self helpers: holding a &mut borrow of
++        // self.pending across self.key_down()/pointer_move() does not borrow-check.
++        let Some((stage, x, y, waits, open_menu, click2)) = self
++            .pending
++            .as_ref()
++            .map(|m| (m.stage, m.x, m.y, m.waits, m.open_menu, m.click2))
++        else {
++            return;
++        };
++        if waits > 0 {
++            if let Some(m) = self.pending.as_mut() {
++                m.waits = waits - 1;
++            }
++            return;
++        }
++        let mut next_stage = stage + 1;
++        let mut next_waits = 0;
++        let mut done = false;
++        // Second click target for stages 5..=7; only used when a follow-up click is configured.
++        let (x2, y2) = click2.unwrap_or((x, y));
++        match stage {
++            // Open the pause menu; its fade needs a moment before the entries are clickable.
++            0 => {
++                if open_menu {
++                    self.key_down(KeyCode::Escape, out);
++                } else {
++                    self.cursor_x = x;
++                    self.cursor_y = y;
++                    self.pointer_move(out);
++                    next_waits = 3;
++                    next_stage = 2;
++                }
++            }
++            1 => {
++                self.key_up(KeyCode::Escape, out);
++                // The pause menu fades in; clicking before it settles is swallowed by the UI.
++                next_waits = 90;
++                next_stage = 2;
++            }
++            // Park the pointer on the target, then press and release the left button.
++            2 => {
++                self.cursor_x = x;
++                self.cursor_y = y;
++                self.pointer_move(out);
++                next_waits = 3;
++            }
++            3 => {
++                out.push(RfvpEvent::PointerDown {
++                    button: PointerButton::Left,
++                    x: self.cursor_x,
++                    y: self.cursor_y,
++                });
++                next_waits = 3;
++            }
++            4 => {
++                out.push(RfvpEvent::PointerUp {
++                    button: PointerButton::Left,
++                    x: self.cursor_x,
++                    y: self.cursor_y,
++                });
++                if click2.is_some() {
++                    // Let the game's confirmation dialog appear before hitting its OK button.
++                    next_waits = 30;
++                } else {
++                    done = true;
++                }
++            }
++            // Optional follow-up click (game exit confirmation).
++            5 => {
++                self.cursor_x = x2;
++                self.cursor_y = y2;
++                self.pointer_move(out);
++                next_waits = 3;
++            }
++            6 => {
++                out.push(RfvpEvent::PointerDown {
++                    button: PointerButton::Left,
++                    x: self.cursor_x,
++                    y: self.cursor_y,
++                });
++                next_waits = 3;
++            }
++            7 => {
++                out.push(RfvpEvent::PointerUp {
++                    button: PointerButton::Left,
++                    x: self.cursor_x,
++                    y: self.cursor_y,
++                });
++                done = true;
++            }
++            _ => done = true,
++        }
++        if done {
++            self.pending = None;
++        } else if let Some(m) = self.pending.as_mut() {
++            m.stage = next_stage;
++            m.waits = next_waits;
++        }
++    }
++
++    fn move_pointer(&mut self, stick_x: i32, stick_y: i32, out: &mut Vec<RfvpEvent>) {
++        let mut dx = 0;
++        let mut dy = 0;
++        if stick_x.abs() >= STICK_DEADZONE {
++            dx += stick_x / POINTER_DIVISOR;
++        }
++        if stick_y.abs() >= STICK_DEADZONE {
++            dy -= stick_y / POINTER_DIVISOR;
++        }
++        if dx != 0 || dy != 0 {
++            self.cursor_x = (self.cursor_x + dx).clamp(0, SCREEN_WIDTH - 1);
++            self.cursor_y = (self.cursor_y + dy).clamp(0, SCREEN_HEIGHT - 1);
++            self.pointer_move(out);
++        }
++    }
++
++    /// Left stick up scrolls back through the text (mouse wheel up), down goes forward.
++    fn scroll(&mut self, stick_y: i32, out: &mut Vec<RfvpEvent>) {
++        if stick_y.abs() < STICK_DEADZONE {
++            self.wheel_polls = 0;
++            return;
++        }
++        self.wheel_polls = self.wheel_polls.wrapping_add(1);
++        // The first poll fires at once so a short stick tap scrolls one line; holding then
++        // repeats at the regular rate.
++        if self.wheel_polls != 1 && self.wheel_polls % WHEEL_REPEAT_POLLS != 0 {
++            return;
++        }
++        let delta_y = if stick_y > 0 { WHEEL_STEP } else { -WHEEL_STEP };
++        out.push(RfvpEvent::Wheel {
++            delta_x: 0,
++            delta_y,
++        });
++    }
++
++    fn click_buttons(&self, down: u64, up: u64, out: &mut Vec<RfvpEvent>) {
++        let (x, y) = (self.cursor_x, self.cursor_y);
++        for (mask, button) in [(ZR, PointerButton::Left), (ZL, PointerButton::Right)] {
++            if down & mask != 0 {
++                out.push(RfvpEvent::PointerDown { button, x, y });
++            }
++            if up & mask != 0 {
++                out.push(RfvpEvent::PointerUp { button, x, y });
++            }
++        }
++    }
++
++    /// Pointer position for the overlay cursor, and whether it should be drawn at all.
++    pub fn pointer(&self) -> (i32, i32, bool) {
++        (
++            self.cursor_x,
++            self.cursor_y,
++            self.pointer_seen || self.touch_active,
++        )
++    }
++
++    /// Whether the console's own exit confirmation is on screen.
++    pub fn quit_dialog_open(&self) -> bool {
++        self.quit_dialog
++    }
++
++    /// Take the "player confirmed the exit" edge, if there is one.
++    pub fn take_quit_confirmed(&mut self) -> bool {
++        let confirmed = self.quit_confirmed;
++        self.quit_confirmed = false;
++        confirmed
++    }
++
++    /// One line of input state for the on-device trace file.
++    pub fn debug_line(&self) -> (i32, i32, i32, i32, u64, u8) {
++        (
++            self.cursor_x,
++            self.cursor_y,
++            self.pending.as_ref().map_or(-1, |m| m.stage as i32),
++            if self.pointer_seen { 1 } else { 0 },
++            self.previous_buttons,
++            if self.quit_dialog { 1 } else { 0 },
++        )
++    }
++
++    fn update_touch(&mut self, input: &SwitchInput, out: &mut Vec<RfvpEvent>) {
++        if input.touch_count == 0 {
++            if self.touch_active {
++                let (id, x, y) = (self.touch_id, self.touch_x, self.touch_y);
++                out.push(RfvpEvent::TouchUp { id, x, y });
++                out.push(RfvpEvent::PointerUp {
++                    button: PointerButton::Left,
++                    x,
++                    y,
++                });
++                self.touch_active = false;
++            }
++            return;
++        }
++
++        let id = input.touch_id as u64;
++        let x = input.touch_x.clamp(0, SCREEN_WIDTH - 1);
++        let y = input.touch_y.clamp(0, SCREEN_HEIGHT - 1);
++        self.cursor_x = x;
++        self.cursor_y = y;
++        self.pointer_move(out);
++        if !self.touch_active || self.touch_id != id {
++            self.touch_active = true;
++            self.touch_id = id;
++            self.touch_x = x;
++            self.touch_y = y;
++            out.push(RfvpEvent::TouchDown { id, x, y });
++            out.push(RfvpEvent::PointerDown {
++                button: PointerButton::Left,
++                x,
++                y,
++            });
++        } else if self.touch_x != x || self.touch_y != y {
++            self.touch_x = x;
++            self.touch_y = y;
++            out.push(RfvpEvent::TouchMove { id, x, y });
++        }
++    }
++}
+--- a/platform/switch/host/src/ffi.rs
++++ b/platform/switch/host/src/ffi.rs
+@@ -294,6 +294,15 @@
+             return -1;
+         }
+     };
++    // The console's own confirmation answered "yes": leave through the engine's normal close
++    // path (the game gets a chance to save on the way out), rather than killing the process.
++    if session.app.take_quit_confirmed() {
++        log("rfvp: exit confirmed by the player, closing\n");
++        if let Err(err) = session.app.request_quit() {
++            session.report_error("the game refused to close", Some(err));
++            return -1;
++        }
++    }
+     session.sum_vm_us += tick.vm_us;
+     session.sum_scene_us += tick.scene_us;
+     session.sum_render_us += tick.render_us;
+@@ -311,6 +320,70 @@
+     0
+ }
+ 
++/// Pointer and exit-confirmation state for the runtime's own overlay (cursor + dialog).
++#[no_mangle]
++pub unsafe extern "C" fn rfvp_switch_pointer(
++    session: *mut Session,
++    x: *mut c_int,
++    y: *mut c_int,
++    visible: *mut c_int,
++    dialog: *mut c_int,
++) {
++    if session.is_null() {
++        return;
++    }
++    let session = unsafe { &*session };
++    let (px, py, shown) = session.app.pointer_state();
++    if !x.is_null() {
++        unsafe { *x = px };
++    }
++    if !y.is_null() {
++        unsafe { *y = py };
++    }
++    if !visible.is_null() {
++        unsafe { *visible = if shown { 1 } else { 0 } };
++    }
++    if !dialog.is_null() {
++        unsafe { *dialog = if session.app.quit_dialog_open() { 1 } else { 0 } };
++    }
++}
++
++/// One line of input state for the on-device trace, or `None` when the session is gone.
++#[no_mangle]
++pub unsafe extern "C" fn rfvp_switch_input_debug(
++    session: *mut Session,
++    cursor_x: *mut c_int,
++    cursor_y: *mut c_int,
++    macro_stage: *mut c_int,
++    pointer_seen: *mut c_int,
++    buttons: *mut u64,
++    quit_dialog: *mut c_int,
++) {
++    if session.is_null() {
++        return;
++    }
++    let session = unsafe { &*session };
++    let (x, y, stage, seen, held, dialog) = session.app.input_debug_line();
++    if !cursor_x.is_null() {
++        unsafe { *cursor_x = x };
++    }
++    if !cursor_y.is_null() {
++        unsafe { *cursor_y = y };
++    }
++    if !macro_stage.is_null() {
++        unsafe { *macro_stage = stage };
++    }
++    if !pointer_seen.is_null() {
++        unsafe { *pointer_seen = seen };
++    }
++    if !buttons.is_null() {
++        unsafe { *buttons = held };
++    }
++    if !quit_dialog.is_null() {
++        unsafe { *quit_dialog = dialog as c_int };
++    }
++}
++
+ /// Mix the next `frames` frames of 48 kHz stereo into `dst`.
+ #[no_mangle]
+ pub unsafe extern "C" fn rfvp_switch_audio_render(session: *mut Session, dst: *mut i16, frames: usize) {
+--- a/platform/switch/runtime/main.c
++++ b/platform/switch/runtime/main.c
+@@ -1,298 +1,314 @@
+-/* The Switch runtime: libnx owns the process, the controller, the touch screen and the audio
+- * driver; SDL2 (platform/switch/runtime/sdl_video.c) owns the display and draws each frame the
+- * rfvp engine (Rust, linked in as librfvp_horizon.a) submits through the RfvpRenderer trait. */
+-
+-#include <dirent.h>
+-#include <stdio.h>
+-#include <string.h>
+-#include <sys/stat.h>
+-#include <time.h>
+-
+-#include <switch.h>
+-
+-/* A plain NRO reads the game data from the SD card; a self-contained NSP ships it inside
+- * romfs:/game. Saves always live on the SD card (platform/switch/host/src/fs.rs), so both
+- * layouts keep their save data. */
+-static const char* const GameRoot = "sdmc:/switch/rfvp/game";
+-static const char* const RomfsGameRoot = "romfs:/game";
+-
+-/* True when a directory holds at least one KiriKiri script archive (*.hcb). */
+-static bool dir_has_game_script(const char* path) {
+-    DIR* dir = opendir(path);
+-    if (dir == NULL) return false;
+-    bool found = false;
+-    struct dirent* entry;
+-    while (!found && (entry = readdir(dir)) != NULL) {
+-        const size_t len = strlen(entry->d_name);
+-        if (len >= 4 && strcmp(entry->d_name + len - 4, ".hcb") == 0) found = true;
+-    }
+-    closedir(dir);
+-    return found;
+-}
+-
+-/* Defined below; declared here so the game-root logging above can use it. */
+-void rfvp_switch_log(const char* message, size_t len);
+-
+-static void log_text(const char* text) {
+-    rfvp_switch_log(text, strlen(text));
+-}
+-static const char* const ScreenshotFile = "sdmc:/switch/rfvp/debug_screen.bmp";
+-
+-typedef struct {
+-    uint64_t buttons;
+-    int32_t stick_x;
+-    int32_t stick_y;
+-    uint32_t touch_count;
+-    uint32_t touch_id;
+-    int32_t touch_x;
+-    int32_t touch_y;
+-} RfvpSwitchInput;
+-
+-typedef struct {
+-    uint16_t year;
+-    uint8_t month;
+-    uint8_t day;
+-    uint8_t day_of_week;
+-    uint8_t hour;
+-    uint8_t minute;
+-} RfvpSwitchWallTime;
+-
+-/* The engine (platform/switch/host/src/ffi.rs). */
+-extern void* rfvp_switch_start(const char* game_root);
+-extern int rfvp_switch_frame(void* app, const RfvpSwitchInput* input, uint32_t* framebuffer,
+-                             uint32_t stride_bytes);
+-extern void rfvp_switch_audio_render(void* app, int16_t* dst, size_t frames);
+-extern void rfvp_switch_stop(void* app);
+-
+-/* The SDL video backend (platform/switch/runtime/sdl_video.c). */
+-extern int galnx_sdl_video_init(void);
+-extern void galnx_sdl_video_shutdown(void);
+-extern int galnx_sdl_pump_events(void);
+-extern int galnx_sdl_write_screen_bmp(const char* path);
+-
+-/* ---- Services for the engine ---------------------------------------------------------------- */
+-
+-void rfvp_switch_log(const char* message, size_t len) {
+-    /* An emulator shows these in its log; on a console they go to the debug output. */
+-    svcOutputDebugString(message, len);
+-}
+-
+-uint64_t rfvp_switch_ticks_us(void) {
+-    return armTicksToNs(armGetSystemTick()) / 1000;
+-}
+-
+-bool rfvp_switch_wall_time(RfvpSwitchWallTime* out) {
+-    time_t now = time(NULL);
+-    struct tm* local = localtime(&now);
+-    if (local == NULL) return false;
+-    out->year = (uint16_t) (local->tm_year + 1900);
+-    out->month = (uint8_t) (local->tm_mon + 1);
+-    out->day = (uint8_t) local->tm_mday;
+-    out->day_of_week = (uint8_t) local->tm_wday;
+-    out->hour = (uint8_t) local->tm_hour;
+-    out->minute = (uint8_t) local->tm_min;
+-    return true;
+-}
+-
+-typedef void (*RfvpDirVisitor)(void* ctx, const char* name, bool is_dir, uint64_t size);
+-
+-/* List a directory; Rust does not know newlib's dirent and stat layouts. */
+-int rfvp_switch_list_dir(const char* path, RfvpDirVisitor visit, void* ctx) {
+-    DIR* dir = opendir(path);
+-    if (dir == NULL) return -1;
+-    char child[FS_MAX_PATH];
+-    struct dirent* entry;
+-    while ((entry = readdir(dir)) != NULL) {
+-        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) continue;
+-        snprintf(child, sizeof(child), "%s/%s", path, entry->d_name);
+-        struct stat st;
+-        if (stat(child, &st) != 0) continue;
+-        visit(ctx, entry->d_name, S_ISDIR(st.st_mode), (uint64_t) st.st_size);
+-    }
+-    closedir(dir);
+-    return 0;
+-}
+-
+-/* 1 for a file, 2 for a directory, 0 if nothing is there. */
+-int rfvp_switch_path_kind(const char* path, uint64_t* size) {
+-    struct stat st;
+-    if (stat(path, &st) != 0) return 0;
+-    if (size != NULL) *size = (uint64_t) st.st_size;
+-    return S_ISDIR(st.st_mode) ? 2 : 1;
+-}
+-
+-/* ---- Audio ---------------------------------------------------------------------------------- */
+-
+-enum {
+-    /* One buffer is one page of 16-bit stereo (about 21 ms); six of them ride out stalls of
+-     * over 100 ms without running dry. */
+-    AudioBufferFrames = 1024,
+-    AudioBufferCount = 6,
+-};
+-static AudioDriver audio_driver;
+-static AudioDriverWaveBuf audio_wavebufs[AudioBufferCount];
+-static int16_t audio_buffers[AudioBufferCount][AudioBufferFrames * 2]
+-    __attribute__((aligned(0x1000)));
+-static bool audio_renderer_ready;
+-static bool audio_driver_ready;
+-
+-static void log_result(const char* what, Result rc) {
+-    char message[96];
+-    int len = snprintf(message, sizeof(message), "rfvp: %s failed: 0x%08x\n", what,
+-                       (unsigned) rc);
+-    rfvp_switch_log(message, (size_t) len);
+-}
+-
+-static void audio_init(void) {
+-    static const AudioRendererConfig config = {
+-        .output_rate = AudioRendererOutputRate_48kHz,
+-        .num_voices = 2,
+-        .num_effects = 0,
+-        .num_sinks = 1,
+-        .num_mix_objs = 1,
+-        .num_mix_buffers = 2,
+-    };
+-    Result rc = audrenInitialize(&config);
+-    if (R_FAILED(rc)) { log_result("audrenInitialize", rc); return; }
+-    audio_renderer_ready = true;
+-    rc = audrvCreate(&audio_driver, &config, 2);
+-    if (R_FAILED(rc)) { log_result("audrvCreate", rc); return; }
+-    audio_driver_ready = true;
+-
+-    memset(audio_buffers, 0, sizeof(audio_buffers));
+-    armDCacheFlush(audio_buffers, sizeof(audio_buffers));
+-    int pool = audrvMemPoolAdd(&audio_driver, audio_buffers, sizeof(audio_buffers));
+-    if (pool < 0 || !audrvMemPoolAttach(&audio_driver, pool)) {
+-        rfvp_switch_log("rfvp: audio memory pool failed\n", 31);
+-        audio_driver_ready = false;
+-        return;
+-    }
+-    static const u8 sink_channels[] = { 0, 1 };
+-    audrvDeviceSinkAdd(&audio_driver, AUDREN_DEFAULT_DEVICE_NAME, 2, sink_channels);
+-    /* The pool and the sink have to be committed before a voice can use them. */
+-    rc = audrvUpdate(&audio_driver);
+-    if (R_FAILED(rc)) { log_result("audrvUpdate", rc); audio_driver_ready = false; return; }
+-    rc = audrenStartAudioRenderer();
+-    if (R_FAILED(rc)) { log_result("audrenStartAudioRenderer", rc); audio_driver_ready = false; return; }
+-    if (!audrvVoiceInit(&audio_driver, 0, 2, PcmFormat_Int16, 48000)) {
+-        rfvp_switch_log("rfvp: audrvVoiceInit failed\n", 28);
+-        audio_driver_ready = false;
+-        return;
+-    }
+-    audrvVoiceSetDestinationMix(&audio_driver, 0, AUDREN_FINAL_MIX_ID);
+-    audrvVoiceSetMixFactor(&audio_driver, 0, 1.0f, 0, 0);
+-    audrvVoiceSetMixFactor(&audio_driver, 0, 1.0f, 1, 1);
+-    audrvVoiceStart(&audio_driver, 0);
+-    audrvUpdate(&audio_driver);
+-}
+-
+-/* Refill every buffer the device has finished with. */
+-static void audio_pump(void* app) {
+-    if (!audio_driver_ready) return;
+-    for (unsigned i = 0; i < AudioBufferCount; ++i) {
+-        AudioDriverWaveBuf* wavebuf = &audio_wavebufs[i];
+-        if (wavebuf->state != AudioDriverWaveBufState_Free &&
+-            wavebuf->state != AudioDriverWaveBufState_Done) continue;
+-        rfvp_switch_audio_render(app, audio_buffers[i], AudioBufferFrames);
+-        armDCacheFlush(audio_buffers[i], sizeof(audio_buffers[i]));
+-        wavebuf->data_raw = audio_buffers[i];
+-        wavebuf->size = sizeof(audio_buffers[i]);
+-        wavebuf->start_sample_offset = 0;
+-        wavebuf->end_sample_offset = AudioBufferFrames;
+-        wavebuf->is_looping = false;
+-        audrvVoiceAddWaveBuf(&audio_driver, 0, wavebuf);
+-    }
+-    audrvUpdate(&audio_driver);
+-}
+-
+-static void audio_exit(void) {
+-    if (audio_driver_ready) audrvClose(&audio_driver);
+-    if (audio_renderer_ready) audrenExit();
+-}
+-
+-/* ---- Main loop ------------------------------------------------------------------------------ */
+-
+-/* Optional screenshot, using the same debug.txt convention as the other ports: write
+- * shot=N and frame N of the run is saved as debug_screen.bmp. */
+-static unsigned screenshot_frame(void) {
+-    FILE* file = fopen("sdmc:/switch/rfvp/debug.txt", "r");
+-    if (file == NULL) return UINT32_MAX;
+-    char line[128];
+-    unsigned frame = UINT32_MAX;
+-    while (fgets(line, sizeof(line), file)) {
+-        unsigned value;
+-        if (sscanf(line, "shot=%u", &value) == 1) frame = value;
+-    }
+-    fclose(file);
+-    return frame;
+-}
+-
+-int main(void) {
+-    rfvp_switch_log("rfvp: starting\n", 15);
+-
+-    /* SDL opens the window and creates the GLES2 renderer. */
+-    if (galnx_sdl_video_init() != 0) {
+-        rfvp_switch_log("rfvp: sdl video init failed\n", 28);
+-        return 1;
+-    }
+-
+-    audio_init();
+-
+-    padConfigureInput(1, HidNpadStyleSet_NpadStandard);
+-    PadState pad;
+-    padInitializeDefault(&pad);
+-    hidInitializeTouchScreen();
+-
+-    /* Prefer the SD card when it holds a game (development); otherwise use the romfs copy
+-     * embedded in an NSP build. romfsInit() failing is expected for SD-card NRO builds. */
+-    const bool romfs_mounted = R_SUCCEEDED(romfsInit());
+-    const char* game_root = GameRoot;
+-    if (romfs_mounted && !dir_has_game_script(GameRoot) && dir_has_game_script(RomfsGameRoot)) {
+-        game_root = RomfsGameRoot;
+-    }
+-    log_text("rfvp: game root: ");
+-    log_text(game_root);
+-    log_text(romfs_mounted ? " (romfs mounted)\n" : " (no romfs)\n");
+-
+-    void* app = rfvp_switch_start(game_root);
+-    if (app == NULL) {
+-        /* The reason is in sdmc:/switch/rfvp/last_error.txt. */
+-        audio_exit();
+-        galnx_sdl_video_shutdown();
+-        return 1;
+-    }
+-
+-    const unsigned shot = screenshot_frame();
+-    unsigned frame = 0;
+-    int status = 0;
+-    for (;;) {
+-        /* The Switch video driver ticks the applet loop here and reports a quit request. */
+-        if (galnx_sdl_pump_events() != 0) break;
+-
+-        padUpdate(&pad);
+-        RfvpSwitchInput input = { 0 };
+-        input.buttons = padGetButtons(&pad);
+-        HidAnalogStickState stick = padGetStickPos(&pad, 0);
+-        input.stick_x = stick.x;
+-        input.stick_y = stick.y;
+-        HidTouchScreenState touch = { 0 };
+-        if (hidGetTouchScreenStates(&touch, 1) && touch.count > 0) {
+-            input.touch_count = (uint32_t) touch.count;
+-            input.touch_id = touch.touches[0].finger_id;
+-            input.touch_x = (int32_t) touch.touches[0].x;
+-            input.touch_y = (int32_t) touch.touches[0].y;
+-        }
+-
+-        /* SDL owns the display, so the engine draws and presents inside this call. */
+-        status = rfvp_switch_frame(app, &input, NULL, 0);
+-        if (frame++ == shot) galnx_sdl_write_screen_bmp(ScreenshotFile);
+-        audio_pump(app);
+-        if (status != 0) break;
+-    }
+-
+-    rfvp_switch_stop(app);
+-    audio_exit();
+-    galnx_sdl_video_shutdown();
+-    if (romfs_mounted) romfsExit();
+-    return 0;
+-}
++/* The Switch runtime: libnx owns the process, the controller, the touch screen and the audio
++ * driver; SDL2 (platform/switch/runtime/sdl_video.c) owns the display and draws each frame the
++ * rfvp engine (Rust, linked in as librfvp_horizon.a) submits through the RfvpRenderer trait. */
++
++#include <dirent.h>
++#include <stdio.h>
++#include <string.h>
++#include <sys/stat.h>
++#include <time.h>
++
++#include <switch.h>
++
++/* A plain NRO reads the game data from the SD card; a self-contained NSP ships it inside
++ * romfs:/game. Saves always live on the SD card (platform/switch/host/src/fs.rs), so both
++ * layouts keep their save data. */
++static const char* const GameRoot = "sdmc:/switch/rfvp/game";
++static const char* const RomfsGameRoot = "romfs:/game";
++
++/* True when a directory holds at least one KiriKiri script archive (*.hcb). */
++static bool dir_has_game_script(const char* path) {
++    DIR* dir = opendir(path);
++    if (dir == NULL) return false;
++    bool found = false;
++    struct dirent* entry;
++    while (!found && (entry = readdir(dir)) != NULL) {
++        const size_t len = strlen(entry->d_name);
++        if (len >= 4 && strcmp(entry->d_name + len - 4, ".hcb") == 0) found = true;
++    }
++    closedir(dir);
++    return found;
++}
++
++/* Defined below; declared here so the game-root logging above can use it. */
++void rfvp_switch_log(const char* message, size_t len);
++
++static void log_text(const char* text) {
++    rfvp_switch_log(text, strlen(text));
++}
++static const char* const ScreenshotFile = "sdmc:/switch/rfvp/debug_screen.bmp";
++
++typedef struct {
++    uint64_t buttons;
++    int32_t stick_x;
++    int32_t stick_y;
++    int32_t right_stick_x;
++    int32_t right_stick_y;
++    uint32_t touch_count;
++    uint32_t touch_id;
++    int32_t touch_x;
++    int32_t touch_y;
++} RfvpSwitchInput;
++
++typedef struct {
++    uint16_t year;
++    uint8_t month;
++    uint8_t day;
++    uint8_t day_of_week;
++    uint8_t hour;
++    uint8_t minute;
++} RfvpSwitchWallTime;
++
++/* The engine (platform/switch/host/src/ffi.rs). */
++extern void* rfvp_switch_start(const char* game_root);
++extern int rfvp_switch_frame(void* app, const RfvpSwitchInput* input, uint32_t* framebuffer,
++                             uint32_t stride_bytes);
++extern void rfvp_switch_audio_render(void* app, int16_t* dst, size_t frames);
++extern void rfvp_switch_stop(void* app);
++/* Pointer and exit-confirmation state for the console overlay. */
++extern void rfvp_switch_pointer(void* app, int32_t* x, int32_t* y, int32_t* visible,
++                                int32_t* dialog_open);
++
++/* The SDL video backend (platform/switch/runtime/sdl_video.c). */
++extern int galnx_sdl_video_init(void);
++extern void galnx_sdl_video_shutdown(void);
++extern int galnx_sdl_pump_events(void);
++extern int galnx_sdl_write_screen_bmp(const char* path);
++/* Console overlay: the vector pointer and the exit confirmation, drawn over the game's frame. */
++extern void galnx_sdl_set_overlay(int cursor_visible, int cursor_x, int cursor_y, int dialog_open);
++
++/* ---- Services for the engine ---------------------------------------------------------------- */
++
++void rfvp_switch_log(const char* message, size_t len) {
++    /* An emulator shows these in its log; on a console they go to the debug output. */
++    svcOutputDebugString(message, len);
++}
++
++uint64_t rfvp_switch_ticks_us(void) {
++    return armTicksToNs(armGetSystemTick()) / 1000;
++}
++
++bool rfvp_switch_wall_time(RfvpSwitchWallTime* out) {
++    time_t now = time(NULL);
++    struct tm* local = localtime(&now);
++    if (local == NULL) return false;
++    out->year = (uint16_t) (local->tm_year + 1900);
++    out->month = (uint8_t) (local->tm_mon + 1);
++    out->day = (uint8_t) local->tm_mday;
++    out->day_of_week = (uint8_t) local->tm_wday;
++    out->hour = (uint8_t) local->tm_hour;
++    out->minute = (uint8_t) local->tm_min;
++    return true;
++}
++
++typedef void (*RfvpDirVisitor)(void* ctx, const char* name, bool is_dir, uint64_t size);
++
++/* List a directory; Rust does not know newlib's dirent and stat layouts. */
++int rfvp_switch_list_dir(const char* path, RfvpDirVisitor visit, void* ctx) {
++    DIR* dir = opendir(path);
++    if (dir == NULL) return -1;
++    char child[FS_MAX_PATH];
++    struct dirent* entry;
++    while ((entry = readdir(dir)) != NULL) {
++        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) continue;
++        snprintf(child, sizeof(child), "%s/%s", path, entry->d_name);
++        struct stat st;
++        if (stat(child, &st) != 0) continue;
++        visit(ctx, entry->d_name, S_ISDIR(st.st_mode), (uint64_t) st.st_size);
++    }
++    closedir(dir);
++    return 0;
++}
++
++/* 1 for a file, 2 for a directory, 0 if nothing is there. */
++int rfvp_switch_path_kind(const char* path, uint64_t* size) {
++    struct stat st;
++    if (stat(path, &st) != 0) return 0;
++    if (size != NULL) *size = (uint64_t) st.st_size;
++    return S_ISDIR(st.st_mode) ? 2 : 1;
++}
++
++/* ---- Audio ---------------------------------------------------------------------------------- */
++
++enum {
++    /* One buffer is one page of 16-bit stereo (about 21 ms); six of them ride out stalls of
++     * over 100 ms without running dry. */
++    AudioBufferFrames = 1024,
++    AudioBufferCount = 6,
++};
++static AudioDriver audio_driver;
++static AudioDriverWaveBuf audio_wavebufs[AudioBufferCount];
++static int16_t audio_buffers[AudioBufferCount][AudioBufferFrames * 2]
++    __attribute__((aligned(0x1000)));
++static bool audio_renderer_ready;
++static bool audio_driver_ready;
++
++static void log_result(const char* what, Result rc) {
++    char message[96];
++    int len = snprintf(message, sizeof(message), "rfvp: %s failed: 0x%08x\n", what,
++                       (unsigned) rc);
++    rfvp_switch_log(message, (size_t) len);
++}
++
++static void audio_init(void) {
++    static const AudioRendererConfig config = {
++        .output_rate = AudioRendererOutputRate_48kHz,
++        .num_voices = 2,
++        .num_effects = 0,
++        .num_sinks = 1,
++        .num_mix_objs = 1,
++        .num_mix_buffers = 2,
++    };
++    Result rc = audrenInitialize(&config);
++    if (R_FAILED(rc)) { log_result("audrenInitialize", rc); return; }
++    audio_renderer_ready = true;
++    rc = audrvCreate(&audio_driver, &config, 2);
++    if (R_FAILED(rc)) { log_result("audrvCreate", rc); return; }
++    audio_driver_ready = true;
++
++    memset(audio_buffers, 0, sizeof(audio_buffers));
++    armDCacheFlush(audio_buffers, sizeof(audio_buffers));
++    int pool = audrvMemPoolAdd(&audio_driver, audio_buffers, sizeof(audio_buffers));
++    if (pool < 0 || !audrvMemPoolAttach(&audio_driver, pool)) {
++        rfvp_switch_log("rfvp: audio memory pool failed\n", 31);
++        audio_driver_ready = false;
++        return;
++    }
++    static const u8 sink_channels[] = { 0, 1 };
++    audrvDeviceSinkAdd(&audio_driver, AUDREN_DEFAULT_DEVICE_NAME, 2, sink_channels);
++    /* The pool and the sink have to be committed before a voice can use them. */
++    rc = audrvUpdate(&audio_driver);
++    if (R_FAILED(rc)) { log_result("audrvUpdate", rc); audio_driver_ready = false; return; }
++    rc = audrenStartAudioRenderer();
++    if (R_FAILED(rc)) { log_result("audrenStartAudioRenderer", rc); audio_driver_ready = false; return; }
++    if (!audrvVoiceInit(&audio_driver, 0, 2, PcmFormat_Int16, 48000)) {
++        rfvp_switch_log("rfvp: audrvVoiceInit failed\n", 28);
++        audio_driver_ready = false;
++        return;
++    }
++    audrvVoiceSetDestinationMix(&audio_driver, 0, AUDREN_FINAL_MIX_ID);
++    audrvVoiceSetMixFactor(&audio_driver, 0, 1.0f, 0, 0);
++    audrvVoiceSetMixFactor(&audio_driver, 0, 1.0f, 1, 1);
++    audrvVoiceStart(&audio_driver, 0);
++    audrvUpdate(&audio_driver);
++}
++
++/* Refill every buffer the device has finished with. */
++static void audio_pump(void* app) {
++    if (!audio_driver_ready) return;
++    for (unsigned i = 0; i < AudioBufferCount; ++i) {
++        AudioDriverWaveBuf* wavebuf = &audio_wavebufs[i];
++        if (wavebuf->state != AudioDriverWaveBufState_Free &&
++            wavebuf->state != AudioDriverWaveBufState_Done) continue;
++        rfvp_switch_audio_render(app, audio_buffers[i], AudioBufferFrames);
++        armDCacheFlush(audio_buffers[i], sizeof(audio_buffers[i]));
++        wavebuf->data_raw = audio_buffers[i];
++        wavebuf->size = sizeof(audio_buffers[i]);
++        wavebuf->start_sample_offset = 0;
++        wavebuf->end_sample_offset = AudioBufferFrames;
++        wavebuf->is_looping = false;
++        audrvVoiceAddWaveBuf(&audio_driver, 0, wavebuf);
++    }
++    audrvUpdate(&audio_driver);
++}
++
++static void audio_exit(void) {
++    if (audio_driver_ready) audrvClose(&audio_driver);
++    if (audio_renderer_ready) audrenExit();
++}
++
++/* ---- Main loop ------------------------------------------------------------------------------ */
++
++/* Optional screenshot, using the same debug.txt convention as the other ports: write
++ * shot=N and frame N of the run is saved as debug_screen.bmp. */
++static unsigned screenshot_frame(void) {
++    FILE* file = fopen("sdmc:/switch/rfvp/debug.txt", "r");
++    if (file == NULL) return UINT32_MAX;
++    char line[128];
++    unsigned frame = UINT32_MAX;
++    while (fgets(line, sizeof(line), file)) {
++        unsigned value;
++        if (sscanf(line, "shot=%u", &value) == 1) frame = value;
++    }
++    fclose(file);
++    return frame;
++}
++
++int main(void) {
++    rfvp_switch_log("rfvp: starting\n", 15);
++
++    /* SDL opens the window and creates the GLES2 renderer. */
++    if (galnx_sdl_video_init() != 0) {
++        rfvp_switch_log("rfvp: sdl video init failed\n", 28);
++        return 1;
++    }
++
++    audio_init();
++
++    padConfigureInput(1, HidNpadStyleSet_NpadStandard);
++    PadState pad;
++    padInitializeDefault(&pad);
++    hidInitializeTouchScreen();
++
++    /* Prefer the SD card when it holds a game (development); otherwise use the romfs copy
++     * embedded in an NSP build. romfsInit() failing is expected for SD-card NRO builds. */
++    const bool romfs_mounted = R_SUCCEEDED(romfsInit());
++    const char* game_root = GameRoot;
++    if (romfs_mounted && !dir_has_game_script(GameRoot) && dir_has_game_script(RomfsGameRoot)) {
++        game_root = RomfsGameRoot;
++    }
++    log_text("rfvp: game root: ");
++    log_text(game_root);
++    log_text(romfs_mounted ? " (romfs mounted)\n" : " (no romfs)\n");
++
++    void* app = rfvp_switch_start(game_root);
++    if (app == NULL) {
++        /* The reason is in sdmc:/switch/rfvp/last_error.txt. */
++        audio_exit();
++        galnx_sdl_video_shutdown();
++        return 1;
++    }
++
++    const unsigned shot = screenshot_frame();
++    unsigned frame = 0;
++    int status = 0;
++    for (;;) {
++        /* The Switch video driver ticks the applet loop here and reports a quit request. */
++        if (galnx_sdl_pump_events() != 0) break;
++
++        padUpdate(&pad);
++        RfvpSwitchInput input = { 0 };
++        input.buttons = padGetButtons(&pad);
++        HidAnalogStickState stick = padGetStickPos(&pad, 0);
++        input.stick_x = stick.x;
++        input.stick_y = stick.y;
++        HidAnalogStickState right_stick = padGetStickPos(&pad, 1);
++        input.right_stick_x = right_stick.x;
++        input.right_stick_y = right_stick.y;
++        HidTouchScreenState touch = { 0 };
++        if (hidGetTouchScreenStates(&touch, 1) && touch.count > 0) {
++            input.touch_count = (uint32_t) touch.count;
++            input.touch_id = touch.touches[0].finger_id;
++            input.touch_x = (int32_t) touch.touches[0].x;
++            input.touch_y = (int32_t) touch.touches[0].y;
++        }
++
++        /* SDL owns the display, so the engine draws and presents inside this call. */
++        status = rfvp_switch_frame(app, &input, NULL, 0);
++        {
++            int32_t pointer_x = 0, pointer_y = 0, pointer_visible = 0, dialog_open = 0;
++            rfvp_switch_pointer(app, &pointer_x, &pointer_y, &pointer_visible, &dialog_open);
++            galnx_sdl_set_overlay(pointer_visible, (int) pointer_x, (int) pointer_y,
++                                  (int) dialog_open);
++        }
++        if (frame++ == shot) galnx_sdl_write_screen_bmp(ScreenshotFile);
++        audio_pump(app);
++        if (status != 0) break;
++    }
++
++    rfvp_switch_stop(app);
++    audio_exit();
++    galnx_sdl_video_shutdown();
++    if (romfs_mounted) romfsExit();
++    return 0;
++}
+--- a/platform/switch/runtime/sdl_video.c
++++ b/platform/switch/runtime/sdl_video.c
+@@ -1,491 +1,691 @@
+-/* SDL2 (OpenGL ES2) video backend for the rfvp Switch port.
+- *
+- * The engine (Rust) renders game frames as 2D quads and solid rectangles through this shim.
+- * The previous backend was a CPU soft rasterizer that alone cost ~38 ms of a 39 ms frame;
+- * SDL2 hands the same work to the Tegra GPU.
+- *
+- * Coordinates handed in by the engine are virtual (script) coordinates; this shim scales and
+- * letterboxes them onto the 1280x720 display, mirroring the old soft rasterizer mapping.
+- */
+-
+-#include <stdarg.h>
+-#include <stdint.h>
+-#include <stdio.h>
+-#include <stdlib.h>
+-#include <string.h>
+-
+-#include <SDL.h>
+-
+-#define OUT_WIDTH 1280
+-#define OUT_HEIGHT 720
+-
+-/* Engine PixelFormat codes (crates/rfvp/src/host_api/render.rs). */
+-enum {
+-    FormatRgba8 = 0,
+-    FormatBgra8 = 1,
+-    FormatRgb8 = 2,
+-    FormatLuma8 = 3,
+-    FormatLumaA8 = 4,
+-    FormatAlpha8 = 5,
+-};
+-
+-/* Engine BlendMode codes. */
+-enum {
+-    BlendOpaque = 0,
+-    BlendAlpha = 1,
+-    BlendAdd = 2,
+-    BlendMultiply = 3,
+-    BlendScreen = 4,
+-};
+-
+-enum { MaxTextures = 4096 };
+-
+-typedef struct {
+-    int id;
+-    SDL_Texture* texture;
+-    int width;
+-    int height;
+-} TextureEntry;
+-
+-static SDL_Window* window;
+-static SDL_Renderer* renderer;
+-static TextureEntry textures[MaxTextures];
+-static int texture_count;
+-static int ready;
+-static int virtual_width = 1920;
+-static int virtual_height = 1080;
+-static float map_scale = 1.0f;
+-static float map_offset_x;
+-static float map_offset_y;
+-
+-static int format_bytes(int format) {
+-    switch (format) {
+-        case FormatRgba8:
+-        case FormatBgra8: return 4;
+-        case FormatRgb8: return 3;
+-        case FormatLuma8:
+-        case FormatAlpha8: return 1;
+-        case FormatLumaA8: return 2;
+-        default: return 4;
+-    }
+-}
+-
+-/* Convert pixels of the engine format to RGBA bytes (R, G, B, A). */
+-static void convert_to_rgba(const uint8_t* src, int format, int pixels, uint8_t* dst) {
+-    int i;
+-    switch (format) {
+-        case FormatRgba8:
+-            memcpy(dst, src, (size_t) pixels * 4);
+-            return;
+-        case FormatBgra8:
+-            for (i = 0; i < pixels; ++i) {
+-                dst[i * 4 + 0] = src[i * 4 + 2];
+-                dst[i * 4 + 1] = src[i * 4 + 1];
+-                dst[i * 4 + 2] = src[i * 4 + 0];
+-                dst[i * 4 + 3] = src[i * 4 + 3];
+-            }
+-            return;
+-        case FormatRgb8:
+-            for (i = 0; i < pixels; ++i) {
+-                dst[i * 4 + 0] = src[i * 3 + 0];
+-                dst[i * 4 + 1] = src[i * 3 + 1];
+-                dst[i * 4 + 2] = src[i * 3 + 2];
+-                dst[i * 4 + 3] = 255;
+-            }
+-            return;
+-        case FormatLuma8:
+-            for (i = 0; i < pixels; ++i) {
+-                dst[i * 4 + 0] = src[i];
+-                dst[i * 4 + 1] = src[i];
+-                dst[i * 4 + 2] = src[i];
+-                dst[i * 4 + 3] = 255;
+-            }
+-            return;
+-        case FormatLumaA8:
+-            for (i = 0; i < pixels; ++i) {
+-                dst[i * 4 + 0] = src[i * 2];
+-                dst[i * 4 + 1] = src[i * 2];
+-                dst[i * 4 + 2] = src[i * 2];
+-                dst[i * 4 + 3] = src[i * 2 + 1];
+-            }
+-            return;
+-        case FormatAlpha8:
+-            for (i = 0; i < pixels; ++i) {
+-                dst[i * 4 + 0] = 255;
+-                dst[i * 4 + 1] = 255;
+-                dst[i * 4 + 2] = 255;
+-                dst[i * 4 + 3] = src[i];
+-            }
+-            return;
+-        default:
+-            memcpy(dst, src, (size_t) pixels * 4);
+-            return;
+-    }
+-}
+-
+-static void galnx_log(const char* fmt, ...) {
+-    extern void rfvp_switch_log(const char* message, unsigned long length);
+-    char line[320];
+-    va_list ap;
+-    int len;
+-    va_start(ap, fmt);
+-    len = vsnprintf(line, sizeof(line), fmt, ap);
+-    va_end(ap);
+-    if (len > 0) rfvp_switch_log(line, (unsigned long) len);
+-}
+-
+-static TextureEntry* find_texture(unsigned id) {
+-    int i;
+-    for (i = 0; i < texture_count; ++i) {
+-        if (textures[i].id == (int) id) return &textures[i];
+-    }
+-    return NULL;
+-}
+-
+-static void update_mapping(int vw, int vh) {
+-    float sx, sy;
+-    if (vw <= 0 || vh <= 0) return;
+-    virtual_width = vw;
+-    virtual_height = vh;
+-    sx = (float) OUT_WIDTH / (float) vw;
+-    sy = (float) OUT_HEIGHT / (float) vh;
+-    map_scale = sx < sy ? sx : sy;
+-    map_offset_x = ((float) OUT_WIDTH - (float) vw * map_scale) * 0.5f;
+-    map_offset_y = ((float) OUT_HEIGHT - (float) vh * map_scale) * 0.5f;
+-}
+-
+-static void base_clip(SDL_Rect* out) {
+-    out->x = (int) (map_offset_x + 0.5f);
+-    out->y = (int) (map_offset_y + 0.5f);
+-    out->w = (int) ((float) virtual_width * map_scale + 0.5f);
+-    out->h = (int) ((float) virtual_height * map_scale + 0.5f);
+-}
+-
+-static SDL_BlendMode blend_mode(int blend) {
+-    switch (blend) {
+-        case BlendOpaque: return SDL_BLENDMODE_NONE;
+-        case BlendAdd: return SDL_BLENDMODE_ADD;
+-        case BlendMultiply:
+-            return SDL_ComposeCustomBlendMode(SDL_BLENDFACTOR_DST_COLOR, SDL_BLENDFACTOR_ZERO,
+-                                              SDL_BLENDOPERATION_ADD, SDL_BLENDFACTOR_ZERO,
+-                                              SDL_BLENDFACTOR_ONE, SDL_BLENDOPERATION_ADD);
+-        case BlendScreen:
+-            return SDL_ComposeCustomBlendMode(SDL_BLENDFACTOR_ONE,
+-                                              SDL_BLENDFACTOR_ONE_MINUS_SRC_COLOR,
+-                                              SDL_BLENDOPERATION_ADD, SDL_BLENDFACTOR_ONE,
+-                                              SDL_BLENDFACTOR_ONE_MINUS_SRC_ALPHA,
+-                                              SDL_BLENDOPERATION_ADD);
+-        case BlendAlpha:
+-        default: return SDL_BLENDMODE_BLEND;
+-    }
+-}
+-
+-static void apply_clip(int scissor_valid, int sx, int sy, int sw, int sh) {
+-    SDL_Rect clip;
+-    base_clip(&clip);
+-    if (scissor_valid) {
+-        SDL_Rect extra;
+-        int x0, y0, x1, y1;
+-        extra.x = (int) (map_offset_x + (float) sx * map_scale + 0.5f);
+-        extra.y = (int) (map_offset_y + (float) sy * map_scale + 0.5f);
+-        extra.w = (int) ((float) sw * map_scale + 0.5f);
+-        extra.h = (int) ((float) sh * map_scale + 0.5f);
+-        x0 = clip.x > extra.x ? clip.x : extra.x;
+-        y0 = clip.y > extra.y ? clip.y : extra.y;
+-        x1 = (clip.x + clip.w) < (extra.x + extra.w) ? (clip.x + clip.w) : (extra.x + extra.w);
+-        y1 = (clip.y + clip.h) < (extra.y + extra.h) ? (clip.y + clip.h) : (extra.y + extra.h);
+-        clip.x = x0;
+-        clip.y = y0;
+-        clip.w = x1 - x0;
+-        clip.h = y1 - y0;
+-        if (clip.w < 0) clip.w = 0;
+-        if (clip.h < 0) clip.h = 0;
+-    }
+-    SDL_RenderSetClipRect(renderer, &clip);
+-}
+-
+-int galnx_sdl_video_init(void) {
+-    SDL_RendererInfo info;
+-    if (ready) return 0;
+-    if (SDL_Init(SDL_INIT_VIDEO) != 0) return -1;
+-    window = SDL_CreateWindow("rfvp", 0, 0, OUT_WIDTH, OUT_HEIGHT, SDL_WINDOW_FULLSCREEN);
+-    if (window == NULL) return -2;
+-    renderer = SDL_CreateRenderer(window, 0, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+-    if (renderer == NULL) return -3;
+-    if (SDL_GetRendererInfo(renderer, &info) == 0 && info.name != NULL) {
+-        galnx_log("rfvp: sdl video renderer: %s", info.name);
+-    }
+-    ready = 1;
+-    return 0;
+-}
+-
+-void galnx_sdl_video_shutdown(void) {
+-    int i;
+-    if (!ready) return;
+-    for (i = 0; i < texture_count; ++i) {
+-        if (textures[i].texture != NULL) SDL_DestroyTexture(textures[i].texture);
+-    }
+-    texture_count = 0;
+-    if (renderer != NULL) SDL_DestroyRenderer(renderer);
+-    if (window != NULL) SDL_DestroyWindow(window);
+-    renderer = NULL;
+-    window = NULL;
+-    SDL_Quit();
+-    ready = 0;
+-}
+-
+-int galnx_sdl_texture_create(unsigned id, int width, int height, int format,
+-                             const unsigned char* pixels, long length) {
+-    TextureEntry* entry;
+-    SDL_Texture* texture;
+-    uint8_t* rgba = NULL;
+-    int bpp = format_bytes(format);
+-    if (!ready || width <= 0 || height <= 0) return -1;
+-    entry = find_texture(id);
+-    if (entry == NULL && texture_count >= MaxTextures) return -2;
+-    texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING,
+-                                width, height);
+-    if (texture == NULL) return -4;
+-    SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
+-    rgba = (uint8_t*) calloc((size_t) width * height, 4);
+-    if (rgba == NULL) {
+-        SDL_DestroyTexture(texture);
+-        return -5;
+-    }
+-    if (pixels != NULL && length >= (long) width * height * bpp) {
+-        convert_to_rgba(pixels, format, width * height, rgba);
+-    }
+-    SDL_UpdateTexture(texture, NULL, rgba, width * 4);
+-    free(rgba);
+-    if (entry == NULL) {
+-        entry = &textures[texture_count++];
+-    } else {
+-        SDL_DestroyTexture(entry->texture);
+-    }
+-    entry->id = (int) id;
+-    entry->texture = texture;
+-    entry->width = width;
+-    entry->height = height;
+-    return 0;
+-}
+-
+-int galnx_sdl_texture_update(unsigned id, int x, int y, int width, int height, int format,
+-                             const unsigned char* pixels, long length) {
+-    TextureEntry* entry = find_texture(id);
+-    SDL_Rect rect;
+-    uint8_t* rgba;
+-    int bpp = format_bytes(format);
+-    if (entry == NULL || pixels == NULL || width <= 0 || height <= 0) return -1;
+-    if (length < (long) width * height * bpp) return -2;
+-    rect.x = x;
+-    rect.y = y;
+-    rect.w = width;
+-    rect.h = height;
+-    if (format == FormatRgba8) {
+-        SDL_UpdateTexture(entry->texture, &rect, pixels, width * 4);
+-        return 0;
+-    }
+-    rgba = (uint8_t*) malloc((size_t) width * height * 4);
+-    if (rgba == NULL) return -3;
+-    convert_to_rgba(pixels, format, width * height, rgba);
+-    SDL_UpdateTexture(entry->texture, &rect, rgba, width * 4);
+-    free(rgba);
+-    return 0;
+-}
+-
+-void galnx_sdl_texture_destroy(unsigned id) {
+-    int i;
+-    for (i = 0; i < texture_count; ++i) {
+-        if (textures[i].id == (int) id) {
+-            SDL_DestroyTexture(textures[i].texture);
+-            textures[i] = textures[texture_count - 1];
+-            texture_count--;
+-            return;
+-        }
+-    }
+-}
+-
+-int galnx_sdl_begin(int vw, int vh, int clear_enabled, unsigned clear_rgba) {
+-    SDL_Rect clip;
+-    if (!ready) return -1;
+-    update_mapping(vw, vh);
+-    SDL_RenderSetClipRect(renderer, NULL);
+-    if (clear_enabled) {
+-        SDL_SetRenderDrawColor(renderer, (uint8_t) (clear_rgba & 0xff),
+-                               (uint8_t) ((clear_rgba >> 8) & 0xff),
+-                               (uint8_t) ((clear_rgba >> 16) & 0xff),
+-                               (uint8_t) ((clear_rgba >> 24) & 0xff));
+-        SDL_RenderClear(renderer);
+-    }
+-    base_clip(&clip);
+-    SDL_RenderSetClipRect(renderer, &clip);
+-    return 0;
+-}
+-
+-int galnx_sdl_draw_quad(unsigned id, const float* xy, const float* uv, const unsigned* colors,
+-                        int blend, int filter, int scissor_valid, int sx, int sy, int sw,
+-                        int sh) {
+-    TextureEntry* entry = find_texture(id);
+-    SDL_Vertex vertices[4];
+-    int indices[6];
+-    int i;
+-    if (!ready) return -1;
+-    if (entry == NULL) return -1;
+-    if (xy == NULL || uv == NULL || colors == NULL) return -1;
+-    apply_clip(scissor_valid, sx, sy, sw, sh);
+-    SDL_SetTextureScaleMode(entry->texture,
+-                            filter == 0 ? SDL_ScaleModeNearest : SDL_ScaleModeLinear);
+-    SDL_SetTextureBlendMode(entry->texture, blend_mode(blend));
+-    for (i = 0; i < 4; ++i) {
+-        unsigned c = colors[i];
+-        vertices[i].position.x = map_offset_x + xy[i * 2 + 0] * map_scale;
+-        vertices[i].position.y = map_offset_y + xy[i * 2 + 1] * map_scale;
+-        vertices[i].tex_coord.x = uv[i * 2 + 0];
+-        vertices[i].tex_coord.y = uv[i * 2 + 1];
+-        vertices[i].color.r = (uint8_t) (c & 0xff);
+-        vertices[i].color.g = (uint8_t) ((c >> 8) & 0xff);
+-        vertices[i].color.b = (uint8_t) ((c >> 16) & 0xff);
+-        vertices[i].color.a = (uint8_t) ((c >> 24) & 0xff);
+-    }
+-    indices[0] = 0;
+-    indices[1] = 1;
+-    indices[2] = 2;
+-    indices[3] = 2;
+-    indices[4] = 1;
+-    indices[5] = 3;
+-    SDL_RenderGeometry(renderer, entry->texture, vertices, 4, indices, 6);
+-    return 0;
+-}
+-
+-int galnx_sdl_draw_solid(int x, int y, int width, int height, unsigned rgba, int blend,
+-                         int scissor_valid, int sx, int sy, int sw, int sh) {
+-    SDL_Rect rect;
+-    if (!ready) return -1;
+-    apply_clip(scissor_valid, sx, sy, sw, sh);
+-    rect.x = (int) (map_offset_x + (float) x * map_scale + 0.5f);
+-    rect.y = (int) (map_offset_y + (float) y * map_scale + 0.5f);
+-    rect.w = (int) ((float) width * map_scale + 0.5f);
+-    rect.h = (int) ((float) height * map_scale + 0.5f);
+-    SDL_SetRenderDrawBlendMode(renderer, blend_mode(blend));
+-    SDL_SetRenderDrawColor(renderer, (uint8_t) (rgba & 0xff), (uint8_t) ((rgba >> 8) & 0xff),
+-                           (uint8_t) ((rgba >> 16) & 0xff), (uint8_t) ((rgba >> 24) & 0xff));
+-    SDL_RenderFillRect(renderer, &rect);
+-    return 0;
+-}
+-
+-void galnx_sdl_present(void) {
+-    if (!ready) return;
+-    SDL_RenderSetClipRect(renderer, NULL);
+-    SDL_RenderPresent(renderer);
+-}
+-
+-/* Copy the render target (the frame last presented: the renderer swaps buffers, so the new back
+- * buffer holds the previous frame) into out as RGBA, box-filtered to width x height. */
+-/* Pump SDL's events (the Switch video driver ticks the applet loop from here) and report
+- * whether the user asked to leave. */
+-int galnx_sdl_pump_events(void) {
+-    SDL_Event event;
+-    if (!ready) return 0;
+-    while (SDL_PollEvent(&event)) {
+-        if (event.type == SDL_QUIT) return 1;
+-    }
+-    return 0;
+-}
+-
+-int galnx_sdl_read_pixels_scaled(int width, int height, unsigned char* out) {
+-    unsigned char* full;
+-    uint32_t* buffer;
+-    int x, y;
+-    if (!ready || out == NULL || width <= 0 || height <= 0) return -1;
+-    full = (unsigned char*) malloc((size_t) OUT_WIDTH * OUT_HEIGHT * 4);
+-    if (full == NULL) return -2;
+-    if (SDL_RenderReadPixels(renderer, NULL, SDL_PIXELFORMAT_ABGR8888, full,
+-                             OUT_WIDTH * 4) != 0) {
+-        free(full);
+-        return -3;
+-    }
+-    buffer = (uint32_t*) full;
+-    for (y = 0; y < height; ++y) {
+-        int sy0 = (int) ((long) y * OUT_HEIGHT / height);
+-        int sy1 = (int) ((long) (y + 1) * OUT_HEIGHT / height);
+-        if (sy1 <= sy0) sy1 = sy0 + 1;
+-        for (x = 0; x < width; ++x) {
+-            int sx0 = (int) ((long) x * OUT_WIDTH / width);
+-            int sx1 = (int) ((long) (x + 1) * OUT_WIDTH / width);
+-            unsigned rs = 0, gs = 0, bs = 0, as = 0, n = 0;
+-            int px, py;
+-            if (sx1 <= sx0) sx1 = sx0 + 1;
+-            for (py = sy0; py < sy1; ++py) {
+-                for (px = sx0; px < sx1; ++px) {
+-                    uint32_t value = buffer[py * OUT_WIDTH + px];
+-                    rs += value & 0xff;
+-                    gs += (value >> 8) & 0xff;
+-                    bs += (value >> 16) & 0xff;
+-                    as += (value >> 24) & 0xff;
+-                    n++;
+-                }
+-            }
+-            if (n == 0) n = 1;
+-            out[(y * width + x) * 4 + 0] = (unsigned char) (rs / n);
+-            out[(y * width + x) * 4 + 1] = (unsigned char) (gs / n);
+-            out[(y * width + x) * 4 + 2] = (unsigned char) (bs / n);
+-            out[(y * width + x) * 4 + 3] = (unsigned char) (as / n);
+-        }
+-    }
+-    free(full);
+-    return 0;
+-}
+-
+-int galnx_sdl_write_screen_bmp(const char* path) {
+-    unsigned char* pixels;
+-    FILE* file;
+-    uint8_t header[54];
+-    int y;
+-    if (!ready || path == NULL) return -1;
+-    pixels = (unsigned char*) malloc((size_t) OUT_WIDTH * OUT_HEIGHT * 4);
+-    if (pixels == NULL) return -2;
+-    if (SDL_RenderReadPixels(renderer, NULL, SDL_PIXELFORMAT_ABGR8888, pixels,
+-                             OUT_WIDTH * 4) != 0) {
+-        free(pixels);
+-        return -3;
+-    }
+-    file = fopen(path, "wb");
+-    if (file == NULL) {
+-        free(pixels);
+-        return -4;
+-    }
+-    memset(header, 0, sizeof(header));
+-    header[0] = 'B';
+-    header[1] = 'M';
+-    {
+-        uint32_t size = 54u + (uint32_t) OUT_WIDTH * (uint32_t) OUT_HEIGHT * 4u;
+-        header[2] = (uint8_t) (size & 0xff);
+-        header[3] = (uint8_t) ((size >> 8) & 0xff);
+-        header[4] = (uint8_t) ((size >> 16) & 0xff);
+-        header[5] = (uint8_t) ((size >> 24) & 0xff);
+-    }
+-    header[10] = 54;
+-    header[14] = 40;
+-    header[18] = (uint8_t) (OUT_WIDTH & 0xff);
+-    header[19] = (uint8_t) ((OUT_WIDTH >> 8) & 0xff);
+-    header[22] = (uint8_t) (OUT_HEIGHT & 0xff);
+-    header[23] = (uint8_t) ((OUT_HEIGHT >> 8) & 0xff);
+-    header[26] = 1;
+-    header[28] = 32;
+-    fwrite(header, 1, sizeof(header), file);
+-    for (y = OUT_HEIGHT - 1; y >= 0; --y) {
+-        const unsigned char* row = pixels + (size_t) y * OUT_WIDTH * 4;
+-        int x;
+-        for (x = 0; x < OUT_WIDTH; ++x) {
+-            unsigned char bgr[4];
+-            bgr[0] = row[x * 4 + 2];
+-            bgr[1] = row[x * 4 + 1];
+-            bgr[2] = row[x * 4 + 0];
+-            bgr[3] = 255;
+-            fwrite(bgr, 1, 4, file);
+-        }
+-    }
+-    fclose(file);
+-    free(pixels);
+-    return 0;
+-}
++/* SDL2 (OpenGL ES2) video backend for the rfvp Switch port.
++ *
++ * The engine (Rust) renders game frames as 2D quads and solid rectangles through this shim.
++ * The previous backend was a CPU soft rasterizer that alone cost ~38 ms of a 39 ms frame;
++ * SDL2 hands the same work to the Tegra GPU.
++ *
++ * Coordinates handed in by the engine are virtual (script) coordinates; this shim scales and
++ * letterboxes them onto the 1280x720 display, mirroring the old soft rasterizer mapping.
++ */
++
++#include <stdarg.h>
++#include <stdint.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++
++#include <SDL.h>
++
++#define OUT_WIDTH 1280
++#define OUT_HEIGHT 720
++
++/* Engine PixelFormat codes (crates/rfvp/src/host_api/render.rs). */
++enum {
++    FormatRgba8 = 0,
++    FormatBgra8 = 1,
++    FormatRgb8 = 2,
++    FormatLuma8 = 3,
++    FormatLumaA8 = 4,
++    FormatAlpha8 = 5,
++};
++
++/* Engine BlendMode codes. */
++enum {
++    BlendOpaque = 0,
++    BlendAlpha = 1,
++    BlendAdd = 2,
++    BlendMultiply = 3,
++    BlendScreen = 4,
++};
++
++enum { MaxTextures = 4096 };
++
++typedef struct {
++    int id;
++    SDL_Texture* texture;
++    int width;
++    int height;
++} TextureEntry;
++
++static SDL_Window* window;
++static SDL_Renderer* renderer;
++static TextureEntry textures[MaxTextures];
++static int texture_count;
++static int ready;
++static int virtual_width = 1920;
++static int virtual_height = 1080;
++static float map_scale = 1.0f;
++static float map_offset_x;
++static float map_offset_y;
++
++static int format_bytes(int format) {
++    switch (format) {
++        case FormatRgba8:
++        case FormatBgra8: return 4;
++        case FormatRgb8: return 3;
++        case FormatLuma8:
++        case FormatAlpha8: return 1;
++        case FormatLumaA8: return 2;
++        default: return 4;
++    }
++}
++
++/* Convert pixels of the engine format to RGBA bytes (R, G, B, A). */
++static void convert_to_rgba(const uint8_t* src, int format, int pixels, uint8_t* dst) {
++    int i;
++    switch (format) {
++        case FormatRgba8:
++            memcpy(dst, src, (size_t) pixels * 4);
++            return;
++        case FormatBgra8:
++            for (i = 0; i < pixels; ++i) {
++                dst[i * 4 + 0] = src[i * 4 + 2];
++                dst[i * 4 + 1] = src[i * 4 + 1];
++                dst[i * 4 + 2] = src[i * 4 + 0];
++                dst[i * 4 + 3] = src[i * 4 + 3];
++            }
++            return;
++        case FormatRgb8:
++            for (i = 0; i < pixels; ++i) {
++                dst[i * 4 + 0] = src[i * 3 + 0];
++                dst[i * 4 + 1] = src[i * 3 + 1];
++                dst[i * 4 + 2] = src[i * 3 + 2];
++                dst[i * 4 + 3] = 255;
++            }
++            return;
++        case FormatLuma8:
++            for (i = 0; i < pixels; ++i) {
++                dst[i * 4 + 0] = src[i];
++                dst[i * 4 + 1] = src[i];
++                dst[i * 4 + 2] = src[i];
++                dst[i * 4 + 3] = 255;
++            }
++            return;
++        case FormatLumaA8:
++            for (i = 0; i < pixels; ++i) {
++                dst[i * 4 + 0] = src[i * 2];
++                dst[i * 4 + 1] = src[i * 2];
++                dst[i * 4 + 2] = src[i * 2];
++                dst[i * 4 + 3] = src[i * 2 + 1];
++            }
++            return;
++        case FormatAlpha8:
++            for (i = 0; i < pixels; ++i) {
++                dst[i * 4 + 0] = 255;
++                dst[i * 4 + 1] = 255;
++                dst[i * 4 + 2] = 255;
++                dst[i * 4 + 3] = src[i];
++            }
++            return;
++        default:
++            memcpy(dst, src, (size_t) pixels * 4);
++            return;
++    }
++}
++
++static void galnx_log(const char* fmt, ...) {
++    extern void rfvp_switch_log(const char* message, unsigned long length);
++    char line[320];
++    va_list ap;
++    int len;
++    va_start(ap, fmt);
++    len = vsnprintf(line, sizeof(line), fmt, ap);
++    va_end(ap);
++    if (len > 0) rfvp_switch_log(line, (unsigned long) len);
++}
++
++static TextureEntry* find_texture(unsigned id) {
++    int i;
++    for (i = 0; i < texture_count; ++i) {
++        if (textures[i].id == (int) id) return &textures[i];
++    }
++    return NULL;
++}
++
++static void update_mapping(int vw, int vh) {
++    float sx, sy;
++    if (vw <= 0 || vh <= 0) return;
++    virtual_width = vw;
++    virtual_height = vh;
++    sx = (float) OUT_WIDTH / (float) vw;
++    sy = (float) OUT_HEIGHT / (float) vh;
++    map_scale = sx < sy ? sx : sy;
++    map_offset_x = ((float) OUT_WIDTH - (float) vw * map_scale) * 0.5f;
++    map_offset_y = ((float) OUT_HEIGHT - (float) vh * map_scale) * 0.5f;
++}
++
++static void base_clip(SDL_Rect* out) {
++    out->x = (int) (map_offset_x + 0.5f);
++    out->y = (int) (map_offset_y + 0.5f);
++    out->w = (int) ((float) virtual_width * map_scale + 0.5f);
++    out->h = (int) ((float) virtual_height * map_scale + 0.5f);
++}
++
++static SDL_BlendMode blend_mode(int blend) {
++    switch (blend) {
++        case BlendOpaque: return SDL_BLENDMODE_NONE;
++        case BlendAdd: return SDL_BLENDMODE_ADD;
++        case BlendMultiply:
++            return SDL_ComposeCustomBlendMode(SDL_BLENDFACTOR_DST_COLOR, SDL_BLENDFACTOR_ZERO,
++                                              SDL_BLENDOPERATION_ADD, SDL_BLENDFACTOR_ZERO,
++                                              SDL_BLENDFACTOR_ONE, SDL_BLENDOPERATION_ADD);
++        case BlendScreen:
++            return SDL_ComposeCustomBlendMode(SDL_BLENDFACTOR_ONE,
++                                              SDL_BLENDFACTOR_ONE_MINUS_SRC_COLOR,
++                                              SDL_BLENDOPERATION_ADD, SDL_BLENDFACTOR_ONE,
++                                              SDL_BLENDFACTOR_ONE_MINUS_SRC_ALPHA,
++                                              SDL_BLENDOPERATION_ADD);
++        case BlendAlpha:
++        default: return SDL_BLENDMODE_BLEND;
++    }
++}
++
++static void apply_clip(int scissor_valid, int sx, int sy, int sw, int sh) {
++    SDL_Rect clip;
++    base_clip(&clip);
++    if (scissor_valid) {
++        SDL_Rect extra;
++        int x0, y0, x1, y1;
++        extra.x = (int) (map_offset_x + (float) sx * map_scale + 0.5f);
++        extra.y = (int) (map_offset_y + (float) sy * map_scale + 0.5f);
++        extra.w = (int) ((float) sw * map_scale + 0.5f);
++        extra.h = (int) ((float) sh * map_scale + 0.5f);
++        x0 = clip.x > extra.x ? clip.x : extra.x;
++        y0 = clip.y > extra.y ? clip.y : extra.y;
++        x1 = (clip.x + clip.w) < (extra.x + extra.w) ? (clip.x + clip.w) : (extra.x + extra.w);
++        y1 = (clip.y + clip.h) < (extra.y + extra.h) ? (clip.y + clip.h) : (extra.y + extra.h);
++        clip.x = x0;
++        clip.y = y0;
++        clip.w = x1 - x0;
++        clip.h = y1 - y0;
++        if (clip.w < 0) clip.w = 0;
++        if (clip.h < 0) clip.h = 0;
++    }
++    SDL_RenderSetClipRect(renderer, &clip);
++}
++
++int galnx_sdl_video_init(void) {
++    SDL_RendererInfo info;
++    if (ready) return 0;
++    if (SDL_Init(SDL_INIT_VIDEO) != 0) return -1;
++    window = SDL_CreateWindow("rfvp", 0, 0, OUT_WIDTH, OUT_HEIGHT, SDL_WINDOW_FULLSCREEN);
++    if (window == NULL) return -2;
++    renderer = SDL_CreateRenderer(window, 0, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
++    if (renderer == NULL) return -3;
++    if (SDL_GetRendererInfo(renderer, &info) == 0 && info.name != NULL) {
++        galnx_log("rfvp: sdl video renderer: %s", info.name);
++    }
++    ready = 1;
++    return 0;
++}
++
++void galnx_sdl_video_shutdown(void) {
++    int i;
++    if (!ready) return;
++    for (i = 0; i < texture_count; ++i) {
++        if (textures[i].texture != NULL) SDL_DestroyTexture(textures[i].texture);
++    }
++    texture_count = 0;
++    if (renderer != NULL) SDL_DestroyRenderer(renderer);
++    if (window != NULL) SDL_DestroyWindow(window);
++    renderer = NULL;
++    window = NULL;
++    SDL_Quit();
++    ready = 0;
++}
++
++/* Scratch buffer for format conversion; grown on demand so steady-state frames do not malloc. */
++static uint8_t* scratch;
++static size_t scratch_bytes;
++
++static uint8_t* scratch_reserve(size_t bytes) {
++    uint8_t* grown;
++    if (bytes <= scratch_bytes) return scratch;
++    grown = (uint8_t*) realloc(scratch, bytes);
++    if (grown == NULL) return NULL;
++    scratch = grown;
++    scratch_bytes = bytes;
++    return scratch;
++}
++
++int galnx_sdl_texture_create(unsigned id, int width, int height, int format,
++                             const unsigned char* pixels, long length) {
++    TextureEntry* entry;
++    SDL_Texture* texture;
++    int reused = 0;
++    int bpp = format_bytes(format);
++    if (!ready || width <= 0 || height <= 0) return -1;
++    if (pixels != NULL && length < (long) width * height * bpp) pixels = NULL;
++    entry = find_texture(id);
++    if (entry == NULL && texture_count >= MaxTextures) return -2;
++    /* The engine recreates a graph texture every time its content changes, with the same id and
++     * size. Reusing the SDL texture keeps the GL object alive instead of a destroy/create pair
++     * per upload, which is the hot path while text and animations redraw. */
++    if (entry != NULL && entry->texture != NULL && entry->width == width &&
++        entry->height == height) {
++        texture = entry->texture;
++        reused = 1;
++    } else {
++        texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ABGR8888,
++                                    SDL_TEXTUREACCESS_STREAMING, width, height);
++        if (texture == NULL) return -4;
++        SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
++        SDL_SetTextureScaleMode(texture, SDL_ScaleModeLinear);
++    }
++    if (pixels != NULL && format == FormatRgba8) {
++        if (SDL_UpdateTexture(texture, NULL, pixels, width * 4) != 0) {
++            if (!reused) SDL_DestroyTexture(texture);
++            return -6;
++        }
++    } else {
++        uint8_t* rgba = scratch_reserve((size_t) width * height * 4);
++        if (rgba == NULL) {
++            if (!reused) SDL_DestroyTexture(texture);
++            return -5;
++        }
++        if (pixels != NULL) {
++            convert_to_rgba(pixels, format, width * height, rgba);
++        } else {
++            /* No content yet: a fresh texture must start transparent, as the old code did. */
++            memset(rgba, 0, (size_t) width * height * 4);
++        }
++        if (SDL_UpdateTexture(texture, NULL, rgba, width * 4) != 0) {
++            if (!reused) SDL_DestroyTexture(texture);
++            return -6;
++        }
++    }
++    if (entry == NULL) {
++        entry = &textures[texture_count++];
++    } else if (entry->texture != texture) {
++        SDL_DestroyTexture(entry->texture);
++    }
++    entry->id = (int) id;
++    entry->texture = texture;
++    entry->width = width;
++    entry->height = height;
++    return 0;
++}
++
++int galnx_sdl_texture_update(unsigned id, int x, int y, int width, int height, int format,
++                             const unsigned char* pixels, long length) {
++    TextureEntry* entry = find_texture(id);
++    SDL_Rect rect;
++    int bpp = format_bytes(format);
++    if (entry == NULL || pixels == NULL || width <= 0 || height <= 0) return -1;
++    if (length < (long) width * height * bpp) return -2;
++    rect.x = x;
++    rect.y = y;
++    rect.w = width;
++    rect.h = height;
++    if (format == FormatRgba8) {
++        SDL_UpdateTexture(entry->texture, &rect, pixels, width * 4);
++        return 0;
++    }
++    {
++        uint8_t* rgba = scratch_reserve((size_t) width * height * 4);
++        if (rgba == NULL) return -3;
++        convert_to_rgba(pixels, format, width * height, rgba);
++        SDL_UpdateTexture(entry->texture, &rect, rgba, width * 4);
++    }
++    return 0;
++}
++
++void galnx_sdl_texture_destroy(unsigned id) {
++    int i;
++    for (i = 0; i < texture_count; ++i) {
++        if (textures[i].id == (int) id) {
++            SDL_DestroyTexture(textures[i].texture);
++            textures[i] = textures[texture_count - 1];
++            texture_count--;
++            return;
++        }
++    }
++}
++
++int galnx_sdl_begin(int vw, int vh, int clear_enabled, unsigned clear_rgba) {
++    SDL_Rect clip;
++    if (!ready) return -1;
++    update_mapping(vw, vh);
++    SDL_RenderSetClipRect(renderer, NULL);
++    if (clear_enabled) {
++        SDL_SetRenderDrawColor(renderer, (uint8_t) (clear_rgba & 0xff),
++                               (uint8_t) ((clear_rgba >> 8) & 0xff),
++                               (uint8_t) ((clear_rgba >> 16) & 0xff),
++                               (uint8_t) ((clear_rgba >> 24) & 0xff));
++        SDL_RenderClear(renderer);
++    }
++    base_clip(&clip);
++    SDL_RenderSetClipRect(renderer, &clip);
++    return 0;
++}
++
++int galnx_sdl_draw_quad(unsigned id, const float* xy, const float* uv, const unsigned* colors,
++                        int blend, int filter, int scissor_valid, int sx, int sy, int sw,
++                        int sh) {
++    TextureEntry* entry = find_texture(id);
++    SDL_Vertex vertices[4];
++    int indices[6];
++    int i;
++    if (!ready) return -1;
++    if (entry == NULL) return -1;
++    if (xy == NULL || uv == NULL || colors == NULL) return -1;
++    apply_clip(scissor_valid, sx, sy, sw, sh);
++    SDL_SetTextureScaleMode(entry->texture,
++                            filter == 0 ? SDL_ScaleModeNearest : SDL_ScaleModeLinear);
++    SDL_SetTextureBlendMode(entry->texture, blend_mode(blend));
++    for (i = 0; i < 4; ++i) {
++        unsigned c = colors[i];
++        vertices[i].position.x = map_offset_x + xy[i * 2 + 0] * map_scale;
++        vertices[i].position.y = map_offset_y + xy[i * 2 + 1] * map_scale;
++        vertices[i].tex_coord.x = uv[i * 2 + 0];
++        vertices[i].tex_coord.y = uv[i * 2 + 1];
++        vertices[i].color.r = (uint8_t) (c & 0xff);
++        vertices[i].color.g = (uint8_t) ((c >> 8) & 0xff);
++        vertices[i].color.b = (uint8_t) ((c >> 16) & 0xff);
++        vertices[i].color.a = (uint8_t) ((c >> 24) & 0xff);
++    }
++    indices[0] = 0;
++    indices[1] = 1;
++    indices[2] = 2;
++    indices[3] = 2;
++    indices[4] = 1;
++    indices[5] = 3;
++    SDL_RenderGeometry(renderer, entry->texture, vertices, 4, indices, 6);
++    return 0;
++}
++
++int galnx_sdl_draw_solid(int x, int y, int width, int height, unsigned rgba, int blend,
++                         int scissor_valid, int sx, int sy, int sw, int sh) {
++    SDL_Rect rect;
++    if (!ready) return -1;
++    apply_clip(scissor_valid, sx, sy, sw, sh);
++    rect.x = (int) (map_offset_x + (float) x * map_scale + 0.5f);
++    rect.y = (int) (map_offset_y + (float) y * map_scale + 0.5f);
++    rect.w = (int) ((float) width * map_scale + 0.5f);
++    rect.h = (int) ((float) height * map_scale + 0.5f);
++    SDL_SetRenderDrawBlendMode(renderer, blend_mode(blend));
++    SDL_SetRenderDrawColor(renderer, (uint8_t) (rgba & 0xff), (uint8_t) ((rgba >> 8) & 0xff),
++                           (uint8_t) ((rgba >> 16) & 0xff), (uint8_t) ((rgba >> 24) & 0xff));
++    SDL_RenderFillRect(renderer, &rect);
++    return 0;
++}
++
++
++/* ---- Console overlay -------------------------------------------------------------------------
++ * The GLES2 path has no vector cursor of its own (the engine only parks the OS pointer, and a
++ * console has none), and the game's exit UI is only reachable from some screens. So the console
++ * draws both: a small pointer so the player can see where the right stick is aiming, and its own
++ * confirmation so Minus can always leave the game. Everything here is drawn in game coordinates
++ * and mapped like the engine's own quads. */
++
++static int overlay_cursor_visible;
++static int overlay_cursor_x = 640;
++static int overlay_cursor_y = 360;
++static int overlay_dialog_open;
++
++void galnx_sdl_set_overlay(int cursor_visible, int x, int y, int dialog) {
++    overlay_cursor_visible = cursor_visible;
++    overlay_cursor_x = x;
++    overlay_cursor_y = y;
++    overlay_dialog_open = dialog;
++}
++
++static void overlay_fill(float x, float y, float w, float h, unsigned rgba) {
++    SDL_Vertex v[4];
++    int idx[6] = { 0, 1, 2, 2, 1, 3 };
++    float sx = map_offset_x + x * map_scale;
++    float sy = map_offset_y + y * map_scale;
++    float sw = w * map_scale;
++    float sh = h * map_scale;
++    SDL_Color c;
++    int i;
++    if (!ready) return;
++    c.r = (uint8_t) (rgba & 0xff);
++    c.g = (uint8_t) ((rgba >> 8) & 0xff);
++    c.b = (uint8_t) ((rgba >> 16) & 0xff);
++    c.a = (uint8_t) ((rgba >> 24) & 0xff);
++    for (i = 0; i < 4; ++i) {
++        v[i].position.x = sx + ((i == 1 || i == 3) ? sw : 0.0f);
++        v[i].position.y = sy + ((i >= 2) ? sh : 0.0f);
++        v[i].tex_coord.x = 0.0f;
++        v[i].tex_coord.y = 0.0f;
++        v[i].color = c;
++    }
++    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
++    SDL_RenderGeometry(renderer, NULL, v, 4, idx, 6);
++}
++
++/* The pointer is already in window pixels (the same space as the engine's in_screen pointer
++ * events), so this one is deliberately not mapped. */
++static void overlay_diamond(float cx, float cy, float r, unsigned rgba) {
++    SDL_Vertex v[4];
++    int idx[6] = { 0, 1, 2, 2, 1, 3 };
++    static const float dx[4] = { 0.0f, 1.0f, -1.0f, 0.0f };
++    static const float dy[4] = { -1.0f, 0.0f, 0.0f, 1.0f };
++    SDL_Color c;
++    int i;
++    if (!ready) return;
++    c.r = (uint8_t) (rgba & 0xff);
++    c.g = (uint8_t) ((rgba >> 8) & 0xff);
++    c.b = (uint8_t) ((rgba >> 16) & 0xff);
++    c.a = (uint8_t) ((rgba >> 24) & 0xff);
++    for (i = 0; i < 4; ++i) {
++        v[i].position.x = cx + dx[i] * r;
++        v[i].position.y = cy + dy[i] * r;
++        v[i].tex_coord.x = 0.0f;
++        v[i].tex_coord.y = 0.0f;
++        v[i].color = c;
++    }
++    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
++    SDL_RenderGeometry(renderer, NULL, v, 4, idx, 6);
++}
++
++/* 5x7 glyphs for the few letters the overlay needs, one byte per row, bit 4 = leftmost. */
++typedef struct {
++    char ch;
++    uint8_t rows[7];
++} OverlayGlyph;
++
++static const OverlayGlyph overlay_font[] = {
++    { 'A', { 0x0e, 0x11, 0x11, 0x1f, 0x11, 0x11, 0x11 } },
++    { 'B', { 0x1e, 0x11, 0x11, 0x1e, 0x11, 0x11, 0x1e } },
++    { 'E', { 0x1f, 0x10, 0x10, 0x1e, 0x10, 0x10, 0x1f } },
++    { 'G', { 0x0e, 0x11, 0x10, 0x17, 0x11, 0x11, 0x0f } },
++    { 'I', { 0x1f, 0x04, 0x04, 0x04, 0x04, 0x04, 0x1f } },
++    { 'M', { 0x11, 0x1b, 0x15, 0x15, 0x11, 0x11, 0x11 } },
++    { 'N', { 0x11, 0x19, 0x15, 0x13, 0x11, 0x11, 0x11 } },
++    { 'O', { 0x0e, 0x11, 0x11, 0x11, 0x11, 0x11, 0x0e } },
++    { 'Q', { 0x0e, 0x11, 0x11, 0x11, 0x15, 0x12, 0x0d } },
++    { 'S', { 0x0f, 0x10, 0x10, 0x0e, 0x01, 0x01, 0x1e } },
++    { 'T', { 0x1f, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04 } },
++    { 'U', { 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x0e } },
++    { 'Y', { 0x11, 0x11, 0x0a, 0x04, 0x04, 0x04, 0x04 } },
++    { '?', { 0x0e, 0x11, 0x01, 0x02, 0x04, 0x00, 0x04 } },
++    { '=', { 0x00, 0x00, 0x1f, 0x00, 0x1f, 0x00, 0x00 } },
++};
++
++static void overlay_text(const char* text, float x, float y, float scale, unsigned rgba) {
++    size_t n = strlen(text);
++    size_t i;
++    for (i = 0; i < n; ++i) {
++        char ch = text[i];
++        const OverlayGlyph* glyph = NULL;
++        size_t g;
++        if (ch == ' ') {
++            x += 6.0f * scale;
++            continue;
++        }
++        for (g = 0; g < sizeof(overlay_font) / sizeof(overlay_font[0]); ++g) {
++            if (overlay_font[g].ch == ch) {
++                glyph = &overlay_font[g];
++                break;
++            }
++        }
++        if (glyph != NULL) {
++            int row, col;
++            for (row = 0; row < 7; ++row) {
++                for (col = 0; col < 5; ++col) {
++                    if ((glyph->rows[row] >> (4 - col)) & 1) {
++                        overlay_fill(x + (float) col * scale, y + (float) row * scale, scale,
++                                     scale, rgba);
++                    }
++                }
++            }
++        }
++        x += 6.0f * scale;
++    }
++}
++
++static float overlay_text_width(const char* text, float scale) {
++    return (float) strlen(text) * 6.0f * scale;
++}
++
++static void overlay_draw(void) {
++    if (!ready) return;
++    SDL_RenderSetClipRect(renderer, NULL);
++
++    if (overlay_dialog_open) {
++        /* The 800x280 panel is in engine virtual coordinates, centred on the virtual frame. */
++        const float pw = 800.0f;
++        const float ph = 280.0f;
++        const float px = ((float) virtual_width - pw) * 0.5f;
++        const float py = ((float) virtual_height - ph) * 0.5f;
++        const char* title = "QUIT GAME?";
++        const char* hint = "A = YES    B = NO";
++        overlay_fill(px - 6.0f, py - 6.0f, pw + 12.0f, ph + 12.0f, 0xff8a5f3a);
++        overlay_fill(px, py, pw, ph, 0xd8261a12);
++        overlay_text(title, px + (pw - overlay_text_width(title, 8.0f)) * 0.5f, py + 56.0f, 8.0f,
++                     0xffffffff);
++        overlay_text(hint, px + (pw - overlay_text_width(hint, 5.0f)) * 0.5f, py + 176.0f, 5.0f,
++                     0xffffd89f);
++    }
++
++    if (overlay_cursor_visible) {
++        /* Pointer events carry 1280x720 screen coordinates; the overlay draws in window pixels. */
++        const float kx = (float) virtual_width / 1280.0f;
++        const float ky = (float) virtual_height / 720.0f;
++        const float cx = map_offset_x + (float) overlay_cursor_x * kx * map_scale;
++        const float cy = map_offset_y + (float) overlay_cursor_y * ky * map_scale;
++        const float r = 9.0f * map_scale;
++        overlay_diamond(cx, cy, r, 0xc0000000);
++        overlay_diamond(cx, cy, r * 0.72f, 0xffffffff);
++    }
++}
++
++void galnx_sdl_present(void) {
++    if (!ready) return;
++    overlay_draw();
++    SDL_RenderSetClipRect(renderer, NULL);
++    SDL_RenderPresent(renderer);
++}
++
++/* Copy the render target (the frame last presented: the renderer swaps buffers, so the new back
++ * buffer holds the previous frame) into out as RGBA, box-filtered to width x height. */
++/* Pump SDL's events (the Switch video driver ticks the applet loop from here) and report
++ * whether the user asked to leave. */
++int galnx_sdl_pump_events(void) {
++    SDL_Event event;
++    if (!ready) return 0;
++    while (SDL_PollEvent(&event)) {
++        if (event.type == SDL_QUIT) return 1;
++    }
++    return 0;
++}
++
++int galnx_sdl_read_pixels_scaled(int width, int height, unsigned char* out) {
++    unsigned char* full;
++    uint32_t* buffer;
++    int x, y;
++    if (!ready || out == NULL || width <= 0 || height <= 0) return -1;
++    full = (unsigned char*) malloc((size_t) OUT_WIDTH * OUT_HEIGHT * 4);
++    if (full == NULL) return -2;
++    if (SDL_RenderReadPixels(renderer, NULL, SDL_PIXELFORMAT_ABGR8888, full,
++                             OUT_WIDTH * 4) != 0) {
++        free(full);
++        return -3;
++    }
++    buffer = (uint32_t*) full;
++    for (y = 0; y < height; ++y) {
++        int sy0 = (int) ((long) y * OUT_HEIGHT / height);
++        int sy1 = (int) ((long) (y + 1) * OUT_HEIGHT / height);
++        if (sy1 <= sy0) sy1 = sy0 + 1;
++        for (x = 0; x < width; ++x) {
++            int sx0 = (int) ((long) x * OUT_WIDTH / width);
++            int sx1 = (int) ((long) (x + 1) * OUT_WIDTH / width);
++            unsigned rs = 0, gs = 0, bs = 0, as = 0, n = 0;
++            int px, py;
++            if (sx1 <= sx0) sx1 = sx0 + 1;
++            for (py = sy0; py < sy1; ++py) {
++                for (px = sx0; px < sx1; ++px) {
++                    uint32_t value = buffer[py * OUT_WIDTH + px];
++                    rs += value & 0xff;
++                    gs += (value >> 8) & 0xff;
++                    bs += (value >> 16) & 0xff;
++                    as += (value >> 24) & 0xff;
++                    n++;
++                }
++            }
++            if (n == 0) n = 1;
++            out[(y * width + x) * 4 + 0] = (unsigned char) (rs / n);
++            out[(y * width + x) * 4 + 1] = (unsigned char) (gs / n);
++            out[(y * width + x) * 4 + 2] = (unsigned char) (bs / n);
++            out[(y * width + x) * 4 + 3] = (unsigned char) (as / n);
++        }
++    }
++    free(full);
++    return 0;
++}
++
++int galnx_sdl_write_screen_bmp(const char* path) {
++    unsigned char* pixels;
++    FILE* file;
++    uint8_t header[54];
++    int y;
++    if (!ready || path == NULL) return -1;
++    pixels = (unsigned char*) malloc((size_t) OUT_WIDTH * OUT_HEIGHT * 4);
++    if (pixels == NULL) return -2;
++    if (SDL_RenderReadPixels(renderer, NULL, SDL_PIXELFORMAT_ABGR8888, pixels,
++                             OUT_WIDTH * 4) != 0) {
++        free(pixels);
++        return -3;
++    }
++    file = fopen(path, "wb");
++    if (file == NULL) {
++        free(pixels);
++        return -4;
++    }
++    memset(header, 0, sizeof(header));
++    header[0] = 'B';
++    header[1] = 'M';
++    {
++        uint32_t size = 54u + (uint32_t) OUT_WIDTH * (uint32_t) OUT_HEIGHT * 4u;
++        header[2] = (uint8_t) (size & 0xff);
++        header[3] = (uint8_t) ((size >> 8) & 0xff);
++        header[4] = (uint8_t) ((size >> 16) & 0xff);
++        header[5] = (uint8_t) ((size >> 24) & 0xff);
++    }
++    header[10] = 54;
++    header[14] = 40;
++    header[18] = (uint8_t) (OUT_WIDTH & 0xff);
++    header[19] = (uint8_t) ((OUT_WIDTH >> 8) & 0xff);
++    header[22] = (uint8_t) (OUT_HEIGHT & 0xff);
++    header[23] = (uint8_t) ((OUT_HEIGHT >> 8) & 0xff);
++    header[26] = 1;
++    header[28] = 32;
++    fwrite(header, 1, sizeof(header), file);
++    for (y = OUT_HEIGHT - 1; y >= 0; --y) {
++        const unsigned char* row = pixels + (size_t) y * OUT_WIDTH * 4;
++        int x;
++        for (x = 0; x < OUT_WIDTH; ++x) {
++            unsigned char bgr[4];
++            bgr[0] = row[x * 4 + 2];
++            bgr[1] = row[x * 4 + 1];
++            bgr[2] = row[x * 4 + 0];
++            bgr[3] = 255;
++            fwrite(bgr, 1, 4, file);
++        }
++    }
++    fclose(file);
++    free(pixels);
++    return 0;
++}

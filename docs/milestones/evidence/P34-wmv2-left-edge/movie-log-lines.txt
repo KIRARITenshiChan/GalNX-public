@@ -1,0 +1,2 @@
+[   9.026652] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp [info] debug movie: modal flag (true)
+[   9.165228] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp [info] debug movie: started movie/01.wmv

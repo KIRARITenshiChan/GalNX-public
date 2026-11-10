@@ -1,0 +1,35 @@
+# P3g evidence — controller-driven save/load + A4 self-contained NSP (2026-10-30)
+
+- A4 NSP: E:/galnx-build/pilot-01/p3/out/Kirikiroid2-NX-A4-010047410000A000.nsp, 2,906,135,768 B, sha256 2003ec1eb1ccd78d4e74ff10965376a7248c00962262e7582258d8545fb03c39 (version 1.0.3, TitleID 010047410000A000)
+- A4 PROVENANCE: 14,013 B sha256 c82930ae263cb8bbd3cac4365155c4bcc521c75908e0a1253efd99980e62a978
+- A4 verify: galnx package nsp verify -> 19 checks / 18 ok / 1 warn (verify.signature = unsigned homebrew expected)
+- Patch D: 2,406 B sha256 11f501939e16397f15d435eda7a55365ed2fe7f1eca6a217295f552430da1dc7
+- Patch E: 20,233 B sha256 4ae7eda96aa425dfa359aa1e9849dd906d3aade370f1ce615a68118aeb16e85c
+- Engine ELF: 113,891,072 B sha256 7461bbe0b21ca0d2df926b4fe9c694430d8165951cbe68ec9bfdc805da5fd58c; NRO: 42,363,510 B sha256 a84f6be0b817e22062d26df7cf4745bd38bd6341c0ef0ee88dff5b0eb0e9615c
+- Runs: NRO S27b workspaces/citron-harness/runs/20261030-124145-kirikiroid2; A4 NSP workspaces/citron-harness/runs/20261030-125742-Kirikiroid2-NX-A4-010047410000A000
+- savedata (Citron sdmc): savedata010.bmp 45,941 B + system.bmp 989 B, mtime 2026-10-30 12:23 (slot 01 01 = NowPage*10 + DataNum)
+- keyset: only referenced by path/size/sha256, no key material in evidence (scan: header_key/key_area_key 0 hits)
+
+| file | bytes | sha256 |
+| --- | --- | --- |
+| `P3g-a4-00-title.png` | 2378073 | `24329c83ac386ef1e03b34d70eaeeb24f2980c892b328b50f32635cba561b271` |
+| `P3g-a4-01-loadui.png` | 1598522 | `9dfd84f35ab70bea66e151d30344852fcbe6cde6a83e0c74316717f8559952b9` |
+| `P3g-a4-02-cursor.png` | 1607684 | `2573dba7ad4234e69891c9d5364d09d1637f02ab433c08dfe24c9f926d7d01fc` |
+| `P3g-a4-03-afterclick.png` | 1168837 | `1c32d8346f79281dbf5a6455f8ae0743b65d8a22a73a24a779c0fc7b45669872` |
+| `P3g-a4-04-loaded.png` | 934676 | `d2f5540c7a943df658c0c72ee9fea7a076352b29c19b6ab681dd3c50b29a34af` |
+| `P3g-a4-05-adv1.png` | 908664 | `e3e33e5946870ddcdead7a6890eef0ed113b6f18eb387b2a8086495fe052915b` |
+| `P3g-a4-06-saveui.png` | 1217030 | `c8b40f9f869b6316e5a35cfeefae4209148b7d9367eba3cabe444dadaf507bef` |
+| `P3g-a4-glog.txt` | 5222 | `cd185f744900c651a152d347047d49d6549a192f15f6f302ac38eff5153b6764` |
+| `P3g-a4-k2s_log.txt` | 8700 | `4086bd2545678166010edcfca1fbc22ffdb6de3766f8aecd6d9310af1d0237d2` |
+| `P3g-a4-savedata.txt` | 298 | `8dfae4c6df97725391fea6f763eea77cf774b3907869d883d6e067939689479e` |
+| `P3g-s27b-00-title.png` | 1100785 | `a25eaf77be7bc747ddeaca7bff5f2bbca1b29eddf9844eddfb8454cf5e926c62` |
+| `P3g-s27b-01-loadui.png` | 1276484 | `bc61558c6b93013ef5406a7b36644233a9c899712dbd51a6dd6490d6b3330ad6` |
+| `P3g-s27b-02-cursor.png` | 1285126 | `576cff3f6ce70395f77bdd3c874d452a3d4421d6ae5772d580013ebfccb3ca27` |
+| `P3g-s27b-03-afterclick.png` | 1169002 | `c9588a2d4036755b16075a6edacad37510e78e07450bc053344e811ee8248d2f` |
+| `P3g-s27b-04-loaded.png` | 934366 | `dbb367f63c43af5ccb23ff05f840cfc1676a91f87ea1c89985437955c313331d` |
+| `P3g-s27b-05-adv1.png` | 908430 | `6d1098ae474b55244db661fce92928a4986f6b29e710c9a9832396beed666888` |
+| `P3g-s27b-06-adv2.png` | 919261 | `0a5766f09164fbcfb70e381a1f68ce0319f93544f72c9be9658a3a305a07dcef` |
+| `P3g-s27b-07-saveui.png` | 1219758 | `91559c621ced4819ed75c042d31fd14a3b131df686aa0a9fe70646f7a59ccd93` |
+| `P3g-s27b-glog.txt` | 5435 | `91314f38a6d29a29ebec418289e4bbe52d8341f134327f52a24fa594df3b80e0` |
+| `P3g-s27b-k2s_log.txt` | 7358 | `a80910784616e7c0a41943efc6530e4dc166454813cbdd2540c0e814a0585cf3` |
+| `P3g-s27b-savedata.txt` | 298 | `8dfae4c6df97725391fea6f763eea77cf774b3907869d883d6e067939689479e` |

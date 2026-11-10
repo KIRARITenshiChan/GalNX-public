@@ -1,0 +1,15 @@
+# P2 acceptance evidence sha256 manifest (generated 2026-10-29T23:54:30Z)
+# fields: sha256  bytes  file
+6603d6f934289c2398d2ec6a7367284f68abd3c5cac5290042e64a0e952f70db  P2c-run3-adv1.png  P2c-run3-adv1.png
+2a5cdbf4aa2bdef7e23218638e7e1110153c8dd9464bf6d0a08fb90edb5455ef  P2c-run3-harness-run.log  P2c-run3-harness-run.log
+a9ed5113bb527842ec6ea9d79f401a0aa40882ae392bee5f7aa3a7b0b2b73c90  P2c-run3-input-steps.tsv  P2c-run3-input-steps.tsv
+2d3ca872b99976c451bf34941d1f75eac00a6bf452180ed3a9524e9180c2696a  P2c-run3-k2s_boot.txt  P2c-run3-k2s_boot.txt
+17612172f6206da5295275446fdc2227e3a1c85fa5557101471d8278fa8910ba  P2c-run3-k2s_log.txt  P2c-run3-k2s_log.txt
+aa4fa8aab256f73c6d73111a62305f7078bd9c1eca3cd9d9128d0a51abef9543  P2c-run3-keymap.xml  P2c-run3-keymap.xml
+08e6648d0b35e3740174b356231642475dc845aabbabe3c9450cbb0c262d2633  P2c-run3-result.json  P2c-run3-result.json
+243de31c4e92b1e9c2bf5efbc645b30cf86c96b76c8ca0355572f4467a9455e7  P2c-run3-started.png  P2c-run3-started.png
+06f4d1b8ab134399666a871ba304ecd3609fe22bc818dfbc0c01ef7fce83aac3  P2c-run3-title.png  P2c-run3-title.png
+f6bb60db7ecfd141170a56f3017771a5beb5ad670340bc68378a99436875f9a2  P2c-run3-window-final.png  P2c-run3-window-final.png
+b097234b0fa48e1c1a0e4da90a05e310838225b1a746721d65c5a541ad0a4472  P2d-secondboot-k2s_log.txt  P2d-secondboot-k2s_log.txt
+fd535f894af1859c6b62eb74ff80e18fb65ae4a86b478e289854f7fb943117d0  P2d-secondboot-result.json  P2d-secondboot-result.json
+06f4d1b8ab134399666a871ba304ecd3609fe22bc818dfbc0c01ef7fce83aac3  P2d-secondboot-title.png  P2d-secondboot-title.png

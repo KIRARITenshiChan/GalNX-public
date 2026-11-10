@@ -1,0 +1,1 @@
+driver=1 thread=1 alive=1 cpu=2 cap=147456 ring=147456 min_water=89088 underrun=0 max_underrun_ms=0 starve_ms=0 produced=11939840 consumed=11792384 stalls=3 stall_ms=1200

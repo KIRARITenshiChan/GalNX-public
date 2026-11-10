@@ -1,0 +1,34 @@
+# P14 perf3 vs perf4 slow-frame comparison (Citron, rfvp IROSEKA_FHD)
+
+## Builds
+- perf3: CPU prev-frame readback (pre-P14). NRO sha256 1f6735cc2caca92c8b4a128bb0b029759e78e1491a8fad1095be3591a88c003b
+- perf4: GPU prev-frame double target + debug screenshot disabled + vertex batching. NRO sha256 e5373bd76f2beda3583711dea0eded5f00b10f542778bf73522e2fe2c97a2484
+
+## Slow-frame statistics (counted from 'rfvp: frame N slow ...' lines)
+| metric | perf3 | perf4 |
+|---|---|---|
+| slow-frame lines | 154 | 19 |
+| slow frames after startup (frame > 7) | 151 | 15 |
+| frames >= 30 ms | 150 | 13 |
+| frames >= 50 ms | 136 | 5 |
+| total slow ms (all) | 12133.7 | 3567.8 |
+| total slow ms (frame > 7) | 9221.4 | 639.9 |
+| frames with thumb readback > 5 ms | 145 | 4 |
+| frames with thumb readback >= 20 ms | 142 | 0 |
+
+## Transition spike (logo / fade-in, the reported stutter)
+- perf3 frame 81: slow 84.5 ms, host thumb 66.49 ms / 1 call, render 84.28 ms
+- perf3 frame 82: slow 59.1 ms, host thumb 47.30 ms / 1 call
+- perf3 frame 83: slow 59.2 ms, host thumb 47.66 ms / 1 call
+- perf4: frames 81-85 absent from slow log entirely; no slow frame has thumb >= 20 ms
+
+## Periodic diagnostic readback (debug_screen.bmp every 300 frames)
+- perf3 frame 8401/8701/9001: slow 53.8/49.9/49.7 ms, render only 0.47-0.64 ms, host thumb 41.20/39.16/38.15 ms / 1 call
+- perf4 frame 6751/7365/9261: slow 29.2/30.7/35.6 ms, entirely end_frame/present 27.9-34.3 ms, thumb 0.00/0 calls (VSync wait, also present in perf3 - not a regression)
+
+## Remaining spikes in perf4 (not fixed by this change)
+- frame 1: 1744.4 ms startup (vfs_read 675.52, host begin 97.47, upload 8.64)
+- frame 4: 818.6 ms (graph_decode 521.47, upload 79.34 / 17 textures)
+- frame 2: 333.2 ms (save_finalize 32.43, save thumbnail thumb 11.43 / 1 call)
+- frame 226: 155.1 ms (audio_cmds 150.31 - Citron audio environment)
+- frame 5819: 70.9 ms; frame 6151: 42.5 ms (thumb 10.82 save thumbnail)

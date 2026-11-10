@@ -1,0 +1,59 @@
+# P2e 证据清单：A2 自包含 NSP 独立复跑（audit-engines，2026-10-30）
+
+- 复跑者：audit-engines（独立于 Lead 的 run 目录与驱动脚本）
+- 被验收物：`Kirikiroid2-NX-010047410000b0b4.nsp` 2,906,125,016 B sha256 `eb6c6a15151c2a5936c6549eebb26ca25a059744f0136cb5b8cce773fd9c705f`
+- run 目录：R1 `Workspace/GalNX/workspaces/citron-harness/runs/20261030-075524-Kirikiroid2-NX-010047410000b0b4/`；R2 `.../20261030-075931-Kirikiroid2-NX-010047410000b0b4/`
+- 原始备份（含未入仓的 Citron 日志）：`E:/galnx-build/pilot-01/review/a2-indep/`
+- 记录文档：`docs/pilot/P2-acceptance.md` §7 附录、`docs/pilot/P1-engine-k2nx.md` §2.13.11
+- 生成时间：2026-10-30（本地，UTC+8）；sha256 均为本文件生成时对仓内副本重新计算
+
+## 1. 文件与哈希（22 个）
+
+| 文件 | 字节 | sha256 |
+| --- | --- | --- |
+| `P2e-crop-started-diff.png` | 14995 | `829cc0ecd37b50a5bd0b55b966eddf63b1a9a104047ce609e8b47f783511e3d7` |
+| `P2e-r1-adv1.png` | 924381 | `7d0e94360a47da94ca4bb8ff2ec9191c144dfb2556d88cad34030f7f53d60982` |
+| `P2e-r1-autostart.txt` | 26 | `75b6df8004ab7c2831d6d6de844e124f173a8d10c2e2a58130c0cfda4377d966` |
+| `P2e-r1-driver.sh` | 1934 | `e849f32be0fa7ddce81013d6ea46e899da8b778d6e560b912b0e4cb57b8f960f` |
+| `P2e-r1-input-steps.tsv` | 887 | `f54f7a47559856366a7d125e08e8c200bef08ec6fe6b7069ca089c562a52737a` |
+| `P2e-r1-k2s_log.txt` | 7994 | `dde7eba65b6f6a12f8e1933fa6b6963dcbded925e9430d8f3bef4e76be9359ce` |
+| `P2e-r1-keymap-Kirikiroid2Preference.xml` | 1293 | `aa4fa8aab256f73c6d73111a62305f7078bd9c1eca3cd9d9128d0a51abef9543` |
+| `P2e-r1-marker.txt` | 11 | `5109bb58005e64755f4f5806247de5a07e0e4f3a8b7c178395bb829156d10c3a` |
+| `P2e-r1-prewipe.txt` | 153 | `c7a8e96aed09b70773cb425b62e2e2aa76642cbc11e351e617365e9f2d10111d` |
+| `P2e-r1-result.json` | 3937 | `bd149a3aacc82eab3e71583713757225a8c0f5b8a46b1ca986d193344b6af7d4` |
+| `P2e-r1-run.log` | 1905 | `7b578054cc36176f8ea54e4ffa0f743e5e853e9838b29e2933324ef09b391993` |
+| `P2e-r1-sd-after.txt` | 523 | `9890e0037ca53625ca150a4e1ce42394681a7815637737bed7b6dc74034b65f9` |
+| `P2e-r1-started.png` | 882695 | `d10f50b009efc1f971d107229bf344231939d1bb4950f8c33d986e2872358901` |
+| `P2e-r1-title.png` | 2377811 | `5b001042eb61d3fae25585b25758fc94e4ee39e4c19362fe5dcbbad3ceb53252` |
+| `P2e-r2-driver.sh` | 1520 | `5744363897f2aaae65bc9221943277a3bc9c26f47a618ea119a3f913025b5c1d` |
+| `P2e-r2-input-steps.tsv` | 262 | `bcbdab2a536bfb24404046adc207fde9575b4779d7212d602ee6a9be754643aa` |
+| `P2e-r2-k2s_log.txt` | 7143 | `5ec17d1d3e6f595bc6d5d94aeb6f38dcbd5c2385f99cc8ba3f07adfccdbf1257` |
+| `P2e-r2-poststate.txt` | 476 | `b32a239a7455c0a2d57136bc389eed1a084d20d60891bb7abc323da106d5ecaa` |
+| `P2e-r2-prestate.txt` | 213 | `8eb96d438f4f56ffd1ef3591a3ed833cf1d92c23b14f4461fc43191b4664ffd9` |
+| `P2e-r2-result.json` | 2611 | `66c0aa04dc0393880029fa7064e11bab32206f86e0e60d05814a1bcccf0f7ee9` |
+| `P2e-r2-run.log` | 1905 | `8172bffd4c280605ccb50e5dd102d44350b99e05a48510b6cf5c30110724b849` |
+| `P2e-r2-title.png` | 2377784 | `884786a6ef6aa33a626fb52bc24d98c30289ef6bc35c1a154657e9b726c83994` |
+
+## 2. 与 Lead 证据的对照（关键值）
+
+| 对象 | 本轮（audit-engines） | Lead（run3 / 二启） | 判断 |
+| --- | --- | --- | --- |
+| R1 解包后 SD 总量 | 23 文件 / 2,870,635,309 B | 2,870,635,309 B | 字节级一致 |
+| R1 k2s_log | 133 行，`dde7eba6…`（7,994 B） | 133 行，`17612172…`（7,995 B） | 行数/行文一致，仅时间戳与一处 (5ms)/(4ms) 差 |
+| R2 k2s_log | 116 行，`5ec17d1d…`（7,143 B） | 116 行，`b097234b…`（7,143 B） | 行数/行文一致，仅时间戳差 |
+| R1 title PNG | `5b001042…`（2,377,811 B） | `06f4d1b8…`（2,377,792 B） | 像素 MAD 0.0043 / changed 0.0059% → 渲染一致 |
+| R1 started PNG | `d10f50b0…`（882,695 B） | `243de31c…`（884,524 B） | 像素 MAD 0.0200 / changed 0.0489% → 渲染一致 |
+| R1 adv1 PNG | `7d0e9436…`（924,381 B） | `6603d6f9…`（924,034 B） | 像素 MAD 0.0139 / changed 0.0390% → 渲染一致 |
+| R2 title PNG | `884786a6…`（2,377,784 B） | `06f4d1b8…`（2,377,792 B） | 像素 MAD 0.0046 / changed 0.0063% → 渲染一致 |
+| marker | pilot01-r2（`5109bb58…`，11 B） | pilot01-r2 | 一致 |
+| autostart | `/kirikiri/haruno/data.xp3`（`75b6df80…`，26 B） | 同 | 一致 |
+| keymap XML | 1,293 B `aa4fa8aa…`（R2 后不变） | 同 | 一致（随 NSP payload 分发，引擎不覆写） |
+| R1 起跑前 k2s 旧内容 | `b097234b…`（7,143 B） | 二启 k2s 快照 `b097234b…` | 相同 → 起跑 SD 状态与 Lead 验收后同源 |
+
+结论：渲染/状态层面与 Lead 证据一致；截图 sha256 跨进程不可逐字节复现（差异源=右下角游戏 UI 图标动画帧 + Citron OSD `Frame: 16.66/16.67 ms` 数字），故验收判据为像素级（MAD≤0.02、变化像素≤0.05%）。
+
+## 3. 判据说明
+
+- 像素差计算：python3 + Pillow + numpy，整幅 1728x1016 client 截图，逐像素 RGB 最大通道差；MAD=平均绝对差/255；changed=差值>8 的像素占比。
+- 裁剪对照图 `P2e-crop-started-diff.png`：R1 started / Lead started / 差值图三联（区域 1380,890–1640,1010）。
+- 解包耗时以 SD 文件 mtime 窗口计（首末文件写入时间差），非墙钟。

@@ -1,0 +1,72 @@
+# GalNX P42 pilot manifest - rfvp AKASEKA HD (iroseka FD) self-contained NSP.
+#
+# Game: 映入红瞳的世界 HD (AKASEKA_HD), FAVORITE, Chinese-patched release.
+# Engine: rfvp (Rust FVP reimplementation) + GalNX Switch backend, same stack as
+# pilot02 (IROSEKA FHD) and pilot03 (Sakura).
+#
+# Pipeline (P42):
+#   bash scripts/build_nsp_game.sh --elf <rfvp-switch ELF> --game-dir /e/galnx-build/p42/game \
+#       --title-id 010047420000d000 --name "AKASEKA HD" --author GalNX --version 1.4.0-test \
+#       --icon examples/pilot04/icon-256.jpg --keyset <prod.keys> --romfs-mode hardlink --out <nsp>
+#
+# Content notes:
+#   * The Chinese patch ships a pre-built .akaseka.hcb (GBK text) plus a patched
+#     graph/ folder; both are copied verbatim into the staging root, so no bytecode
+#     surgery is needed for this title.
+#   * The original OP movie/01.wmv is VC-1 1920x1080; it was transcoded to 720p60
+#     H.264 + Vorbis OGG (movie/01_h264.mp4, movie/01.ogg) for the Switch movie
+#     pipeline (docs/builds/046-rfvp-movie-h264.md).
+#   * movie/ (the unused 01.wmv in the misspelt movei/ directory) is not shipped.
+#   * saev/ is the PC save directory and is intentionally excluded.
+schema_version: 1
+
+game:
+  id: pilot04-akaseka
+  title: 映入红瞳的世界 HD
+  publisher: FAVORITE
+  version: "1.4.0-test"
+  source_dir: E:/Othergames/Galgame/AKASEKA_HD
+  notes: >-
+    Pilot game P4 (rfvp / Rust FVP). Chinese scenario comes from the X'moe patch's
+    own .akaseka.hcb (GBK); rendering uses SDL2 + GLES2 on Switch.
+
+engine:
+  adapter: rfvp
+  adapter_version: "0.7.0 (9f07ade) + GalNX Switch backend"
+  profile: switch
+  entry: .akaseka.hcb
+  descriptor: engines/rfvp.yaml
+  options:
+    config: config.toml
+    nls: gbk
+
+switch:
+  title_id: "010047420000D000"
+  title: AKASEKA HD
+  author: GalNX
+  icon: pilot04/icon-256.jpg
+  target: nsp
+  display_mode: handheld
+  save_policy: per-title-isolated
+
+input:
+  default_mode: controller
+  toggle_combo: "L+R+PLUS"
+  profile: generic-vn
+
+build:
+  output_dir: E:/galnx-build/p42
+  reproducible: true
+  clean_workspace_before_build: false
+  keys_env: GALNX_PROD_KEYS
+  romfs_mode: embedded
+
+package:
+  type: self_contained_nsp
+  startup_user_account: 1
+  romfs_dir: E:/galnx-build/p42/nspwork/romfs
+  icon: pilot04/icon-256.jpg
+  notes: >-
+    RomFS assembled by scripts/build_nsp_game.sh (hardlink staging, 6.2 GB); the
+    game root becomes romfs:/game at runtime when the SD copy is absent. Saves are
+    written to sdmc:/switch/rfvp/saves, independent of the game root.

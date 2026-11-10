@@ -1,0 +1,44 @@
+[INFO] [save] SaveCreate(3) value=Int(901)
+[INFO] [save] state total=399110B motion=387557B audio=329B globals=2143B vm=9080B
+[INFO] [diag t=656397637981us] [save] prepare header_ms=1.01 encode_ms=24.37 len=489531
+[INFO] [diag t=656397644655us] [save] commit slot=901 len=489531 write_ms=5.94 ok=true
+[INFO] [save] SaveCreate(3) value=Int(906)
+[INFO] [save] state total=401063B motion=389424B audio=353B globals=2160B vm=9125B
+[INFO] [diag t=656408105566us] [save] prepare header_ms=0.03 encode_ms=11.28 len=491484
+[INFO] [diag t=656408108734us] [save] commit slot=906 len=491484 write_ms=3.04 ok=true
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] state total=10269622B motion=10250941B audio=578B globals=8936B vm=9166B
+[INFO] [diag t=656463976547us] [save] prepare header_ms=1.78 encode_ms=107.67 len=10360061
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] state total=10269628B motion=10250944B audio=578B globals=8935B vm=9170B
+[INFO] [diag t=656464112365us] [save] prepare header_ms=0.06 encode_ms=107.20 len=10360067
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] state total=10228522B motion=10209633B audio=578B globals=9145B vm=9165B
+[INFO] [diag t=656470431261us] [save] prepare header_ms=0.67 encode_ms=101.38 len=10319031
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] state total=10228530B motion=10209636B audio=578B globals=9145B vm=9170B
+[INFO] [diag t=656470557396us] [save] prepare header_ms=0.11 encode_ms=103.23 len=10319039
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] state total=10228448B motion=10209602B audio=578B globals=9106B vm=9161B
+[INFO] [diag t=656475942791us] [save] prepare header_ms=0.10 encode_ms=99.47 len=10318945
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] state total=10228455B motion=10209604B audio=578B globals=9106B vm=9166B
+[INFO] [diag t=656476061900us] [save] prepare header_ms=0.13 encode_ms=99.17 len=10318952
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] state total=10228264B motion=10209505B audio=578B globals=9014B vm=9166B
+[INFO] [diag t=656484874482us] [save] prepare header_ms=0.09 encode_ms=104.43 len=10318729
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] state total=10228270B motion=10209508B audio=578B globals=9013B vm=9170B
+[INFO] [diag t=656484994390us] [save] prepare header_ms=0.09 encode_ms=100.18 len=10318735
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] state total=10228673B motion=10209717B audio=578B globals=9216B vm=9161B
+[INFO] [diag t=656490968323us] [save] prepare header_ms=0.13 encode_ms=101.44 len=10319206
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] state total=10228680B motion=10209719B audio=578B globals=9216B vm=9166B
+[INFO] [diag t=656491089260us] [save] prepare header_ms=0.11 encode_ms=102.38 len=10319213
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] state total=10228391B motion=10209576B audio=578B globals=9074B vm=9162B
+[INFO] [diag t=656496862632us] [save] prepare header_ms=0.09 encode_ms=103.09 len=10318876
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] state total=10228395B motion=10209577B audio=578B globals=9073B vm=9166B
+[INFO] [diag t=656496984935us] [save] prepare header_ms=0.08 encode_ms=102.87 len=10318880

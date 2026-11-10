@@ -1,0 +1,70 @@
+Kirikiroid2-Switch log (build Oct 18 2026 23:24:50)
+applicationDidFinishLaunching
+GL_VERSION: OpenGL ES 3.2 Mesa 20.1.0-rc3
+GL ext: VAO=yes mapbuffer=yes
+05:45:18 (info) Trying to read XP3 virtual file system information from : file://./kirikiri/haruno/data.xp3
+05:45:18 (info) Done. (contains 37 file(s), 37 segment(s))
+05:46:38 (info) Data path : file://./kirikiri/haruno/savedata/
+05:46:39 Program started on Linux (Linux)
+05:46:39 (info) Rebuilding Auto Path Table ...
+05:46:39 (info) Total 0 file(s) found, 0 file(s) activated. (9ms)
+05:46:39 (info) Loading csvParser.tpm
+05:46:39 (info) Loading extrans.tpm
+05:46:39 (info) Loading fstat.tpm
+05:46:39 (info) Loading layerExImage.tpm
+05:46:39 (info) Loading windowEx.tpm
+05:46:39 (info) Loading wumsadp.tpm
+05:46:39 (info) Loading wuvorbis.tpm
+05:46:39 (info) Total physical memory : 2907701248
+05:46:39 (info) Specified option(s) (earlier item has more priority) : (none)
+[K2S] NEON blend routines: on
+[K2S] OpenCV threads: 1
+[K2S] CPU boost: on (rc=0x0)
+05:46:39 (info) Trying to read XP3 virtual file system information from : file://./kirikiri/haruno/data.xp3
+05:46:39 (info) Done. (contains 37 file(s), 37 segment(s))
+05:46:39 (info) Loading startup script : file://./kirikiri/haruno/data.xp3>startup.tjs
+05:46:39 haruno.cf
+05:46:39 (info) Rebuilding Auto Path Table ...
+05:46:39 (info) Total 80 file(s) found, 80 file(s) activated. (64ms)
+05:46:39 (info) Rebuilding Auto Path Table ...
+05:46:39 (info) Total 80 file(s) found, 80 file(s) activated. (187ms)
+05:46:39 (info) Rebuilding Auto Path Table ...
+05:46:40 (info) Trying to read XP3 virtual file system information from : file://./kirikiri/haruno/scenario.xp3
+05:46:40 (info) Done. (contains 237 file(s), 237 segment(s))
+05:46:40 (info) Trying to read XP3 virtual file system information from : file://./kirikiri/haruno/image01.xp3
+05:46:40 (info) Done. (contains 221 file(s), 221 segment(s))
+05:46:40 (info) Trying to read XP3 virtual file system information from : file://./kirikiri/haruno/image02.xp3
+05:46:40 (info) Done. (contains 703 file(s), 703 segment(s))
+05:46:40 (info) Trying to read XP3 virtual file system information from : file://./kirikiri/haruno/image02_2.xp3
+05:46:40 (info) Done. (contains 124 file(s), 124 segment(s))
+05:46:40 (info) Trying to read XP3 virtual file system information from : file://./kirikiri/haruno/image03.xp3
+05:46:40 (info) Done. (contains 123 file(s), 123 segment(s))
+05:46:40 (info) Trying to read XP3 virtual file system information from : file://./kirikiri/haruno/image04.xp3
+05:46:40 (info) Done. (contains 1755 file(s), 1755 segment(s))
+05:46:40 (info) Total 3243 file(s) found, 3238 file(s) activated. (270ms)
+05:46:40 (info) Rebuilding Auto Path Table ...
+05:46:40 (info) Trying to read XP3 virtual file system information from : file://./kirikiri/haruno/media.xp3
+05:46:40 (info) Done. (contains 222 file(s), 624 segment(s))
+05:46:40 (info) Trying to read XP3 virtual file system information from : file://./kirikiri/haruno/movie.xp3
+05:46:40 (info) Done. (contains 3 file(s), 3 segment(s))
+05:46:40 (info) Trying to read XP3 virtual file system information from : file://./kirikiri/haruno/voice01.xp3
+05:46:40 (info) Done. (contains 382 file(s), 1142 segment(s))
+05:46:40 (info) Trying to read XP3 virtual file system information from : file://./kirikiri/haruno/voice02.xp3
+05:46:40 (info) Done. (contains 14027 file(s), 42049 segment(s))
+05:46:40 (info) Trying to read XP3 virtual file system information from : file://./kirikiri/haruno/voice02_2.xp3
+05:46:40 (info) Done. (contains 1113 file(s), 3335 segment(s))
+05:46:40 (info) Trying to read XP3 virtual file system information from : file://./kirikiri/haruno/image00.xp3
+05:46:40 (info) Done. (contains 141 file(s), 141 segment(s))
+05:46:40 (info) Trying to read XP3 virtual file system information from : file://./kirikiri/haruno/image06.xp3
+05:46:40 (info) Done. (contains 51 file(s), 51 segment(s))
+05:46:40 (info) Total 19182 file(s) found, 19170 file(s) activated. (411ms)
+05:46:40 (info) Use malloc for Bitmap
+05:46:40 Detected CPU core(s): 3
+05:46:40 ==== An exception occured at mainwindow.tjs(990)[(function) SetExEvent], VM ip = 15 ====
+05:46:40 -- Disassembled VM code --
+05:46:40 #(990) 		this.registerExEvent();
+05:46:40 00000015 calld %0, %-1.*2()	// *2 = (string)"registerExEvent"
+05:46:40 -- Register dump --
+05:46:40 %-2=(object)(object 0x1082f03010:0)  %-1=(object)(object 0x210e247c20:0x210e247c20)
+05:46:40 %0=(void)  %1=(object)(object 0x210e247c20:0x210e247c20)
+05:46:40 ----------------------------------------------------------------------------------------

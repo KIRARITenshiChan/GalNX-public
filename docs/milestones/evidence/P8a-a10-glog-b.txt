@@ -1,0 +1,12 @@
+[pad] key=1008 virt=0 uiChildren=0 gamemenu=0x20f257c00 cursor=0x0
+[tjs] sl-replace -> ok
+[tjs] loadui-nodlg -> ok
+[tjs] loadui-open -> ok
+[pad] key=1022 virt=0 uiChildren=0 gamemenu=0x20f257c00 cursor=0x0
+[tjs] exit -> ok
+[touch] began id=0x2140ba080 loc=(439.6,276.0) virt=0 uiChildren=0
+[touch] ended id=0x2140ba080 loc=(439.6,276.0) virt=0
+[touch] began id=0x20aefa360 loc=(430.6,267.0) virt=0 uiChildren=0
+[touch] ended id=0x20aefa360 loc=(430.6,267.0) virt=0
+[close] persisted system data (TraceSave + SystemSave)
+[close] main window close confirmed; terminating application after save

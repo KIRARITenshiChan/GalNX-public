@@ -1,0 +1,8 @@
+NSP v1.0.3 Citron smoke (NSP form, romfs-only: SD game dir temporarily renamed)
+- window title: citron Nightly | 0237a9b88 | IROSEKA FHD (64-bit) | 1.0.3 | NVIDIA
+- Booting game: 010047420000A000 | IROSEKA FHD (64-bit) | 1.0.3
+- rfvp: game root: romfs:/game (romfs mounted)
+- GameConfig { hcb: Some(".iroseka.hcb"), nls: Some(GBK) }, first frame drawn at t=6.70 s
+- exit confirmed by the player, closing -> quit requested by host event at t=121.17 s
+- EXCEPTION 0 / panic 0; slow-frame lines 16 (startup-dominated)
+- screenshots: nsp-title.png 65d0138f..., nsp-story.png 21137fc7..., nsp-quit-dialog.png 6b1d3cfc..., nsp-after-exit.png e84daad0... (same sha as P13 nsp-after-exit)

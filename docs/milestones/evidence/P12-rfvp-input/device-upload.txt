@@ -1,0 +1,24 @@
+# P12 NSP device upload (DBI FTP)
+
+- Date: 2026-10-31，上传 16:49–17:14 CST
+- Host: 192.168.31.254:5000（DBI FTP，Switch 处于 FTP 模式）
+- File: IROSEKA_FHD-010047420000a000.nsp
+- Size: 9,979,435,736 B
+- SHA-256: 0fda623c37dc8664492341d00a103eaf606eb1a88583f0101508cefd39467419
+- Version: 1.0.1（P12 输入层；exefs/main SHA-256 7dbae0128ac2d6b3ce80255d8a9cc538a86145632cd8ac57335a6c95ef38afdd）
+- Result: UPLOAD_DONE，1,462.2 s = 6.52 MiB/s（24.4 分钟），无中断
+- After upload: DBI 根目录回到占位条目（'/Place NSP, NSZ, XCI, XCZ or MSP files here'）= 文件已接收并自动安装
+- Note: 远端不支持 SIZE（550），断点续传会从 0 重传；本次为单次完整传输。
+- Build log: E:/galnx-build/p11/nsp-input2-build.log（SHA-256 eacb0b58f1a7c644cb348aaf011a6817687e8af8e23656b5695c1597dc3069cd）
+- Upload log: ftp_upload_input2.log（SHA-256 3413c1e998551cd80afa3d34c93116548b0c1142ce071e5926bb2d534e54771b）
+
+## Upload log tail
+
+```
+PROGRESS 94.15% 9395240960/9979435736 bytes  6.51 MiB/s  elapsed 1375s
+PROGRESS 96.84% 9663676416/9979435736 bytes  6.51 MiB/s  elapsed 1415s
+PROGRESS 99.53% 9932111872/9979435736 bytes  6.52 MiB/s  elapsed 1454s
+PROGRESS 100.00% 9979435736/9979435736 bytes  6.52 MiB/s  elapsed 1460s
+UPLOAD_DONE IROSEKA_FHD-010047420000a000.nsp 9979435736 in 1462.2 s
+LIST_AFTER ['/Place NSP, NSZ, XCI, XCZ or MSP files here']
+```

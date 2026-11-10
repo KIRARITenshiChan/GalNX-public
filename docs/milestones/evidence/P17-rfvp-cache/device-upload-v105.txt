@@ -1,0 +1,14 @@
+# P17 / NSP v1.0.5 真机上传记录（DBI FTP「浏览 SD 卡」模式）
+
+- 日期：2026-11-01 08:05–08:33 (+08:00)
+- 主机：192.168.31.254:5000（Switch DBI FTP 服务）
+- 模式：**浏览 SD 卡**（FTP 根 = SD 根，含 /switch、Nintendo、atmosphere；put 只落盘不自动安装）
+- 本地：E:/galnx-build/p17/out/IROSEKA_FHD-010047420000a000.nsp
+- 大小：9,979,481,304 B
+- SHA-256：6c7f668b218665c3c0189e5fad7f97c22b3d0a3182eca9e985b745288f5f030c
+- 远端：/switch/galnx-nsp/IROSEKA_FHD-010047420000a000.nsp
+- 传输：1,686.5 s ≈ 5.64 MiB/s（28.1 分钟），无中断；结束后远端目录仅该文件（REMOTE_DIR_LIST 校验）
+- 脚本：E:/galnx-build/p17/ftp_upload_nsp_sd.py（ftplib，1 MiB 块，SIZE/REST 续传）
+- 日志：E:/galnx-build/p17/upload-sd.log（含 PROGRESS/UPLOAD_DONE/REMOTE_DIR_LIST）
+- 安装：Switch → DBI → 浏览 SD 卡 → switch/galnx-nsp/ → 选中 NSP → 安装（覆盖 v1.0.4）
+- 备注：上传前 SITE FREESPACE SD 返回 67,280,568,320 B 可用（总 127,901,106,176 B）；远端 SIZE 查询不支持（550），故只能靠 UPLOAD_DONE + 目录列表校验。

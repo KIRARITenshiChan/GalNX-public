@@ -1,0 +1,9 @@
+[   2.735334] Frontend <Info> citron\main.cpp:2475:BootGame: Booting game: 0000000000000000 | rfvp (64-bit) | 
+[   5.088993] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp: game root: 
+[   5.089004] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: sdmc:/switch/rfvp/game
+[   5.089009] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString:  (no romfs)
+[   5.121418] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp [info] config.toml: GameConfig { hcb: Some(".iroseka.hcb"), nls: Some(GBK) }
+[   5.816892] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp: the game is loaded, running
+[   7.006623] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp: the first frame was drawn
+[ 144.005175] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp [info] quit requested by host event
+NRO EXCEPTION/panic count: 0

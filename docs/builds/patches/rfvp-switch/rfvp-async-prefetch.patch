@@ -1,0 +1,360 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 45ce563..0e5ee8a 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -4898,7 +4898,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "rfvp-horizon"
+-version = "1.1.0-test"
++version = "1.1.1-test"
+ dependencies = [
+  "cc",
+  "rfvp",
+diff --git a/crates/rfvp/src/subsystem/components/syscalls/graph.rs b/crates/rfvp/src/subsystem/components/syscalls/graph.rs
+index 0d1d20f..f3f8448 100644
+--- a/crates/rfvp/src/subsystem/components/syscalls/graph.rs
++++ b/crates/rfvp/src/subsystem/components/syscalls/graph.rs
+@@ -1041,29 +1041,29 @@ pub fn graph_load(game_data: &mut GameData, id: &Variant, path: &Variant) -> Res
+             #[cfg(all(not(feature = "old_school"), feature = "switch-async"))]
+             {
+                 use crate::subsystem::resources::{async_decode, resource_cache};
+-                // Warm the partner picture (the *b variant of a background, or the parts sheet
+-                // of a character) while this one is being loaded.
++                // GalNX P25: async is prefetch-only. A GraphLoad must always return with a usable
++                // texture on `id`, because the renderer redraws every layer by id each frame: a
++                // decode that is only queued means that layer (a CG) is not drawn at all.
++                // Warm the partner picture (the *b variant of a background, or the parts sheet of
++                // a character) while this one is decoded synchronously below.
+                 prefetch_graph_siblings(game_data, path);
+-                // Big pictures are inflated on the worker thread instead of the frame thread:
+-                // keep drawing the previous texture and apply the new one when it is ready.
+-                if let Some((source, offset, size)) = game_data.vfs.pack_location(path) {
+-                    if size >= async_decode::ASYNC_INLINE_MIN_BYTES
+-                        && async_decode::submit_graph(id as u16, path, source, offset, size)
+-                    {
+-                        return Ok(Variant::Nil);
+-                    }
+-                }
+-                // A partner prefetch may be in flight already; waiting beats inflating twice.
+-                if async_decode::wait_for_graph(path, 400) {
++                // A partner prefetch may have this exact picture in flight already; a short,
++                // bounded wait beats inflating the same 8-13 MB file twice. A miss falls through
++                // to the synchronous decode, so the texture is ready when this call returns.
++                if async_decode::wait_for_graph(path, 300) {
+                     if let Some(entry) = resource_cache::get_texture(path) {
+                         if crate::perf::enabled() {
+-                            crate::perf::event(format_args!("graph async hit path={path:?}"));
++                            crate::perf::event(format_args!("graph prefetch hit path={path:?}"));
+                         }
+-                        game_data
++                        if game_data
+                             .motion_manager
+-                            .load_graph_cached(id as u16, path, &entry)?;
+-                        game_data.motion_manager.refresh_prims(id as u16);
+-                        return Ok(Variant::Nil);
++                            .load_graph_cached(id as u16, path, &entry)
++                            .is_ok()
++                        {
++                            game_data.motion_manager.refresh_prims(id as u16);
++                            return Ok(Variant::Nil);
++                        }
++                        // The cached picture does not apply to this id any more: decode below.
+                     }
+                 }
+             }
+diff --git a/crates/rfvp/src/subsystem/components/syscalls/movie.rs b/crates/rfvp/src/subsystem/components/syscalls/movie.rs
+index ca98433..88427d6 100644
+--- a/crates/rfvp/src/subsystem/components/syscalls/movie.rs
++++ b/crates/rfvp/src/subsystem/components/syscalls/movie.rs
+@@ -53,6 +53,7 @@ pub fn movie_play(game_data: &mut GameData, path: &Variant, flag: &Variant) -> R
+         None
+     };
+ 
++    let mut last_error: Option<String> = None;
+     for cand in movie_path_candidates(path) {
+         let cand = normalize_vfs_path(&cand);
+         let request = MovieRequest {
+@@ -70,10 +71,19 @@ pub fn movie_play(game_data: &mut GameData, path: &Variant, flag: &Variant) -> R
+             Ok(()) => return Ok(Variant::True),
+             Err(e) => {
+                 log::debug!("Movie: start failed for {} (orig {}): {e:?}", cand, path);
++                last_error = Some(format!("{e:?}"));
+             }
+         }
+     }
+ 
++    // GalNX P25: the console build has no movie decoder (videoplayer/mod.rs bails for no_std), so
++    // this is where an OP/movie gets skipped. Warn level so the ring log keeps it and the device's
++    // debug_report.txt proves the skip is a build limitation, unrelated to the async worker.
++    log::warn!(
++        "Movie: no playable movie for {path:?}; last error: {}",
++        last_error.as_deref().unwrap_or("none")
++    );
++
+     Ok(Variant::Nil)
+ }
+ 
+diff --git a/crates/rfvp/src/subsystem/components/syscalls/parts.rs b/crates/rfvp/src/subsystem/components/syscalls/parts.rs
+index 47b1126..cc29014 100644
+--- a/crates/rfvp/src/subsystem/components/syscalls/parts.rs
++++ b/crates/rfvp/src/subsystem/components/syscalls/parts.rs
+@@ -32,21 +32,21 @@ pub fn parts_load(game_data: &mut GameData, id: &Variant, path: &Variant) -> Res
+         Noop,
+         Unload,
+         Load { path: String, buff: Vec<u8> },
+-        /// The worker thread is decoding this sheet; the old expression stays on screen until
+-        /// the next tick applies the new one (GalNX P18).
+-        Async { path: String },
+     }
+ 
+     let action = match path {
+         Variant::Nil => Action::Unload,
+         Variant::String(p) | Variant::ConstString(p, _) => {
+-            // A cached parts sheet needs no VFS read. One a prefetch already queued only
+-            // needs to wait for the worker that is decoding it (GalNX P18).
++            // A cached parts sheet needs no VFS read (GalNX P25: async is prefetch-only).
+             let mut cached =
+                 crate::subsystem::resources::resource_cache::get_parts(p).is_some();
+             #[cfg(feature = "switch-async")]
+             if !cached {
+-                cached = crate::subsystem::resources::async_decode::wait_for_parts(p, 400);
++                // A prefetch may be decoding this exact sheet right now: give it a short,
++                // bounded head start. A miss falls through to the synchronous decode, so the
++                // new expression is installed before this call returns (the deferred-apply
++                // path left the old expression on screen and caused stale pixels).
++                cached = crate::subsystem::resources::async_decode::wait_for_parts(p, 300);
+             }
+             if cached {
+                 Action::Load {
+@@ -54,35 +54,12 @@ pub fn parts_load(game_data: &mut GameData, id: &Variant, path: &Variant) -> Res
+                     buff: Vec::new(),
+                 }
+             } else {
+-                let mut queued = false;
+-                #[cfg(feature = "switch-async")]
+-                {
+-                    if let Some((source, offset, size)) = game_data.vfs.pack_location(p) {
+-                        if size
+-                            >= crate::subsystem::resources::async_decode::ASYNC_INLINE_MIN_BYTES
+-                        {
+-                            queued = crate::subsystem::resources::async_decode::submit_parts(
+-                                id as u16,
+-                                p,
+-                                source,
+-                                offset,
+-                                size,
+-                            );
+-                        }
+-                    }
+-                }
+-                if queued {
+-                    Action::Async {
++                match game_data.vfs_load_file(p) {
++                    Ok(buff) => Action::Load {
+                         path: p.to_string(),
+-                    }
+-                } else {
+-                    match game_data.vfs_load_file(p) {
+-                        Ok(buff) => Action::Load {
+-                            path: p.to_string(),
+-                            buff,
+-                        },
+-                        Err(_) => Action::Noop,
+-                    }
++                        buff,
++                    },
++                    Err(_) => Action::Noop,
+                 }
+             }
+         }
+@@ -107,11 +84,6 @@ pub fn parts_load(game_data: &mut GameData, id: &Variant, path: &Variant) -> Res
+                     id as u16,
+                 );
+             }
+-            Action::Async { path } => {
+-                if crate::perf::enabled() {
+-                    crate::perf::event(format_args!("parts async queued id={id} path={path:?}"));
+-                }
+-            }
+         }
+         pm.next_free_id(id as u8);
+     }
+diff --git a/crates/rfvp/src/subsystem/resources/async_decode.rs b/crates/rfvp/src/subsystem/resources/async_decode.rs
+index 585c796..5752f87 100644
+--- a/crates/rfvp/src/subsystem/resources/async_decode.rs
++++ b/crates/rfvp/src/subsystem/resources/async_decode.rs
+@@ -4,9 +4,12 @@
+ //! On the console that costs 80-160 ms per picture, and entering a CG loads two backgrounds plus
+ //! a character sheet, so the frame thread (and the audio with it) stalled for 0.3-0.9 s.
+ //!
+-//! Large pictures are now queued here instead: the frame thread keeps drawing the previous
+-//! texture, a worker thread started by the C runtime (platform/switch/runtime/main.c) reads the
+-//! pack bytes and decodes them into the process caches, and the next tick applies the result.
++//! GalNX P25: this module is prefetch-only. The worker still reads pack bytes and decodes into
++//! the process caches, but a graph_load/parts_load never returns before a usable texture is
++//! installed on the requested id: it either hits a finished prefetch or decodes synchronously.
++//! The old on-demand mode (queue a job, return Nil, apply on a later tick) was incompatible with
++//! rfvp's draw model: every layer is redrawn by id each frame, so a layer whose texture was not
++//! ready simply was not drawn (missing CGs, stale UI pixels on the console).
+ //! Small assets are decoded inline; they cost a few milliseconds and the game draws them at once.
+ 
+ #[cfg(feature = "no_std")]
+@@ -144,19 +147,38 @@ pub fn clear_requested(kind: u8, id: u16) {
+ }
+ 
+ fn push(kind: u8, id: u16, path: &str, source: Arc<dyn PackSource>, offset: u64, size: u64) {
+-    PENDING.lock().push((kind, id, path.to_string()));
+-    QUEUE.lock().push_back(Job {
++    {
++        let mut pending = PENDING.lock();
++        // GalNX P25: one job per path. A speculative prefetch and an explicit load of the same
++        // picture must never be decoded twice, and the single worker serialises them anyway.
++        if pending.iter().any(|(_, _, p)| p == path) {
++            return;
++        }
++        pending.push((kind, id, path.to_string()));
++    }
++    let job = Job {
+         kind,
+         id,
+         path: path.to_string(),
+         source,
+         offset,
+         size,
+-    });
++    };
++    let mut queue = QUEUE.lock();
++    // On-demand jobs (none are queued while async is prefetch-only, but keep the queue honest)
++    // jump ahead of speculative prefetches.
++    if kind == KIND_GRAPH_PREFETCH {
++        queue.push_back(job);
++    } else {
++        queue.push_front(job);
++    }
+ }
+ 
+-/// Queue a large GraphLoad. Returns true when the frame thread should keep the previous
+-/// texture and let the worker decode this file.
++/// Queue a large GraphLoad on the worker.
++///
++/// GalNX P25: the engine no longer calls this from graph_load (async is prefetch-only), so a
++/// graph load never returns a texture it does not have. Kept for the on-demand queue API; a
++/// caller that gets false must still install a texture synchronously.
+ pub fn submit_graph(
+     id: u16,
+     path: &str,
+@@ -170,8 +192,9 @@ pub fn submit_graph(
+     if size < ASYNC_MIN_BYTES || resource_cache::get_texture(path).is_some() {
+         return false;
+     }
+-    if is_pending(KIND_GRAPH, id, path) {
+-        return true;
++    if is_pending_any_path(path) {
++        // Already queued/running (usually as a prefetch): a second job would decode it twice.
++        return false;
+     }
+     set_requested(KIND_GRAPH, id, path);
+     log::info!("[async] submit graph id={id} path={path:?} bytes={size}");
+@@ -193,8 +216,9 @@ pub fn submit_parts(
+     if size < ASYNC_MIN_BYTES || resource_cache::get_parts(path).is_some() {
+         return false;
+     }
+-    if is_pending(KIND_PARTS, id, path) {
+-        return true;
++    if is_pending_any_path(path) {
++        // Already queued/running (usually as a prefetch): a second job would decode it twice.
++        return false;
+     }
+     set_requested(KIND_PARTS, id, path);
+     log::info!("[async] submit parts id={id} path={path:?} bytes={size}");
+@@ -216,6 +240,10 @@ fn is_pending_path(kind: u8, path: &str) -> bool {
+     PENDING.lock().iter().any(|(k, _, p)| *k == kind && p == path)
+ }
+ 
++fn is_pending_any_path(path: &str) -> bool {
++    PENDING.lock().iter().any(|(_, _, p)| p == path)
++}
++
+ /// Sleep a little while the frame thread waits for a worker result.
+ fn idle_wait() {
+     #[cfg(feature = "no_std")]
+diff --git a/crates/rfvp/src/subsystem/resources/graph_buff.rs b/crates/rfvp/src/subsystem/resources/graph_buff.rs
+index 7819a23..ce5668d 100644
+--- a/crates/rfvp/src/subsystem/resources/graph_buff.rs
++++ b/crates/rfvp/src/subsystem/resources/graph_buff.rs
+@@ -1453,29 +1453,9 @@ impl GraphBuff {
+                 return Ok(());
+             }
+ 
+-            #[cfg(feature = "switch-async")]
+-            if let Some(id) = async_id {
+-                if let Some((source, offset, size)) = vfs.pack_location(&snap.texture_path) {
+-                    if size >= crate::subsystem::resources::async_decode::ASYNC_INLINE_MIN_BYTES
+-                        && crate::subsystem::resources::async_decode::submit_graph(
+-                            id,
+-                            &snap.texture_path,
+-                            source,
+-                            offset,
+-                            size,
+-                        )
+-                    {
+-                        if crate::perf::enabled() {
+-                            log::info!(
+-                                "[probe] restore path={:?} queued=async bytes={}",
+-                                snap.texture_path,
+-                                size
+-                            );
+-                        }
+-                        return Ok(());
+-                    }
+-                }
+-            }
++            // GalNX P25: async is prefetch-only. A restored texture must be installed during
++            // this call; leaving the slot to "be applied later" made the renderer skip the layer
++            // (the console showed CGs without their background until the next picture arrived).
+             let _ = async_id;
+ 
+             let cached_before = false;
+diff --git a/crates/rfvp/src/subsystem/resources/parts_manager.rs b/crates/rfvp/src/subsystem/resources/parts_manager.rs
+index 4a2f2d8..b14cc35 100644
+--- a/crates/rfvp/src/subsystem/resources/parts_manager.rs
++++ b/crates/rfvp/src/subsystem/resources/parts_manager.rs
+@@ -492,22 +492,9 @@ impl PartsItem {
+                 self.set_color_tone(snap.r_value, snap.g_value, snap.b_value);
+                 return Ok(());
+             }
+-            // Large textures are decoded by the worker thread; the slot keeps the
+-            // old pixels until the worker result is applied in tick (GalNX P18).
+-            #[cfg(feature = "switch-async")]
+-            if let Some(id) = async_id {
+-                if let Some((source, offset, size)) = vfs.pack_location(path) {
+-                    if size >= crate::subsystem::resources::async_decode::ASYNC_INLINE_MIN_BYTES
+-                        && crate::subsystem::resources::async_decode::submit_parts(
+-                            id, path, source, offset, size,
+-                        )
+-                    {
+-                        log::info!("[probe] restore parts path={path:?} queued=async bytes={size}");
+-                        self.loaded = snap.loaded;
+-                        return Ok(());
+-                    }
+-                }
+-            }
++            // GalNX P25: async is prefetch-only. A restored expression sheet must be installed
++            // during this call; the old "keep the previous pixels until the worker applies it"
++            // path is what left stale parts on screen after a load.
+             let _ = async_id;
+             let bytes = vfs.read_file(path)?;
+             self.load_texture(path, bytes)?;
+diff --git a/platform/switch/host/Cargo.toml b/platform/switch/host/Cargo.toml
+index 3b44557..0044279 100644
+--- a/platform/switch/host/Cargo.toml
++++ b/platform/switch/host/Cargo.toml
+@@ -1,6 +1,6 @@
+ [package]
+ name = "rfvp-horizon"
+-version = "1.1.0-test"
++version = "1.1.1-test"
+ edition = "2021"
+ description = "Nintendo Horizon host crate for rfvp no_std core"
+ license = "MPL-2.0"

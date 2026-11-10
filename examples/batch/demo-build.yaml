@@ -1,0 +1,30 @@
+# M6-b demo manifest: a real (deterministic) build executed by "galnx batch build".
+# The engine is a demo-only descriptor (examples/batch/engines/custom-demo.yaml):
+# build_backend none, no devkitPro or upstream source involved.
+schema_version: 1
+game:
+  id: batch-demo-build
+  title: "Batch Demo Build"
+  source_dir: examples/batch/games/demo-build
+engine:
+  adapter: custom
+  descriptor: engines/custom-demo.yaml
+  adapter_version: "custom-demo@01234567 (2026-10-30)"
+  profile: default
+  entry: seed.txt
+switch:
+  title_id: "010047410000A003"
+  target: nro
+  display_mode: handheld
+build:
+  output_dir: "E:/galnx-build/batch-examples/demo-build"
+  clean_workspace_before_build: true
+  reproducible: true
+  keys_env: GALNX_PROD_KEYS
+  commands:
+    - ["python", "games/demo-build/build.py", "--out", "out/demo.bin"]
+  workdir: "."
+  artifact: "out/demo.bin"
+  env:
+    GALNX_DEMO_SEED: galnx-m6b
+  timeout_s: 60

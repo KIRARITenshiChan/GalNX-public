@@ -1,0 +1,14 @@
+# P14 / rfvp NSP v1.0.3 — DBI FTP upload (device install)
+
+- 时间：2026-10-31T17:00:00Z 开始（本地 2026-11-01 01:00:00 +08:00）
+- 文件：IROSEKA_FHD-010047420000a000.nsp
+- 大小：9,979,441,368 B
+- sha256：b9e0d6a54a44bf3a3dde8e3f32f22f41d3ee4e009101e9df4f6892e4fb85aa3e
+- 目标：ftp://192.168.31.254:5000（DBI FTP，匿名）
+- 结果：UPLOAD_DONE IROSEKA_FHD-010047420000a000.nsp 9979441368 in 1529.0 s
+- 平均速率：6,526,777 B/s ≈ 6.22 MiB/s（25 分 29 秒，无中断）
+- 进度样本：5.38% @79s 6.49 MiB/s；50% @~772s 6.30 MiB/s；99.53% @1520s 6.23 MiB/s；100% @1527s 6.23 MiB/s
+- 结束后 LIST_AFTER: ['/Place NSP, NSZ, XCI, XCZ or MSP files here'] ⇒ DBI 已自动安装（根目录回到投放占位）
+- 脚本：E:/galnx-build/p14/ftp_upload_nsp_103.py（1 MiB block，遇同名不同大小先 DELETE 再传）
+- 原始日志：E:/galnx-build/p14/upload.log
+- 后续：真机复验 P14 版 V1–V15（重点 V14 转场/周期卡顿、V15 冷启动/存档尖峰）、U18–U21

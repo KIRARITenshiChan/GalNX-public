@@ -1,0 +1,111 @@
+diff --git a/src/core/environ/cocos2d/MainScene.cpp b/src/core/environ/cocos2d/MainScene.cpp
+index de565fa..b983be0 100644
+--- a/src/core/environ/cocos2d/MainScene.cpp
++++ b/src/core/environ/cocos2d/MainScene.cpp
+@@ -1386,6 +1386,18 @@ public:
+ 				else
+ 					SetVisible(false);  // just hide
+ 
++#ifdef __SWITCH__
++				// [GalNX] Switch: a confirmed close of the main window means "leave the game".
++				// The desktop path below invalidates the script object, which tears the TJS world
++				// down in an arbitrary member order; games whose dialog finalizers then touch
++				// MainWnd die with: Member "SystemObj" does not exist. The game has already
++				// stored its data in its own close handler, so exiting the application is safe.
++				if (TJSNativeInstance && TJSNativeInstance->IsMainWindow()) {
++					GalNXLog("[close] main window close confirmed; terminating application");
++					TVPExitApplication(0);
++					return;
++				}
++#endif
+ 				Closing = false;
+ 				if (TJSNativeInstance) {
+ 					if (TJSNativeInstance->IsMainWindow()) {
+@@ -2432,13 +2444,13 @@ static bool GalNX_QuickSaveLoad(int keyCode) {
+ 		GalNX_EvalTJS("\"ui-shown\"", "ui-ok");
+ 		return true;
+ 	}
++// [GalNX] temporary diagnostic: reproduce the K2S power button close chain.
++// X evaluates the game's own onCloseQuery(true), the same entry point the
++// K2S drawer power button reaches through the engine Close() path.
+ 	if (keyCode == cocos2d::Controller::BUTTON_X) {
+-		GalNX_EvalTJS("MainObj.f[\"lastmess\"] === void ? \"lastmess-void\" : \"lastmess-ok\"", "probe-lastmess");
+-		GalNX_EvalTJS("MainObj.f[\"savetitle\"] === void ? \"st-void\" : \"st-ok\"", "probe-savetitle");
+-		GalNX_EvalTJS("typeof s === \"undefined\" ? \"s-undef\" : (s === void ? \"s-void\" : \"s-ok\")", "probe-sdict");
+-		GalNX_EvalTJS("\"\" + Savefolder", "probe-savefolder");
+-		GalNX_EvalTJS("MainObj.calcThumbnailSize().size", "probe-thumbsize");
+-		GalNX_EvalTJS("MainObj.f[\"scenario\"]", "probe-scenario");
++		GalNX_EvalTJS("typeof MainObj.onCloseQuery", "closereq-type");
++		GalNX_EvalTJS("MainObj.onCloseQuery(true)", "closereq");
++		GalNX_EvalTJS("\"closereq-done\"", "closereq-ok");
+ 		return true;
+ 	}
+ 	if (keyCode == cocos2d::Controller::AXIS_LEFT_TRIGGER) {
+diff --git a/src/core/visual/WindowIntf.cpp b/src/core/visual/WindowIntf.cpp
+index 773b7f0..7e68eac 100644
+--- a/src/core/visual/WindowIntf.cpp
++++ b/src/core/visual/WindowIntf.cpp
+@@ -1908,6 +1908,63 @@ TJS_BEGIN_NATIVE_PROP_DECL(layerTreeOwnerInterface)
+ TJS_END_NATIVE_PROP_DECL(layerTreeOwnerInterface)
+ //----------------------------------------------------------------------
+ 
++//----------------------------------------------------------------------
++// [GalNX] Win32 compatibility layer. The Win32 build of Kirikiri had a real
++// window that games could minimize / restore, and games rely on it: the BASE
++// ADV SYSTEM engine (MainWindow.EscapeWork) tests `this.minimized` and calls
++// `this.minimize()` when the user presses ESC. The Switch build had no such
++// window state, so evaluating `this.minimized` raised
++// `Member "minimized" does not exist` and aborted the game script.
++// Report a constant non-minimized / non-maximized state and make the state
++// changing calls harmless no-ops.
++TJS_BEGIN_NATIVE_PROP_DECL(minimized)
++{
++	TJS_BEGIN_NATIVE_PROP_GETTER
++	{
++		// [GalNX] never minimized on Switch
++		*result = (tjs_int)0;
++		return TJS_S_OK;
++	}
++	TJS_END_NATIVE_PROP_GETTER
++
++	TJS_DENY_NATIVE_PROP_SETTER
++}
++TJS_END_NATIVE_PROP_DECL(minimized)
++//----------------------------------------------------------------------
++TJS_BEGIN_NATIVE_PROP_DECL(maximized)
++{
++	TJS_BEGIN_NATIVE_PROP_GETTER
++	{
++		// [GalNX] never maximized on Switch
++		*result = (tjs_int)0;
++		return TJS_S_OK;
++	}
++	TJS_END_NATIVE_PROP_GETTER
++
++	TJS_DENY_NATIVE_PROP_SETTER
++}
++TJS_END_NATIVE_PROP_DECL(maximized)
++//----------------------------------------------------------------------
++TJS_BEGIN_NATIVE_METHOD_DECL(/*func. name*/minimize)
++{
++	// [GalNX] no-op: there is no OS window to minimize on Switch
++	return TJS_S_OK;
++}
++TJS_END_NATIVE_METHOD_DECL(/*func. name*/minimize)
++//----------------------------------------------------------------------
++TJS_BEGIN_NATIVE_METHOD_DECL(/*func. name*/maximize)
++{
++	// [GalNX] no-op
++	return TJS_S_OK;
++}
++TJS_END_NATIVE_METHOD_DECL(/*func. name*/maximize)
++//----------------------------------------------------------------------
++TJS_BEGIN_NATIVE_METHOD_DECL(/*func. name*/restore)
++{
++	// [GalNX] no-op
++	return TJS_S_OK;
++}
++TJS_END_NATIVE_METHOD_DECL(/*func. name*/restore)
+ 	TJS_END_NATIVE_MEMBERS
+ 
+ }

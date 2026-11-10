@@ -1,0 +1,479 @@
+diff --git a/src/core/environ/cocos2d/MainScene.cpp b/src/core/environ/cocos2d/MainScene.cpp
+--- a/src/core/environ/cocos2d/MainScene.cpp
++++ b/src/core/environ/cocos2d/MainScene.cpp
+@@ -10,6 +10,7 @@
+ #include "LayerBitmapImpl.h"
+ #include "ui/BaseForm.h"
+ #include "ui/GameMainMenu.h"
++#include "ui/InGameMenuForm.h"
+ #include "ui/UIHelper.h"
+ #include "TickCount.h"
+ #include "Random.h"
+@@ -23,8 +24,24 @@
+ #include "ui/FileSelectorForm.h"
+ #include "ui/DebugViewLayerForm.h"
+ #include "Application.h"
++// [GalNX] input diagnostics: appended to sdmc:/galnx-input.log from the game thread.
++#include <cstdio>
++#include <cstdarg>
++static void GalNXLog(const char *fmt, ...) {
++	static bool s_ok = true;
++	if (!s_ok) return;
++	FILE *fp = fopen("sdmc:/galnx-input.log", "a");
++	if (!fp) { s_ok = false; return; }
++	va_list ap;
++	va_start(ap, fmt);
++	vfprintf(fp, fmt, ap);
++	va_end(ap);
++	fputc(10, fp);
++	fclose(fp);
++}
+ #include "ScriptMgnIntf.h"
+ #include "win32/TVPWindow.h"
++#include "win32/MenuItemImpl.h"
+ #include "VelocityTracker.h"
+ #include "SystemImpl.h"
+ #include "RenderManager.h"
+@@ -2116,6 +2133,8 @@
+ }
+ 
+ bool TVPMainScene::onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event) {
++	GalNXLog("[touch] began id=%p loc=(%.1f,%.1f) virt=%d uiChildren=%d",
++		(void*)touch, touch->getLocation().x, touch->getLocation().y, (int)_virutalMouseMode, (int)UINode->getChildrenCount());
+ 	if (UINode->getChildrenCount()) return false;
+ 	if (!_currentWindowLayer) return false;
+ #ifdef __SWITCH__
+@@ -2193,6 +2212,8 @@
+ 
+ void TVPMainScene::onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event) {
+ 	if (!_currentWindowLayer) return;
++	GalNXLog("[touch] ended id=%p loc=(%.1f,%.1f) virt=%d",
++		(void*)touch, touch->getLocation().x, touch->getLocation().y, (int)_virutalMouseMode);
+ 	if (!_virutalMouseMode || _windowMgrOverlay) return _currentWindowLayer->onTouchEnded(touch, event);
+ 	if (_mouseTouches.size() == 1) {
+ 		Vec2 pt = _mouseCursor->getPosition();
+@@ -2362,57 +2383,194 @@
+ 	_currentWindowLayer->onMouseMove(GameNode->convertToWorldSpace(newpt));
+ }
+ 
++// [GalNX] quick save / quick load. KAG3 keeps its save / load entries in the game's own Window.menu,
++// and this port has no HWND based menu registry, so the menu can never be opened from a pad. Evaluate
++// KAG3's own TJS entry points instead (kag is the global KAGWindow created by Initialize.tjs):
++//   L shoulder -> kag.saveBookMark(0, false)  -> writes <dataPath>/<dataName>0.kdt (or .bmp)
++//   R shoulder -> kag.loadBookMark(0)         -> restores the same slot
++static void GalNX_EvalTJS(const char *expr, const char *tag) {
++	tTJSVariant result;
++	try {
++		TVPExecuteExpression(ttstr(expr), &result);
++		ttstr text(result);
++		std::string utf8 = text.AsStdString();
++		GalNXLog("[tjs] %s -> %s", tag, utf8.c_str());
++	} catch (const eTJS &e) {
++		std::string utf8 = e.GetMessage().AsStdString();
++		GalNXLog("[tjs] %s -> eTJS: %s", tag, utf8.c_str());
++	} catch (...) {
++		GalNXLog("[tjs] %s -> unknown exception", tag);
++	}
++}
++
++static bool GalNX_QuickSaveLoad(int keyCode) {
++	if (keyCode == cocos2d::Controller::BUTTON_LEFT_SHOULDER) {
++		GalNX_EvalTJS("MainObj.f[\"savetitle\"] = \"GalNX save\"", "preset-title");
++		GalNX_EvalTJS("MainObj.SaveAction(1)", "qsave");
++		GalNX_EvalTJS("MainObj.SystemSave()", "syssave");
++		GalNX_EvalTJS("\"saved1\"", "qsave-ok");
++		return true;
++	}
++	if (keyCode == cocos2d::Controller::BUTTON_RIGHT_SHOULDER) {
++		GalNX_EvalTJS("s[\"dlg_load\"] = false", "loadui-nodlg");
++		GalNX_EvalTJS("typeof MainObj", "loadui-mainobj");
++		GalNX_EvalTJS("MainObj.SaveLoadObj = new _SAVELOADOBJECT(MainObj, MainObj.PrimaryLayer, nLOAD_SC)", "loadui-open");
++		GalNX_EvalTJS("MainObj.ActiveObj = MainObj.SaveLoadObj", "loadui-active");
++		GalNX_EvalTJS("\"load-ui-shown\"", "loadui-ok");
++		return true;
++	}
++	if (keyCode == cocos2d::Controller::AXIS_RIGHT_TRIGGER) {
++		GalNX_EvalTJS("MainObj.DataLoadAction(10)", "qload10");
++		GalNX_EvalTJS("\"load10\"", "qload10-ok");
++		return true;
++	}
++	if (keyCode == cocos2d::Controller::BUTTON_START) {
++		GalNX_EvalTJS("MainObj.f[\"savetitle\"] = \"GalNX save\"", "preset-title");
++		GalNX_EvalTJS("s[\"dlg_save\"] = false", "saveui-nodlg");
++		GalNX_EvalTJS("MainObj.SaveLoadObj = new _SAVELOADOBJECT(MainObj, MainObj.PrimaryLayer, nSAVE_SC)", "ui-open");
++		GalNX_EvalTJS("MainObj.ActiveObj = MainObj.SaveLoadObj", "ui-active");
++		GalNX_EvalTJS("\"ui-shown\"", "ui-ok");
++		return true;
++	}
++	if (keyCode == cocos2d::Controller::BUTTON_X) {
++		GalNX_EvalTJS("MainObj.f[\"lastmess\"] === void ? \"lastmess-void\" : \"lastmess-ok\"", "probe-lastmess");
++		GalNX_EvalTJS("MainObj.f[\"savetitle\"] === void ? \"st-void\" : \"st-ok\"", "probe-savetitle");
++		GalNX_EvalTJS("typeof s === \"undefined\" ? \"s-undef\" : (s === void ? \"s-void\" : \"s-ok\")", "probe-sdict");
++		GalNX_EvalTJS("\"\" + Savefolder", "probe-savefolder");
++		GalNX_EvalTJS("MainObj.calcThumbnailSize().size", "probe-thumbsize");
++		GalNX_EvalTJS("MainObj.f[\"scenario\"]", "probe-scenario");
++		return true;
++	}
++	if (keyCode == cocos2d::Controller::AXIS_LEFT_TRIGGER) {
++		GalNX_EvalTJS("MainObj.SystemSave()", "syssave2");
++		GalNX_EvalTJS("\"syssave-done\"", "syssave2-ok");
++		return true;
++	}
++	return false;
++}
++
++// [GalNX] controller access to the in-game menu. The K2S drawer's top-left button opens the game's
++// own TJS menu (save / load / config) through TVPGetMenuDispatch(); a pad cannot press that button
++// because the drawer only knows touch events, so re-create the same call from onPadKeyDown().
++iTJSDispatch2* TVPGetMenuDispatch(tTVInteger hWnd);
++tTJSNI_Window *TVPGetActiveWindow();
++
++static iTVPBaseForm *GalNX_TopUIForm(cocos2d::Node *uiNode) {
++	if (!uiNode || uiNode->getChildren().empty()) return nullptr;
++	return dynamic_cast<iTVPBaseForm*>(uiNode->getChildren().back());
++}
++
++static void GalNX_ToggleInGameMenu(cocos2d::Node *uiNode) {
++	iTVPBaseForm *top = GalNX_TopUIForm(uiNode);
++	TVPInGameMenuForm *menuForm = dynamic_cast<TVPInGameMenuForm*>(top);
++	if (menuForm) {
++		TVPMainScene::GetInstance()->popUIForm(menuForm);
++		GalNXLog("[menu] closed");
++		return;
++	}
++	if (top) {
++		GalNXLog("[menu] open blocked: another K2S form is open (%p)", (void*)top);
++		return;
++	}
++	iTJSDispatch2 *menuobj = TVPGetMenuDispatch((tjs_intptr_t)TVPGetActiveWindow());
++	if (!menuobj) {
++		GalNXLog("[menu] no menu dispatch");
++		GalNX_EvalTJS("typeof kag == \"undefined\" ? \"kag:undefined\" : (\"kag:ok menu:\" + (kag.menu === void ? \"null\" : \"present\"))", "menu-probe");
++		return;
++	}
++	tTJSNI_MenuItem *menu = nullptr;
++	menuobj->NativeInstanceSupport(TJS_NIS_GETINSTANCE, tTJSNC_MenuItem::ClassID, (iTJSNativeInstance**)&menu);
++	if (!menu) { GalNXLog("[menu] no menu instance"); return; }
++	if (menu->GetChildren().empty()) { GalNXLog("[menu] empty menu"); return; }
++	GalNXLog("[menu] open GameMenu items=%d", (int)menu->GetChildren().size());
++	TVPMainScene::GetInstance()->pushUIForm(TVPInGameMenuForm::create("GameMenu", menu));
++}
++
++static bool GalNX_InGameMenuKey(cocos2d::Node *uiNode, int keyCode) {
++	TVPInGameMenuForm *menuForm = dynamic_cast<TVPInGameMenuForm*>(GalNX_TopUIForm(uiNode));
++	if (!menuForm) return false;
++	switch (keyCode) {
++	case cocos2d::Controller::BUTTON_DPAD_UP:
++		menuForm->navMove(-1);
++		GalNXLog("[menu] nav up");
++		return true;
++	case cocos2d::Controller::BUTTON_DPAD_DOWN:
++		menuForm->navMove(1);
++		GalNXLog("[menu] nav down");
++		return true;
++	case cocos2d::Controller::BUTTON_A:
++		GalNXLog("[menu] activate ret=%d", (int)menuForm->navActivate());
++		return true;
++	default:
++		return false;
++	}
++}
++
+ void TVPMainScene::onPadKeyDown(cocos2d::Controller* ctrl, int keyCode, cocos2d::Event *e) {
+ #ifdef __SWITCH__
+-	// [K2S] Kirikiroid2's own UI (file selector, preferences, dialogs) only knows the Android back key:
+-	// B acts as that key there (close menu/dialog, go back); everything else in the UI is touch.
+-	if (!UINode->getChildren().empty()) {
+-		if (keyCode == cocos2d::Controller::BUTTON_B) {
+-			iTVPBaseForm* uiform = dynamic_cast<iTVPBaseForm*>(UINode->getChildren().back());
+-			if (uiform) uiform->onKeyPressed(EventKeyboard::KeyCode::KEY_BACK, e);
+-		}
++	// [GalNX] controller-driven UI for TV / docked mode (there is no touch screen there):
++	//   PLUS -> open / close the in-game menu (the game's own TJS menu that the K2S drawer's
++	//           top-left button opens; it holds the save / load / config entries)
++	//   Y    -> toggle the K2S virtual mouse cursor on/off
++	//   DPAD -> in-game menu: move the selection; otherwise (cursor shown) move the cursor 24 px
++	//   A    -> in-game menu: activate the selection; otherwise left click at the cursor
++	//   B    -> right click at the cursor, close the K2S drawer, or Android BACK inside a K2S form
++	// onAxisEvent() is intentionally not used: it bails out when the window has no PrimaryLayerArea,
++	// which is the case for KAG3 games, so the stick could never show the cursor.
++	GalNXLog("[pad] key=%d virt=%d uiChildren=%d gamemenu=%p cursor=%p", keyCode, (int)_virutalMouseMode, (int)UINode->getChildrenCount(), (void*)_gameMenu, (void*)_mouseCursor);
++	if (GalNX_QuickSaveLoad(keyCode)) return;
++	if (keyCode == cocos2d::Controller::BUTTON_START) {
++		GalNX_ToggleInGameMenu(UINode);
+ 		return;
+ 	}
+-#endif
+-	if (!UINode->getChildren().empty()) return;
+-	// [GalNX] controller-driven virtual mouse cursor (needed when there is no touch screen: docked / TV mode):
+-	//   PLUS  -> toggle the K2S virtual cursor on/off
+-	//   DPAD  -> move the cursor in 24 px steps while it is shown
+-	//   A / B -> left / right click at the cursor (handled below)
+-	// This intentionally does not use onAxisEvent(): that handler bails out when the window has no
+-	// PrimaryLayerArea (the case for KAG3 games), so the stick could never show the cursor.
+-	if (keyCode == cocos2d::Controller::BUTTON_START || keyCode == cocos2d::Controller::BUTTON_SELECT) {
++	if (keyCode == cocos2d::Controller::BUTTON_Y) {
+ 		toggleVirtualMouseCursor();
+ 		return;
+ 	}
+-	if (_virutalMouseMode && !_windowMgrOverlay && _mouseCursor &&
+-		(keyCode == cocos2d::Controller::BUTTON_DPAD_LEFT || keyCode == cocos2d::Controller::BUTTON_DPAD_RIGHT ||
+-		 keyCode == cocos2d::Controller::BUTTON_DPAD_UP || keyCode == cocos2d::Controller::BUTTON_DPAD_DOWN)) {
+-		Vec2 pt = _mouseCursor->getPosition();
+-		const float step = 24.f;
+-		switch (keyCode) {
+-		case cocos2d::Controller::BUTTON_DPAD_LEFT: pt.x -= step; break;
+-		case cocos2d::Controller::BUTTON_DPAD_RIGHT: pt.x += step; break;
+-		case cocos2d::Controller::BUTTON_DPAD_UP: pt.y += step; break;
+-		default: pt.y -= step; break;
++	if (GalNX_InGameMenuKey(UINode, keyCode)) return;
++	if (_virutalMouseMode && !_windowMgrOverlay && _mouseCursor && UINode->getChildren().empty()) {
++		const bool drawerOpen = _gameMenu && !_gameMenu->isShrinked();
++		GalNXLog("[virt] key=%d drawerOpen=%d cursor=(%.1f,%.1f)", keyCode, (int)drawerOpen,
++			_mouseCursor->getPosition().x, _mouseCursor->getPosition().y);
++		if (keyCode == cocos2d::Controller::BUTTON_DPAD_LEFT || keyCode == cocos2d::Controller::BUTTON_DPAD_RIGHT ||
++			keyCode == cocos2d::Controller::BUTTON_DPAD_UP || keyCode == cocos2d::Controller::BUTTON_DPAD_DOWN) {
++			Vec2 pt = _mouseCursor->getPosition();
++			const float step = 24.f;
++			switch (keyCode) {
++			case cocos2d::Controller::BUTTON_DPAD_LEFT: pt.x -= step; break;
++			case cocos2d::Controller::BUTTON_DPAD_RIGHT: pt.x += step; break;
++			case cocos2d::Controller::BUTTON_DPAD_UP: pt.y += step; break;
++			default: pt.y -= step; break;
++			}
++			Size size = GameNode->getContentSize();
++			pt.x = std::max(0.f, std::min(pt.x, size.width));
++			pt.y = std::max(0.f, std::min(pt.y, size.height));
++			_mouseCursor->stopAllActions();
++			_mouseCursor->setOpacity(255);
++			_mouseCursor->setPosition(pt);
++			_refadeMouseCursor();
++			if (_currentWindowLayer) _currentWindowLayer->onMouseMove(GameNode->convertToWorldSpace(pt));
++			return;
++		}
++		if (keyCode == cocos2d::Controller::BUTTON_A || keyCode == cocos2d::Controller::BUTTON_B) {
++			const bool isTap = keyCode == cocos2d::Controller::BUTTON_A;
++			if (!isTap && drawerOpen && _gameMenu) { _gameMenu->shrink(); return; }
++			if (_currentWindowLayer) {
++				_mouseBtn = isTap ? ::mbLeft : ::mbRight;
++				_currentWindowLayer->onMouseClick(GameNode->convertToWorldSpace(_mouseCursor->getPosition()));
++				_mouseBtn = ::mbLeft;
++			}
++			return;
+ 		}
+-		Size size = GameNode->getContentSize();
+-		pt.x = std::max(0.f, std::min(pt.x, size.width));
+-		pt.y = std::max(0.f, std::min(pt.y, size.height));
+-		_mouseCursor->stopAllActions();
+-		_mouseCursor->setOpacity(255);
+-		_mouseCursor->setPosition(pt);
+-		_refadeMouseCursor();
+-		if (_currentWindowLayer) _currentWindowLayer->onMouseMove(GameNode->convertToWorldSpace(pt));
+-		return;
+ 	}
+-	// [K2S] with the virtual mouse cursor shown, A = left click and B = right click at the cursor
+-#ifdef __SWITCH__
+-	if (_virutalMouseMode && !_windowMgrOverlay && _mouseCursor && _currentWindowLayer &&
+-		(keyCode == cocos2d::Controller::BUTTON_A || keyCode == cocos2d::Controller::BUTTON_B)) {
+-		_mouseBtn = keyCode == cocos2d::Controller::BUTTON_A ? ::mbLeft : ::mbRight;
+-		_currentWindowLayer->onMouseClick(GameNode->convertToWorldSpace(_mouseCursor->getPosition()));
+-		_mouseBtn = ::mbLeft;
++
++	// [K2S] Kirikiroid2's own UI (file selector, preferences, dialogs) only knows the Android back key:
++	// B acts as that key there (close menu/dialog, go back); everything else in the UI is touch.
++	if (!UINode->getChildren().empty()) {
++		if (keyCode == cocos2d::Controller::BUTTON_B) {
++			iTVPBaseForm* uiform = dynamic_cast<iTVPBaseForm*>(UINode->getChildren().back());
++			if (uiform) uiform->onKeyPressed(EventKeyboard::KeyCode::KEY_BACK, e);
++		}
+ 		return;
+ 	}
+ #endif
+diff --git a/src/core/environ/ui/InGameMenuForm.h b/src/core/environ/ui/InGameMenuForm.h
+--- a/src/core/environ/ui/InGameMenuForm.h
++++ b/src/core/environ/ui/InGameMenuForm.h
+@@ -1,5 +1,7 @@
+ #pragma once
+ #include "PreferenceForm.h"
++#include <functional>
++#include <vector>
+ 
+ class tTJSNI_MenuItem;
+ 
+@@ -12,9 +14,19 @@
+ 
+ 	void initMenu(const std::string& title, tTJSNI_MenuItem *item);
+ 
++	// [GalNX] pad navigation: the list entries are touch-only widgets, so keep their actions around
++	// and let a controller move a highlight and activate the selected entry.
++	void navMove(int delta);
++	bool navActivate();
++
+ private:
+ 	cocos2d::ui::Widget *createMenuItem(int idx, tTJSNI_MenuItem *item, const std::string &caption);
++	void updateNavVisual();
+ 
+ 	cocos2d::ui::ListView *_list;
+ 	cocos2d::ui::Button *_title;
+-};
+\ No newline at end of file
++
++	std::vector<iPreferenceItem*> _navItems;
++	std::vector<std::function<void()>> _navActions;
++	int _navSel;
++};
+diff --git a/src/core/environ/ui/InGameMenuForm.cpp b/src/core/environ/ui/InGameMenuForm.cpp
+--- a/src/core/environ/ui/InGameMenuForm.cpp
++++ b/src/core/environ/ui/InGameMenuForm.cpp
+@@ -1,9 +1,9 @@
+ #include "InGameMenuForm.h"
+ #include "cocos2d/MainScene.h"
++#include "MenuItemImpl.h"
+ #include "ui/UIButton.h"
+ #include "ui/UIListView.h"
+ #include "ui/UIText.h"
+-#include "MenuItemImpl.h"
+ #include "ui/UIHelper.h"
+ #include "tjsGlobalStringMap.h"
+ 
+@@ -37,6 +37,9 @@
+ }
+ 
+ void TVPInGameMenuForm::initMenu(const std::string& title, tTJSNI_MenuItem *item) {
++	_navItems.clear();
++	_navActions.clear();
++	_navSel = -1;
+ 	_list->removeAllItems();
+ 	if (_title) {
+ 		if (title.empty()) {
+@@ -58,16 +61,18 @@
+ 		if(caption != seperator)
+ 			++idx;
+ 	}
++	// [GalNX] preselect the first actionable entry so a pad can act immediately.
++	navMove(1);
+ }
+ 
+ cocos2d::ui::Widget * TVPInGameMenuForm::createMenuItem(int idx, tTJSNI_MenuItem *item, const std::string &caption) {
+ 	iPreferenceItem *ret = nullptr;
++	std::function<void()> action;
+ 	const Size &size = _list->getContentSize();
+ 	if (!item->GetChildren().empty()) {
+ 		ret = CreatePreferenceItem<tPreferenceItemSubDir>(idx, size, caption);
+-		ret->addClickEventListener([=](Ref*){
+-			TVPMainScene::GetInstance()->pushUIForm(create(caption, item));
+-		});
++		action = [=](){ TVPMainScene::GetInstance()->pushUIForm(create(caption, item)); };
++		ret->addClickEventListener([action](Ref*){ action(); });
+ 	} else if (item->GetGroup() > 0 || item->GetRadio()) {
+ 		auto getter = [=]()->bool{ return item->GetChecked(); };
+ 		auto setter = [=](bool b){
+@@ -79,6 +84,7 @@
+ 			item->_getter = getter;
+ 			item->_setter = setter;
+ 		});
++		action = [=](){ item->OnClick(); TVPMainScene::GetInstance()->popAllUIForm(); };
+ 	} else if (item->GetChecked()) {
+ 		auto getter = [=]()->bool{ return item->GetChecked(); };
+ 		auto setter = [=](bool b){ item->OnClick(); };
+@@ -87,6 +93,7 @@
+ 			item->_getter = getter;
+ 			item->_setter = setter;
+ 		});
++		action = [=](){ item->OnClick(); };
+ 	} else if(caption == "-") {
+ 		CSBReader reader;
+ 		Widget * root = static_cast<Widget*>(reader.Load("ui/comctrl/SeperateItem.csb"));
+@@ -97,16 +104,47 @@
+ 		return root;
+ 	} else {
+ 		ret = CreatePreferenceItem<tPreferenceItemConstant>(idx, size, caption);
+-		ret->addClickEventListener([=](Ref*){
++		action = [=](){
+ 			TVPMainScene::GetInstance()->scheduleOnce(
+ 				std::bind(&TVPMainScene::popAllUIForm, TVPMainScene::GetInstance()), 0, "close_menu");
+ 			item->OnClick();
+-		});
++		};
++		ret->addClickEventListener([action](Ref*){ action(); });
+ 		ret->setTouchEnabled(true);
+ 	}
++	_navItems.push_back(ret);
++	_navActions.push_back(action);
+ 	return ret;
+ }
+ 
++void TVPInGameMenuForm::navMove(int delta) {
++	const int n = (int)_navItems.size();
++	if (n == 0) return;
++	int i = _navSel;
++	for (int k = 0; k < n; ++k) {
++		i = (i + delta + n) % n;
++		if (_navActions[i]) {
++			_navSel = i;
++			updateNavVisual();
++			return;
++		}
++	}
++}
++
++bool TVPInGameMenuForm::navActivate() {
++	if (_navSel < 0 || _navSel >= (int)_navActions.size()) return false;
++	std::function<void()> action = _navActions[_navSel];
++	if (!action) return false;
++	action();
++	return true;
++}
++
++void TVPInGameMenuForm::updateNavVisual() {
++	for (size_t i = 0; i < _navItems.size(); ++i) {
++		if (_navItems[i]) _navItems[i]->setSelectedVisual((int)i == _navSel);
++	}
++}
++
+ void TVPShowPopMenu(tTJSNI_MenuItem* menu) {
+ 	TVPMainScene::GetInstance()->pushUIForm(TVPInGameMenuForm::create(std::string(), menu));
+ }
+diff --git a/src/core/environ/ui/PreferenceForm.h b/src/core/environ/ui/PreferenceForm.h
+--- a/src/core/environ/ui/PreferenceForm.h
++++ b/src/core/environ/ui/PreferenceForm.h
+@@ -74,6 +74,8 @@
+ class iPreferenceItem : public cocos2d::ui::Widget {
+ public:
+ 	void initFromInfo(int idx, cocos2d::Size size, const std::string& title); // not tid
++	// [GalNX] pad navigation: highlight this row when a controller selects it.
++	virtual void setSelectedVisual(bool b) { (void)b; }
+ 
+ protected:
+ 	virtual void initController(const NodeMap &allNodes) = 0;
+@@ -116,6 +118,7 @@
+ 	virtual const char* getUIFileName() const override;
+ 	virtual void onPressStateChangedToNormal() override;
+ 	virtual void onPressStateChangedToPressed() override;
++	virtual void setSelectedVisual(bool b) override;
+ 	cocos2d::ui::CheckBox *checkbox;
+ 	cocos2d::Node *highlight;
+ };
+@@ -127,6 +130,7 @@
+ 	virtual void onPressStateChangedToNormal() override;
+ 	virtual void onPressStateChangedToPressed() override;
+ 
++	virtual void setSelectedVisual(bool b) override;
+ 	cocos2d::Node *highlight = nullptr;
+ };
+ 
+diff --git a/src/core/environ/ui/PreferenceForm.cpp b/src/core/environ/ui/PreferenceForm.cpp
+--- a/src/core/environ/ui/PreferenceForm.cpp
++++ b/src/core/environ/ui/PreferenceForm.cpp
+@@ -544,3 +544,11 @@
+ 	initFromInfo(idx, size, buf);
+ }
+ 
++
++void tPreferenceItemCheckBox::setSelectedVisual(bool b) {
++	if (highlight) highlight->setVisible(b);
++}
++
++void tPreferenceItemWithHighlight::setSelectedVisual(bool b) {
++	if (highlight) highlight->setVisible(b);
++}

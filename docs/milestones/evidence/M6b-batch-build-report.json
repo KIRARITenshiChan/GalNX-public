@@ -1,0 +1,1263 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-10-29T20:06:41Z",
+  "root": "E:/Othergames/Nintendo Switch/Workspace/GalNX/examples/batch",
+  "totals": {
+    "total": 4,
+    "ok": 3,
+    "warn": 0,
+    "fail": 1,
+    "skipped": 0,
+    "duration_s": 0.3359,
+    "cache_hits": 0,
+    "cache_misses": 1,
+    "built": 1
+  },
+  "projects": [
+    {
+      "path": "demo-a.yaml",
+      "name": "batch-demo-a",
+      "adapter": "krkrsdl2",
+      "status": "ok",
+      "stages": [
+        {
+          "name": "manifest",
+          "status": "ok",
+          "duration_s": 0.0154,
+          "checks": [
+            {
+              "id": "manifest.parse",
+              "name": "manifest.parse",
+              "status": "ok",
+              "detail": "demo-a.yaml",
+              "hint": ""
+            },
+            {
+              "id": "manifest.schema",
+              "name": "manifest.schema",
+              "status": "ok",
+              "detail": "schema_version=1",
+              "hint": ""
+            },
+            {
+              "id": "manifest.input",
+              "name": "manifest.input",
+              "status": "ok",
+              "detail": "input section resolved",
+              "hint": ""
+            },
+            {
+              "id": "manifest.game",
+              "name": "manifest.game",
+              "status": "ok",
+              "detail": "batch-demo-a (target=nro)",
+              "hint": ""
+            }
+          ]
+        },
+        {
+          "name": "preflight",
+          "status": "ok",
+          "duration_s": 0.0012,
+          "checks": [
+            {
+              "id": "game.source_dir",
+              "name": "game.source_dir",
+              "status": "ok",
+              "detail": "examples/batch/games/demo-a (1 entries: data.xp3)",
+              "hint": ""
+            },
+            {
+              "id": "engine.entry",
+              "name": "engine.entry",
+              "status": "ok",
+              "detail": "examples\\batch\\games\\demo-a\\data.xp3",
+              "hint": ""
+            },
+            {
+              "id": "switch.title_id",
+              "name": "switch.title_id",
+              "status": "ok",
+              "detail": "0x010047410000A001",
+              "hint": ""
+            },
+            {
+              "id": "switch.target",
+              "name": "switch.target",
+              "status": "ok",
+              "detail": "nro",
+              "hint": ""
+            },
+            {
+              "id": "build.output_dir",
+              "name": "build.output_dir",
+              "status": "ok",
+              "detail": "E:/galnx-build/batch-examples/demo-a",
+              "hint": ""
+            },
+            {
+              "id": "build.output_dir.length",
+              "name": "build.output_dir.length",
+              "status": "ok",
+              "detail": "36 chars (limit 259)",
+              "hint": ""
+            },
+            {
+              "id": "build-root",
+              "name": "build-root",
+              "status": "ok",
+              "detail": "E:\\galnx-build (free 449.0 GiB)",
+              "hint": ""
+            },
+            {
+              "id": "prod.keys",
+              "name": "prod.keys",
+              "status": "skip",
+              "detail": "NRO target does not need keys",
+              "hint": ""
+            }
+          ]
+        },
+        {
+          "name": "engines",
+          "status": "ok",
+          "duration_s": 0.0005,
+          "checks": [
+            {
+              "id": "engine.adapter",
+              "name": "engine.adapter",
+              "status": "ok",
+              "detail": "krkrsdl2 (krkrsdl2)",
+              "hint": ""
+            },
+            {
+              "id": "engine.pinned",
+              "name": "engine.pinned",
+              "status": "ok",
+              "detail": "124bdf841f09e7ce02aa99b7b55791a0f7a900ff",
+              "hint": ""
+            },
+            {
+              "id": "engine.license",
+              "name": "engine.license",
+              "status": "ok",
+              "detail": "MIT",
+              "hint": "https://github.com/krkrsdl2/krkrsdl2/blob/main/LICENSE"
+            },
+            {
+              "id": "engine.input_profile",
+              "name": "engine.input_profile",
+              "status": "ok",
+              "detail": "krkrsdl2 (engine-default)",
+              "hint": ""
+            },
+            {
+              "id": "engine.plan",
+              "name": "engine.plan",
+              "status": "ok",
+              "detail": "8 build step(s) planned (not executed)",
+              "hint": ""
+            },
+            {
+              "id": "engine.artifact",
+              "name": "engine.artifact",
+              "status": "ok",
+              "detail": "krkrsdl2-krkrsdl2-124bdf84.nro",
+              "hint": ""
+            },
+            {
+              "id": "engine.result",
+              "name": "engine.result",
+              "status": "ok",
+              "detail": "build plan ready; no commands executed",
+              "hint": ""
+            }
+          ]
+        },
+        {
+          "name": "cache",
+          "status": "skip",
+          "duration_s": 0.0,
+          "checks": [
+            {
+              "id": "cache.skip",
+              "name": "cache.skip",
+              "status": "skip",
+              "detail": "no build.commands/artifact configured",
+              "hint": ""
+            }
+          ]
+        },
+        {
+          "name": "build",
+          "status": "skip",
+          "duration_s": 0.0,
+          "checks": [
+            {
+              "id": "build.skip",
+              "name": "build.skip",
+              "status": "skip",
+              "detail": "no build.commands/artifact configured",
+              "hint": ""
+            }
+          ]
+        }
+      ],
+      "checks": [
+        {
+          "id": "manifest.parse",
+          "name": "manifest.parse",
+          "status": "ok",
+          "detail": "demo-a.yaml",
+          "hint": ""
+        },
+        {
+          "id": "manifest.schema",
+          "name": "manifest.schema",
+          "status": "ok",
+          "detail": "schema_version=1",
+          "hint": ""
+        },
+        {
+          "id": "manifest.input",
+          "name": "manifest.input",
+          "status": "ok",
+          "detail": "input section resolved",
+          "hint": ""
+        },
+        {
+          "id": "manifest.game",
+          "name": "manifest.game",
+          "status": "ok",
+          "detail": "batch-demo-a (target=nro)",
+          "hint": ""
+        },
+        {
+          "id": "game.source_dir",
+          "name": "game.source_dir",
+          "status": "ok",
+          "detail": "examples/batch/games/demo-a (1 entries: data.xp3)",
+          "hint": ""
+        },
+        {
+          "id": "engine.entry",
+          "name": "engine.entry",
+          "status": "ok",
+          "detail": "examples\\batch\\games\\demo-a\\data.xp3",
+          "hint": ""
+        },
+        {
+          "id": "switch.title_id",
+          "name": "switch.title_id",
+          "status": "ok",
+          "detail": "0x010047410000A001",
+          "hint": ""
+        },
+        {
+          "id": "switch.target",
+          "name": "switch.target",
+          "status": "ok",
+          "detail": "nro",
+          "hint": ""
+        },
+        {
+          "id": "build.output_dir",
+          "name": "build.output_dir",
+          "status": "ok",
+          "detail": "E:/galnx-build/batch-examples/demo-a",
+          "hint": ""
+        },
+        {
+          "id": "build.output_dir.length",
+          "name": "build.output_dir.length",
+          "status": "ok",
+          "detail": "36 chars (limit 259)",
+          "hint": ""
+        },
+        {
+          "id": "build-root",
+          "name": "build-root",
+          "status": "ok",
+          "detail": "E:\\galnx-build (free 449.0 GiB)",
+          "hint": ""
+        },
+        {
+          "id": "prod.keys",
+          "name": "prod.keys",
+          "status": "skip",
+          "detail": "NRO target does not need keys",
+          "hint": ""
+        },
+        {
+          "id": "engine.adapter",
+          "name": "engine.adapter",
+          "status": "ok",
+          "detail": "krkrsdl2 (krkrsdl2)",
+          "hint": ""
+        },
+        {
+          "id": "engine.pinned",
+          "name": "engine.pinned",
+          "status": "ok",
+          "detail": "124bdf841f09e7ce02aa99b7b55791a0f7a900ff",
+          "hint": ""
+        },
+        {
+          "id": "engine.license",
+          "name": "engine.license",
+          "status": "ok",
+          "detail": "MIT",
+          "hint": "https://github.com/krkrsdl2/krkrsdl2/blob/main/LICENSE"
+        },
+        {
+          "id": "engine.input_profile",
+          "name": "engine.input_profile",
+          "status": "ok",
+          "detail": "krkrsdl2 (engine-default)",
+          "hint": ""
+        },
+        {
+          "id": "engine.plan",
+          "name": "engine.plan",
+          "status": "ok",
+          "detail": "8 build step(s) planned (not executed)",
+          "hint": ""
+        },
+        {
+          "id": "engine.artifact",
+          "name": "engine.artifact",
+          "status": "ok",
+          "detail": "krkrsdl2-krkrsdl2-124bdf84.nro",
+          "hint": ""
+        },
+        {
+          "id": "engine.result",
+          "name": "engine.result",
+          "status": "ok",
+          "detail": "build plan ready; no commands executed",
+          "hint": ""
+        },
+        {
+          "id": "cache.skip",
+          "name": "cache.skip",
+          "status": "skip",
+          "detail": "no build.commands/artifact configured",
+          "hint": ""
+        },
+        {
+          "id": "build.skip",
+          "name": "build.skip",
+          "status": "skip",
+          "detail": "no build.commands/artifact configured",
+          "hint": ""
+        }
+      ],
+      "errors": [],
+      "duration_s": 0.0181,
+      "cache": {
+        "hit": false,
+        "key": ""
+      },
+      "commands": []
+    },
+    {
+      "path": "demo-b.yaml",
+      "name": "batch-demo-b",
+      "adapter": "brewser",
+      "status": "ok",
+      "stages": [
+        {
+          "name": "manifest",
+          "status": "ok",
+          "duration_s": 0.0155,
+          "checks": [
+            {
+              "id": "manifest.parse",
+              "name": "manifest.parse",
+              "status": "ok",
+              "detail": "demo-b.yaml",
+              "hint": ""
+            },
+            {
+              "id": "manifest.schema",
+              "name": "manifest.schema",
+              "status": "ok",
+              "detail": "schema_version=1",
+              "hint": ""
+            },
+            {
+              "id": "manifest.input",
+              "name": "manifest.input",
+              "status": "ok",
+              "detail": "input section resolved",
+              "hint": ""
+            },
+            {
+              "id": "manifest.game",
+              "name": "manifest.game",
+              "status": "ok",
+              "detail": "batch-demo-b (target=nro)",
+              "hint": ""
+            }
+          ]
+        },
+        {
+          "name": "preflight",
+          "status": "ok",
+          "duration_s": 0.0014,
+          "checks": [
+            {
+              "id": "game.source_dir",
+              "name": "game.source_dir",
+              "status": "ok",
+              "detail": "examples/batch/games/demo-b (1 entries: index.html)",
+              "hint": ""
+            },
+            {
+              "id": "engine.entry",
+              "name": "engine.entry",
+              "status": "ok",
+              "detail": "examples\\batch\\games\\demo-b\\index.html",
+              "hint": ""
+            },
+            {
+              "id": "switch.title_id",
+              "name": "switch.title_id",
+              "status": "ok",
+              "detail": "0x010047410000A002",
+              "hint": ""
+            },
+            {
+              "id": "switch.target",
+              "name": "switch.target",
+              "status": "ok",
+              "detail": "nro",
+              "hint": ""
+            },
+            {
+              "id": "build.output_dir",
+              "name": "build.output_dir",
+              "status": "ok",
+              "detail": "E:/galnx-build/batch-examples/demo-b",
+              "hint": ""
+            },
+            {
+              "id": "build.output_dir.length",
+              "name": "build.output_dir.length",
+              "status": "ok",
+              "detail": "36 chars (limit 259)",
+              "hint": ""
+            },
+            {
+              "id": "build-root",
+              "name": "build-root",
+              "status": "ok",
+              "detail": "E:\\galnx-build (free 449.0 GiB)",
+              "hint": ""
+            },
+            {
+              "id": "prod.keys",
+              "name": "prod.keys",
+              "status": "skip",
+              "detail": "NRO target does not need keys",
+              "hint": ""
+            }
+          ]
+        },
+        {
+          "name": "engines",
+          "status": "ok",
+          "duration_s": 0.0005,
+          "checks": [
+            {
+              "id": "engine.adapter",
+              "name": "engine.adapter",
+              "status": "ok",
+              "detail": "brewser (brewser)",
+              "hint": ""
+            },
+            {
+              "id": "engine.pinned",
+              "name": "engine.pinned",
+              "status": "ok",
+              "detail": "8040580e92e40a60f704a6478ee296b105212f1b",
+              "hint": ""
+            },
+            {
+              "id": "engine.license",
+              "name": "engine.license",
+              "status": "ok",
+              "detail": "MPL-2.0",
+              "hint": "https://github.com/natureglass/Brewser/blob/main/LICENSE"
+            },
+            {
+              "id": "engine.input_profile",
+              "name": "engine.input_profile",
+              "status": "ok",
+              "detail": "kb_mouse (engine-default)",
+              "hint": ""
+            },
+            {
+              "id": "engine.plan",
+              "name": "engine.plan",
+              "status": "ok",
+              "detail": "6 build step(s) planned (not executed)",
+              "hint": ""
+            },
+            {
+              "id": "engine.artifact",
+              "name": "engine.artifact",
+              "status": "ok",
+              "detail": "brewser.nro",
+              "hint": ""
+            },
+            {
+              "id": "engine.result",
+              "name": "engine.result",
+              "status": "ok",
+              "detail": "build plan ready; no commands executed",
+              "hint": ""
+            }
+          ]
+        },
+        {
+          "name": "cache",
+          "status": "skip",
+          "duration_s": 0.0,
+          "checks": [
+            {
+              "id": "cache.skip",
+              "name": "cache.skip",
+              "status": "skip",
+              "detail": "no build.commands/artifact configured",
+              "hint": ""
+            }
+          ]
+        },
+        {
+          "name": "build",
+          "status": "skip",
+          "duration_s": 0.0,
+          "checks": [
+            {
+              "id": "build.skip",
+              "name": "build.skip",
+              "status": "skip",
+              "detail": "no build.commands/artifact configured",
+              "hint": ""
+            }
+          ]
+        }
+      ],
+      "checks": [
+        {
+          "id": "manifest.parse",
+          "name": "manifest.parse",
+          "status": "ok",
+          "detail": "demo-b.yaml",
+          "hint": ""
+        },
+        {
+          "id": "manifest.schema",
+          "name": "manifest.schema",
+          "status": "ok",
+          "detail": "schema_version=1",
+          "hint": ""
+        },
+        {
+          "id": "manifest.input",
+          "name": "manifest.input",
+          "status": "ok",
+          "detail": "input section resolved",
+          "hint": ""
+        },
+        {
+          "id": "manifest.game",
+          "name": "manifest.game",
+          "status": "ok",
+          "detail": "batch-demo-b (target=nro)",
+          "hint": ""
+        },
+        {
+          "id": "game.source_dir",
+          "name": "game.source_dir",
+          "status": "ok",
+          "detail": "examples/batch/games/demo-b (1 entries: index.html)",
+          "hint": ""
+        },
+        {
+          "id": "engine.entry",
+          "name": "engine.entry",
+          "status": "ok",
+          "detail": "examples\\batch\\games\\demo-b\\index.html",
+          "hint": ""
+        },
+        {
+          "id": "switch.title_id",
+          "name": "switch.title_id",
+          "status": "ok",
+          "detail": "0x010047410000A002",
+          "hint": ""
+        },
+        {
+          "id": "switch.target",
+          "name": "switch.target",
+          "status": "ok",
+          "detail": "nro",
+          "hint": ""
+        },
+        {
+          "id": "build.output_dir",
+          "name": "build.output_dir",
+          "status": "ok",
+          "detail": "E:/galnx-build/batch-examples/demo-b",
+          "hint": ""
+        },
+        {
+          "id": "build.output_dir.length",
+          "name": "build.output_dir.length",
+          "status": "ok",
+          "detail": "36 chars (limit 259)",
+          "hint": ""
+        },
+        {
+          "id": "build-root",
+          "name": "build-root",
+          "status": "ok",
+          "detail": "E:\\galnx-build (free 449.0 GiB)",
+          "hint": ""
+        },
+        {
+          "id": "prod.keys",
+          "name": "prod.keys",
+          "status": "skip",
+          "detail": "NRO target does not need keys",
+          "hint": ""
+        },
+        {
+          "id": "engine.adapter",
+          "name": "engine.adapter",
+          "status": "ok",
+          "detail": "brewser (brewser)",
+          "hint": ""
+        },
+        {
+          "id": "engine.pinned",
+          "name": "engine.pinned",
+          "status": "ok",
+          "detail": "8040580e92e40a60f704a6478ee296b105212f1b",
+          "hint": ""
+        },
+        {
+          "id": "engine.license",
+          "name": "engine.license",
+          "status": "ok",
+          "detail": "MPL-2.0",
+          "hint": "https://github.com/natureglass/Brewser/blob/main/LICENSE"
+        },
+        {
+          "id": "engine.input_profile",
+          "name": "engine.input_profile",
+          "status": "ok",
+          "detail": "kb_mouse (engine-default)",
+          "hint": ""
+        },
+        {
+          "id": "engine.plan",
+          "name": "engine.plan",
+          "status": "ok",
+          "detail": "6 build step(s) planned (not executed)",
+          "hint": ""
+        },
+        {
+          "id": "engine.artifact",
+          "name": "engine.artifact",
+          "status": "ok",
+          "detail": "brewser.nro",
+          "hint": ""
+        },
+        {
+          "id": "engine.result",
+          "name": "engine.result",
+          "status": "ok",
+          "detail": "build plan ready; no commands executed",
+          "hint": ""
+        },
+        {
+          "id": "cache.skip",
+          "name": "cache.skip",
+          "status": "skip",
+          "detail": "no build.commands/artifact configured",
+          "hint": ""
+        },
+        {
+          "id": "build.skip",
+          "name": "build.skip",
+          "status": "skip",
+          "detail": "no build.commands/artifact configured",
+          "hint": ""
+        }
+      ],
+      "errors": [],
+      "duration_s": 0.0186,
+      "cache": {
+        "hit": false,
+        "key": ""
+      },
+      "commands": []
+    },
+    {
+      "path": "demo-broken.yaml",
+      "name": "batch-demo-broken",
+      "adapter": "",
+      "status": "fail",
+      "stages": [
+        {
+          "name": "manifest",
+          "status": "fail",
+          "duration_s": 0.0128,
+          "checks": [
+            {
+              "id": "manifest.parse",
+              "name": "manifest.parse",
+              "status": "ok",
+              "detail": "demo-broken.yaml",
+              "hint": ""
+            },
+            {
+              "id": "manifest.schema",
+              "name": "manifest.schema",
+              "status": "fail",
+              "detail": "<root>: 'engine' is a required property",
+              "hint": "fix the manifest structure"
+            },
+            {
+              "id": "manifest.schema",
+              "name": "manifest.schema",
+              "status": "fail",
+              "detail": "switch/title_id: 'NOT-A-TITLE-ID' does not match '^01[0-9A-Fa-f]{14}$'",
+              "hint": "fix the manifest structure"
+            }
+          ]
+        },
+        {
+          "name": "preflight",
+          "status": "skip",
+          "duration_s": 0.0,
+          "checks": [
+            {
+              "id": "preflight.skip",
+              "name": "preflight.skip",
+              "status": "skip",
+              "detail": "manifest stage failed",
+              "hint": ""
+            }
+          ]
+        },
+        {
+          "name": "engines",
+          "status": "skip",
+          "duration_s": 0.0,
+          "checks": [
+            {
+              "id": "engines.skip",
+              "name": "engines.skip",
+              "status": "skip",
+              "detail": "manifest stage failed",
+              "hint": ""
+            }
+          ]
+        },
+        {
+          "name": "cache",
+          "status": "skip",
+          "duration_s": 0.0,
+          "checks": [
+            {
+              "id": "cache.skip",
+              "name": "cache.skip",
+              "status": "skip",
+              "detail": "manifest stage failed",
+              "hint": ""
+            }
+          ]
+        },
+        {
+          "name": "build",
+          "status": "skip",
+          "duration_s": 0.0,
+          "checks": [
+            {
+              "id": "build.skip",
+              "name": "build.skip",
+              "status": "skip",
+              "detail": "manifest stage failed",
+              "hint": ""
+            }
+          ]
+        }
+      ],
+      "checks": [
+        {
+          "id": "manifest.parse",
+          "name": "manifest.parse",
+          "status": "ok",
+          "detail": "demo-broken.yaml",
+          "hint": ""
+        },
+        {
+          "id": "manifest.schema",
+          "name": "manifest.schema",
+          "status": "fail",
+          "detail": "<root>: 'engine' is a required property",
+          "hint": "fix the manifest structure"
+        },
+        {
+          "id": "manifest.schema",
+          "name": "manifest.schema",
+          "status": "fail",
+          "detail": "switch/title_id: 'NOT-A-TITLE-ID' does not match '^01[0-9A-Fa-f]{14}$'",
+          "hint": "fix the manifest structure"
+        },
+        {
+          "id": "preflight.skip",
+          "name": "preflight.skip",
+          "status": "skip",
+          "detail": "manifest stage failed",
+          "hint": ""
+        },
+        {
+          "id": "engines.skip",
+          "name": "engines.skip",
+          "status": "skip",
+          "detail": "manifest stage failed",
+          "hint": ""
+        },
+        {
+          "id": "cache.skip",
+          "name": "cache.skip",
+          "status": "skip",
+          "detail": "manifest stage failed",
+          "hint": ""
+        },
+        {
+          "id": "build.skip",
+          "name": "build.skip",
+          "status": "skip",
+          "detail": "manifest stage failed",
+          "hint": ""
+        }
+      ],
+      "errors": [
+        "<root>: 'engine' is a required property",
+        "switch/title_id: 'NOT-A-TITLE-ID' does not match '^01[0-9A-Fa-f]{14}$'"
+      ],
+      "duration_s": 0.0134,
+      "cache": {
+        "hit": false,
+        "key": ""
+      },
+      "commands": []
+    },
+    {
+      "path": "demo-build.yaml",
+      "name": "batch-demo-build",
+      "adapter": "custom",
+      "status": "ok",
+      "stages": [
+        {
+          "name": "manifest",
+          "status": "ok",
+          "duration_s": 0.0151,
+          "checks": [
+            {
+              "id": "manifest.parse",
+              "name": "manifest.parse",
+              "status": "ok",
+              "detail": "demo-build.yaml",
+              "hint": ""
+            },
+            {
+              "id": "manifest.schema",
+              "name": "manifest.schema",
+              "status": "ok",
+              "detail": "schema_version=1",
+              "hint": ""
+            },
+            {
+              "id": "manifest.input",
+              "name": "manifest.input",
+              "status": "ok",
+              "detail": "input section resolved",
+              "hint": ""
+            },
+            {
+              "id": "manifest.game",
+              "name": "manifest.game",
+              "status": "ok",
+              "detail": "batch-demo-build (target=nro)",
+              "hint": ""
+            }
+          ]
+        },
+        {
+          "name": "preflight",
+          "status": "ok",
+          "duration_s": 0.0014,
+          "checks": [
+            {
+              "id": "game.source_dir",
+              "name": "game.source_dir",
+              "status": "ok",
+              "detail": "examples/batch/games/demo-build (2 entries: build.py, seed.txt)",
+              "hint": ""
+            },
+            {
+              "id": "engine.entry",
+              "name": "engine.entry",
+              "status": "ok",
+              "detail": "examples\\batch\\games\\demo-build\\seed.txt",
+              "hint": ""
+            },
+            {
+              "id": "switch.title_id",
+              "name": "switch.title_id",
+              "status": "ok",
+              "detail": "0x010047410000A003",
+              "hint": ""
+            },
+            {
+              "id": "switch.target",
+              "name": "switch.target",
+              "status": "ok",
+              "detail": "nro",
+              "hint": ""
+            },
+            {
+              "id": "build.output_dir",
+              "name": "build.output_dir",
+              "status": "ok",
+              "detail": "E:/galnx-build/batch-examples/demo-build",
+              "hint": ""
+            },
+            {
+              "id": "build.output_dir.length",
+              "name": "build.output_dir.length",
+              "status": "ok",
+              "detail": "40 chars (limit 259)",
+              "hint": ""
+            },
+            {
+              "id": "build-root",
+              "name": "build-root",
+              "status": "ok",
+              "detail": "E:\\galnx-build (free 449.0 GiB)",
+              "hint": ""
+            },
+            {
+              "id": "prod.keys",
+              "name": "prod.keys",
+              "status": "skip",
+              "detail": "NRO target does not need keys",
+              "hint": ""
+            }
+          ]
+        },
+        {
+          "name": "engines",
+          "status": "ok",
+          "duration_s": 0.0272,
+          "checks": [
+            {
+              "id": "engine.adapter",
+              "name": "engine.adapter",
+              "status": "ok",
+              "detail": "custom (descriptor)",
+              "hint": ""
+            },
+            {
+              "id": "engine.pinned",
+              "name": "engine.pinned",
+              "status": "ok",
+              "detail": "0123456789abcdef0123456789abcdef01234567",
+              "hint": ""
+            },
+            {
+              "id": "engine.license",
+              "name": "engine.license",
+              "status": "ok",
+              "detail": "MIT",
+              "hint": "https://example.invalid/galnx-demo/LICENSE"
+            },
+            {
+              "id": "engine.input_profile",
+              "name": "engine.input_profile",
+              "status": "ok",
+              "detail": "kb_mouse (engine-default)",
+              "hint": ""
+            },
+            {
+              "id": "engine.plan",
+              "name": "engine.plan",
+              "status": "ok",
+              "detail": "3 build step(s) planned (not executed)",
+              "hint": ""
+            },
+            {
+              "id": "engine.artifact",
+              "name": "engine.artifact",
+              "status": "ok",
+              "detail": "custom-custom-demo-01234567.nro",
+              "hint": ""
+            },
+            {
+              "id": "engine.result",
+              "name": "engine.result",
+              "status": "ok",
+              "detail": "build plan ready; no commands executed",
+              "hint": ""
+            }
+          ]
+        },
+        {
+          "name": "cache",
+          "status": "ok",
+          "duration_s": 0.1387,
+          "checks": [
+            {
+              "id": "cache.miss",
+              "name": "cache.miss",
+              "status": "ok",
+              "detail": "no cached artifact for key 2df60e09c72bd1d8",
+              "hint": ""
+            }
+          ]
+        },
+        {
+          "name": "build",
+          "status": "ok",
+          "duration_s": 0.1013,
+          "checks": [
+            {
+              "id": "build.command.1",
+              "name": "build.command.1",
+              "status": "ok",
+              "detail": "python games/demo-build/build.py --out out/demo.bin",
+              "hint": "E:\\Othergames\\Nintendo Switch\\Workspace\\GalNX\\examples\\batch\\.galnx\\logs\\batch-demo-build-1.log"
+            },
+            {
+              "id": "build.artifact",
+              "name": "build.artifact",
+              "status": "ok",
+              "detail": "out/demo.bin (91 bytes, sha256 3c9b52aafdcfbb5387b20b1c704304276538484afb69a29942206fc097f82c4e)",
+              "hint": ""
+            },
+            {
+              "id": "build.cache",
+              "name": "build.cache",
+              "status": "ok",
+              "detail": "cached artifact under key 2df60e09c72bd1d8",
+              "hint": ""
+            },
+            {
+              "id": "build.result",
+              "name": "build.result",
+              "status": "ok",
+              "detail": "1 command(s) succeeded",
+              "hint": ""
+            }
+          ]
+        }
+      ],
+      "checks": [
+        {
+          "id": "manifest.parse",
+          "name": "manifest.parse",
+          "status": "ok",
+          "detail": "demo-build.yaml",
+          "hint": ""
+        },
+        {
+          "id": "manifest.schema",
+          "name": "manifest.schema",
+          "status": "ok",
+          "detail": "schema_version=1",
+          "hint": ""
+        },
+        {
+          "id": "manifest.input",
+          "name": "manifest.input",
+          "status": "ok",
+          "detail": "input section resolved",
+          "hint": ""
+        },
+        {
+          "id": "manifest.game",
+          "name": "manifest.game",
+          "status": "ok",
+          "detail": "batch-demo-build (target=nro)",
+          "hint": ""
+        },
+        {
+          "id": "game.source_dir",
+          "name": "game.source_dir",
+          "status": "ok",
+          "detail": "examples/batch/games/demo-build (2 entries: build.py, seed.txt)",
+          "hint": ""
+        },
+        {
+          "id": "engine.entry",
+          "name": "engine.entry",
+          "status": "ok",
+          "detail": "examples\\batch\\games\\demo-build\\seed.txt",
+          "hint": ""
+        },
+        {
+          "id": "switch.title_id",
+          "name": "switch.title_id",
+          "status": "ok",
+          "detail": "0x010047410000A003",
+          "hint": ""
+        },
+        {
+          "id": "switch.target",
+          "name": "switch.target",
+          "status": "ok",
+          "detail": "nro",
+          "hint": ""
+        },
+        {
+          "id": "build.output_dir",
+          "name": "build.output_dir",
+          "status": "ok",
+          "detail": "E:/galnx-build/batch-examples/demo-build",
+          "hint": ""
+        },
+        {
+          "id": "build.output_dir.length",
+          "name": "build.output_dir.length",
+          "status": "ok",
+          "detail": "40 chars (limit 259)",
+          "hint": ""
+        },
+        {
+          "id": "build-root",
+          "name": "build-root",
+          "status": "ok",
+          "detail": "E:\\galnx-build (free 449.0 GiB)",
+          "hint": ""
+        },
+        {
+          "id": "prod.keys",
+          "name": "prod.keys",
+          "status": "skip",
+          "detail": "NRO target does not need keys",
+          "hint": ""
+        },
+        {
+          "id": "engine.adapter",
+          "name": "engine.adapter",
+          "status": "ok",
+          "detail": "custom (descriptor)",
+          "hint": ""
+        },
+        {
+          "id": "engine.pinned",
+          "name": "engine.pinned",
+          "status": "ok",
+          "detail": "0123456789abcdef0123456789abcdef01234567",
+          "hint": ""
+        },
+        {
+          "id": "engine.license",
+          "name": "engine.license",
+          "status": "ok",
+          "detail": "MIT",
+          "hint": "https://example.invalid/galnx-demo/LICENSE"
+        },
+        {
+          "id": "engine.input_profile",
+          "name": "engine.input_profile",
+          "status": "ok",
+          "detail": "kb_mouse (engine-default)",
+          "hint": ""
+        },
+        {
+          "id": "engine.plan",
+          "name": "engine.plan",
+          "status": "ok",
+          "detail": "3 build step(s) planned (not executed)",
+          "hint": ""
+        },
+        {
+          "id": "engine.artifact",
+          "name": "engine.artifact",
+          "status": "ok",
+          "detail": "custom-custom-demo-01234567.nro",
+          "hint": ""
+        },
+        {
+          "id": "engine.result",
+          "name": "engine.result",
+          "status": "ok",
+          "detail": "build plan ready; no commands executed",
+          "hint": ""
+        },
+        {
+          "id": "cache.miss",
+          "name": "cache.miss",
+          "status": "ok",
+          "detail": "no cached artifact for key 2df60e09c72bd1d8",
+          "hint": ""
+        },
+        {
+          "id": "build.command.1",
+          "name": "build.command.1",
+          "status": "ok",
+          "detail": "python games/demo-build/build.py --out out/demo.bin",
+          "hint": "E:\\Othergames\\Nintendo Switch\\Workspace\\GalNX\\examples\\batch\\.galnx\\logs\\batch-demo-build-1.log"
+        },
+        {
+          "id": "build.artifact",
+          "name": "build.artifact",
+          "status": "ok",
+          "detail": "out/demo.bin (91 bytes, sha256 3c9b52aafdcfbb5387b20b1c704304276538484afb69a29942206fc097f82c4e)",
+          "hint": ""
+        },
+        {
+          "id": "build.cache",
+          "name": "build.cache",
+          "status": "ok",
+          "detail": "cached artifact under key 2df60e09c72bd1d8",
+          "hint": ""
+        },
+        {
+          "id": "build.result",
+          "name": "build.result",
+          "status": "ok",
+          "detail": "1 command(s) succeeded",
+          "hint": ""
+        }
+      ],
+      "errors": [],
+      "duration_s": 0.2852,
+      "cache": {
+        "hit": false,
+        "key": "2df60e09c72bd1d8ff3db09d47c2fdd72b96e240cd0cc76f1b31f19536b4f0d1"
+      },
+      "commands": [
+        {
+          "command": "python games/demo-build/build.py --out out/demo.bin",
+          "duration_s": 0.093,
+          "exit_code": 0,
+          "log": ".galnx/logs/batch-demo-build-1.log"
+        }
+      ],
+      "artifact": {
+        "path": "out/demo.bin",
+        "size": 91,
+        "sha256": "3c9b52aafdcfbb5387b20b1c704304276538484afb69a29942206fc097f82c4e"
+      }
+    }
+  ]
+}

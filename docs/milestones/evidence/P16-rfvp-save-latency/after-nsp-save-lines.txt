@@ -1,0 +1,17 @@
+frame 6720: 60.0 fps over the last 60 frames, slowest frame 18.7 ms
+[INFO] [save] SaveCreate(3) value=Int(901)
+[INFO] [save] state total=399110B
+[INFO] [diag t=658456187304us] [save] materialize thumb=200x113 encode_ms=16.54 len=489531
+[INFO] [diag t=658456195652us] [save] commit slot=901 len=489531 write_ms=6.73 ok=true
+[INFO] [save] SaveCreate(3) value=Int(906)
+[INFO] [save] state total=401063B
+[INFO] [diag t=658466635252us] [save] materialize thumb=200x113 encode_ms=6.96 len=491484
+[INFO] [diag t=658466639068us] [save] commit slot=906 len=491484 write_ms=3.40 ok=true
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil
+[INFO] [save] SaveCreate(3) value=Nil

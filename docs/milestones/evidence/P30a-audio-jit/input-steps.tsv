@@ -1,0 +1,35 @@
+0	wait	wait:22000	ok	waited 22000ms		22178
+1	capture	capture:t0-title	ok	bytes=1418845 nonblack=0.9018	E:\galnx-build\p30\run-lead-audio-jit\20261107-034903-IROSEKA_FHD-010047420000a000-v1.1.6-test\step-02-t0-title.png	1271
+2	click	click:1386,638	ok	focus_ok=1		1588
+3	wait	wait:9000	ok	waited 9000ms		9182
+4	capture	capture:t1-loadlist	ok	bytes=1891036 nonblack=0.9018	E:\galnx-build\p30\run-lead-audio-jit\20261107-034903-IROSEKA_FHD-010047420000a000-v1.1.6-test\step-05-t1-loadlist.png	1255
+5	click	click:420,300	ok	focus_ok=1		1559
+6	wait	wait:24000	ok	waited 24000ms		24173
+7	capture	capture:t2-story	ok	bytes=1601509 nonblack=0.9018	E:\galnx-build\p30\run-lead-audio-jit\20261107-034903-IROSEKA_FHD-010047420000a000-v1.1.6-test\step-08-t2-story.png	1262
+8	key	key:C	ok	keys_sent=1		1171
+9	wait	wait:1500	ok	waited 1500ms		1670
+10	key	key:C	ok	keys_sent=1		1139
+11	wait	wait:1500	ok	waited 1500ms		1673
+12	key	key:C	ok	keys_sent=1		1155
+13	wait	wait:1500	ok	waited 1500ms		1668
+14	key	key:C	ok	keys_sent=1		1169
+15	wait	wait:1500	ok	waited 1500ms		1669
+16	key	key:C	ok	keys_sent=1		1185
+17	wait	wait:1500	ok	waited 1500ms		1674
+18	key	key:C	ok	keys_sent=1		1164
+19	wait	wait:1500	ok	waited 1500ms		1668
+20	key	key:C	ok	keys_sent=1		1198
+21	wait	wait:1500	ok	waited 1500ms		1674
+22	key	key:C	ok	keys_sent=1		1155
+23	wait	wait:1500	ok	waited 1500ms		1684
+24	key	key:C	ok	keys_sent=1		1177
+25	wait	wait:1500	ok	waited 1500ms		1671
+26	key	key:C	ok	keys_sent=1		1173
+27	wait	wait:1500	ok	waited 1500ms		1673
+28	key	key:C	ok	keys_sent=1		1173
+29	wait	wait:1500	ok	waited 1500ms		1686
+30	key	key:C	ok	keys_sent=1		1172
+31	wait	wait:1500	ok	waited 1500ms		1668
+32	capture	capture:t3-story-late	ok	bytes=1792440 nonblack=0.9018	E:\galnx-build\p30\run-lead-audio-jit\20261107-034903-IROSEKA_FHD-010047420000a000-v1.1.6-test\step-33-t3-story-late.png	1293
+33	wait	wait:5000	ok	waited 5000ms		5183
+34	capture	capture:t4-end	ok	bytes=1792417 nonblack=0.9018	E:\galnx-build\p30\run-lead-audio-jit\20261107-034903-IROSEKA_FHD-010047420000a000-v1.1.6-test\step-35-t4-end.png	1254

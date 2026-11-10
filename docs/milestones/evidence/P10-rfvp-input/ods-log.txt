@@ -1,0 +1,7 @@
+[   3.813299] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp [info] config.toml: GameConfig { hcb: Some(".iroseka.hcb"), nls: Some(GBK) }
+[   3.813523] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp [info] rfvp no_std boot: scanning asset root for HCB
+[   4.465573] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp [info] restored the global save
+[   4.466577] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp [info] rfvp no_std boot: parsed real HCB, initialized real GameData, and started VmRunner
+[ 169.952591] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp [info] quick save: wrote slot 0
+[ 179.002266] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp [info] quick load: read slot 0
+[ 188.035351] Debug.Emulated <Info> core\hle\kernel\svc\svc_debug_string.cpp:17:OutputDebugString: rfvp [info] quit requested by host event

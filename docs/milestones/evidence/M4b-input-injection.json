@@ -1,0 +1,276 @@
+{
+  "audited_at": "2026-10-30",
+  "task": "M4-b Brewser Web adapter end-to-end smoke (Citron Neo nightly 0237a9b88)",
+  "brewser": {
+    "nro": "workspaces/web-01/brewser.nro",
+    "bytes": 76546123,
+    "sha256": "8ce31f5b7dfb617c18a705d0c5fc955b59f60d445b5a76e250a1dd98ccd04b13",
+    "version": "v0.1.131 (release tag v0.1.1.31)"
+  },
+  "citron": {
+    "build": "main-0237a9b88",
+    "window_title": "citron Nightly | 0237a9b88 | brewser (64-bit) | NVIDIA"
+  },
+  "run_dir": "workspaces/citron-harness/runs/20261030-025247-brewser",
+  "window": {
+    "hwnd": "0x00C20F66",
+    "window_rect": [
+      426,
+      167,
+      2136,
+      1174
+    ],
+    "client": [
+      1706,
+      960
+    ],
+    "printwindow_image_offset_for_client": [
+      2,
+      45
+    ],
+    "dpi_scale": 1.5
+  },
+  "page": {
+    "url": "brewser://apps/org.galnx.webvn/index.html",
+    "inner": "1280x664",
+    "dpr": 1,
+    "rendered_client_rect": [
+      102,
+      138,
+      1603,
+      916
+    ],
+    "rendered_scale": 1.1727
+  },
+  "coordinate_mapping": {
+    "method": "3 calibration clicks, each click injected via SetCursorPos + mouse_event; page DBG read from screenshot",
+    "css_x_from_client_x": "css_x = 0.8514 * client_x - 93.9",
+    "css_y_from_client_y": "css_y = 0.85 * client_y - 61",
+    "data_points": [
+      {
+        "image": [
+          602,
+          445
+        ],
+        "client": [
+          600,
+          400
+        ],
+        "css": [
+          417,
+          279
+        ]
+      },
+      {
+        "image": [
+          1302,
+          345
+        ],
+        "client": [
+          1300,
+          300
+        ],
+        "css": [
+          1013,
+          194
+        ]
+      },
+      {
+        "image": [
+          302,
+          845
+        ],
+        "client": [
+          300,
+          800
+        ],
+        "css": [
+          162,
+          619
+        ]
+      }
+    ],
+    "note": "page viewport is 1280x664 CSS and is rendered into client rect (102,138)-(1603,916); the forwarded pointer event coordinates are not equal to the visual page coordinates (vertical origin differs by ~66 px, horizontal by ~8 px), so pixel-accurate DOM hit-testing is unreliable"
+  },
+  "input_method": "SendInput-style mouse_event absolute click injected by harness helper (citron_win.ps1 -Mode input); keyboard PostMessage path exists but was not used for the choice step",
+  "clicks": [
+    {
+      "n": 1,
+      "image": [
+        602,
+        445
+      ],
+      "client": [
+        600,
+        400
+      ],
+      "css": [
+        417,
+        279
+      ],
+      "state_after": "STATE=story SCENE=1 SAVE=present CLICKS=1",
+      "intent": "advance title -> scene 1"
+    },
+    {
+      "n": 2,
+      "image": [
+        1302,
+        345
+      ],
+      "client": [
+        1300,
+        300
+      ],
+      "css": [
+        1013,
+        194
+      ],
+      "state_after": "STATE=story SCENE=2 SAVE=present CLICKS=2",
+      "intent": "advance scene 1 -> 2"
+    },
+    {
+      "n": 3,
+      "image": [
+        302,
+        845
+      ],
+      "client": [
+        300,
+        800
+      ],
+      "css": [
+        162,
+        619
+      ],
+      "state_after": "STATE=story SCENE=3 SAVE=present CLICKS=3",
+      "intent": "advance scene 2 -> 3"
+    },
+    {
+      "n": 4,
+      "image": [
+        402,
+        545
+      ],
+      "client": [
+        400,
+        500
+      ],
+      "css": [
+        247,
+        364
+      ],
+      "state_after": "STATE=endingA BRANCH=A SAVE=present CLICKS=4",
+      "intent": "choose A by clicking left half (css_x 247 < 640)"
+    },
+    {
+      "n": 5,
+      "image": [
+        852,
+        545
+      ],
+      "client": [
+        850,
+        500
+      ],
+      "css": [
+        630,
+        364
+      ],
+      "state_after": "STATE=title CLICKS=5",
+      "intent": "ending A -> title"
+    },
+    {
+      "n": 6,
+      "image": [
+        852,
+        545
+      ],
+      "client": [
+        850,
+        500
+      ],
+      "css": [
+        630,
+        364
+      ],
+      "state_after": "STATE=story SCENE=1 CLICKS=6",
+      "intent": "title -> scene 1"
+    },
+    {
+      "n": 7,
+      "image": [
+        852,
+        545
+      ],
+      "client": [
+        850,
+        500
+      ],
+      "css": [
+        630,
+        364
+      ],
+      "state_after": "STATE=story SCENE=2 CLICKS=7",
+      "intent": "scene 1 -> 2"
+    },
+    {
+      "n": 8,
+      "image": [
+        852,
+        545
+      ],
+      "client": [
+        850,
+        500
+      ],
+      "css": [
+        630,
+        364
+      ],
+      "state_after": "STATE=story SCENE=3 CLICKS=8",
+      "intent": "scene 2 -> 3"
+    },
+    {
+      "n": 9,
+      "image": [
+        1502,
+        445
+      ],
+      "client": [
+        1500,
+        400
+      ],
+      "css": [
+        1183,
+        279
+      ],
+      "state_after": "STATE=endingB BRANCH=B SAVE=present CLICKS=9",
+      "intent": "choose B by clicking right half (css_x 1183 > 640)"
+    }
+  ],
+  "choose_mechanism": "document-level click handler + CSS clientX half-screen test (left half = branch A, right half = branch B); DOM <button> click listeners were NOT reliably triggered (event target tagName empty in Brewser LiveElement), so this is equivalent to tapping the left/right half of the screen, not a strict DOM button click",
+  "screenshots": [
+    {
+      "file": "M4b-title.png",
+      "state": "title",
+      "sha256": "f9b802be3502e88dc40449f8923dc508f05bbe9f8f56a7217d2d51cade57103b"
+    },
+    {
+      "file": "M4b-endingA.png",
+      "state": "endingA / BRANCH=A",
+      "sha256": "7183c12b19a6a2921aa16c610b3d8c5e3632da8b49c9d668865ecc8ea6352ee0"
+    },
+    {
+      "file": "M4b-endingB.png",
+      "state": "endingB / BRANCH=B",
+      "sha256": "d8d012379e69069ecd9b34411c8cfabdd688ddd309aa66d21804d2aba79e5798"
+    }
+  ],
+  "localStorage": {
+    "key": "galnx.webvn.save",
+    "write_read_in_page": "ok (SAVE=present read back in same page session after each save)",
+    "disk_flush_observed": false,
+    "disk_path_created": "sdmc:/switch/brewser/apps/org.galnx.webvn/localStorage/ (directory created, empty during run)",
+    "cross_run_persistence": "not verified"
+  }
+}

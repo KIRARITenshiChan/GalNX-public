@@ -1,0 +1,78 @@
+# GalNX P21 pilot manifest - rfvp (Rust FVP) さくら、もゆ。 HD Re:GENERATION
+#
+# Game: さくら、もゆ。 -as the night's, Reincarnation- HD Re:GENERATION
+#   (FAVORITE, 2023 remaster; source dir has the 2026-02-22 v0.2.0 patch).
+# Engine: rfvp (Rust FVP reimplementation, MPL-2.0, upstream tauri-no-kuni/rfvp)
+# plus the GalNX Switch backend (docs/builds/016-rfvp-sdl2-backend.md), romfs
+# self-containment patch (docs/builds/018-rfvp-nsp.md) and the P16/P17/P18
+# performance work. This is the 720p reference title used to judge whether the
+# IROSEKA 1080p slowdown is a Switch GPU/bandwidth limit.
+#
+# Pipeline (P21):
+#   bash scripts/build_nsp_game.sh --elf <rfvp-switch ELF> --game-dir <staged game dir> \
+#       --title-id 010047420000c000 --name "SAKURA MOYU" --author GalNX --version 1.0.0 \
+#       --icon examples/pilot03/icon-256.jpg --keyset <prod.keys> --romfs-mode hardlink --out <nsp>
+#   galnx package nsp verify --nsp <nsp> --manifest examples/pilot03-sakura.yaml
+#
+# TitleID: GalNX pilot block 0x01004742...; 010047420000c000 is 0x2000-aligned
+# (a base application id, not a patch/DLC id). Distinct from pilot01 (a000) and
+# pilot02 (a000 is IROSEKA? no: pilot02 = 010047420000A000) -> c000 avoids collisions.
+#
+# The game data (~7.0 GiB of .hcb/.bin archives plus movie/) is linked read-only
+# from the staged tree; only relative names/sizes are recorded here. The PC
+# Chinese patch (patch.bin / SakuraChs.exe) is a Windows-runtime injector and is
+# NOT loaded by rfvp, so this build renders the original Japanese text with
+# nls = sjis (verified 2026-11-05, docs/experiments/rfvp-720p-sakura.md).
+schema_version: 1
+
+game:
+  id: pilot03-sakura
+  title: さくら、もゆ。 HD Re:GENERATION
+  publisher: FAVORITE
+  version: "1.0.0"
+  source_dir: E:/Othergames/Galgame/さくら、もゆ。v0.2.0_0222_fix1
+  notes: >-
+    Pilot game P3 (rfvp / Rust FVP), 720p reference for the performance study.
+    The source install targets Windows and stores text as Shift-JIS inside
+    Sakura.hcb; nls = sjis is mandatory (gbk produces mojibake).
+
+engine:
+  adapter: rfvp
+  adapter_version: "0.7.0 (9f07ade) + GalNX Switch backend (v1.0.9)"
+  profile: switch
+  entry: Sakura.hcb
+  descriptor: engines/rfvp.yaml
+  options:
+    config: config.toml
+    nls: sjis
+
+switch:
+  title_id: "010047420000C000"
+  title: SAKURA MOYU
+  author: GalNX
+  icon: pilot03/icon-256.jpg
+  target: nsp
+  display_mode: handheld
+  save_policy: per-title-isolated
+
+input:
+  default_mode: controller
+  toggle_combo: "L+R+PLUS"
+  profile: generic-vn
+
+build:
+  output_dir: E:/galnx-build/p21
+  reproducible: true
+  clean_workspace_before_build: false
+  keys_env: GALNX_PROD_KEYS
+  romfs_mode: embedded
+
+package:
+  type: self_contained_nsp
+  startup_user_account: 1
+  romfs_dir: E:/galnx-build/p21/sakura-work/romfs
+  icon: pilot03/icon-256.jpg
+  notes: >-
+    RomFS assembled by scripts/build_nsp_game.sh (hardlink staging, ~7.5 GB);
+    the game root becomes romfs:/game at runtime when the SD copy is absent.
+    Saves are written to sdmc:/switch/rfvp/saves, outside the game root.

@@ -1,0 +1,41 @@
+# debug_report.txt excerpt (Citron run-08, v1.2.2-test NRO)
+frame 6840: 60.0 fps over the last 60 frames, slowest frame 17.3 ms
+stages (ms per frame): tree 0.06 submit 0.25 end_frame 15.22 vm 0.68 syscalls 0.17
+virtual frame 1920x1080
+
+log:
+[INFO] [diag t=9094879081us] [cache] bytes put size=3468 total=3468/201326592
+[INFO] [diag t=9094879791us] vfs path="graph/diss00" bytes=3468 us=337250 reads=1
+[INFO] [diag t=9094881110us] [cache] prefetch skip path="graph/diss00": Unexpected texture type: Single8Bit
+
+[INFO] MoviePlay: path=movie/01.wmv flag=Nil is_layer_effect=true
+[INFO] Movie: opened (Switch NVDEC H.264) asset=movie/01_h264.mp4
+[INFO] movie h264: decoded frame=1 pts=0 ms 1280x720 hw=0 decode_us=16759 convert_us=3886
+[INFO] movie h264: decoded frame=2 pts=33 ms 1280x720 hw=0 decode_us=19340 convert_us=2609
+[INFO] movie h264: decoded frame=3 pts=66 ms 1280x720 hw=0 decode_us=31153 convert_us=2525
+[INFO] movie h264: decoded frame=4 pts=100 ms 1280x720 hw=0 decode_us=11351 convert_us=2564
+[INFO] movie h264: decoded frame=5 pts=133 ms 1280x720 hw=0 decode_us=13263 convert_us=2568
+[INFO] movie h264: decoded frame=30 pts=967 ms 1280x720 hw=0 decode_us=14995 convert_us=2513
+[INFO] movie h264: decoded frame=60 pts=1968 ms 1280x720 hw=0 decode_us=22621 convert_us=2534
+[INFO] movie h264: decoded frame=90 pts=2969 ms 1280x720 hw=0 decode_us=12428 convert_us=2537
+[INFO] movie h264: decoded frame=120 pts=3970 ms 1280x720 hw=0 decode_us=10909 convert_us=2512
+[INFO] movie h264: decoded frame=150 pts=4971 ms 1280x720 hw=0 decode_us=11916 convert_us=2553
+[INFO] movie h264: decoded frame=180 pts=5972 ms 1280x720 hw=0 decode_us=13798 convert_us=2474
+[INFO] movie h264: decoded frame=210 pts=6973 ms 1280x720 hw=0 decode_us=11367 convert_us=2482
+[INFO] movie h264: decoded frame=240 pts=7974 ms 1280x720 hw=0 decode_us=11434 convert_us=2498
+[INFO] movie h264: decoded frame=270 pts=8975 ms 1280x720 hw=0 decode_us=13927 convert_us=2529
+[INFO] movie h264: decoded frame=300 pts=9976 ms 1280x720 hw=0 decode_us=11161 convert_us=2593
+[INFO] movie h264: decoded frame=330 pts=10977 ms 1280x720 hw=0 decode_us=17574 convert_us=2562
+[INFO] movie h264: decoded frame=360 pts=11978 ms 1280x720 hw=0 decode_us=24866 convert_us=2965
+[INFO] movie h264: decoded frame=390 pts=12979 ms 1280x720 hw=0 decode_us=11306 convert_us=2588
+[ERROR] history_set: unexpected value for set_voice : Nil
+[ERROR] history_set: unexpected value for set_name : Nil
+[ERROR] history_set: unexpected value for set_voice : Nil
+[ERROR] history_set: unexpected value for set_name : Nil
+[ERROR] history_set: unexpected value for set_voice : Nil
+[ERROR] history_set: unexpected value for set_voice : Nil
+[ERROR] history_set: unexpected value for set_voice : Nil
+[ERROR] history_set: unexpected value for set_voice : Nil
+[ERROR] history_set: unexpected value for set_voice : Nil
+[ERROR] history_set: unexpected value for set_name : Nil
+[ERROR] history_set: unexpected value for set_voice : Nil

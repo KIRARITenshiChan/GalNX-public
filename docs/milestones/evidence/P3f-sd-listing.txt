@@ -1,0 +1,28 @@
+# unpacked payload listing: sdmc:/kirikiri (P3-f)
+root=C:/Users/ACETaffy/AppData/Roaming/citron/sdmc/kirikiri
+# size_bytes  relpath
+1293 ./haruno/Kirikiroid2Preference.xml
+198550 ./haruno/data.xp3
+769 ./haruno/haruno.cf
+22230877 ./haruno/image00.xp3
+542381164 ./haruno/image01.xp3
+472173601 ./haruno/image02.xp3
+74766214 ./haruno/image02_2.xp3
+31429614 ./haruno/image03.xp3
+646837304 ./haruno/image04.xp3
+14762304 ./haruno/image06.xp3
+110513170 ./haruno/media.xp3
+164394346 ./haruno/movie.xp3
+86016 ./haruno/plugin/csvParser.tpm
+237568 ./haruno/plugin/extrans.tpm
+128000 ./haruno/plugin/fstat.tpm
+126976 ./haruno/plugin/layerExImage.tpm
+229376 ./haruno/plugin/windowEx.tpm
+57856 ./haruno/plugin/wumsadp.tpm
+200704 ./haruno/plugin/wuvorbis.tpm
+1551254 ./haruno/scenario.xp3
+17431512 ./haruno/voice01.xp3
+717704696 ./haruno/voice02.xp3
+53192145 ./haruno/voice02_2.xp3
+# total:
+files=23 bytes=2870635309

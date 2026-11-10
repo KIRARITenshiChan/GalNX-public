@@ -1,0 +1,40 @@
+# GalNX P3-e evidence: A3 self-contained NSP (compliance base TitleID 010047410000A000)
+# generated 2026-10-30 by lead.
+# sources: run dir workspaces/citron-harness/runs/20261030-090102-Kirikiroid2-NX-010047410000A000;
+#          citron sdmc: switch/kirikiroid2 + kirikiri/haruno; E:/galnx-build/pilot-01/p3
+# files=26 missing=0
+#
+# A3 artifact (not copied into repo, 2.9 GB):
+#   E:/galnx-build/pilot-01/p3/out/Kirikiroid2-NX-010047410000A000.nsp
+#   size=2906131672 sha256=1f54bdf105fdfc0e88a81e5aaec954ffd4c349132fe7bbadcf394948cde994d4
+# verify (keyset-enabled): checks=13 ok=12 warn=1 fail=0 ncas=3
+# verify (no keyset): header-only, 3 warns expected (see P3e-a3-verify-nokeyset.json)
+# provenance inputs.romfs sha256=53535c68d81a24d88fbac0a6fce0d710e0592558bc89286b732f88891b7d164e (109 files / 2,878,186,922 B)
+# lead rerun (nsp verify --keyset --provenance): checks=19 ok=18 warn=1 fail=0 rc=0 (see P3e-a3-verify-lead.json)
+
+06e5c1293713743c4c614a51a9b395d146ade76404a3fd66b9eaa1f6a3fde7c5        3957 B  P3e-a3-result.json
+8c5e0462b3969cc4458af259a8b70b9051b42e441ea8764c6c2200f571b18215        1915 B  P3e-a3-run.log
+06e5c1293713743c4c614a51a9b395d146ade76404a3fd66b9eaa1f6a3fde7c5        3957 B  P3e-a3-harness.out
+1da3ba0f225026a1e0e8bfeec2153c869f8b1cf39aa97caf913c94c01388d94f        1258 B  P3e-a3-job.json
+104052086b92cbbcaef1295a02c464acf2e2c4375c4d37ef7be276fbe863cf70          49 B  P3e-a3-done.txt
+59371d3083d9e8725f82fe062969b34ec6162c873fd55c8d33da043088466639     2377415 B  P3e-a3-title.png
+93bb57c2371aa2e89af1715b4728dfc12b60ebb7ec9e6325cd68ef9712c1a9c7      881598 B  P3e-a3-started.png
+a48ce591b0d5aa9af93acb0c6c3f7bd2c4867b1708b6998c9a56ba048760ee2c      921533 B  P3e-a3-adv1.png
+33a0a5bed6c6743f86bb9af9846cfe22566c352c015fb213f0d8e56a10b8b0ec      923369 B  P3e-a3-window-final.png
+40c3ce03394048467fdcc6aed05c27da311a09c47d72eea83a8e5cd1733025a0         887 B  P3e-a3-input-steps.tsv
+f5a27c78cbf41f72ddd302d1babe8803711c9083159efc477cf795197e1132d7        8494 B  P3e-a3-k2s_log.txt
+e36d34b8140bcc8b7d49ffa9eaac158ce4e3476886ab1a9f2b7021b8803b4dc8        7646 B  P3e-a3-k2s_log.prev.txt
+2d3ca872b99976c451bf34941d1f75eac00a6bf452180ed3a9524e9180c2696a         234 B  P3e-a3-k2s_boot.txt
+5109bb58005e64755f4f5806247de5a07e0e4f3a8b7c178395bb829156d10c3a          11 B  P3e-a3-marker.txt
+75b6df8004ab7c2831d6d6de844e124f173a8d10c2e2a58130c0cfda4377d966          26 B  P3e-a3-autostart.txt
+aa4fa8aab256f73c6d73111a62305f7078bd9c1eca3cd9d9128d0a51abef9543        1293 B  P3e-a3-Kirikiroid2Preference.xml
+4eb8702b943bb22202e78109ad5bae0d3f22e32342b33602111a29fb0fe973a7          10 B  P3e-a3-build.log
+16b1ec390f3f6967a7b235ad2e9d0e5524960e2d2b5037ff0d99dc3f3a898d22        3870 B  P3e-a3-verify-nokeyset.json
+863b9dfc788e253f047b0131198977fe15d5f48e954eee4e64b137b51daee63e        8897 B  P3e-a3-verify.json
+22a89ae4ae36aa23c581f42154bf0abbeea60921569d19c61145d82ae9454ef9        6398 B  P3e-a3-smoke.log
+8338e2df1b4efd2dada7fbd516d608aa193b2f1994065b14b2aaab9b575bb014       13862 B  P3e-a3-provenance.json
+52759b727607d679ba562cceebdb8b2d76ed17a903fbc1451891784b3716c6a1         297 B  P3e-a3-step-elf2nso.log
+c44eb7dbb4506c3e0337cf7765a986ea6fc8d20b91441214e95416f076b8359d         927 B  P3e-a3-step-npdm.log
+8f7f34c35bf2a13c264d0c26ef57db89f172e80593bef4f019fe2b6c9ae55f42         314 B  P3e-a3-step-nacp.log
+def05f86200dcfddd9b77a9bc952b47618c3741a7987799f5e06551c4637a4d3       17605 B  P3e-a3-step-hacbrewpack.log
+86d0eece51e964a7333c725b2c76f48bba6fc43ec42ce43ec89f13c72ca93f29         8897 B  P3e-a3-verify-lead.json

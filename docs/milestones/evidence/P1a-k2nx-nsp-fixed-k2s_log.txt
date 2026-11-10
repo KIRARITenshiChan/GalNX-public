@@ -1,0 +1,4 @@
+Kirikiroid2-Switch log (build Oct 18 2026 23:24:50)
+applicationDidFinishLaunching
+GL_VERSION: OpenGL ES 3.2 Mesa 20.1.0-rc3
+GL ext: VAO=yes mapbuffer=yes

@@ -1,0 +1,159 @@
+# pacman -Qi（Switch 相关包，LC_ALL=C 英文输出）
+# 采集时间: 2026-10-29T22:18:21+08:00
+
+date=2026-10-29T22:18:21+08:00
+Name            : libnx
+Version         : 4.12.0-1
+URL             : http://github.com/switchbrew
+Licenses        : custom
+Groups          : switch-dev
+Depends On      : None
+Installed Size  : 70.94 MiB
+---
+Name            : deko3d
+Version         : 0.5.0-1
+URL             : http://github.com/devkitPro/deko3d
+Licenses        : custom
+Groups          : switch-dev
+Depends On      : libnx
+Installed Size  : 7.20 MiB
+---
+Name            : devkita64-cmake
+Version         : 1.1.3-1
+URL             : http://devkitpro.org/
+Licenses        : None
+Groups          : switch-dev
+Depends On      : dkp-cmake-common-utils
+Installed Size  : 279.00 B
+---
+Name            : switch-tools
+Version         : 1.13.1-1
+URL             : https://github.com/switchbrew/switch-tools
+Licenses        : ISC
+Groups          : switch-dev
+Depends On      : None
+Installed Size  : 616.71 KiB
+---
+Name            : uam
+Version         : 1.1.0-2
+URL             : https://github.com/devkitPro/uam
+Licenses        : ISC
+Groups          : switch-dev
+Depends On      : None
+Installed Size  : 2.38 MiB
+---
+Name            : switch-pkg-config
+Version         : 0.28-4
+URL             : http://devkitpro.org/
+Licenses        : None
+Groups          : switch-dev
+Depends On      : None
+Installed Size  : 25.00 KiB
+---
+Name            : switch-cmake
+Version         : 1.5.2-1
+URL             : https://devkitpro.org/
+Licenses        : None
+Groups          : switch-dev
+Depends On      : devkita64-cmake  switch-tools  uam  switch-pkg-config
+Installed Size  : 10.76 KiB
+---
+Name            : switch-examples
+Version         : 20260201-1
+URL             : http://github.com/switchbrew/switch-examples
+Licenses        : custom
+Groups          : switch-dev
+Depends On      : None
+Installed Size  : 2.36 MiB
+---
+Name            : devkita64-binutils
+Version         : 2.46.0-1
+URL             : https://www.gnu.org/software/binutils/binutils.html
+Licenses        : spdx:GPL-3.0-or-later AND GPL-2.0-or-later AND LGPL-3.0-or-later AND LGPL-2.0-or-later
+Groups          : switch-dev
+Depends On      : None
+Installed Size  : 39.12 MiB
+---
+Name            : devkita64-newlib
+Version         : 4.6.0.20260123-4
+URL             : None
+Licenses        : None
+Groups          : None
+Depends On      : None
+Installed Size  : 8.86 MiB
+---
+Name            : devkita64-rules
+Version         : 1.1.1-1
+URL             : http://github.com/devkitpro/devkita64-rules
+Licenses        : custom
+Groups          : None
+Depends On      : general-tools>=1.3.1
+Installed Size  : 4.21 KiB
+---
+Name            : devkita64-gcc
+Version         : 16.1.0-1
+URL             : https://www.gnu.org/software/gcc/gcc.html
+Licenses        : spdx:GPL-3.0-or-later
+Groups          : None
+Depends On      : devkita64-binutils  devkita64-newlib  devkita64-rules
+Installed Size  : 293.07 MiB
+---
+Name            : devkitA64
+Version         : r30-1
+URL             : https://devkitpro.org
+Licenses        : GPL
+Groups          : None
+Depends On      : devkita64-binutils>=2.46.0-1  devkita64-gcc>=16.1.0-1  devkita64-newlib>=4.6.0.20260123-4
+Installed Size  : 0.00 B
+---
+Name            : devkitA64-gdb
+Version         : 14.1-1
+URL             : https://www.gnu.org/software/gdb
+Licenses        : GPL
+Groups          : switch-dev
+Depends On      : devkitA64
+Installed Size  : 10.35 MiB
+---
+Name            : catnip
+Version         : 0.2.0-1
+URL             : http://github.com/devkitPro/catnip
+Licenses        : custom
+Groups          : 3ds-dev  switch-dev  wiiu-dev  gba-dev  nds-dev  gamecube-dev  wii-dev
+Depends On      : dkp-cmake-common-utils
+Installed Size  : 26.72 KiB
+---
+Name            : general-tools
+Version         : 1.4.4-1
+URL             : https://github.com/devkitpro/general-tools
+Licenses        : ISC
+Groups          : gp32-dev  gp2x-dev  gba-dev  nds-dev  3ds-dev  switch-dev  gamecube-dev  wii-dev  wiiu-dev
+Depends On      : None
+Installed Size  : 278.39 KiB
+---
+Name            : devkit-env
+Version         : 1.0.1-2
+URL             : https://devkitpro.org
+Licenses        : GPL
+Groups          : gp32-dev  gba-dev  nds-dev  3ds-dev  gamecube-dev  wii-dev  wiiu-dev  switch-dev
+Depends On      : None
+Installed Size  : 155.00 B
+---
+
+# pacman -Qi 已安装大小（逐包）
+libnx :: Installed Size  : 70.94 MiB
+deko3d :: Installed Size  : 7.20 MiB
+devkita64-cmake :: Installed Size  : 279.00 B
+switch-tools :: Installed Size  : 616.71 KiB
+uam :: Installed Size  : 2.38 MiB
+switch-pkg-config :: Installed Size  : 25.00 KiB
+switch-cmake :: Installed Size  : 10.76 KiB
+switch-examples :: Installed Size  : 2.36 MiB
+devkita64-binutils :: Installed Size  : 39.12 MiB
+devkita64-newlib :: Installed Size  : 8.86 MiB
+devkita64-rules :: Installed Size  : 4.21 KiB
+devkita64-gcc :: Installed Size  : 293.07 MiB
+devkitA64 :: Installed Size  : 0.00 B
+devkitA64-gdb :: Installed Size  : 10.35 MiB
+catnip :: Installed Size  : 26.72 KiB
+general-tools :: Installed Size  : 278.39 KiB
+devkit-env :: Installed Size  : 155.00 B

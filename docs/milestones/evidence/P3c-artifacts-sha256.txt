@@ -1,0 +1,26 @@
+# P3c 证据清单：K2NX 引擎描述符化与 prepare 工具（audit-engines，2026-10-30）
+
+- 任务：task-42（P3-c）——引擎描述符 schema/source.py 扩展 + 真实描述符 + 009 构建文档
+- 验收对象：`E:/galnx-build/pilot-01/k2nx-src`（pristine，HEAD `e96b6034c292c6ccdb099823ab6a0a6b505f77f3`，只读使用）
+- 验收命令：`PYTHONPATH=src python -m galnx engines prepare --descriptor examples/engines/kirikiroid2-nx.yaml --dest E:/galnx-build/pilot-01/k2nx-src --check-only --json`
+- 验收结果：status=checked；3 条补丁 `applies=true`；7 条 portlibs；`lock_path` 为空；errors 为空；源树未改动（git status 0 行、HEAD 不变、未创建 .galnx）
+- 原始位置：`E:/galnx-build/p3c/`（同目录下 patchgen/ 为补丁切分时的一次性克隆残留，**未入仓**）
+- 记录文档：`docs/builds/009-k2nx-selfcontained-build.md` §9 验收；`docs/pilot/P3-pipeline.md`（Lead 撰写）
+- 生成时间：2026-10-30（本地，UTC+8）；下表 sha256 为本文件生成时对仓内副本重新计算
+
+## 1. 文件与哈希（5 个）
+
+| 文件 | 字节 | sha256 |
+| --- | --- | --- |
+| `P3c-acceptance-check-only.json` | 3695 | `f0d78888d3f19fe423d1c470c5ddf17208d0950caccfd1815048136c66c4462c` |
+| `P3c-acceptance-check-only.log` | 594 | `32e99a78e2e9a5fb45686cd545bc40eab4bb0f8a57d473022d80366ed905da8c` |
+| `P3c-acceptance-cli-check-only.json` | 3695 | `f0d78888d3f19fe423d1c470c5ddf17208d0950caccfd1815048136c66c4462c` |
+| `P3c-acceptance-cli-check-only.log` | 506 | `ee0b8d0c1313e46d490878acf5125c0a87119638e1558e0b1e22937750517490` |
+| `P3c-accept-cli.py` | 956 | `e411a3b21d5818120cd245aa175d38060ebe4634b57fc0affc001530ba2947a6` |
+
+## 2. 说明
+
+1. 两个 JSON 证据逐字节相同（sha256 `f0d78888d3f19fe423d1c470c5ddf17208d0950caccfd1815048136c66c4462c`）：`P3c-acceptance-check-only.json` 是直接调用 `galnx.engines.source.prepare()` 的返回值，`P3c-acceptance-cli-check-only.json` 是 cli.py 接线后真 CLI（`python -m galnx engines prepare`）的 stdout；两者相同即证明 CLI 路径与库路径行为一致。
+2. 两份 log 的差异：`P3c-acceptance-check-only.log` 是驱动脚本外壳记录（含 RC 0、STDERR 摘要、收尾 HEAD 与 `STATUS_LINES_AFTER 0`）；`P3c-acceptance-cli-check-only.log` 只含真 CLI 的 stderr 人类摘要，两者共有的是三行补丁 sha256。
+3. `P3c-accept-cli.py` 是驱动脚本（前置 Git for Windows 到 PATH、设 `PYTHONPATH=src`、从 python 子进程调用 CLI 并落盘 JSON/log），可用于复现；执行环境坑见 009 §9：Windows 上必须让她解析到 Git for Windows 2.55（core.autocrlf=true），否则 devkitPro MSYS2 的 git 2.49 会误判 CRLF 工作树为 dirty。
+4. 本清单不含任何商业游戏数据、密钥或固件内容；只含引擎源码树的 commit 与补丁摘要。

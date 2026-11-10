@@ -1,0 +1,56 @@
+# P1d scale3400 NSP 完整 nstool 列举（E1）
+NSP: E:/galnx-build/pilot-01/scale/out/scale3400-010047410000a030.nsp 3,572,693,208 B sha256 670a7cda1c18d995ba92f786c4bb71cf50f59a67d6847f1d2339c51f06bba735
+工具: nstool v1.9.2 (C) jakcron, Built: 01:34:03 Oct 14 2024
+keyset: 仅以 -k 显式路径传入（内容未读取/未记录）
+
+## NSP 层
+[PartitionFs]
+  Type:        PFS0
+  FileNum:     3
+
+## NCA 抽取（nstool -x nca）
+Saving nca\94d6711aa4f86fd2a4a9e4ba09468868.cnmt.nca...
+Saving nca\d618a92001b7b50d00827d6254d6f8ce.nca...
+Saving nca\f268ccb968635a53fa6111ca99dae1a2.nca...
+- 94d6711aa4f86fd2a4a9e4ba09468868.cnmt.nca 4,096 B (0x1000) Content Type Meta
+- d618a92001b7b50d00827d6254d6f8ce.nca 3,572,571,136 B (0xd4f11c00) Content Type Program
+- f268ccb968635a53fa6111ca99dae1a2.nca 117,760 B (0x1cc00) Content Type Control
+
+## NCA 头（nstool -k，每个 rc=0）
+所有三个 NCA：
+  Format Type:     NCA3
+  Dist. Type:      Download
+  Key Generation:  0
+  Sig. Generation: 0
+  Kaek Index:      Application (0)
+  ProgID:          0x010047410000a030
+  Content Index:   0
+  SdkAddon Ver.:   0.12.17 (v790784)
+签名警告：[WARNING] NCA Header Main Signature: FAIL（Program 另有 ACID Signature: FAIL）→ 预期，无任天堂私钥。
+
+## RomFS 文件树（nstool --fstree，Program NCA，30 行）
+ program:/
+  0/
+   main
+   main.npdm
+  1/
+   data_00.bin
+   data_01.bin
+   data_02.bin
+   data_03.bin
+   data_04.bin
+   data_05.bin
+   data_06.bin
+   data_07.bin
+   data_08.bin
+   data_09.bin
+   sub/
+    readme.txt
+    small.bin
+→ 与 200 MiB fixture 一致（10 个 20 MiB 块 + readme + small = 12 文件；data_00..09 合计 200 MiB）。
+
+## 已知限制
+nstool v1.9.2 对本工具链（hacBrewPack CNMT NCA）解析失败：
+- nstool -t cnmt -k <cnmt.nca> → [CONTENT_META ERROR] Invalid extended header size
+- nstool -t meta -k <cnmt.nca> → [META ERROR] META header corrupt (unrecognised struct signature)
+仅能从 NCA 头读取 Content Type: Meta / ProgID / Size。CNMT 细节（TitleId/Version/ContentInfo hashes）需自写解析器或后续 nstool 版本；不影响 NSP 结构合法性（PFS0 3 文件、NCA 头一致、romfs round-trip 通过）。

@@ -1,0 +1,81 @@
+{
+  "status": "checked",
+  "dest": "E:\\galnx-build\\pilot-01\\k2nx-src",
+  "commit": "e96b6034c292c6ccdb099823ab6a0a6b505f77f3",
+  "head": "e96b6034c292c6ccdb099823ab6a0a6b505f77f3",
+  "check_only": true,
+  "fetched": false,
+  "patches": [
+    {
+      "path": "docs/builds/patches/k2nx-switch/A-autostart.patch",
+      "sha256": "e6a07534b51be5b996af9098df273fd8062404e9a4622239d55a26ebd859e2f2",
+      "notes": "src/core/environ/switch/SwitchUtils.cpp: reads sdmc:/switch/kirikiroid2/autostart.txt and calls startupFrom() so the engine boots straight into a game instead of the file picker.",
+      "applies": true
+    },
+    {
+      "path": "docs/builds/patches/k2nx-switch/B-extract-v2.patch",
+      "sha256": "bafa71effedd2d6d52bd896a3676a2c25332256f5e19969108cd0185c98f7b5e",
+      "notes": "src/core/environ/switch/main.cpp: GalNX_MaybeExtractGame() copies the RomFS payload listed in game_files.txt to sdmc on first boot, with a statvfs free-space precheck, MkDirs, marker versioning and stat checks.",
+      "applies": true
+    },
+    {
+      "path": "docs/builds/patches/k2nx-switch/C-plugin-alias.patch",
+      "sha256": "9806b23f304ffc1fe1371c2a7d4510f00f87d2a3310d52e70781758402b3b186",
+      "notes": "src/plugins/InternalPlugins.cpp: retries plugin names ending in .tpm as .dll so the built-in NCB modules register (windowEx and friends).",
+      "applies": true
+    }
+  ],
+  "portlibs": [
+    {
+      "name": "libiconv",
+      "version": "1.17",
+      "source_url": "https://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.17.tar.gz",
+      "recipe": "platforms/switch/tools/portlibs/build_libiconv.sh",
+      "notes": "newlib has no iconv; --host=aarch64-none-elf, static, --disable-nls."
+    },
+    {
+      "name": "ffmpeg",
+      "version": "3.2.19",
+      "source_url": "https://ffmpeg.org/releases/ffmpeg-3.2.19.tar.xz",
+      "recipe": "platforms/switch/tools/portlibs/build_ffmpeg.sh",
+      "notes": "K2 1.3.9 uses pre-5.0 FFmpeg APIs, so devkitPro FFmpeg 7.1 is not a substitute; NEON asm needs relocate=1 for PIE."
+    },
+    {
+      "name": "opencv",
+      "version": "3.4.20",
+      "source_url": "https://github.com/opencv/opencv/archive/refs/tags/3.4.20.tar.gz",
+      "recipe": "platforms/switch/tools/portlibs/build_opencv.sh",
+      "notes": "BUILD_LIST=core,imgproc; CV_CPU_NEON/FP16 are patched on for __SWITCH__."
+    },
+    {
+      "name": "unrar",
+      "version": "5.6.5",
+      "source_url": "https://www.rarlab.com/rar/unrarsrc-5.6.5.tar.gz",
+      "recipe": "platforms/switch/tools/portlibs/build_unrar.sh",
+      "notes": "Static RARDLL build with a newlib utimensat fix; the UnRAR license restricts redistribution."
+    },
+    {
+      "name": "libbpg",
+      "version": "0.9.8",
+      "source_url": "https://bellard.org/bpg/libbpg-0.9.8.tar.gz",
+      "recipe": "platforms/switch/tools/portlibs/build_libbpg.sh",
+      "notes": "Decoder only, plus the gray-line fix patch."
+    },
+    {
+      "name": "jxrlib",
+      "version": "master",
+      "source_url": "https://github.com/4creators/jxrlib/archive/refs/heads/master.tar.gz",
+      "recipe": "platforms/switch/tools/portlibs/build_jxrlib.sh",
+      "notes": "UNPINNED upstream master; rebuilds may drift, tracked as a reproducibility risk."
+    },
+    {
+      "name": "blend2d",
+      "version": "d2027ebfd6aaf53b190b6b3b497425fc85f14251",
+      "source_url": "https://github.com/blend2d/blend2d",
+      "recipe": "platforms/switch/tools/portlibs/build_blend2d.sh",
+      "notes": "The recipe clones and checks out this commit; __SWITCH__ takes the Apple 64-bit off_t branch."
+    }
+  ],
+  "lock_path": "",
+  "errors": []
+}

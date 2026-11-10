@@ -1,0 +1,5 @@
+# independent NSP hash verification (P3-f, 2026-10-30)
+path=E:/galnx-build/pilot-01/p3/out/Kirikiroid2-NX-010047410000A000.nsp
+bytes=2906131672
+sha256=1F54BDF105FDFC0E88A81E5AAEC954FFD4C349132FE7BBADCF394948CDE994D4
+method:powershell Get-FileHash -Algorithm SHA256 (独立于 Lead 提供的值)

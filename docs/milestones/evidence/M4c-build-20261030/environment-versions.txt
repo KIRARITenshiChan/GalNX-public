@@ -1,0 +1,27 @@
+devkitA64 r30-1
+libnx 4.12.0-1
+switch-tools 1.13.1-1
+switch-sdl2 2.28.5-4
+switch-sdl2_image 2.0.4-1
+switch-sdl2_mixer 2.0.4-2
+switch-sdl2_ttf 2.22.0-2
+switch-smpeg2 2.0.0-1
+switch-libvorbis 1.3.7-1
+switch-libvorbisidec 1.2.1-2
+switch-freetype 2.13.3-1
+switch-harfbuzz 10.0.1-1
+switch-libjpeg-turbo 2.1.2-2
+switch-libpng 1.6.48-1
+switch-libwebp 1.0.2-2
+switch-libmodplug 0.8.9.0-2
+switch-mpg123 1.31.3-3
+switch-opusfile 0.10-3
+switch-libopus 1.3-2
+switch-libogg 1.3.4-2
+switch-bzip2 1.0.8-1
+switch-zlib 1.3.1-1
+switch-pkg-config 0.28-4
+zlib 1.3.1-1
+---
+cmake version 4.0.2
+MSYS_NT-10.0-26100 ��֤Ӣ�� 3.6.11-00eb8435.x86_64 2026-10-16 10:03 UTC x86_64 Msys

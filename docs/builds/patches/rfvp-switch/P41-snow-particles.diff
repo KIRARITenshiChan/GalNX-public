@@ -1,0 +1,232 @@
+diff --git a/crates/rfvp/src/subsystem/components/syscalls/other_anm.rs b/crates/rfvp/src/subsystem/components/syscalls/other_anm.rs
+index 1e4cbfb..bef57e9 100644
+--- a/crates/rfvp/src/subsystem/components/syscalls/other_anm.rs
++++ b/crates/rfvp/src/subsystem/components/syscalls/other_anm.rs
+@@ -461,8 +461,12 @@ pub fn snow(
+         }
+     };
+ 
+-    if !(1..=1024).contains(&arg10) {
+-        log::error!("snow: arg10 should be in range 1..1024");
++    // arg10 is the per-period Y speed (base_y_per_period), not a flake count:
++    // the original Snow plugin accepts values well above 1024 (the moyu title
++    // screen passes 2000/2500 for its rising ember particles).  Only the flake
++    // count (arg9) is capped by the 1024-entry flake table.
++    if !(-65535..=65535).contains(&arg10) {
++        log::error!("snow: arg10 should be in range -65535..65535");
+         return Ok(Variant::Nil);
+     }
+ 
+diff --git a/crates/rfvp/src/subsystem/components/syscalls/graph.rs b/crates/rfvp/src/subsystem/components/syscalls/graph.rs
+index 14938e4..b1c4ba5 100644
+--- a/crates/rfvp/src/subsystem/components/syscalls/graph.rs
++++ b/crates/rfvp/src/subsystem/components/syscalls/graph.rs
+@@ -442,6 +442,15 @@ pub fn prim_set_snow(
+         .motion_manager
+         .prim_manager
+         .prim_init_with_type(id as i16, PrimType::PrimTypeSnow);
++    // The snow renderer picks the motion slot with `prim.get_texture_id()`
++    // (emit_snow in rendering/prim_commands.rs), and PrimSetSnow's second
++    // argument IS that slot id (0/1).  Without this every snow primitive keeps
++    // texture_id 0, so a scene that starts two snow systems only ever renders
++    // the first one (the moyu title screen lost its 1024-flake ember layer).
++    game_data
++        .motion_manager
++        .prim_manager
++        .prim_set_texture_id(id, mode);
+     game_data.motion_manager.prim_manager.prim_set_op(id, 0, 0);
+     game_data
+         .motion_manager
+diff --git a/crates/rfvp/src/rendering/prim_commands.rs b/crates/rfvp/src/rendering/prim_commands.rs
+index 1b55819..48034b8 100644
+--- a/crates/rfvp/src/rendering/prim_commands.rs
++++ b/crates/rfvp/src/rendering/prim_commands.rs
+@@ -1187,6 +1187,20 @@ where
+         return Ok(());
+     }
+ 
++    {
++        use core::sync::atomic::{AtomicU32, Ordering};
++        static N: AtomicU32 = AtomicU32::new(0);
++        let n = N.fetch_add(1, Ordering::Relaxed);
++        if n % 60 == 0 {
++            let cnt = sm.flake_count.max(0).min(1024) as usize;
++            let (fx, fy, fp) = if cnt > 0 {
++                let f = &sm.flakes[sm.flake_ptrs[0]];
++                (f.x, f.y, f.period)
++            } else {
++                (0.0, 0.0, 0.0)
++            };
++        }
++    }
+     let a0 = sm.color_r as f32;
+     let a1 = sm.color_b_or_extra as f32;
+     let a2 = sm.color_g as f32;
+@@ -1198,19 +1212,33 @@ where
+     let tile_w_cfg = (sm.flake_w - 1) as f32;
+     let tile_h_cfg = (sm.flake_h - 1) as f32;
+     let count = sm.flake_count.max(0).min(1024) as usize;
+-
+     for idx in 0..count {
+         let flake_idx = sm.flake_ptrs[idx];
+         let flake = &sm.flakes[flake_idx];
+-        let graph_i32 = base_tex + (flake.variant_idx % variant_count) as i32;
+-        if graph_i32 < 0 {
+-            continue;
++        let variant = (flake.variant_idx % variant_count) as i32;
++        // galnx: flakes pick a variation by graph id (base + variant). Titles routinely
++        // load only the base graph for a multi-variant Snow() preset (moyu loads just
++        // graph/particle500 and particle501), so an unloaded variation must fall back to
++        // the base image instead of dropping the flake: otherwise only 1/N of the flakes
++        // are ever drawn and the effect is visibly sparser than on PC.
++        let mut graph_id = (base_tex + variant) as u16;
++        let mut graph = graphs.get(graph_id as usize);
++        let mut uploaded = match graph {
++            Some(g) => cache.upload_graph_if_needed(backend, graph_id, g)?,
++            None => false,
++        };
++        if !uploaded && variant != 0 {
++            graph_id = base_tex as u16;
++            graph = graphs.get(graph_id as usize);
++            uploaded = match graph {
++                Some(g) => cache.upload_graph_if_needed(backend, graph_id, g)?,
++                None => false,
++            };
+         }
+-        let graph_id = graph_i32 as u16;
+-        let Some(graph) = graphs.get(graph_id as usize) else {
++        let Some(graph) = graph else {
+             continue;
+         };
+-        if !cache.upload_graph_if_needed(backend, graph_id, graph)? {
++        if !uploaded {
+             continue;
+         }
+         let Some((tw, th)) = graph.image_dimensions() else {
+@@ -1219,7 +1247,6 @@ where
+         if tw == 0 || th == 0 {
+             continue;
+         }
+-
+         let period = flake.period;
+         let alpha_u8 = if period <= p0 || p1 <= p0 {
+             a0
+diff --git a/platform/switch/runtime/main.c b/platform/switch/runtime/main.c
+index adc29c8..b48a8ca 100644
+--- a/platform/switch/runtime/main.c
++++ b/platform/switch/runtime/main.c
+@@ -136,6 +136,30 @@ int rfvp_switch_debug_movie_nil(void) {
+ }
+ 
+ 
++/* GalNX P41: which movie index the debug marker asks for, so the ED path can be exercised
++ * without clearing a route. "movie=2" / "index=2" plays movie/02.wmv (moyu ED), anything else
++ * keeps the historical OP target movie/01.wmv. Debug-only, same marker file as above. */
++int rfvp_switch_debug_movie_index(void) {
++    char buf[256] = { 0 };
++    if (!read_movie_debug_file(buf, sizeof(buf))) return 1;
++    if (strstr(buf, "movie=2") != NULL || strstr(buf, "index=2") != NULL) return 2;
++    if (strstr(buf, "movie=3") != NULL || strstr(buf, "index=3") != NULL) return 3;
++    return 1;
++}
++
++/* GalNX P41 SELFTEST ONLY: the movie-skip check in the game scripts reads InputGetState() bit 0/1
++ * (Shift / Ctrl). Citron cannot deliver a pad R press from an injected keyboard key in this
++ * harness, so a marker file "skip=1" in movie_debug.txt lets a Citron run hold Ctrl synthetically
++ * and prove that the script's skip branch really stops the movie. Production runs never have the
++ * marker, so nothing changes for the device. */
++int rfvp_switch_skip_probe(void) {
++    static int cached = -1;
++    if (cached >= 0) return cached;
++    char buf[256] = { 0 };
++    cached = (read_movie_debug_file(buf, sizeof(buf)) && strstr(buf, "skip=1") != NULL) ? 1 : 0;
++    return cached;
++}
++
+ /* GalNX P33 P33_VARIANTS: OP video quality preset. sdmc:/switch/rfvp/video.txt holds one
+  * keyword and picks which pre-encoded movie variant plays next to the original movie/01.wmv:
+  *   720 | 0 -> 1280x720p30  (original asset, best quality)
+diff --git a/platform/switch/host/src/event.rs b/platform/switch/host/src/event.rs
+index ffc5faa..35b1a94 100644
+--- a/platform/switch/host/src/event.rs
++++ b/platform/switch/host/src/event.rs
+@@ -48,6 +48,12 @@ struct MenuMacro {
+     click2: Option<(i32, i32)>,
+ }
+ 
++extern "C" {
++    /// GalNX P41 self-test: when movie_debug.txt carries "skip=1" the runtime holds Ctrl for the
++    /// whole session, so a Citron run can exercise the game script's movie-skip branch.
++    fn rfvp_switch_skip_probe() -> i32;
++}
++
+ /// `struct RfvpSwitchInput` in main.c.
+ #[repr(C)]
+ pub struct SwitchInput {
+@@ -135,8 +141,10 @@ impl HorizonInput {
+         self.previous_buttons = buttons;
+ 
+         // R is the skip key: held down it reports Ctrl, exactly like the keyboard binding.
+-        let skip = R & buttons;
+-        let skip_before = R & held_before;
++        // The self-test marker adds the same signal without a controller, see rfvp_switch_skip_probe.
++        let probe_skip = unsafe { rfvp_switch_skip_probe() } != 0;
++        let skip = if probe_skip { R } else { R & buttons };
++        let skip_before = if probe_skip { R } else { R & held_before };
+         if skip != 0 && skip_before == 0 {
+             self.key_down(KeyCode::Control, out);
+         } else if skip == 0 && skip_before != 0 {
+diff --git a/crates/rfvp/src/subsystem/resources/videoplayer/horizon.rs b/crates/rfvp/src/subsystem/resources/videoplayer/horizon.rs
+index 223e9d4..eacf8a8 100644
+--- a/crates/rfvp/src/subsystem/resources/videoplayer/horizon.rs
++++ b/crates/rfvp/src/subsystem/resources/videoplayer/horizon.rs
+@@ -617,3 +617,18 @@ pub(crate) fn debug_movie_nil_requested() -> bool {
+ pub(crate) fn debug_movie_nil_requested() -> bool {
+     false
+ }
++/// GalNX P41: select which movie the debug marker refers to (1 = OP, 2 = ED).
++/// Defaults to 1 so every existing marker keeps its old meaning.
++#[cfg(target_os = "horizon")]
++pub(crate) fn debug_movie_index() -> u32 {
++    extern "C" {
++        fn rfvp_switch_debug_movie_index() -> core::ffi::c_int;
++    }
++    let index = unsafe { rfvp_switch_debug_movie_index() };
++    if index > 1 { index as u32 } else { 1 }
++}
++
++#[cfg(not(target_os = "horizon"))]
++pub(crate) fn debug_movie_index() -> u32 {
++    1
++}
+diff --git a/crates/rfvp/src/no_std_core.rs b/crates/rfvp/src/no_std_core.rs
+index d0599dd..7921461 100644
+--- a/crates/rfvp/src/no_std_core.rs
++++ b/crates/rfvp/src/no_std_core.rs
+@@ -670,8 +670,12 @@ impl RfvpCore {
+             && crate::subsystem::resources::videoplayer::horizon::debug_movie_requested()
+         {
+             self.debug_movie_started = true;
+-            let path =
+-                crate::script::Variant::String(alloc::string::String::from("movie/01.wmv"));
++            // GalNX P41: the debug marker can point at a different movie index so the ED
++            // path (movie/02.wmv) can be checked without clearing a route. Index 1 keeps
++            // the historical OP target.
++            let debug_index =
++                crate::subsystem::resources::videoplayer::horizon::debug_movie_index();
++            let path = crate::script::Variant::String(format!("movie/{debug_index:02}.wmv"));
+             // GalNX P33: `movie=nil` in debug.txt replays the flag the game actually
+             // passes (layer movie) so the device path can be verified without the
+             // prologue; otherwise keep the modal variant used since P32.
+@@ -694,7 +698,10 @@ impl RfvpCore {
+                 &path,
+                 &flag,
+             ) {
+-                Ok(_) => host.log(RfvpLogLevel::Info, "debug movie: started movie/01.wmv"),
++                Ok(_) => host.log(
++                    RfvpLogLevel::Info,
++                    &format!("debug movie: started movie/{debug_index:02}.wmv"),
++                ),
+                 Err(err) => host.log(
+                     RfvpLogLevel::Warn,
+                     &format!("debug movie: start failed: {err}"),

@@ -1,0 +1,24 @@
+launch mode : schtasks-limited
+wrapper     : C:\ProgramData\galnx-harness\launch-20261105-062202-SAKURA_MOYU-010047420000c000.cmd
+cmdline     : "E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\web-02\citron\citron.exe" -g "E:\galnx-build\p21\out\SAKURA_MOYU-010047420000c000.nsp"
+game type   : nsp
+game path   : /e/galnx-build/p21/out/SAKURA_MOYU-010047420000c000.nsp
+stage path  : /e/galnx-build/p21/out/SAKURA_MOYU-010047420000c000.nsp
+log baseline: size=113189 mtime=1793830241
+status      : loaded
+game        : /e/galnx-build/p21/out/SAKURA_MOYU-010047420000c000.nsp (type nsp)
+window title: citron Nightly | 0237a9b88 | SAKURA MOYU (64-bit) | 1.0.0 | NVIDIA
+pid         : 23820
+elapsed_s   : 19
+boot line   : [   2.858389] Frontend <Info> citron\main.cpp:2475:BootGame: Booting game: 010047420000C000 | SAKURA MOYU (64-bit) | 1.0.0
+signals     : title_match=1 boot_line=1 app_output=1 (screenshot_nonblack)
+screenshot  : E:\galnx-build\p21\run-sakura-nsp\20261105-062202-SAKURA_MOYU-010047420000c000\window.png (printwindow, 1359895 bytes, nonblack=0.9018)
+log         : E:\galnx-build\p21\run-sakura-nsp\20261105-062202-SAKURA_MOYU-010047420000c000\citron_log.txt
+error       : 
+input       : injected=1 focus_ok= clicks=3 keys_sent=0 diff_ratio= region=1728x1016 y=70-950
+input shots : before= after=
+input error : 
+input steps : done=1 failed=0 diff_ratio=0.624221
+steps file  : E:\galnx-build\p21\run-sakura-nsp\20261105-062202-SAKURA_MOYU-010047420000c000\input-steps.tsv
+steps final : E:\galnx-build\p21\run-sakura-nsp\20261105-062202-SAKURA_MOYU-010047420000c000\window-steps-final.png
+steps error : 

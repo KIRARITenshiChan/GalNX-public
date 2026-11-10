@@ -1,0 +1,17 @@
+322:[INFO] Movie: opened (Switch NVDEC H.264) asset=movie/01_h264.mp4
+327:[INFO] movie h264: decoded frame=1 pts=0 ms 1280x720 hw=0 decode_us=16554 convert_us=4182
+330:[INFO] movie: presented frame=1 1280x720 upload_us=373
+332:[INFO] movie h264: decoded frame=2 pts=33 ms 1280x720 hw=0 decode_us=19628 convert_us=2554
+747:[INFO] movie h264: decoded frame=3 pts=66 ms 1280x720 hw=0 decode_us=31293 convert_us=2566
+749:[INFO] movie h264: decoded frame=4 pts=100 ms 1280x720 hw=0 decode_us=12776 convert_us=2852
+927:[INFO] movie h264: decoded frame=5 pts=133 ms 1280x720 hw=0 decode_us=13620 convert_us=2554
+929:[INFO] movie h264: decoded frame=30 pts=967 ms 1280x720 hw=0 decode_us=16879 convert_us=2642
+930:[INFO] movie: presented frame=30 1280x720 upload_us=1
+932:[INFO] movie h264: decoded frame=60 pts=1968 ms 1280x720 hw=0 decode_us=23465 convert_us=2652
+933:[INFO] movie: presented frame=60 1280x720 upload_us=2
+935:[INFO] movie h264: decoded frame=90 pts=2969 ms 1280x720 hw=0 decode_us=12256 convert_us=2488
+1221:[INFO] movie: presented frame=2880 1280x720 upload_us=2
+1223:[INFO] movie h264: decoded frame=2910 pts=97063 ms 1280x720 hw=0 decode_us=21387 convert_us=2630
+1224:[INFO] movie: presented frame=2910 1280x720 upload_us=1
+1226:[INFO] movie h264: decoded frame=2940 pts=98064 ms 1280x720 hw=0 decode_us=12652 convert_us=2653
+1227:[INFO] movie: presented frame=2940 1280x720 upload_us=2

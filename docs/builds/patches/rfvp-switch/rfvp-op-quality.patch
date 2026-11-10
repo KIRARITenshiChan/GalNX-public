@@ -1,0 +1,727 @@
+diff --git a/crates/na_wmv_player/src/color.rs b/crates/na_wmv_player/src/color.rs
+index ec302eb..a209e63 100644
+--- a/crates/na_wmv_player/src/color.rs
++++ b/crates/na_wmv_player/src/color.rs
+@@ -149,6 +149,89 @@ pub fn yuv420p_to_rgba_scaled(frame: &YuvFrame, output_width: u32, output_height
+     rgba
+ }
+ 
++/// Convert a WMV YUV420p frame to packed RGBA8 at the frame's native size.
++///
++/// This is the console path's converter: the Switch build uploads the decoded
++/// 1280x720 frame as a texture and lets the GPU stretch it over the 1920x1080
++/// screen, so the CPU must not resample. Two horizontally adjacent luma samples
++/// share one chroma pair and the loops walk the planes as rows, so there is no
++/// per-pixel division (\`yuv420p_to_rgba_scaled\` spent two integer divisions per
++/// output pixel, which dominated the OP frame time on the device).
++///
++/// \`rgba\` is resized in place, so a caller can hand in an empty Vec and let it
++/// grow once (and, if it wants, reuse the allocation).
++pub fn yuv420p_to_rgba_native_into(frame: &YuvFrame, rgba: &mut Vec<u8>) {
++    let width = frame.width as usize;
++    let height = frame.height as usize;
++    if width == 0 || height == 0 {
++        rgba.clear();
++        return;
++    }
++    let needed = width.saturating_mul(height).saturating_mul(4);
++    if rgba.len() != needed {
++        rgba.clear();
++        rgba.resize(needed, 255);
++    }
++
++    let chroma_width = (width / 2).max(1);
++    let chroma_row_len = (width + 1) / 2;
++    let matrix = VideoTransferMatrix::for_unspecified_source(frame.height);
++
++    for y in 0..height {
++        let luma_start = y * width;
++        let Some(luma_row) = frame.y.get(luma_start..luma_start + width) else {
++            break;
++        };
++        let chroma_start = (y >> 1) * chroma_width;
++        let cb_row = frame
++            .cb
++            .get(chroma_start..chroma_start + chroma_row_len)
++            .unwrap_or(&[]);
++        let cr_row = frame
++            .cr
++            .get(chroma_start..chroma_start + chroma_row_len)
++            .unwrap_or(&[]);
++        let out_start = y * width * 4;
++        let Some(out_row) = rgba.get_mut(out_start..out_start + width * 4) else {
++            break;
++        };
++
++        // Pairs of luma samples sharing one chroma sample.
++        let mut luma_pairs = luma_row.chunks_exact(2);
++        let mut out_chunks = out_row.chunks_exact_mut(8);
++        for (index, (pair, out)) in (&mut luma_pairs).zip(&mut out_chunks).enumerate() {
++            let cb = cb_row.get(index).copied().unwrap_or(128);
++            let cr = cr_row.get(index).copied().unwrap_or(128);
++            let [r0, g0, b0] = yuv_limited_to_rgb(pair[0], cb, cr, matrix);
++            let [r1, g1, b1] = yuv_limited_to_rgb(pair[1], cb, cr, matrix);
++            out[0] = r0;
++            out[1] = g0;
++            out[2] = b0;
++            out[3] = 255;
++            out[4] = r1;
++            out[5] = g1;
++            out[6] = b1;
++            out[7] = 255;
++        }
++
++        // Odd widths leave one luma sample whose partner is out of range.
++        let paired = luma_row.len() & !1;
++        if paired < luma_row.len() {
++            let index = paired >> 1;
++            let cb = cb_row.get(index).copied().unwrap_or(128);
++            let cr = cr_row.get(index).copied().unwrap_or(128);
++            let [r, g, b] = yuv_limited_to_rgb(luma_row[paired], cb, cr, matrix);
++            let out = paired * 4;
++            if let Some(pixel) = out_row.get_mut(out..out + 4) {
++                pixel[0] = r;
++                pixel[1] = g;
++                pixel[2] = b;
++                pixel[3] = 255;
++            }
++        }
++    }
++}
++
+ #[cfg(test)]
+ mod tests {
+     use super::*;
+diff --git a/crates/na_wmv_player/src/lib.rs b/crates/na_wmv_player/src/lib.rs
+index 531893a..3c6d846 100644
+--- a/crates/na_wmv_player/src/lib.rs
++++ b/crates/na_wmv_player/src/lib.rs
+@@ -59,8 +59,8 @@ pub mod api;
+ pub use api::{AsfWmaDecoder, DecodedAudioFrame};
+ pub use api::{AsfWmv2Decoder, DecodedFrame, Wmv2Decoder, Wmv3Decoder, Wvc1Decoder};
+ pub use color::{
+-    VideoTransferMatrix, yuv_limited_to_rgb, yuv420p_to_rgb, yuv420p_to_rgba,
+-    yuv420p_to_rgba_scaled,
++    VideoTransferMatrix, yuv420p_to_rgba_native_into, yuv_limited_to_rgb, yuv420p_to_rgb,
++    yuv420p_to_rgba, yuv420p_to_rgba_scaled,
+ };
+ pub use decoder::YuvFrame;
+ pub use error::{DecoderError, Result};
+diff --git a/crates/rfvp/src/no_std_core.rs b/crates/rfvp/src/no_std_core.rs
+index 925749a..ac96798 100644
+--- a/crates/rfvp/src/no_std_core.rs
++++ b/crates/rfvp/src/no_std_core.rs
+@@ -672,14 +672,27 @@ impl RfvpCore {
+             self.debug_movie_started = true;
+             let path =
+                 crate::script::Variant::String(alloc::string::String::from("movie/01.wmv"));
+-            // GalNX P32: pass a non-nil flag. movie_play maps a nil flag to
+-            // MovieMode::LayerNoAudio (no soundtrack); the OP now has an Ogg
+-            // soundtrack next to the video, so start it as a modal movie with
+-            // audio (the flag value itself is only tested for nil/true).
++            // GalNX P33: `movie=nil` in debug.txt replays the flag the game actually
++            // passes (layer movie) so the device path can be verified without the
++            // prologue; otherwise keep the modal variant used since P32.
++            let debug_nil = crate::subsystem::resources::videoplayer::horizon::debug_movie_nil_requested();
++            let flag = if debug_nil {
++                crate::script::Variant::Nil
++            } else {
++                crate::script::Variant::True
++            };
++            host.log(
++                RfvpLogLevel::Info,
++                if debug_nil {
++                    "debug movie: replaying game flag (nil)"
++                } else {
++                    "debug movie: modal flag (true)"
++                },
++            );
+             match crate::subsystem::components::syscalls::movie::movie_play(
+                 &mut self.game_data,
+                 &path,
+-                &crate::script::Variant::True,
++                &flag,
+             ) {
+                 Ok(_) => host.log(RfvpLogLevel::Info, "debug movie: started movie/01.wmv"),
+                 Err(err) => host.log(
+diff --git a/crates/rfvp/src/rendering/prim_commands.rs b/crates/rfvp/src/rendering/prim_commands.rs
+index 477a83f..1b55819 100644
+--- a/crates/rfvp/src/rendering/prim_commands.rs
++++ b/crates/rfvp/src/rendering/prim_commands.rs
+@@ -823,25 +823,52 @@ where
+             if let Some(graph_id) = graph_id {
+                 if let Some(graph) = graphs.get(graph_id as usize) {
+                     if cache.upload_graph_if_needed(backend, graph_id, graph)? {
+-                        emit_graph_sprite(
+-                            commands,
+-                            hit_proxies,
+-                            order,
+-                            virtual_size,
+-                            graph_id,
+-                            graph,
+-                            &draw_prim,
+-                            parent_x,
+-                            parent_y,
+-                            draw_x,
+-                            draw_y,
+-                            draw_alpha,
+-                            v3d_x,
+-                            v3d_y,
+-                            v3d_z,
+-                            false,
+-                            draw_id,
+-                        )?;
++                        if graph_id == crate::subsystem::resources::videoplayer::MOVIE_GRAPH_ID {
++                            // GalNX P33: the console movie backend uploads the decoded frame
++                            // at its native size (720p for the OP) and skips the software
++                            // upscale to 1080p, so draw the texture over the whole virtual
++                            // screen and let the GPU stretch it. emit_graph_sprite would
++                            // clamp the quad to the texture size instead.
++                            let (dst_w, dst_h) = (virtual_size.0 as f32, virtual_size.1 as f32);
++                            let model = build_draw_model(
++                                virtual_size, &draw_prim, parent_x, parent_y, draw_x, draw_y,
++                                0.0, 0.0, 0.0, 0.0, v3d_x, v3d_y, v3d_z,
++                            );
++                            emit_sprite(
++                                commands,
++                                hit_proxies,
++                                order,
++                                draw_id,
++                                model,
++                                dst_w,
++                                dst_h,
++                                vec2(0.0, 0.0),
++                                vec2(1.0, 1.0),
++                                vec4(1.0, 1.0, 1.0, draw_alpha),
++                                DrawTextureKey::Graph(graph_id),
++                                prim_blend(&draw_prim),
++                            )?;
++                        } else {
++                            emit_graph_sprite(
++                                commands,
++                                hit_proxies,
++                                order,
++                                virtual_size,
++                                graph_id,
++                                graph,
++                                &draw_prim,
++                                parent_x,
++                                parent_y,
++                                draw_x,
++                                draw_y,
++                                draw_alpha,
++                                v3d_x,
++                                v3d_y,
++                                v3d_z,
++                                false,
++                                draw_id,
++                            )?;
++                        }
+                     }
+                 }
+             }
+diff --git a/crates/rfvp/src/subsystem/components/syscalls/movie.rs b/crates/rfvp/src/subsystem/components/syscalls/movie.rs
+index 88427d6..dbff8ce 100644
+--- a/crates/rfvp/src/subsystem/components/syscalls/movie.rs
++++ b/crates/rfvp/src/subsystem/components/syscalls/movie.rs
+@@ -47,10 +47,25 @@ pub fn movie_play(game_data: &mut GameData, path: &Variant, flag: &Variant) -> R
+         MovieMode::ModalWithAudio
+     };
+ 
+-    let audio = if matches!(mode, MovieMode::ModalWithAudio) {
+-        Some(game_data.audio_manager())
+-    } else {
+-        None
++    // GalNX P33: this game plays the OP with Movie(path, nil), i.e. a layer effect. The
++    // original engine therefore never started the soundtrack, and the Switch backend
++    // (which loads movie/01.ogg as the OP soundtrack) was handed `None` and stayed
++    // silent on the device. On the console build the backend decides from the files
++    // alone: it plays the .ogg sibling when it exists and ignores it otherwise.
++    let audio = {
++        #[cfg(all(feature = "switch-video", feature = "no_std"))]
++        {
++            let _ = mode;
++            Some(game_data.audio_manager())
++        }
++        #[cfg(not(all(feature = "switch-video", feature = "no_std")))]
++        {
++            if matches!(mode, MovieMode::ModalWithAudio) {
++                Some(game_data.audio_manager())
++            } else {
++                None
++            }
++        }
+     };
+ 
+     let mut last_error: Option<String> = None;
+diff --git a/crates/rfvp/src/subsystem/resources/graph_buff.rs b/crates/rfvp/src/subsystem/resources/graph_buff.rs
+index ce5668d..75bbcc7 100644
+--- a/crates/rfvp/src/subsystem/resources/graph_buff.rs
++++ b/crates/rfvp/src/subsystem/resources/graph_buff.rs
+@@ -825,6 +825,27 @@ impl GraphBuff {
+         )
+     }
+ 
++    /// GalNX P33: like load_from_buff, but hands the previous pixel buffer
++    /// back so the caller can reuse the allocation. The movie player uploads a
++    /// 1280x720 RGBA frame every tick, and allocating a fresh 3.7 MB Vec (then
++    /// filling it with 255) per frame was pure overhead on the console.
++    pub fn load_from_buff_recycle(
++        &mut self,
++        buff: Vec<u8>,
++        width: u32,
++        height: u32,
++    ) -> Result<Option<Vec<u8>>> {
++        let previous = match self.texture.take() {
++            Some(DynamicImage::ImageRgba8(img)) => Some(img.into_raw()),
++            other => {
++                self.texture = other;
++                None
++            }
++        };
++        self.load_from_owned_rgba(buff, width, height, width, height, 0, 0, 0.0)?;
++        Ok(previous)
++    }
++
+     pub fn load_text_from_buff_with_display_size(
+         &mut self,
+         buff: Vec<u8>,
+diff --git a/crates/rfvp/src/subsystem/resources/motion_manager/mod.rs b/crates/rfvp/src/subsystem/resources/motion_manager/mod.rs
+index 8da04e0..8c12f44 100644
+--- a/crates/rfvp/src/subsystem/resources/motion_manager/mod.rs
++++ b/crates/rfvp/src/subsystem/resources/motion_manager/mod.rs
+@@ -1141,6 +1141,19 @@ impl MotionManager {
+         graph.load_from_buff(buff, width, height)
+     }
+ 
++    /// GalNX P33: upload a raw RGBA buffer and return the previous one so the
++    /// movie player can recycle the allocation instead of allocating per frame.
++    pub fn load_texture_from_buff_recycle(
++        &mut self,
++        id: u16,
++        buff: Vec<u8>,
++        width: u32,
++        height: u32,
++    ) -> Result<Option<Vec<u8>>> {
++        let graph = &mut self.textures[id as usize];
++        graph.load_from_buff_recycle(buff, width, height)
++    }
++
+     pub fn text_reprint(
+         &mut self,
+         fonts: &crate::subsystem::resources::text_manager::FontEnumerator,
+diff --git a/crates/rfvp/src/subsystem/resources/videoplayer/horizon.rs b/crates/rfvp/src/subsystem/resources/videoplayer/horizon.rs
+index 7c0fd74..f37ed46 100644
+--- a/crates/rfvp/src/subsystem/resources/videoplayer/horizon.rs
++++ b/crates/rfvp/src/subsystem/resources/videoplayer/horizon.rs
+@@ -33,7 +33,7 @@ use crate::rfvp_audio::{AudioManager, SoundSource, Tween};
+ use crate::subsystem::resources::vfs::Vfs;
+ 
+ use wmv_decoder::io::{self as wmv_io, ErrorKind, Read as WmvRead, Seek as WmvSeek, SeekFrom};
+-use wmv_decoder::{AsfWmv2Decoder, BytesDecoder, DecodedFrame, yuv420p_to_rgba_scaled};
++use wmv_decoder::{AsfWmv2Decoder, BytesDecoder, DecodedFrame, yuv420p_to_rgba_native_into};
+ 
+ use super::{MovieFrame, MovieRequest, MovieSource};
+ 
+@@ -52,6 +52,8 @@ const DECODE_LOG_EVERY: u32 = 30;
+ struct WmvRgbaFrame {
+     pts_ms: u32,
+     rgba: Vec<u8>,
++    width: u32,
++    height: u32,
+ }
+ 
+ /// GalNX P32: the OP soundtrack shipped as an Ogg Vorbis file next to the video.
+@@ -254,23 +256,19 @@ struct WmvPlayback {
+     base_pts_ms: Option<u32>,
+     last_presented_pts_ms: u32,
+     eof: bool,
+-    screen_w: u32,
+-    screen_h: u32,
+     decoded_frames: u32,
+     presented_frames: u32,
+     last_decode_us: u32,
++    /// GalNX P33: one recycled RGBA frame buffer so decode_one() does not
++    /// allocate 3.7 MB per frame (and the YUV converter skips its 255 memset).
++    spare_buffer: Option<Vec<u8>>,
+     /// GalNX P32: the Ogg OP soundtrack, when the movie was started as a
+     /// modal movie (script Movie flag non-nil) and movie/01.ogg exists.
+     audio: Option<MovieAudio>,
+ }
+ 
+ impl WmvPlayback {
+-    fn new(
+-        dec: WmvDecoder,
+-        screen_w: u32,
+-        screen_h: u32,
+-        audio: Option<MovieAudio>,
+-    ) -> Self {
++    fn new(dec: WmvDecoder, audio: Option<MovieAudio>) -> Self {
+         Self {
+             dec,
+             stash: VecDeque::new(),
+@@ -278,11 +276,10 @@ impl WmvPlayback {
+             base_pts_ms: None,
+             last_presented_pts_ms: u32::MAX,
+             eof: false,
+-            screen_w,
+-            screen_h,
+             decoded_frames: 0,
+             presented_frames: 0,
+             last_decode_us: 0,
++            spare_buffer: None,
+             audio,
+         }
+     }
+@@ -306,7 +303,9 @@ impl WmvPlayback {
+         if self.eof {
+             return Ok(false);
+         }
+-        let started = Instant::now();
++        // GalNX P33: perf::start() is the host microsecond clock; the no_std
++        // platform_time::Instant only advances once per tick (elapsed was 0).
++        let decode_t0 = crate::perf::start();
+         let decoded = self
+             .dec
+             .next_frame()
+@@ -315,22 +314,40 @@ impl WmvPlayback {
+             self.eof = true;
+             return Ok(false);
+         };
+-        let rgba = yuv420p_to_rgba_scaled(&frame.frame, self.screen_w, self.screen_h);
++        self.last_decode_us = crate::perf::start()
++            .saturating_sub(decode_t0)
++            .min(u32::MAX as u64) as u32;
++        // GalNX P33: convert at the decoded size (the OP is 1280x720) and let the
++        // renderer stretch the texture over the screen. The old path upscaled every
++        // frame to 1920x1080 in software with two integer divisions per pixel, which
++        // was the main reason the OP ran at a few fps on the device.
++        let width = frame.frame.width;
++        let height = frame.frame.height;
++        let convert_t0 = crate::perf::start();
++        // GalNX P33: reuse the recycled buffer; when its length already matches
++        // the converter fills every byte, so the old 255-fill memset disappears.
++        let mut rgba = self.spare_buffer.take().unwrap_or_default();
++        yuv420p_to_rgba_native_into(&frame.frame, &mut rgba);
++        let convert_us = crate::perf::start()
++            .saturating_sub(convert_t0)
++            .min(u32::MAX as u64) as u32;
+         self.decoded_frames = self.decoded_frames.saturating_add(1);
+-        self.last_decode_us = started.elapsed().as_micros().min(u32::MAX as u128) as u32;
+         if self.decoded_frames == 1 || self.decoded_frames % DECODE_LOG_EVERY == 0 {
+             log::info!(
+-                "movie: decoded frame={} pts={} ms {}x{} decode_us={}",
++                "movie: decoded frame={} pts={} ms {}x{} decode_us={} convert_us={}",
+                 self.decoded_frames,
+                 frame.pts_ms,
+-                self.screen_w,
+-                self.screen_h,
+-                self.last_decode_us
++                width,
++                height,
++                self.last_decode_us,
++                convert_us
+             );
+         }
+         self.stash.push_back(WmvRgbaFrame {
+             pts_ms: frame.pts_ms,
+             rgba,
++            width,
++            height,
+         });
+         Ok(true)
+     }
+@@ -393,8 +410,8 @@ impl MovieSource for WmvPlayback {
+         self.maybe_start_audio();
+         Ok(Some(MovieFrame {
+             rgba: frame.rgba,
+-            width: self.screen_w,
+-            height: self.screen_h,
++            width: frame.width,
++            height: frame.height,
+         }))
+     }
+ 
+@@ -402,6 +419,12 @@ impl MovieSource for WmvPlayback {
+         WmvPlayback::is_finished(self)
+     }
+ 
++    fn recycle_buffer(&mut self, buffer: Vec<u8>) {
++        if self.spare_buffer.is_none() {
++            self.spare_buffer = Some(buffer);
++        }
++    }
++
+     fn stop(mut self: Box<Self>) {
+         self.stop_audio();
+     }
+@@ -416,6 +439,61 @@ impl Drop for WmvPlayback {
+     }
+ }
+ 
++/// GalNX P33 P33_VARIANTS: pre-encoded OP quality variants. The shipped OP is a 1920x1080p VC-1
++/// master re-encoded to 1280x720 WMV2 for the console; software WMV2 decode on the A57 is still
++/// far below 30 fps, so the payload also carries downscaled copies next to the original:
++///
++/// * movie/01_q540.wmv  960x540@29.97  (level 1)
++/// * movie/01_q480.wmv  854x480@24     (level 2, default)
++/// * movie/01_q360.wmv  640x360@24     (level 3)
++///
++/// The level comes from sdmc:/switch/rfvp/video.txt (read by rfvp_switch_movie_quality in
++/// main.c). Level 0, or a missing variant file, keeps playing the original 720p asset, so a
++/// payload without the variants behaves exactly like before.
++fn movie_variant_name(name: &str, level: u8) -> Option<String> {
++    let suffix = match level {
++        1 => "_q540",
++        2 => "_q480",
++        3 => "_q360",
++        _ => return None,
++    };
++    let dot = name.rfind('.')?;
++    let (base, ext) = name.split_at(dot);
++    let ext_lower = ext.to_ascii_lowercase();
++    if ext_lower != ".wmv" && ext_lower != ".asf" {
++        return None;
++    }
++    let mut out = String::with_capacity(name.len() + 5);
++    out.push_str(base);
++    out.push_str(suffix);
++    out.push_str(ext);
++    Some(out)
++}
++
++/// GalNX P33 P33_VARIANTS: sdmc:/switch/rfvp/video.txt selects the OP quality level
++/// (0=720p original, 1=540p, 2=480p, 3=360p). main.c defaults to 2 when the file is missing,
++/// so a freshly installed NSP plays the OP closer to real time; writing 720 restores the
++/// original asset.
++#[cfg(target_os = "horizon")]
++pub(crate) fn movie_quality_level() -> u8 {
++    extern "C" {
++        fn rfvp_switch_movie_quality() -> core::ffi::c_int;
++    }
++    let level = unsafe { rfvp_switch_movie_quality() };
++    if level < 0 {
++        0
++    } else if level > 3 {
++        3
++    } else {
++        level as u8
++    }
++}
++
++#[cfg(not(target_os = "horizon"))]
++pub(crate) fn movie_quality_level() -> u8 {
++    0
++}
++
+ /// Open a movie for the Switch (no_std) backend: WMV/ASF only, video only.
+ ///
+ /// The game ships exactly one movie (movie/01.wmv), so MPEG/MP4 support is out
+@@ -431,32 +509,53 @@ pub(super) fn open(request: &MovieRequest<'_>) -> Result<Box<dyn MovieSource>> {
+         ));
+     }
+ 
+-    let (w, h) = (request.screen_w, request.screen_h);
+-
+     // GalNX P32: read the Ogg OP soundtrack once, up front. It is only played
+     // once the first video frame is actually presented. Missing/unreadable
+     // soundtrack is not fatal: the movie keeps playing video-only.
+     let audio = load_movie_audio(request);
+ 
+     #[cfg(feature = "switch-async")]
+-    if let Some((source, offset, size)) = request.vfs.pack_location(name) {
+-        let reader = VfsMovieReader::new(source, offset, size);
+-        match AsfWmv2Decoder::open(reader) {
+-            Ok(dec) => {
+-                log::info!(
+-                    "Movie: opened (Switch WMV video-only, streaming) name={name} bytes={size}"
+-                );
+-                return Ok(Box::new(WmvPlayback::new(
+-                    WmvDecoder::Stream(dec),
+-                    w,
+-                    h,
+-                    audio,
+-                )));
++    {
++        // GalNX P33 P33_VARIANTS: prefer the downscaled variant picked by video.txt; anything
++        // that goes wrong (no file, open error) quietly falls back to the original 720p asset.
++        let level = movie_quality_level();
++        if let Some(variant) = movie_variant_name(name, level) {
++            if let Some((source, offset, size)) = request.vfs.pack_location(variant.as_str()) {
++                let reader = VfsMovieReader::new(source, offset, size);
++                match AsfWmv2Decoder::open(reader) {
++                    Ok(dec) => {
++                        log::info!(
++                            "Movie: opened (Switch WMV video-only, streaming, P33 quality) name={variant} level={level} bytes={size}"
++                        );
++                        return Ok(Box::new(WmvPlayback::new(
++                            WmvDecoder::Stream(dec),
++                            audio,
++                        )));
++                    }
++                    Err(err) => {
++                        log::warn!(
++                            "movie: quality variant open failed for {variant}: {err}; using the original asset"
++                        );
++                    }
++                }
++            } else {
++                log::info!("movie: no level-{level} variant for {name}; playing the original asset");
+             }
+-            Err(err) => {
+-                log::warn!(
+-                    "movie: streaming open failed for {name}: {err}; falling back to a whole-file read"
+-                );
++        }
++        if let Some((source, offset, size)) = request.vfs.pack_location(name) {
++            let reader = VfsMovieReader::new(source, offset, size);
++            match AsfWmv2Decoder::open(reader) {
++                Ok(dec) => {
++                    log::info!(
++                        "Movie: opened (Switch WMV video-only, streaming) name={name} bytes={size}"
++                    );
++                    return Ok(Box::new(WmvPlayback::new(WmvDecoder::Stream(dec), audio)));
++                }
++                Err(err) => {
++                    log::warn!(
++                        "movie: streaming open failed for {name}: {err}; falling back to a whole-file read"
++                    );
++                }
+             }
+         }
+     }
+@@ -470,12 +569,7 @@ pub(super) fn open(request: &MovieRequest<'_>) -> Result<Box<dyn MovieSource>> {
+         bytes.len()
+     );
+     let dec = BytesDecoder::open_bytes(bytes).map_err(|err| anyhow!("WMV open failed: {err}"))?;
+-    Ok(Box::new(WmvPlayback::new(
+-        WmvDecoder::Memory(dec),
+-        w,
+-        h,
+-        audio,
+-    )))
++    Ok(Box::new(WmvPlayback::new(WmvDecoder::Memory(dec), audio)))
+ }
+ 
+ 
+@@ -495,3 +589,19 @@ pub(crate) fn debug_movie_requested() -> bool {
+ pub(crate) fn debug_movie_requested() -> bool {
+     false
+ }
++
++/// GalNX P33: `movie=nil` in sdmc:/switch/rfvp/debug.txt starts the OP with the nil
++/// flag, i.e. the exact call the game makes (layer movie). Used to verify on-device
++/// audio for the real path instead of the modal debug variant.
++#[cfg(target_os = "horizon")]
++pub(crate) fn debug_movie_nil_requested() -> bool {
++    extern "C" {
++        fn rfvp_switch_debug_movie_nil() -> core::ffi::c_int;
++    }
++    unsafe { rfvp_switch_debug_movie_nil() != 0 }
++}
++
++#[cfg(not(target_os = "horizon"))]
++pub(crate) fn debug_movie_nil_requested() -> bool {
++    false
++}
+diff --git a/crates/rfvp/src/subsystem/resources/videoplayer/mod.rs b/crates/rfvp/src/subsystem/resources/videoplayer/mod.rs
+index be0dcc1..6670313 100644
+--- a/crates/rfvp/src/subsystem/resources/videoplayer/mod.rs
++++ b/crates/rfvp/src/subsystem/resources/videoplayer/mod.rs
+@@ -72,6 +72,9 @@ pub trait MovieSource: Send + Sync {
+ 
+     /// Stop decoding and the soundtrack.
+     fn stop(self: Box<Self>);
++
++    /// GalNX P33: give a frame buffer back so the decoder can reuse it.
++    fn recycle_buffer(&mut self, _buffer: Vec<u8>) {}
+ }
+ 
+ /// What a decoder needs to open a movie.
+@@ -193,7 +196,22 @@ impl VideoPlayerManager {
+         };
+ 
+         if let Some(frame) = source.next_frame()? {
+-            motion.load_texture_from_buff(MOVIE_GRAPH_ID, frame.rgba, frame.width, frame.height)?;
++            // GalNX P33: perf::start() is the host microsecond clock. The
++            // no_std platform_time::Instant only advances once per tick, so all
++            // of these timings used to read 0 on the console.
++            let upload_started = crate::perf::start();
++            let recycled = motion.load_texture_from_buff_recycle(
++                MOVIE_GRAPH_ID,
++                frame.rgba,
++                frame.width,
++                frame.height,
++            )?;
++            let upload_us = crate::perf::start()
++                .saturating_sub(upload_started)
++                .min(u32::MAX as u64) as u32;
++            if let Some(buffer) = recycled {
++                source.recycle_buffer(buffer);
++            }
+             motion.refresh_prims(MOVIE_GRAPH_ID);
+             // GalNX P29: the movie sprite has to be the last child of root prim 0.
+             // The renderer walks the prim tree in child order and does not sort by
+@@ -206,10 +224,11 @@ impl VideoPlayerManager {
+             self.frames = self.frames.saturating_add(1);
+             if self.frames == 1 || self.frames % 30 == 0 {
+                 log::info!(
+-                    "movie: presented frame={} {}x{}",
++                    "movie: presented frame={} {}x{} upload_us={}",
+                     self.frames,
+                     frame.width,
+-                    frame.height
++                    frame.height,
++                    upload_us
+                 );
+             }
+         }
+diff --git a/platform/switch/runtime/main.c b/platform/switch/runtime/main.c
+index 059d624..33544ff 100644
+--- a/platform/switch/runtime/main.c
++++ b/platform/switch/runtime/main.c
+@@ -106,9 +106,43 @@ int rfvp_switch_debug_movie(void) {
+     const size_t got = fread(buf, 1, sizeof(buf) - 1, file);
+     fclose(file);
+     buf[got] = '\0';
+-    return strstr(buf, "movie=1") != NULL;
++    return strstr(buf, "movie=1") != NULL || strstr(buf, "movie=nil") != NULL;
+ }
+ 
++/* GalNX P33: debug-only second trigger. The game itself plays the OP as a layer movie
++ * (flag = nil), which used to mean "no soundtrack". "movie=nil" starts exactly that variant
++ * so the device path (layer movie + Ogg soundtrack) can be checked under Citron. */
++int rfvp_switch_debug_movie_nil(void) {
++    FILE* file = fopen("sdmc:/switch/rfvp/debug.txt", "r");
++    if (file == NULL) return 0;
++    char buf[512] = { 0 };
++    const size_t got = fread(buf, 1, sizeof(buf) - 1, file);
++    fclose(file);
++    buf[got] = '\0';
++    return strstr(buf, "movie=nil") != NULL;
++}
++
++
++/* GalNX P33 P33_VARIANTS: OP video quality preset. sdmc:/switch/rfvp/video.txt holds one
++ * keyword and picks which pre-encoded movie variant plays next to the original movie/01.wmv:
++ *   720 | 0 -> 1280x720p30  (original asset, best quality)
++ *   540 | 1 -> 960x540p30
++ *   480 | 2 -> 854x480p24   (default: the OP stays close to real time)
++ *   360 | 3 -> 640x360p24
++ * The soundtrack is unchanged (movie/01.ogg), so only the video decode cost moves. */
++int rfvp_switch_movie_quality(void) {
++    FILE* file = fopen("sdmc:/switch/rfvp/video.txt", "r");
++    if (file == NULL) return 2;
++    char line[64] = { 0 };
++    const bool got = fgets(line, sizeof(line), file) != NULL;
++    fclose(file);
++    if (!got) return 2;
++    if (strncmp(line, "720", 3) == 0 || line[0] == '0') return 0;
++    if (strncmp(line, "540", 3) == 0 || line[0] == '1') return 1;
++    if (strncmp(line, "480", 3) == 0 || line[0] == '2') return 2;
++    if (strncmp(line, "360", 3) == 0 || line[0] == '3') return 3;
++    return 2;
++}
+ 
+ /* GalNX P22: async decode is opt-in per run. A file sdmc:/switch/rfvp/async.txt holding the word
+  * "on" (or "1") starts the worker; no file means the synchronous path, so an installed NSP keeps

@@ -1,0 +1,22 @@
+diff --git a/platform/switch/host/build.rs b/platform/switch/host/build.rs
+index b810291..4fed5bb 100644
+--- a/platform/switch/host/build.rs
++++ b/platform/switch/host/build.rs
+@@ -12,8 +12,15 @@ fn main() {
+     // version, which changes between releases: use the newest one that is there.
+     let gcc_dir = newest_subdir(&devkitpro.join("devkitA64/lib/gcc/aarch64-none-elf"))
+         .unwrap_or_else(|| devkitpro.join("devkitA64/lib/gcc/aarch64-none-elf/15.2.0"));
+-    let compiler = devkitpro.join("devkitA64/bin/aarch64-none-elf-gcc");
+-    let archiver = devkitpro.join("devkitA64/bin/aarch64-none-elf-ar");
++    // [GalNX local patch, M5-a] On Windows the devkitPro tools carry a .exe suffix, so the
++    // extensionless paths never exist and cc silently fell back to the host compiler
++    // (producing x86-64 COFF objects the AArch64 linker rejects). Probe both spellings.
++    fn tool(devkitpro: &std::path::Path, rel: &str) -> PathBuf {
++        let base = devkitpro.join(rel);
++        if base.exists() { base } else { base.with_extension("exe") }
++    }
++    let compiler = tool(&devkitpro, "devkitA64/bin/aarch64-none-elf-gcc");
++    let archiver = tool(&devkitpro, "devkitA64/bin/aarch64-none-elf-ar");
+     println!(
+         "cargo:rustc-link-search=native={}",
+         devkitpro.join("devkitA64/aarch64-none-elf/lib").display()

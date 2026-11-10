@@ -1,0 +1,17 @@
+# P3-f 独立复跑证据清单（2026-10-30，审计员 audit-web）
+# sha256                                                            bytes     file
+aa4fa8aab256f73c6d73111a62305f7078bd9c1eca3cd9d9128d0a51abef9543        1293  P3f-Kirikiroid2Preference.xml
+9aa4ba29e22c1341ab280e7bba6f48f08fd07610740a840ef2a0639743cba0d7      922387  P3f-adv1.png
+75b6df8004ab7c2831d6d6de844e124f173a8d10c2e2a58130c0cfda4377d966          26  P3f-autostart.txt
+072f605247d2f061c0727d3c195d7a3839af30950c7709d97d285092c26f7ada         887  P3f-input-steps.tsv
+6f6ba95fe5b459376b99b64c4477f070f9e5d49d20885f5a9e8a51576f9f8d10        1258  P3f-job.json
+2d3ca872b99976c451bf34941d1f75eac00a6bf452180ed3a9524e9180c2696a         234  P3f-k2s_boot.txt
+419c10dc6148896bd46955bd9a15ea02a8fd325e5b055ba5ddd4bd87dd791ea2        7995  P3f-k2s_log.txt
+a1ab40c5f0712b4d59ba07f902837b6ec36e098ca9e131f653a1cd7a0c91f2ed         158  P3f-keymap-hash.txt
+5109bb58005e64755f4f5806247de5a07e0e4f3a8b7c178395bb829156d10c3a          11  P3f-marker.txt
+1b2adf3a6e5528086066f379ae3714e14eeaacb87b2273d0b06b7ec04cbed476         295  P3f-nsp-hash.txt
+fd06631a956dbbf57145aad744e1affab887114b79796dfe3699d149d845bc52        3957  P3f-result.json
+2c8db0353b7f30291b38b35bb2665c71739f4b9f6c80a767f493d7ceaa9faeac        1915  P3f-run.log
+7e6cb486567e1c3ec1d78b2e6886febd1f24cf07cf737386db9d1300c0cce381         901  P3f-sd-listing.txt
+6a64d050bd134d318511b94448071b26975d3efdec0a51d7f2268c5074be990e      883561  P3f-started.png
+b7291cc54f15a5a2fb1f3dae1ad76d9d8c6974ff66bfbd1107d2e2412da8de35     2377262  P3f-title.png

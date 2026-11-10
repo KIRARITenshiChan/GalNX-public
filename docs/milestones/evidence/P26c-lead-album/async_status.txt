@@ -1,0 +1,1 @@
+enabled=1 create=0x0 start=0x0 hb=170000 stage=0 cpu=1 wdt=1 main=11174 stalled=0

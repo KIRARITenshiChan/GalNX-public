@@ -1,0 +1,46 @@
+// ---- [GalNX] autostart hook ---------------------------------------------------------------
+// The GalNX pilot ships a self-contained NSP: the game payload is copied to the SD card by
+// galnxMaybeExtractGame() in environ/switch/main.cpp on first boot, and this function starts it
+// without showing the file selector.
+// sdmc:/switch/kirikiroid2/autostart.txt contains one line with a TJS-visible path (leading '/',
+// no media type; "sdmc:" would be parsed as a media type by the TJS storage layer), e.g.
+//     /kirikiri/haruno
+// Delete the file (or the game folder) to get the normal file selector back.
+
+static bool GalNX_AutostartPathExists(const std::string &path) {
+	struct stat st;
+	const std::string native = "sdmc:" + path; // libnx sdmc device prefix, not visible to TJS
+	return stat(native.c_str(), &st) == 0;
+}
+
+static std::string GalNX_TrimLine(const char *raw) {
+	std::string s(raw);
+	while (!s.empty() && (s.back() == '\n' || s.back() == '\r' || s.back() == ' ' || s.back() == '\t'))
+		s.pop_back();
+	size_t first = s.find_first_not_of(" \t");
+	if (first == std::string::npos)
+		return std::string();
+	return s.substr(first);
+}
+
+void TVPCheckAndSendDumps(const std::string &dumpdir, const std::string &packageName, const std::string &versionStr);
+bool TVPCheckStartupArg() {
+	FILE *fp = fopen("sdmc:/switch/kirikiroid2/autostart.txt", "r");
+	if (!fp)
+		return false;
+	char line[1024] = { 0 };
+	const bool got = fgets(line, (int)sizeof(line) - 1, fp) != nullptr;
+	fclose(fp);
+	if (!got)
+		return false;
+	const std::string path = GalNX_TrimLine(line);
+	if (path.empty())
+		return false;
+	if (!GalNX_AutostartPathExists(path)) {
+		printf("[GALNX] autostart path does not exist, falling back to the file selector: %s\n", path.c_str());
+		return false;
+	}
+	printf("[GALNX] autostarting game from %s\n", path.c_str());
+	TVPMainScene::GetInstance()->startupFrom(path);
+	return true;
+}

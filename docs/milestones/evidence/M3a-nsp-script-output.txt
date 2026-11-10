@@ -1,0 +1,91 @@
+# M3-a 证据 E1: 构建脚本运行记录（摘录）
+# 采集时间: 2026-10-30 02:14–02:18 (Asia/Shanghai)
+# 采集人: audit-package (task-19)
+# 说明: 原始 stdout/stderr 在 /e/galnx-build/m3-tools/evidence-raw/ 与各 work 目录，
+#       本文件只收录关键行（命令、退出码、产物、PROVENANCE、日志尾）。
+# 安全: keyset 只记录 path/size/sha256/mtime metadata，绝不含任何 key 内容。
+
+## 0. 环境
+- host: Windows_NT 10.0.26100 x64, 16 cores
+- bash: /d/Scoop/apps/git/current/bin/bash.exe (GNU bash 5.3.15)
+- devkitPro: /d/devkitPro (tools/bin 内 elf2nso/npdmtool/nacptool 均为 2024-10-23 23:42:13)
+- gcc: gcc.exe (x86_64-posix-seh-rev1, Built by MinGW-Builds project) 16.2.0
+- make: GNU Make 4.4.1 (/d/devkitPro/msys2/usr/bin/make)
+- hacBrewPack: /e/galnx-build/m3-tools/hacBrewPack-745b16ecfc9ce055743067d200572204cb2aac6c/hacbrewpack.exe
+  508,983 B, sha256 5623fd2b51225b91d18e23f252bc8d21e440b94be53701f39e514358fecf2c7b
+  (源码 zip sha256 77d7c65976f5a4161219a0447a54a4fd40f18b9ee579d9325fa48986dc61e601 = v3.05 / 745b16ec)
+- nstool: /e/galnx-build/m3-tools/nstool.exe
+  1,050,112 B, sha256 844648190dd8688098887a369da1126c1b3ab1c2a664fb603b01cb22e76b6ca9
+  版本输出: NSTool v1.9.2 (C) jakcron / Built: 01:34:03 Oct 14 2024
+  (release zip sha256 34659dc47249a3c00f7fc88a11f4e5ba14dfbec0a6a96b4f3f71368a7e1c9374)
+
+## 1. 合成 keyset 冒烟（--keyset synthetic，离线/CI 用；产物 NOT INSTALLABLE）
+命令（在 /e/Othergames/Nintendo Switch/Workspace/GalNX）:
+  ./scripts/build_nsp_demo.sh --elf /e/galnx-build/m0-hello/m0-hello.elf \
+    --title-id 0100000000001000 --name m0-hello --author GalNX --version 1.0.0 \
+    --keyset synthetic \
+    --hacbrewpack /e/galnx-build/m3-tools/hacBrewPack-745b16ecfc9ce055743067d200572204cb2aac6c/hacbrewpack.exe \
+    --nstool /e/galnx-build/m3-tools/nstool.exe \
+    --out /e/galnx-build/m3-tools/out/script-synth --work /e/galnx-build/m3-tools/script-work-synth
+退出码: 0
+stdout 关键行:
+  STEP 1/5 elf2nso -> exefs/main
+  STEP 2/5 npdmtool -> exefs/main.npdm (title_id=0x0100000000001000)
+  STEP 3/5 nacptool -> control/control.nacp
+  STEP 4/5 hacBrewPack (mode=synthetic)
+  STEP 5/5 nstool structure check
+  nstool exit=0
+  ===EXIT=0
+  ===ARTIFACTS
+  m0-hello-0100000000001000.nsp 309464 0441af687061312d19028e0a629664e60b9f8c8a8b008117fda3c75d973be219
+stderr 关键行:
+  WARN: --keyset synthetic -> fabricated keys, NSP is NOT INSTALLABLE (structure-only smoke test)
+  （npdmtool 对缺省可选字段的 11 条警告，见 M3-nsp.md 第 3 节）
+nstool 日志尾:
+  [WARNING] Failed to load "title.keys" keyfile.
+  [PartitionFs]
+    Type:        PFS0
+    FileNum:     3
+备注: NSP 层 nstool 只列出 PFS0，并未校验 NCA；见 M3a-nstool-verify.txt 的跨 keyset 实验。
+
+## 2. 真实 keyset 构建 A/B（非确定性对照）
+命令 A（B 仅改 --out/--work 目录）:
+  ./scripts/build_nsp_demo.sh --elf /e/galnx-build/m0-hello/m0-hello.elf \
+    --title-id 0100000000001000 --name m0-hello --author GalNX --version 1.0.0 \
+    --keyset "/e/Othergames/Nintendo Switch/Ryujinx-canary/portable/system/prod.keys" \
+    --hacbrewpack .../hacbrewpack.exe \
+    --out /e/galnx-build/m3-tools/out/script-real-a --work /e/galnx-build/m3-tools/script-work-real-a
+命令 B: 同上，--out script-real-b --work script-work-real-b
+退出码: A=0, B=0
+PROVENANCE（两次相同）:
+  keyset=/e/Othergames/Nintendo Switch/Ryujinx-canary/portable/system/prod.keys size=12007 \
+  sha256=7bb3b6d2a2eedc83c9f244ee2ed2eaa4d59eb9ad95b66df575f7dfffa71a2a40 \
+  mtime=2026-03-19 07:25:45.902258500 +0800
+产物:
+  A: m0-hello-0100000000001000.nsp 309464 cd7ff7492b5358a64b8ad9097eb547fe9ab79faf64ffda31fb4331c5fb706354
+  B: m0-hello-0100000000001000.nsp 309464 9a915ef2f41152aef25eee4780db67f5d51e752a2d8594a7c9bf28f557fdfc4d
+结论: 同输入、同 keyset、两次构建大小相同但 SHA-256 不同 → 构建非确定性（Program/Meta NCA 的 RSA-PSS 签名随机盐）。
+
+## 3. 真实 keyset + RomFS 内容构建（round-trip 用）
+romfs fixture: /e/galnx-build/m3-tools/romfs-fixture/hello.txt 31 B sha256 03912248c2f59f77146b65b1f5f8c87774a3f7eb15902e06b9cbd28d9d09e7a7
+命令: 同 2，附加 --romfs /e/galnx-build/m3-tools/romfs-fixture，--out script-real-r --work script-work-real-r，--nstool
+退出码: 0
+产物: m0-hello-0100000000001000.nsp 309464 f89f7063d2fa9ba8a51c930f00c0a1993e230e1fbaf4dd0f83cb816ff9baa60f
+中间 PFS0（/e/galnx-build/m3-tools/evidence-raw/romfs-pfs0.txt）:
+  fileCount 3 stringTableSize 128 dataStart 0xd8 nspSize 309464
+  ENTRY 3528a1deaa977a1f681d18363d93702d.nca     offset=0x0     size=187392 sha256=3528a1deaa977a1f681d18363d93702d58427168a6bb5338246dad413bc1809d
+  ENTRY 77fad85376ac8fcfbcea55dedf8cae23.cnmt.nca offset=0x2dc00 size=4096   sha256=77fad85376ac8fcfbcea55dedf8cae23e0019db17223c48c4cdb87c03bb3817a
+  ENTRY d5bcc2f62e1f6e8852ba230b67179c13.nca    offset=0x2ec00 size=117760 sha256=d5bcc2f62e1f6e8852ba230b67179c1353119c8c009ea54f090886d31378230e
+注意: 三次构建的 entry 顺序不同（build1 为 program→control→meta；A 为 meta→program→control；R 为 program→meta→control），
+      NSP 内 NCA 的偏移/命名依赖签名后的哈希，不可作为固定布局依赖。
+
+## 4. m1-sdl2（较大 ELF）构建
+命令: 同 2，--elf /e/galnx-build/m1-sdl2/m1-sdl2.elf --title-id 0100000000001001 --name m1-sdl2
+      --out script-real-m1 --work script-work-real-m1 --nstool
+退出码: 0
+产物: m1-sdl2-0100000000001001.nsp 4,063,448 B
+      sha256 6f17a387cf0b045fd40625271b43dc46712b872897f16a8acf9d26945e804128
+输入: main 3,836,556 B sha256 d8f841d0f2a81b5bb944f57cd859eb5871ce516221cf386e58cae5a966c70d2e
+      main.npdm 972 B sha256 564a2b44fcf2132c5be9c510b338a4e0b2a6e2da3aec8ddcdc408536019902d1
+      control.nacp 16,384 B sha256 4acdc9a7a6916fd25620079b6dd88f32b74ea77a2281b2fb4e6309c9380a7ca1
+      icon_AmericanEnglish.dat 6,285 B sha256 0b942950df9fb30f08336b681e24a3ceeeaa6f0915d7dd404d5ebb9bd4e15214

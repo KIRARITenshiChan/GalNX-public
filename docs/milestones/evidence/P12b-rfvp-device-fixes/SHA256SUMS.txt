@@ -1,0 +1,7 @@
+e84daad06101052e13664851aec23f63a472fdd4df056ecf008837007bfc5294 *o-after-confirm-citron-list.png
+f9d1e4e9b99821834c1f3e8b5774d4add2e9e3bf0687f853028631889ca32ea7 *o-quit-dialog.png
+e84daad06101052e13664851aec23f63a472fdd4df056ecf008837007bfc5294 *q-after-native-exit.png
+ee0d69cbc6e7d8d1f57b556b88418f1303be63911b9ec54d73cdee7560c052cf *q-cursor-settled.png
+545d6ef89f39878197dfe511fc5cd48e964af2ff6a7063f7b3c052cff252ac22 *q-exit-log-lines.txt
+870a0fc6074819d52169bbc48fb156e5cf5c2691c3895db10c4ec773bcae0a77 *q-quit-dialog.png
+60a1b631b1771ce03421acd63c45dc9fa4cd2d39305b9f1258afd8f274038b8b *s-cursor-story.png

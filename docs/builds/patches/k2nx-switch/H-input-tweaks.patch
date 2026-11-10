@@ -1,0 +1,46 @@
+diff --git a/src/core/environ/cocos2d/MainScene.cpp b/src/core/environ/cocos2d/MainScene.cpp
+index 544b7fd..facd7ed 100644
+--- a/src/core/environ/cocos2d/MainScene.cpp
++++ b/src/core/environ/cocos2d/MainScene.cpp
+@@ -2390,7 +2390,7 @@ void TVPMainScene::onAxisEvent(cocos2d::Controller* ctrl, int keyCode, cocos2d::
+         if (std::abs(v) < 0.25f) { _k2sWheelReady = true; return; }
+         if (_k2sWheelReady && std::abs(v) > 0.6f) {
+             _k2sWheelReady = false;
+-            const int delta = v < 0 ? -120 : 120;  // stick up = wheel up, same sign as onMouseScroll
++            const int delta = v < 0 ? 120 : -120;  // [GalNX] patch H: stick up = wheel up (game backlog); stick down = next line
+             _currentWindowLayer->GalNX_SendWheel(delta);
+             GalNXLog("[pad] wheel %d", delta);
+         }
+@@ -2630,6 +2630,15 @@ void TVPMainScene::onPadKeyDown(cocos2d::Controller* ctrl, int keyCode, cocos2d:
+     case cocos2d::Controller::BUTTON_START:
+         GalNX_OpenGameSaveLoad(UINode, true);
+         return;
++    case cocos2d::Controller::BUTTON_RIGHT_SHOULDER:
++        // [GalNX] patch H: hold R = hold VK_CONTROL, the game's own skip key
++        // (MainWindow.SkipCheck polls System.getKeyState(VK_CONTROL)).
++        if (_currentWindowLayer) {
++            _scancode[VK_CONTROL] = 0x11;
++            _currentWindowLayer->InternalKeyDown(VK_CONTROL, TVPGetCurrentShiftKeyState());
++            GalNXLog("[pad] ctrl down");
++        }
++        return;
+     case cocos2d::Controller::BUTTON_SELECT:
+         GalNX_RequestExit();
+         return;
+@@ -2661,6 +2670,16 @@ void TVPMainScene::onPadKeyDown(cocos2d::Controller* ctrl, int keyCode, cocos2d:
+ }
+ 
+ void TVPMainScene::onPadKeyUp(cocos2d::Controller* ctrl, int keyCode, cocos2d::Event *e) {
++    // [GalNX] patch H: release the Ctrl that the R shoulder holds down.
++    if (keyCode == cocos2d::Controller::BUTTON_RIGHT_SHOULDER) {
++        if (_currentWindowLayer) {
++            bool was = (_scancode[VK_CONTROL] & 1) != 0;
++            _scancode[VK_CONTROL] &= 0x10;
++            if (was) _currentWindowLayer->OnKeyUp(VK_CONTROL, TVPGetCurrentShiftKeyState());
++            GalNXLog("[pad] ctrl up");
++        }
++        return;
++    }
+ 	unsigned int code = TVPConvertPadKeyCodeToVKCode(keyCode);
+ 	if (!code || code >= 0x200) return;
+ 	code = _keymap[code];

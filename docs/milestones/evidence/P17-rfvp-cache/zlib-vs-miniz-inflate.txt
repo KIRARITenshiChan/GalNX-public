@@ -1,0 +1,23 @@
+Prefetch decode split, same 66 graph/* textures, Citron x86_64 (same complex save).
+Backend A = miniz_oxide (p17-e, NRO b868c2fb58b59fbb3e86ab770b06bbd4ceb2c7241dcdaa7f86b95b6725379579)
+Backend B = devkitPro zlib C uncompress (p17-f, NRO 331e0a254034777da2c478091725a914097e5b25bae1153671ad2d07ad0e930c)
+
+Totals over 66 textures:
+  A: inflate_us=204,407  convert_us=24,589
+  B: inflate_us=133,686  convert_us=24,942
+  => inflate 1.53x faster, convert unchanged (word-opt BGRA->RGBA already applied in both)
+
+Per-file (inflate_us; miniz numbers recorded from the p17-e run, p17-e debug_report was not archived):
+  graph/slf_load_bg        57,861 ->  36,669
+  graph/slf_save_bg        57,773 ->  36,463
+  graph/slf_prt_sheet      23,388 ->  15,682
+  graph/sys_window_left    13,377 ->  10,102
+  graph/sys_window_right   14,428 ->  10,067
+  graph/menu_bg             8,864 ->   6,945
+  graph/sys_window_title    4,700 ->   3,136
+  graph/menu_byebye             - ->   1,305
+  graph/sys_title_M             - ->     593
+  graph/sys_undo_M              - ->     571
+  (all 66 rows: graph-decode-split-p17f.txt; Zlib full-scan cost is dominated by the 1920x1080 slf_* sheets.)
+
+Note: convert_us (pixel conversion) is no longer the bottleneck; zlib inflate still is, at ~0.7–1.0 ms per 100 KB of compressed sheet.

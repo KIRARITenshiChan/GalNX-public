@@ -1,0 +1,21 @@
+{
+  "files": {
+    "0.txt": {
+      "bytes": 418,
+      "sha256": "c0a9efacc1b06bd0a0efd3763bfbe10f50534669c11f91c124dae435f590a555"
+    },
+    "bg.png": {
+      "bytes": 10854,
+      "sha256": "17e0cd7b050cee1daef0064258364e5cbd0aca075d175ff87eb74860a51c3b08"
+    },
+    "arc.nsa": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "romfs/default.ttf": {
+      "bytes": 11248,
+      "sha256": "9e0c70f71148984389ef6d7ff7ae1ece446259c34ae373f2aba181d8b7ef74ca"
+    }
+  },
+  "script_text": "*define\r\ngame\r\n\r\n*start\r\nbg \"bg.png\",1\r\n`GALNX M4-c minimal test\r\nbr\r\n`Self-authored content only.\r\nbr\r\n`Press A or click to advance.\r\nclick\r\n`Page 2: advance works.\r\nbr\r\n`Pick one branch below.\r\nbr\r\nselect `Branch A`,*ca,`Branch B`,*cb\r\n\r\n*ca\r\n`You picked Branch A.\r\nbr\r\n`Input mapping works.\r\nclick\r\ngoto *halt\r\n\r\n*cb\r\n`You picked Branch B.\r\nbr\r\n`Input mapping works.\r\nclick\r\ngoto *halt\r\n\r\n*halt\r\nclick\r\ngoto *halt\r\n"
+}

@@ -1,0 +1,36 @@
+0	wait	wait:20000	ok	waited 20000ms		20222
+1	capture	capture:n01	ok	bytes=2385589 nonblack=0.9018	E:\galnx-build\p33\run-lead-119\20261107-232940-IROSEKA_FHD-010047420000a000\step-02-n01.png	1475
+2	wait	wait:8000	ok	waited 8000ms		8217
+3	capture	capture:n02	ok	bytes=2707444 nonblack=0.9018	E:\galnx-build\p33\run-lead-119\20261107-232940-IROSEKA_FHD-010047420000a000\step-04-n02.png	1469
+4	wait	wait:8000	ok	waited 8000ms		8201
+5	capture	capture:n03	ok	bytes=2950002 nonblack=0.9017	E:\galnx-build\p33\run-lead-119\20261107-232940-IROSEKA_FHD-010047420000a000\step-06-n03.png	1716
+6	wait	wait:8000	ok	waited 8000ms		8214
+7	capture	capture:n04	ok	bytes=1902477 nonblack=0.9018	E:\galnx-build\p33\run-lead-119\20261107-232940-IROSEKA_FHD-010047420000a000\step-08-n04.png	1518
+8	wait	wait:8000	ok	waited 8000ms		8202
+9	capture	capture:n05	ok	bytes=2337572 nonblack=0.9018	E:\galnx-build\p33\run-lead-119\20261107-232940-IROSEKA_FHD-010047420000a000\step-10-n05.png	1412
+10	wait	wait:8000	ok	waited 8000ms		8195
+11	capture	capture:n06	ok	bytes=2022351 nonblack=0.9018	E:\galnx-build\p33\run-lead-119\20261107-232940-IROSEKA_FHD-010047420000a000\step-12-n06.png	1710
+12	wait	wait:8000	ok	waited 8000ms		8226
+13	capture	capture:n07	ok	bytes=1540596 nonblack=0.9018	E:\galnx-build\p33\run-lead-119\20261107-232940-IROSEKA_FHD-010047420000a000\step-14-n07.png	1439
+14	wait	wait:8000	ok	waited 8000ms		8203
+15	capture	capture:n08	ok	bytes=2197111 nonblack=0.9018	E:\galnx-build\p33\run-lead-119\20261107-232940-IROSEKA_FHD-010047420000a000\step-16-n08.png	1405
+16	wait	wait:8000	ok	waited 8000ms		8195
+17	capture	capture:n09	ok	bytes=437215 nonblack=0.9018	E:\galnx-build\p33\run-lead-119\20261107-232940-IROSEKA_FHD-010047420000a000\step-18-n09.png	1393
+18	wait	wait:8000	ok	waited 8000ms		8212
+19	capture	capture:n10	ok	bytes=1418876 nonblack=0.9018	E:\galnx-build\p33\run-lead-119\20261107-232940-IROSEKA_FHD-010047420000a000\step-20-n10.png	1388
+20	wait	wait:8000	ok	waited 8000ms		8252
+21	capture	capture:n11	ok	bytes=1418876 nonblack=0.9018	E:\galnx-build\p33\run-lead-119\20261107-232940-IROSEKA_FHD-010047420000a000\step-22-n11.png	1456
+22	wait	wait:8000	ok	waited 8000ms		8206
+23	capture	capture:n12	ok	bytes=1418881 nonblack=0.9018	E:\galnx-build\p33\run-lead-119\20261107-232940-IROSEKA_FHD-010047420000a000\step-24-n12.png	1360
+24	wait	wait:10000	ok	waited 10000ms		10190
+25	capture	capture:n13	ok	bytes=1418885 nonblack=0.9018	E:\galnx-build\p33\run-lead-119\20261107-232940-IROSEKA_FHD-010047420000a000\step-26-n13.png	1412
+26	wait	wait:10000	ok	waited 10000ms		10201
+27	capture	capture:n14	ok	bytes=1418881 nonblack=0.9018	E:\galnx-build\p33\run-lead-119\20261107-232940-IROSEKA_FHD-010047420000a000\step-28-n14.png	1581
+28	wait	wait:10000	ok	waited 10000ms		10213
+29	capture	capture:n15	ok	bytes=1418876 nonblack=0.9018	E:\galnx-build\p33\run-lead-119\20261107-232940-IROSEKA_FHD-010047420000a000\step-30-n15.png	1405
+30	wait	wait:10000	ok	waited 10000ms		10194
+31	capture	capture:n16	ok	bytes=1418881 nonblack=0.9018	E:\galnx-build\p33\run-lead-119\20261107-232940-IROSEKA_FHD-010047420000a000\step-32-n16.png	1636
+32	wait	wait:10000	ok	waited 10000ms		10272
+33	capture	capture:n17	ok	bytes=1418881 nonblack=0.9018	E:\galnx-build\p33\run-lead-119\20261107-232940-IROSEKA_FHD-010047420000a000\step-34-n17.png	1452
+34	wait	wait:10000	ok	waited 10000ms		10201
+35	capture	capture:n18	ok	bytes=1418881 nonblack=0.9018	E:\galnx-build\p33\run-lead-119\20261107-232940-IROSEKA_FHD-010047420000a000\step-36-n18.png	1315

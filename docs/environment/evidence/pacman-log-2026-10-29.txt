@@ -1,0 +1,95 @@
+date=2026-10-29T22:16:23+08:00
+## log total lines
+266 /var/log/pacman.log
+## switch-dev mentions
+245:[2026-10-29T15:36:07+0800] [PACMAN] Running '/opt/devkitpro/msys2/usr/bin/pacman -S --noconfirm --needed switch-dev'
+246:[2026-10-29T22:00:14+0800] [PACMAN] Running 'pacman -S --needed --noconfirm switch-dev'
+247:[2026-10-29T22:02:19+0800] [PACMAN] Running 'pacman -S --needed --noconfirm switch-dev'
+248:[2026-10-29T22:05:42+0800] [PACMAN] Running 'pacman -S --needed --noconfirm switch-dev'
+249:[2026-10-29T22:06:39+0800] [PACMAN] Running 'pacman -S --needed --noconfirm switch-dev'
+## Total Installed Size lines (2026-10-29)
+## log lines 224-400
+[2026-10-29T15:35:59+0800] [ALPM] transaction started
+[2026-10-29T15:35:59+0800] [ALPM] installed devkitppc-cmake (1.1.4-1)
+[2026-10-29T15:35:59+0800] [ALPM] installed devkitppc-crtls (2.1.0-1)
+[2026-10-29T15:35:59+0800] [ALPM] installed devkitppc-rules (1.2.1-1)
+[2026-10-29T15:35:59+0800] [ALPM] installed libogc (3.2.1-1)
+[2026-10-29T15:35:59+0800] [ALPM] installed libfat-ogc (2.1.0-4)
+[2026-10-29T15:35:59+0800] [ALPM] installed libgxflux (20230423-3)
+[2026-10-29T15:35:59+0800] [ALPM] installed gamecube-tools (1.0.7-1)
+[2026-10-29T15:35:59+0800] [ALPM] installed ogc-cmake (1.3.0-1)
+[2026-10-29T15:35:59+0800] [ALPM] installed ppc-pkg-config (0.28-5)
+[2026-10-29T15:35:59+0800] [ALPM] installed wii-pkg-config (0.28-5)
+[2026-10-29T15:35:59+0800] [ALPM] installed wii-cmake (1.0.1-1)
+[2026-10-29T15:36:01+0800] [ALPM] installed devkitppc-binutils (2.47-2)
+[2026-10-29T15:36:02+0800] [ALPM] installed devkitppc-mn10200-binutils (2.24-3)
+[2026-10-29T15:36:02+0800] [ALPM] installed devkitppc-newlib (4.6.0.20260123-4)
+[2026-10-29T15:36:04+0800] [ALPM] installed devkitppc-gcc (16.2.0-1)
+[2026-10-29T15:36:04+0800] [ALPM] installed devkitPPC (r51-1)
+[2026-10-29T15:36:04+0800] [ALPM] installed wii-examples (20260510-1)
+[2026-10-29T15:36:04+0800] [ALPM] installed devkitPPC-gdb (14.1-1)
+[2026-10-29T15:36:04+0800] [ALPM] installed wiiload (0.5.3-1)
+[2026-10-29T15:36:04+0800] [ALPM] transaction completed
+[2026-10-29T15:36:07+0800] [PACMAN] Running '/opt/devkitpro/msys2/usr/bin/pacman -S --noconfirm --needed switch-dev'
+[2026-10-29T22:00:14+0800] [PACMAN] Running 'pacman -S --needed --noconfirm switch-dev'
+[2026-10-29T22:02:19+0800] [PACMAN] Running 'pacman -S --needed --noconfirm switch-dev'
+[2026-10-29T22:05:42+0800] [PACMAN] Running 'pacman -S --needed --noconfirm switch-dev'
+[2026-10-29T22:06:39+0800] [PACMAN] Running 'pacman -S --needed --noconfirm switch-dev'
+[2026-10-29T22:07:08+0800] [ALPM] transaction started
+[2026-10-29T22:07:09+0800] [ALPM] installed libnx (4.12.0-1)
+[2026-10-29T22:07:09+0800] [ALPM] installed deko3d (0.5.0-1)
+[2026-10-29T22:07:09+0800] [ALPM] installed devkita64-cmake (1.1.3-1)
+[2026-10-29T22:07:09+0800] [ALPM] installed switch-tools (1.13.1-1)
+[2026-10-29T22:07:09+0800] [ALPM] installed uam (1.1.0-2)
+[2026-10-29T22:07:09+0800] [ALPM] installed switch-pkg-config (0.28-4)
+[2026-10-29T22:07:09+0800] [ALPM] installed switch-cmake (1.5.2-1)
+[2026-10-29T22:07:10+0800] [ALPM] installed switch-examples (20260201-1)
+[2026-10-29T22:07:12+0800] [ALPM] installed devkita64-binutils (2.46.0-1)
+[2026-10-29T22:07:12+0800] [ALPM] installed devkita64-newlib (4.6.0.20260123-4)
+[2026-10-29T22:07:12+0800] [ALPM] installed devkita64-rules (1.1.1-1)
+[2026-10-29T22:07:16+0800] [ALPM] installed devkita64-gcc (16.1.0-1)
+[2026-10-29T22:07:16+0800] [ALPM] installed devkitA64 (r30-1)
+[2026-10-29T22:07:16+0800] [ALPM] installed devkitA64-gdb (14.1-1)
+[2026-10-29T22:07:16+0800] [ALPM] transaction completed
+[2026-10-29T22:09:14+0800] [PACMAN] Running 'pacman -Sw --noconfirm --needed switch-sdl2'
+## log tail 40
+[2026-10-29T15:35:59+0800] [ALPM] installed devkitppc-rules (1.2.1-1)
+[2026-10-29T15:35:59+0800] [ALPM] installed libogc (3.2.1-1)
+[2026-10-29T15:35:59+0800] [ALPM] installed libfat-ogc (2.1.0-4)
+[2026-10-29T15:35:59+0800] [ALPM] installed libgxflux (20230423-3)
+[2026-10-29T15:35:59+0800] [ALPM] installed gamecube-tools (1.0.7-1)
+[2026-10-29T15:35:59+0800] [ALPM] installed ogc-cmake (1.3.0-1)
+[2026-10-29T15:35:59+0800] [ALPM] installed ppc-pkg-config (0.28-5)
+[2026-10-29T15:35:59+0800] [ALPM] installed wii-pkg-config (0.28-5)
+[2026-10-29T15:35:59+0800] [ALPM] installed wii-cmake (1.0.1-1)
+[2026-10-29T15:36:01+0800] [ALPM] installed devkitppc-binutils (2.47-2)
+[2026-10-29T15:36:02+0800] [ALPM] installed devkitppc-mn10200-binutils (2.24-3)
+[2026-10-29T15:36:02+0800] [ALPM] installed devkitppc-newlib (4.6.0.20260123-4)
+[2026-10-29T15:36:04+0800] [ALPM] installed devkitppc-gcc (16.2.0-1)
+[2026-10-29T15:36:04+0800] [ALPM] installed devkitPPC (r51-1)
+[2026-10-29T15:36:04+0800] [ALPM] installed wii-examples (20260510-1)
+[2026-10-29T15:36:04+0800] [ALPM] installed devkitPPC-gdb (14.1-1)
+[2026-10-29T15:36:04+0800] [ALPM] installed wiiload (0.5.3-1)
+[2026-10-29T15:36:04+0800] [ALPM] transaction completed
+[2026-10-29T15:36:07+0800] [PACMAN] Running '/opt/devkitpro/msys2/usr/bin/pacman -S --noconfirm --needed switch-dev'
+[2026-10-29T22:00:14+0800] [PACMAN] Running 'pacman -S --needed --noconfirm switch-dev'
+[2026-10-29T22:02:19+0800] [PACMAN] Running 'pacman -S --needed --noconfirm switch-dev'
+[2026-10-29T22:05:42+0800] [PACMAN] Running 'pacman -S --needed --noconfirm switch-dev'
+[2026-10-29T22:06:39+0800] [PACMAN] Running 'pacman -S --needed --noconfirm switch-dev'
+[2026-10-29T22:07:08+0800] [ALPM] transaction started
+[2026-10-29T22:07:09+0800] [ALPM] installed libnx (4.12.0-1)
+[2026-10-29T22:07:09+0800] [ALPM] installed deko3d (0.5.0-1)
+[2026-10-29T22:07:09+0800] [ALPM] installed devkita64-cmake (1.1.3-1)
+[2026-10-29T22:07:09+0800] [ALPM] installed switch-tools (1.13.1-1)
+[2026-10-29T22:07:09+0800] [ALPM] installed uam (1.1.0-2)
+[2026-10-29T22:07:09+0800] [ALPM] installed switch-pkg-config (0.28-4)
+[2026-10-29T22:07:09+0800] [ALPM] installed switch-cmake (1.5.2-1)
+[2026-10-29T22:07:10+0800] [ALPM] installed switch-examples (20260201-1)
+[2026-10-29T22:07:12+0800] [ALPM] installed devkita64-binutils (2.46.0-1)
+[2026-10-29T22:07:12+0800] [ALPM] installed devkita64-newlib (4.6.0.20260123-4)
+[2026-10-29T22:07:12+0800] [ALPM] installed devkita64-rules (1.1.1-1)
+[2026-10-29T22:07:16+0800] [ALPM] installed devkita64-gcc (16.1.0-1)
+[2026-10-29T22:07:16+0800] [ALPM] installed devkitA64 (r30-1)
+[2026-10-29T22:07:16+0800] [ALPM] installed devkitA64-gdb (14.1-1)
+[2026-10-29T22:07:16+0800] [ALPM] transaction completed
+[2026-10-29T22:09:14+0800] [PACMAN] Running 'pacman -Sw --noconfirm --needed switch-sdl2'

@@ -1,0 +1,8 @@
+Title screen particle motion metric: two captures 3 s apart, region x=40..0.45W y=40..0.60H, grayscale |diff| > 25 counted, per 10k sampled px.
+Higher = more moving particles. Same metric used for every row.
+
+prefix-arg10-on  (motion0 only)    region=737x569 changed=    46 per10k=  1.10
+double-snow-fix   (205/1024)       region=737x569 changed=   233 per10k=  5.56
+variant-fallback  (1024/1024)      region=737x569 changed=  1656 per10k= 39.49
+clean-build       (1024/1024)      region=737x569 changed=  1377 per10k= 32.84
+nsp-romfs-1.3.1   (1024/1024)      region=737x569 changed=  1392 per10k= 33.19

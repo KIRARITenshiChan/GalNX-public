@@ -1,0 +1,64 @@
+# /var/cache/pacman/pkg 中的包与 SHA-256（Switch 相关）
+# 采集时间: 2026-10-29T22:14:42+08:00
+
+## cache pkg.tar.zst count
+64
+## cache switch-related files
+catnip-0.2.0-1-any.pkg.tar.zst
+catnip-0.2.0-1-any.pkg.tar.zst.sig
+deko3d-0.5.0-1-any.pkg.tar.zst
+deko3d-0.5.0-1-any.pkg.tar.zst.sig
+devkita64-binutils-2.46.0-1-x86_64.pkg.tar.zst
+devkita64-binutils-2.46.0-1-x86_64.pkg.tar.zst.sig
+devkita64-cmake-1.1.3-1-any.pkg.tar.zst
+devkita64-cmake-1.1.3-1-any.pkg.tar.zst.sig
+devkita64-gcc-16.1.0-1-x86_64.pkg.tar.zst
+devkita64-gcc-16.1.0-1-x86_64.pkg.tar.zst.sig
+devkitA64-gdb-14.1-1-x86_64.pkg.tar.zst
+devkitA64-gdb-14.1-1-x86_64.pkg.tar.zst.sig
+devkita64-newlib-4.6.0.20260123-4-any.pkg.tar.zst
+devkita64-newlib-4.6.0.20260123-4-any.pkg.tar.zst.sig
+devkitA64-r30-1-any.pkg.tar.zst
+devkitA64-r30-1-any.pkg.tar.zst.sig
+devkita64-rules-1.1.1-1-any.pkg.tar.zst
+devkita64-rules-1.1.1-1-any.pkg.tar.zst.sig
+devkit-env-1.0.1-2-any.pkg.tar.zst
+devkit-env-1.0.1-2-any.pkg.tar.zst.sig
+general-tools-1.4.4-1-x86_64.pkg.tar.zst
+general-tools-1.4.4-1-x86_64.pkg.tar.zst.sig
+libnx-4.12.0-1-any.pkg.tar.zst
+libnx-4.12.0-1-any.pkg.tar.zst.sig
+switch-cmake-1.5.2-1-any.pkg.tar.zst
+switch-cmake-1.5.2-1-any.pkg.tar.zst.sig
+switch-examples-20260201-1-any.pkg.tar.zst
+switch-examples-20260201-1-any.pkg.tar.zst.sig
+switch-libdrm_nouveau-1.0.1-2-any.pkg.tar.xz
+switch-libdrm_nouveau-1.0.1-2-any.pkg.tar.xz.sig
+switch-mesa-20.1.0-5-any.pkg.tar.zst
+switch-mesa-20.1.0-5-any.pkg.tar.zst.sig
+switch-pkg-config-0.28-4-any.pkg.tar.xz
+switch-pkg-config-0.28-4-any.pkg.tar.xz.sig
+switch-sdl2-2.28.5-4-any.pkg.tar.zst
+switch-sdl2-2.28.5-4-any.pkg.tar.zst.sig
+switch-tools-1.13.1-1-x86_64.pkg.tar.zst
+switch-tools-1.13.1-1-x86_64.pkg.tar.zst.sig
+uam-1.1.0-2-x86_64.pkg.tar.xz
+uam-1.1.0-2-x86_64.pkg.tar.xz.sig
+## cache sha256 switch-related (pkg only)
+e960ff96ae62f2faaff68a3a97a81793a191a08d3efff1f3f306c3f9dadd18de *catnip-0.2.0-1-any.pkg.tar.zst
+d4281a573246c2e658c0a2619b78099d4016ad72d6210a1e13473a546e7f9ac3 *deko3d-0.5.0-1-any.pkg.tar.zst
+c516a70a31521b61e18759669c6f5c6718796a6cbb0b3c1c023a2ac418f79988 *devkita64-binutils-2.46.0-1-x86_64.pkg.tar.zst
+f2baa41f2b776ea5e7c5340464d2ba1bcccbc73a96c3293c91ae13df9ee5d467 *devkita64-cmake-1.1.3-1-any.pkg.tar.zst
+4ccf7ee6f3d85248f3b58708e44aa3e9f777479ff90cd4409a95862752e85400 *devkita64-gcc-16.1.0-1-x86_64.pkg.tar.zst
+293d8f1b1156aeadd7e670c2a2150129908488a164c5c40c5ce57c519594973b *devkitA64-gdb-14.1-1-x86_64.pkg.tar.zst
+fc97ba1009a94b68f8714c3cc548ef697ca82687b72fe0c05a7ca3df81beb53e *devkita64-newlib-4.6.0.20260123-4-any.pkg.tar.zst
+66f100490dafe506495ee083bc932aa2c2f231b5dafaa2b203d1832389b700e9 *devkitA64-r30-1-any.pkg.tar.zst
+2649cf7827243447070073acc2aa2fee152a0592fc30e827ceed803c565a1ede *devkita64-rules-1.1.1-1-any.pkg.tar.zst
+892648f8472aa4d15041d9d6f53fd2c50268d449d3ee6aa1a1f13c504f98f50c *devkit-env-1.0.1-2-any.pkg.tar.zst
+a0fcea1a26c4f472c2ac98c409847dbec9d8e86ed82cd8b02131454f63d239f1 *general-tools-1.4.4-1-x86_64.pkg.tar.zst
+c6950bdf8e4b872ece492225368c03e633776329548a7494f91aa1e8f239cd8a *libnx-4.12.0-1-any.pkg.tar.zst
+7eee6a98312991faac73246f93d88740fb234d90ac5bd19ca969d6e227a59c8f *switch-cmake-1.5.2-1-any.pkg.tar.zst
+c55cab70202eb7b1804957c9fdda8f8a1c76c27c6be8839729c9b7f6839e34c4 *switch-examples-20260201-1-any.pkg.tar.zst
+78328415d06bff75af07091243844ded5a63dc4d4520d2c708787b8d80ad386d *switch-mesa-20.1.0-5-any.pkg.tar.zst
+395b2fe3cd7fed9d3edc443a35cd40d2b7e8dce8730a5acffc8fb9a85b52c031 *switch-sdl2-2.28.5-4-any.pkg.tar.zst
+c9c5fc60e3dd2f82d7c6592611bd37cc610d150ef4fa75fe09ce329df998084d *switch-tools-1.13.1-1-x86_64.pkg.tar.zst

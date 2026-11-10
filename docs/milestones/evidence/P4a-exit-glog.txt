@@ -1,0 +1,14 @@
+[pad] key=1007 virt=0 uiChildren=0 gamemenu=0x210cf6d0c0 cursor=0x0
+[tjs] closereq-type -> Object
+[tjs] closereq -> 
+[tjs] closereq-ok -> closereq-done
+[pad] key=1008 virt=0 uiChildren=0 gamemenu=0x210cf6d0c0 cursor=0x0
+[pad] key=1012 virt=1 uiChildren=0 gamemenu=0x210cf6d0c0 cursor=0x210d913fc0
+[virt] key=1012 drawerOpen=0 cursor=(480.0,270.0)
+[pad] key=1012 virt=1 uiChildren=0 gamemenu=0x210cf6d0c0 cursor=0x210d913fc0
+[virt] key=1012 drawerOpen=0 cursor=(456.0,270.0)
+[pad] key=1012 virt=1 uiChildren=0 gamemenu=0x210cf6d0c0 cursor=0x210d913fc0
+[virt] key=1012 drawerOpen=0 cursor=(432.0,270.0)
+[pad] key=1004 virt=1 uiChildren=0 gamemenu=0x210cf6d0c0 cursor=0x210d913fc0
+[virt] key=1004 drawerOpen=0 cursor=(408.0,270.0)
+[close] main window close confirmed; terminating application

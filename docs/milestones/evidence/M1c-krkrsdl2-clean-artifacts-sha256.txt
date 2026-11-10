@@ -1,0 +1,6 @@
+8124ffd2e8c813de6f1929a16aa69322878c47af5631d089c3809a576d1c52a7 *krkrsdl2.nro
+74d843cbf1ac633aa83af3f60b6d1049c4367de43c751738d386a913370d6cbe *krkrsdl2.elf
+776f5b44a1b5c16d71988f306c77cbeae138dde864d748d0cbcd49a0d14e37bd *krkrsdl2.nacp
+-rw-r--r-- 1 ACETaffy 197121 58391328 Oct 30 01:33 krkrsdl2.elf
+-rw-r--r-- 1 ACETaffy 197121    16384 Oct 30 01:33 krkrsdl2.nacp
+-rw-r--r-- 1 ACETaffy 197121 17911329 Oct 30 01:33 krkrsdl2.nro

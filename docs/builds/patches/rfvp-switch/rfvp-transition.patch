@@ -1,0 +1,76 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index cd584f1..aafed82 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -4898,7 +4898,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "rfvp-horizon"
+-version = "1.1.3-test"
++version = "1.1.4-test"
+ dependencies = [
+  "cc",
+  "rfvp",
+diff --git a/crates/rfvp/src/no_std_core.rs b/crates/rfvp/src/no_std_core.rs
+index f0440a1..b84fa2c 100644
+--- a/crates/rfvp/src/no_std_core.rs
++++ b/crates/rfvp/src/no_std_core.rs
+@@ -1011,6 +1011,23 @@ impl RfvpCore {
+         } else {
+             self.render_cache.set_prev_frame(host.renderer(), None)?;
+         }
++        // A mask dissolve wipes the frame shown before it with the alpha of the mask: hand
++        // that frame over before drawing, the same frame that the Sprt texture id -1 path captures.
++        #[cfg(not(feature = "psx"))]
++        {
++            if self.render_cache.mask_frame_wants_snapshot(&self.game_data.motion_manager) {
++                let (w, h) = (self.config.virtual_width, self.config.virtual_height);
++                let rgba = host.renderer().capture_thumbnail(w, h);
++                if let (Some(rgba), Ok(fw), Ok(fh)) = (rgba, u16::try_from(w), u16::try_from(h)) {
++                    if rgba.len() == w as usize * h as usize * 4 {
++                        if let Some(frame) = image::RgbaImage::from_raw(fw as u32, fh as u32, rgba) {
++                            self.render_cache
++                                .set_mask_snapshot(&self.game_data.motion_manager, frame);
++                        }
++                    }
++                }
++            }
++        }
+         let frame = render_motion_to_host(
+             host.renderer(),
+             &mut self.render_cache,
+diff --git a/crates/rfvp/src/rendering/prim_commands.rs b/crates/rfvp/src/rendering/prim_commands.rs
+index 402f4b7..477a83f 100644
+--- a/crates/rfvp/src/rendering/prim_commands.rs
++++ b/crates/rfvp/src/rendering/prim_commands.rs
+@@ -105,6 +105,18 @@ impl HostPrimRenderCache {
+         self.wants_prev_frame = false;
+     }
+ 
++    /// Whether the mask dissolve needs the frame last shown (a mask wipe wipes it away).
++    #[cfg(not(feature = "psx"))]
++    pub fn mask_frame_wants_snapshot(&self, motion: &MotionManager) -> bool {
++        self.mask_frame.wants_snapshot(motion)
++    }
++
++    /// Hand over the frame last shown (RGBA8, the virtual size) for the mask dissolve.
++    #[cfg(not(feature = "psx"))]
++    pub fn set_mask_snapshot(&mut self, motion: &MotionManager, frame: image::RgbaImage) {
++        self.mask_frame.set_snapshot(motion, frame);
++    }
++
+     /// Whether the host holds `graph_id` at `generation` (so its CPU copy may be evicted).
+     pub fn is_graph_uploaded(&self, graph_id: u16, generation: u64) -> bool {
+         self.graph_generation(graph_id) == Some(generation)
+diff --git a/platform/switch/host/Cargo.toml b/platform/switch/host/Cargo.toml
+index 9e7cef3..7d9f4d4 100644
+--- a/platform/switch/host/Cargo.toml
++++ b/platform/switch/host/Cargo.toml
+@@ -1,6 +1,6 @@
+ [package]
+ name = "rfvp-horizon"
+-version = "1.1.3-test"
++version = "1.1.4-test"
+ edition = "2021"
+ description = "Nintendo Horizon host crate for rfvp no_std core"
+ license = "MPL-2.0"

@@ -1,0 +1,91 @@
+"""Real build execution, cache and lockfile support for ``galnx batch build``.
+
+M6-b scope: this package executes only manifest-declared ``build.commands``.  It
+does not consume engine plan guidance as commands and it never touches keys.
+"""
+
+from .cache import (
+    CACHE_DIRNAME,
+    CACHE_SCHEMA_VERSION,
+    artifact_from_entry,
+    cache_key,
+    cache_payload,
+    cache_root,
+    canonical_json,
+    describe_artifact,
+    entry_path,
+    fingerprint_toolchain,
+    read_cache_entry,
+    verify_cache_entry,
+    write_cache_entry,
+)
+from .config import (
+    DEFAULT_TIMEOUT_S,
+    BuildConfig,
+    BuildError,
+    command_display,
+    parse_build_section,
+)
+from .executor import (
+    MAX_LOG_CHARS,
+    TAIL_LINES,
+    compute_artifact,
+    normalize_commands,
+    run_build_commands,
+    safe_label,
+    sha256_file,
+    tail_lines,
+    truncate_text,
+)
+from .lock import (
+    LOCK_NAME,
+    LOCK_SCHEMA_VERSION,
+    LockError,
+    build_lock,
+    compare_projects,
+    describe_drift,
+    lock_path,
+    manifest_sha256,
+    read_lock,
+    write_lock,
+)
+
+__all__ = [
+    "CACHE_DIRNAME",
+    "CACHE_SCHEMA_VERSION",
+    "DEFAULT_TIMEOUT_S",
+    "LOCK_NAME",
+    "LOCK_SCHEMA_VERSION",
+    "MAX_LOG_CHARS",
+    "TAIL_LINES",
+    "BuildConfig",
+    "BuildError",
+    "LockError",
+    "artifact_from_entry",
+    "build_lock",
+    "cache_key",
+    "cache_payload",
+    "cache_root",
+    "canonical_json",
+    "command_display",
+    "compare_projects",
+    "compute_artifact",
+    "describe_artifact",
+    "describe_drift",
+    "entry_path",
+    "fingerprint_toolchain",
+    "lock_path",
+    "manifest_sha256",
+    "normalize_commands",
+    "parse_build_section",
+    "read_cache_entry",
+    "read_lock",
+    "run_build_commands",
+    "safe_label",
+    "sha256_file",
+    "tail_lines",
+    "truncate_text",
+    "verify_cache_entry",
+    "write_cache_entry",
+    "write_lock",
+]

@@ -1,0 +1,302 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://galnx.local/schemas/game-manifest.schema.json",
+  "title": "GalNX Game Manifest",
+  "description": "Single-game porting configuration consumed by the GalNX workbench.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "game",
+    "engine",
+    "switch",
+    "build"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "game": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "source_dir"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_-]{1,63}$",
+          "description": "Stable slug used in workspace paths and artifact names."
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "publisher": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "source_dir": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Absolute path of the original game directory. Never modified by GalNX."
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "engine": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "adapter"
+      ],
+      "properties": {
+        "adapter": {
+          "type": "string",
+          "enum": [
+            "krkrsdl2",
+            "krkr-ns",
+            "onscripter-nx",
+            "onscripter-jh",
+            "kirikiroid2-nx",
+            "renpy",
+            "brewser",
+            "siglus",
+            "rfvp",
+            "custom"
+          ]
+        },
+        "adapter_version": {
+          "type": "string"
+        },
+        "profile": {
+          "type": "string",
+          "description": "Named adapter profile inside profiles/<adapter>/."
+        },
+        "entry": {
+          "type": "string",
+          "description": "Entry file relative to game.source_dir (e.g. data.xp3, 0.txt)."
+        },
+        "options": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "descriptor": {
+          "type": "string",
+          "description": "Optional path to an engine descriptor YAML (relative paths resolve against the manifest directory). Use it to register an adapter that is not built in."
+        }
+      }
+    },
+    "switch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title_id",
+        "target"
+      ],
+      "properties": {
+        "title_id": {
+          "type": "string",
+          "pattern": "^01[0-9A-Fa-f]{14}$",
+          "description": "Application title id: 16 hex chars, 0x0100000000000000-0x0fffffffffffffff."
+        },
+        "title": {
+          "type": "string",
+          "description": "Name shown in HOME menu (NSP only)."
+        },
+        "author": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string",
+          "description": "Path to an icon. NSP: 256x256 JPEG; NRO: converted NACP icon."
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "nro",
+            "nsp"
+          ]
+        },
+        "display_mode": {
+          "type": "string",
+          "enum": [
+            "handheld",
+            "docked",
+            "both"
+          ],
+          "default": "both"
+        },
+        "save_policy": {
+          "type": "string",
+          "description": "e.g. per-title-isolated (default) or shared-profile."
+        }
+      }
+    },
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "default_mode": {
+          "type": "string",
+          "enum": [
+            "keyboard_mouse",
+            "controller",
+            "off"
+          ],
+          "default": "keyboard_mouse"
+        },
+        "toggle_combo": {
+          "description": "Combo that switches input modes at runtime. String form like L+R+PLUS, or a list of Switch button names.",
+          "oneOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_+ -]+$"
+            },
+            {
+              "type": "array",
+              "minItems": 2,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_]+$"
+              }
+            }
+          ],
+          "default": "L+R+PLUS"
+        },
+        "profile": {
+          "type": "string",
+          "description": "Built-in input profile name (kb_mouse, generic-vn, krkrsdl2, krkr-ns) or a path to an input-profile YAML file (relative paths resolve against the manifest directory)."
+        }
+      }
+    },
+    "build": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "output_dir"
+      ],
+      "properties": {
+        "output_dir": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reproducible": {
+          "type": "boolean",
+          "default": false
+        },
+        "clean_workspace_before_build": {
+          "type": "boolean",
+          "default": true
+        },
+        "keys_env": {
+          "type": "string",
+          "default": "GALNX_PROD_KEYS",
+          "description": "Environment variable holding the prod.keys path (NSP packaging only)."
+        },
+        "romfs_mode": {
+          "type": "string",
+          "enum": [
+            "embedded",
+            "external",
+            "none"
+          ],
+          "default": "embedded"
+        },
+        "commands": {
+          "type": "array",
+          "minItems": 1,
+          "description": "Build commands executed by 'galnx batch build' / 'galnx build run'. Each item is an argv list (preferred; shell=False) or a single string run through the platform shell.",
+          "items": {
+            "oneOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            ]
+          }
+        },
+        "workdir": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Working directory for build commands, relative to the manifest directory (default: manifest directory)."
+        },
+        "artifact": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Build artifact path relative to workdir. Required when commands are present: used for cache verification and the report artifact record."
+        },
+        "env": {
+          "type": "object",
+          "description": "Extra environment variables passed to build commands (on top of the inherited environment).",
+          "additionalProperties": {
+            "type": [
+              "string",
+              "number",
+              "boolean"
+            ]
+          }
+        },
+        "timeout_s": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "default": 600,
+          "description": "Per-command timeout in seconds (default 600)."
+        }
+      }
+    },
+    "package": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Optional packaging metadata. Absent means the package type is derived from switch.target.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "self_contained_nsp",
+            "forwarder_nsp",
+            "nro"
+          ]
+        },
+        "startup_user_account": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2,
+          "default": 0,
+          "description": "NACP StartupUserAccount: 0 = not required, 1 = required, 2 = required with save data."
+        },
+        "romfs_dir": {
+          "type": "string",
+          "description": "RomFS directory to embed in the NSP (self-contained packaging only)."
+        },
+        "icon": {
+          "type": "string",
+          "description": "Override for the NACP icon path. NSP requires a 256x256 JPEG."
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "payload": {
+      "type": "object",
+      "description": "Optional payload plan for self-contained NSPs: which romfs files ship and where the engine copies them on first run. Structure is validated in detail by src/galnx/payload against schemas/payload.schema.json; see docs/packaging/payload.md."
+    }
+  }
+}

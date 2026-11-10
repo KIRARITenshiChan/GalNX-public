@@ -1,0 +1,15 @@
+launch mode : runas-deelevated
+wrapper     : C:\Users\ACETaffy\AppData\Local\Temp\galnx-harness\launch-20261030-020644-krkrsdl2.cmd
+cmdline     : "E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\web-02\citron\citron.exe" -g "C:\Users\ACETaffy\AppData\Roaming\citron\sdmc\switch\galnx-harness\krkrsdl2.nro"
+status      : loaded
+window title: citron Nightly | 0237a9b88 | Kirikiri SDL2 (64-bit) | NVIDIA
+pid         : 11988
+elapsed_s   : 26
+boot line   : [   1.732669] Frontend <Info> citron\main.cpp:2475:BootGame: Booting game: 0000000000000000 | Kirikiri SDL2 (64-bit) | 
+signals     : title_match=1 boot_line=1 app_output=1 (app_log_regex)
+screenshot  : E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\citron-harness\runs\20261030-020644-krkrsdl2\window.png (printwindow, 940588 bytes, nonblack=0.7159)
+log         : E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\citron-harness\runs\20261030-020644-krkrsdl2\citron_log.txt
+error       : 
+input       : injected=1 focus_ok=1 clicks=1 keys_sent=1 diff_ratio=0.494313 region=1728x1016 y=70-950
+input shots : before=E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\citron-harness\runs\20261030-020644-krkrsdl2\window-before-input.png after=E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\citron-harness\runs\20261030-020644-krkrsdl2\window-after-input.png
+input error : 

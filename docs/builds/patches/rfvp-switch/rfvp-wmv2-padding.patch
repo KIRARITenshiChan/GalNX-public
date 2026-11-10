@@ -1,0 +1,101 @@
+diff --git a/crates/na_wmv_player/src/api.rs b/crates/na_wmv_player/src/api.rs
+index add3cd1..096ce0c 100644
+--- a/crates/na_wmv_player/src/api.rs
++++ b/crates/na_wmv_player/src/api.rs
+@@ -43,6 +43,9 @@ pub struct Wmv2Decoder {
+     params: Wmv2Params,
+     mb_dec: MacroblockDecoder,
+     cur: YuvFrame,
++    visible: YuvFrame,
++    display_width: u32,
++    display_height: u32,
+     locked_hdr_off: Option<usize>,
+ }
+ 
+@@ -51,31 +54,70 @@ impl Wmv2Decoder {
+     ///
+     /// `extradata` is the 4-byte WMV2 ext header typically carried in ASF stream properties.
+     pub fn new(width: u32, height: u32, extradata: &[u8]) -> Self {
+-        let params = Wmv2Params::new(width, height);
+-        let mut mb_dec = MacroblockDecoder::new(width, height);
++        // WMV2 reconstructs complete 16x16 macroblocks.  For widths that are not
++        // a multiple of 16 (e.g. 854) the rightmost macroblock column extends
++        // past the display rectangle; writing it into a width*height surface
++        // wraps the overflow into the start of the next row and corrupts the
++        // left edge (observed as a column of mosaic blocks in the OP video).
++        // Decode into a macroblock-aligned surface, like the WMV3/WVC1 paths,
++        // and crop the display rectangle on output.
++        let coded_width = width.saturating_add(15) / 16 * 16;
++        let coded_height = height.saturating_add(15) / 16 * 16;
++        let params = Wmv2Params::new(coded_width, coded_height);
++        let mut mb_dec = MacroblockDecoder::new(coded_width, coded_height);
+         mb_dec.wmv2_set_extradata(extradata);
+-        let cur = YuvFrame::new(width, height);
++        let cur = YuvFrame::new(coded_width, coded_height);
++        let visible = YuvFrame::new(width, height);
+         Self {
+             params,
+             mb_dec,
+             cur,
++            visible,
++            display_width: width,
++            display_height: height,
+             locked_hdr_off: None,
+         }
+     }
+ 
+     pub fn width(&self) -> u32 {
+-        self.params.width
++        self.display_width
+     }
+ 
+     pub fn height(&self) -> u32 {
+-        self.params.height
++        self.display_height
+     }
+ 
+     /// Borrow the internal YUV420p frame buffer.
+     ///
+     /// The returned reference stays valid until the next successful decode.
+     pub fn current_frame(&self) -> &YuvFrame {
+-        &self.cur
++        &self.visible
++    }
++
++    /// Crop the macroblock-aligned decode surface down to the display rectangle.
++    fn crop_frame(src: &YuvFrame, width: u32, height: u32) -> YuvFrame {
++        let width = width as usize;
++        let height = height as usize;
++        let src_width = src.width as usize;
++        debug_assert!(width <= src_width && height <= src.height as usize);
++
++        let mut out = YuvFrame::new(width as u32, height as u32);
++        for y in 0..height {
++            let s = y * src_width;
++            let d = y * width;
++            out.y[d..d + width].copy_from_slice(&src.y[s..s + width]);
++        }
++
++        let cw = width / 2;
++        let ch = height / 2;
++        let src_cw = src_width / 2;
++        for y in 0..ch {
++            let s = y * src_cw;
++            let d = y * cw;
++            out.cb[d..d + cw].copy_from_slice(&src.cb[s..s + cw]);
++            out.cr[d..d + cw].copy_from_slice(&src.cr[s..s + cw]);
++        }
++        out
+     }
+ 
+     /// Decode one assembled WMV2 frame payload.
+@@ -155,7 +197,8 @@ impl Wmv2Decoder {
+         let frame_data = &payload[best_off..];
+         self.mb_dec
+             .decode_wmv2_frame(frame_data, &hdr, &self.params, &mut self.cur)?;
+-        Ok(Some(&self.cur))
++        self.visible = Self::crop_frame(&self.cur, self.display_width, self.display_height);
++        Ok(Some(&self.visible))
+     }
+ 
+     /// Decode and return an owned frame buffer (clone).

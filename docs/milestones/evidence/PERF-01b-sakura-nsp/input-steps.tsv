@@ -1,0 +1,11 @@
+0	wait	wait:20000	ok	waited 20000ms		20352
+1	capture	capture:t1-title	ok	bytes=1573274 nonblack=0.9018	E:\galnx-build\p21\run-sakura-nsp\20261105-062202-SAKURA_MOYU-010047420000c000\step-02-t1-title.png	1881
+2	click	click:1451,250	ok	focus_ok=1		2031
+3	wait	wait:9000	ok	waited 9000ms		9367
+4	capture	capture:t2-after-newgame	ok	bytes=1380152 nonblack=0.9018	E:\galnx-build\p21\run-sakura-nsp\20261105-062202-SAKURA_MOYU-010047420000c000\step-05-t2-after-newgame.png	1879
+5	click	click:864,600	ok	focus_ok=1		2013
+6	wait	wait:7000	ok	waited 7000ms		7362
+7	capture	capture:t3-text1	ok	bytes=1416402 nonblack=0.9018	E:\galnx-build\p21\run-sakura-nsp\20261105-062202-SAKURA_MOYU-010047420000c000\step-08-t3-text1.png	1901
+8	click	click:864,600	ok	focus_ok=1		2014
+9	wait	wait:7000	ok	waited 7000ms		7369
+10	capture	capture:t4-text2	ok	bytes=1406671 nonblack=0.9018	E:\galnx-build\p21\run-sakura-nsp\20261105-062202-SAKURA_MOYU-010047420000c000\step-11-t4-text2.png	1861

@@ -1,0 +1,40 @@
+# Demo-only engine descriptor for examples/batch/demo-build.yaml (M6-b).
+# No upstream source is fetched or built: build_backend "none" only gates the
+# preflight/plan stages; the actual commands live in the manifest build section.
+id: custom
+display_name: GalNX Demo Build
+upstream_url: https://example.invalid/galnx-demo
+pinned_commit: 0123456789abcdef0123456789abcdef01234567
+pinned_version: "custom-demo@01234567 (2026-10-30)"
+license_spdx: MIT
+license_url: https://example.invalid/galnx-demo/LICENSE
+license_notes: >-
+  Demo-only descriptor. No upstream code is fetched, built or redistributed;
+  the pinned commit is a fabricated placeholder used to exercise pinning and
+  lock-file verification.
+target_kind: nro
+build_backend: none
+capabilities:
+  video:
+    supported: false
+    note: Demo only; no engine runtime.
+  audio:
+    supported: false
+    note: Demo only; no engine runtime.
+  input:
+    supported: false
+    note: Demo only; no engine runtime.
+  save:
+    supported: false
+    note: Demo only; no engine runtime.
+  touch:
+    supported: false
+    note: Demo only; no engine runtime.
+default_input_profile: kb_mouse
+artifact_naming: "{id}-{version}.nro"
+content_layout:
+  mode: none
+status: ready
+notes: >-
+  Used by examples/batch/demo-build.yaml to demonstrate M6-b real build
+  execution, artifact caching and engine locking without devkitPro.

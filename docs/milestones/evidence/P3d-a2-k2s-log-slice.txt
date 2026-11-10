@@ -1,0 +1,35 @@
+=== k2s_log.txt 关键行（A2 NSP detach run 20261030-083721） ===
+[GALNX] payload pilot01-r2 already extracted, starting game
+[GALNX] autostarting game from /kirikiri/haruno/data.xp3
+08:37:44 (info) Total 0 file(s) found, 0 file(s) activated. (5ms)
+[GalNX] internal plugin loaded via .tpm alias: csvParser.tpm -> csvParser.dll
+[GalNX] internal plugin loaded via .tpm alias: extrans.tpm -> extrans.dll
+[GalNX] internal plugin loaded via .tpm alias: fstat.tpm -> fstat.dll
+[GalNX] internal plugin loaded via .tpm alias: layerExImage.tpm -> layerExImage.dll
+[GalNX] internal plugin loaded via .tpm alias: windowEx.tpm -> windowEx.dll
+[GalNX] no built-in module for game plugin: wumsadp.tpm
+[GalNX] no built-in module for game plugin: wuvorbis.tpm
+08:37:45 (info) Loading startup script : file://./kirikiri/haruno/data.xp3>startup.tjs
+08:37:45 (info) Total 51 file(s) found, 51 file(s) activated. (29ms)
+08:37:45 (info) Total 51 file(s) found, 51 file(s) activated. (136ms)
+08:37:45 (info) Total 3214 file(s) found, 3209 file(s) activated. (234ms)
+08:37:46 (info) Total 19153 file(s) found, 19141 file(s) activated. (326ms)
+08:37:46 Scenario loaded : startup.soc
+08:37:46 Scenario loaded : userMacro.ks
+08:37:46 Scenario loaded : startup.soc
+08:37:46 Scenario loaded : eyecatch.ks
+08:37:46 Scenario loaded : startup.soc
+08:37:46 Scenario loaded : logo.ks
+08:38:22 Scenario loaded : title.ks
+08:40:29 Scenario loaded : start.ks
+08:40:32 Scenario loaded : @0000A_Z01.ks
+
+=== k2s_boot.txt 全文 ===
+0 build Oct 30 2026 06:28:53
+1 static-init start (image base 0x8000000, 305 init entries)
+2 prioritized static-init done (TU constructors next)
+3 main
+4 logging ready
+5 romfs ok
+5b galnx payload
+6 app delegate created, entering run()

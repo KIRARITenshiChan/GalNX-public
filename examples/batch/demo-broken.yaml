@@ -1,0 +1,12 @@
+# Deliberately broken manifest: no engine section and an invalid title ID.
+# 'galnx batch run' must mark this project failed without stopping the others.
+schema_version: 1
+game:
+  id: batch-demo-broken
+  title: "Batch Demo Broken"
+  source_dir: examples/batch/games/demo-broken
+switch:
+  title_id: "NOT-A-TITLE-ID"
+  target: nro
+build:
+  output_dir: "E:/galnx-build/batch-examples/demo-broken"

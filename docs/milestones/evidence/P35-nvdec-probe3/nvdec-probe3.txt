@@ -1,0 +1,50 @@
+=== GalNX NVDEC probe3 (SDL playback) ===
+applet_type=0 application=1
+input=sdmc:/nvdec-poc.wmv
+info: 1920x1080 codec=vc1(70) pix_fmt=yuv420p fps=59.940 duration_ms=25130 frames_hint=-1 hw_requested=1
+renderer=opengles2 flags=0xe
+bmp: wrote sdmc:/nvdec-probe3-001.bmp (1920x1080)
+frame=1 pts=33ms dec=4.43ms xfer=0.00ms conv=33.97ms hw=0 1920x1080
+progress: frames=30 fps=14.93 hw=0 sw=30
+bmp: wrote sdmc:/nvdec-probe3-060.bmp (1920x1080)
+frame=60 pts=2002ms dec=25.56ms xfer=0.00ms conv=27.26ms hw=0 1920x1080
+progress: frames=64 fps=16.75 hw=0 sw=64
+progress: frames=102 fps=18.85 hw=0 sw=102
+frame=120 pts=4004ms dec=15.97ms xfer=0.00ms conv=25.06ms hw=0 1920x1080
+progress: frames=144 fps=20.77 hw=0 sw=144
+bmp: wrote sdmc:/nvdec-probe3-180.bmp (1920x1080)
+frame=180 pts=6006ms dec=20.00ms xfer=0.00ms conv=28.53ms hw=0 1920x1080
+progress: frames=182 fps=18.99 hw=0 sw=182
+progress: frames=221 fps=19.42 hw=0 sw=221
+frame=240 pts=8008ms dec=20.25ms xfer=0.00ms conv=29.39ms hw=0 1920x1080
+progress: frames=260 fps=19.29 hw=0 sw=260
+progress: frames=299 fps=19.26 hw=0 sw=299
+frame=300 pts=10010ms dec=21.84ms xfer=0.00ms conv=29.36ms hw=0 1920x1080
+progress: frames=336 fps=18.00 hw=0 sw=336
+frame=360 pts=12012ms dec=19.93ms xfer=0.00ms conv=27.22ms hw=0 1920x1080
+progress: frames=371 fps=17.38 hw=0 sw=371
+progress: frames=413 fps=20.89 hw=0 sw=413
+frame=420 pts=14014ms dec=14.29ms xfer=0.00ms conv=25.89ms hw=0 1920x1080
+progress: frames=449 fps=17.55 hw=0 sw=449
+frame=480 pts=16016ms dec=20.03ms xfer=0.00ms conv=30.71ms hw=0 1920x1080
+progress: frames=484 fps=17.23 hw=0 sw=484
+progress: frames=524 fps=19.65 hw=0 sw=524
+frame=540 pts=18018ms dec=15.75ms xfer=0.00ms conv=29.63ms hw=0 1920x1080
+progress: frames=562 fps=18.98 hw=0 sw=562
+frame=600 pts=20020ms dec=14.67ms xfer=0.00ms conv=25.77ms hw=0 1920x1080
+progress: frames=605 fps=21.08 hw=0 sw=605
+progress: frames=645 fps=19.69 hw=0 sw=645
+frame=660 pts=22022ms dec=19.12ms xfer=0.00ms conv=27.04ms hw=0 1920x1080
+progress: frames=686 fps=20.20 hw=0 sw=686
+frame=720 pts=24024ms dec=17.92ms xfer=0.00ms conv=32.65ms hw=0 1920x1080
+progress: frames=724 fps=18.88 hw=0 sw=724
+end of stream
+
+=== SUMMARY ===
+frames=750 hw_frames=0 sw_frames=750
+hw_used=0 fps_overall=18.896 wall_ms=39691.0
+DECODE   avg=19.926ms min=4.429ms max=63.357ms
+TRANSFER avg=0.000ms min=0.000ms max=0.000ms
+CONVERT  avg=27.779ms min=24.492ms max=43.914ms
+mode=gles accelerated=1 headless=0
+last_frame=1920x1080

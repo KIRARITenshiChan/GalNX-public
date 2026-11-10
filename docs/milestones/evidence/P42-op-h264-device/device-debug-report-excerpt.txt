@@ -1,0 +1,147 @@
+# 设备原始日志摘录：sdmc:/switch/rfvp/debug_report.txt
+# 来源设备：NS1（IROSEKA FHD v1.2.1-test）；采集：MTP 只读（脚本 E:/galnx-build/p40/mtp-pull-rfvp.ps1）
+# 原始文件：101,342 B / 1,210 行  sha256 89cef8075186c3438522a5798ce02a11c4b7ba939ca5b10db5946952e784121f
+# 摘录规则：OP 相关原文（原始行号保留在每行前缀）+ 全部 124 条 decoded 采样；未改动行内容
+
+## OP 开始前（原始行 1-3：帧率心跳与虚拟分辨率）
+1: frame 7620: 60.0 fps over the last 60 frames, slowest frame 26.0 ms
+2: stages (ms per frame): text 0.46 tree 0.09 submit 0.35 end_frame 14.26 vm 0.13 syscalls 0.03
+3: virtual frame 1920x1080
+
+## OP 启动（原始行 331-336）
+331: [INFO] MoviePlay: path=movie/01.wmv flag=True is_layer_effect=false
+332: [INFO] Movie: opened (Switch NVDEC H.264) asset=movie/01_h264.mp4
+333: [INFO] [diag t=858353059896us] [cache] bytes put size=2343033 total=22719543/201326592
+334: [INFO] [diag t=858353059906us] vfs path="movie/01.ogg" bytes=2343033 us=189361 reads=0
+335: [INFO] movie audio: loaded movie/01.ogg (Ogg Vorbis, 2343033 bytes); queued for the audio thread
+336: [INFO] movie h264: decoded frame=1 pts=0 ms 1280x720 hw=1 decode_us=7138 convert_us=3529
+
+## decoded 采样（全部 124 条，原始行号）
+336: [INFO] movie h264: decoded frame=1 pts=0 ms 1280x720 hw=1 decode_us=7138 convert_us=3529
+340: [INFO] movie h264: decoded frame=2 pts=33 ms 1280x720 hw=1 decode_us=2819 convert_us=3536
+755: [INFO] movie h264: decoded frame=3 pts=66 ms 1280x720 hw=1 decode_us=1886 convert_us=3493
+756: [INFO] movie h264: decoded frame=4 pts=100 ms 1280x720 hw=1 decode_us=3188 convert_us=3536
+933: [INFO] movie h264: decoded frame=5 pts=133 ms 1280x720 hw=1 decode_us=5907 convert_us=3497
+934: [INFO] movie h264: decoded frame=30 pts=966 ms 1280x720 hw=1 decode_us=5021 convert_us=3535
+936: [INFO] movie h264: decoded frame=60 pts=1966 ms 1280x720 hw=1 decode_us=8921 convert_us=3487
+938: [INFO] movie h264: decoded frame=90 pts=2966 ms 1280x720 hw=1 decode_us=4265 convert_us=3620
+940: [INFO] movie h264: decoded frame=120 pts=3966 ms 1280x720 hw=1 decode_us=5539 convert_us=3539
+942: [INFO] movie h264: decoded frame=150 pts=4966 ms 1280x720 hw=1 decode_us=5666 convert_us=3532
+946: [INFO] movie h264: decoded frame=180 pts=5966 ms 1280x720 hw=1 decode_us=9264 convert_us=3511
+948: [INFO] movie h264: decoded frame=210 pts=6966 ms 1280x720 hw=1 decode_us=4883 convert_us=3562
+950: [INFO] movie h264: decoded frame=240 pts=7966 ms 1280x720 hw=1 decode_us=2911 convert_us=3523
+952: [INFO] movie h264: decoded frame=270 pts=8966 ms 1280x720 hw=1 decode_us=2643 convert_us=3524
+954: [INFO] movie h264: decoded frame=300 pts=9966 ms 1280x720 hw=1 decode_us=5661 convert_us=3491
+956: [INFO] movie h264: decoded frame=330 pts=10966 ms 1280x720 hw=1 decode_us=4275 convert_us=3544
+962: [INFO] movie h264: decoded frame=360 pts=11966 ms 1280x720 hw=1 decode_us=5368 convert_us=3495
+964: [INFO] movie h264: decoded frame=390 pts=12966 ms 1280x720 hw=1 decode_us=2795 convert_us=3508
+966: [INFO] movie h264: decoded frame=420 pts=13966 ms 1280x720 hw=1 decode_us=8189 convert_us=3490
+968: [INFO] movie h264: decoded frame=450 pts=14966 ms 1280x720 hw=1 decode_us=11122 convert_us=3499
+970: [INFO] movie h264: decoded frame=480 pts=15966 ms 1280x720 hw=1 decode_us=4990 convert_us=3542
+972: [INFO] movie h264: decoded frame=510 pts=16966 ms 1280x720 hw=1 decode_us=2757 convert_us=3503
+974: [INFO] movie h264: decoded frame=540 pts=17966 ms 1280x720 hw=1 decode_us=3025 convert_us=3548
+976: [INFO] movie h264: decoded frame=570 pts=18966 ms 1280x720 hw=1 decode_us=4821 convert_us=3516
+978: [INFO] movie h264: decoded frame=600 pts=19966 ms 1280x720 hw=1 decode_us=5441 convert_us=3515
+980: [INFO] movie h264: decoded frame=630 pts=20966 ms 1280x720 hw=1 decode_us=4945 convert_us=3517
+982: [INFO] movie h264: decoded frame=660 pts=21966 ms 1280x720 hw=1 decode_us=5207 convert_us=3532
+984: [INFO] movie h264: decoded frame=690 pts=22966 ms 1280x720 hw=1 decode_us=2888 convert_us=3493
+986: [INFO] movie h264: decoded frame=720 pts=23966 ms 1280x720 hw=1 decode_us=5988 convert_us=3482
+988: [INFO] movie h264: decoded frame=750 pts=24966 ms 1280x720 hw=1 decode_us=5876 convert_us=3477
+990: [INFO] movie h264: decoded frame=780 pts=25966 ms 1280x720 hw=1 decode_us=4307 convert_us=3516
+992: [INFO] movie h264: decoded frame=810 pts=26966 ms 1280x720 hw=1 decode_us=1755 convert_us=3515
+994: [INFO] movie h264: decoded frame=840 pts=27966 ms 1280x720 hw=1 decode_us=3848 convert_us=3504
+996: [INFO] movie h264: decoded frame=870 pts=28966 ms 1280x720 hw=1 decode_us=3180 convert_us=3479
+998: [INFO] movie h264: decoded frame=900 pts=29966 ms 1280x720 hw=1 decode_us=3364 convert_us=3453
+1000: [INFO] movie h264: decoded frame=930 pts=30966 ms 1280x720 hw=1 decode_us=12203 convert_us=3477
+1002: [INFO] movie h264: decoded frame=960 pts=31966 ms 1280x720 hw=1 decode_us=5688 convert_us=3476
+1004: [INFO] movie h264: decoded frame=990 pts=32966 ms 1280x720 hw=1 decode_us=4990 convert_us=3523
+1006: [INFO] movie h264: decoded frame=1020 pts=33966 ms 1280x720 hw=1 decode_us=5551 convert_us=3477
+1008: [INFO] movie h264: decoded frame=1050 pts=34966 ms 1280x720 hw=1 decode_us=4605 convert_us=3535
+1010: [INFO] movie h264: decoded frame=1080 pts=35966 ms 1280x720 hw=1 decode_us=5149 convert_us=3514
+1012: [INFO] movie h264: decoded frame=1110 pts=36966 ms 1280x720 hw=1 decode_us=3138 convert_us=3550
+1014: [INFO] movie h264: decoded frame=1140 pts=37966 ms 1280x720 hw=1 decode_us=5445 convert_us=3540
+1016: [INFO] movie h264: decoded frame=1170 pts=38966 ms 1280x720 hw=1 decode_us=5214 convert_us=3522
+1018: [INFO] movie h264: decoded frame=1200 pts=39966 ms 1280x720 hw=1 decode_us=3389 convert_us=3516
+1020: [INFO] movie h264: decoded frame=1230 pts=40966 ms 1280x720 hw=1 decode_us=4661 convert_us=3544
+1022: [INFO] movie h264: decoded frame=1260 pts=41966 ms 1280x720 hw=1 decode_us=9902 convert_us=3494
+1024: [INFO] movie h264: decoded frame=1290 pts=42966 ms 1280x720 hw=1 decode_us=5314 convert_us=3543
+1026: [INFO] movie h264: decoded frame=1320 pts=43966 ms 1280x720 hw=1 decode_us=5213 convert_us=3535
+1028: [INFO] movie h264: decoded frame=1350 pts=44966 ms 1280x720 hw=1 decode_us=4744 convert_us=3560
+1030: [INFO] movie h264: decoded frame=1380 pts=45966 ms 1280x720 hw=1 decode_us=5493 convert_us=3498
+1032: [INFO] movie h264: decoded frame=1410 pts=46966 ms 1280x720 hw=1 decode_us=5125 convert_us=3547
+1034: [INFO] movie h264: decoded frame=1440 pts=47966 ms 1280x720 hw=1 decode_us=5483 convert_us=3559
+1036: [INFO] movie h264: decoded frame=1470 pts=48966 ms 1280x720 hw=1 decode_us=4590 convert_us=3540
+1038: [INFO] movie h264: decoded frame=1500 pts=49966 ms 1280x720 hw=1 decode_us=10378 convert_us=3451
+1040: [INFO] movie h264: decoded frame=1530 pts=50966 ms 1280x720 hw=1 decode_us=4996 convert_us=3498
+1042: [INFO] movie h264: decoded frame=1560 pts=51966 ms 1280x720 hw=1 decode_us=3284 convert_us=3528
+1044: [INFO] movie h264: decoded frame=1590 pts=52966 ms 1280x720 hw=1 decode_us=10040 convert_us=3511
+1046: [INFO] movie h264: decoded frame=1620 pts=53966 ms 1280x720 hw=1 decode_us=5417 convert_us=3509
+1048: [INFO] movie h264: decoded frame=1650 pts=54966 ms 1280x720 hw=1 decode_us=5894 convert_us=3572
+1050: [INFO] movie h264: decoded frame=1680 pts=55966 ms 1280x720 hw=1 decode_us=3222 convert_us=3536
+1052: [INFO] movie h264: decoded frame=1710 pts=56966 ms 1280x720 hw=1 decode_us=4841 convert_us=3479
+1054: [INFO] movie h264: decoded frame=1740 pts=57966 ms 1280x720 hw=1 decode_us=4800 convert_us=3550
+1056: [INFO] movie h264: decoded frame=1770 pts=58966 ms 1280x720 hw=1 decode_us=3968 convert_us=3511
+1058: [INFO] movie h264: decoded frame=1800 pts=59966 ms 1280x720 hw=1 decode_us=3361 convert_us=3461
+1060: [INFO] movie h264: decoded frame=1830 pts=60966 ms 1280x720 hw=1 decode_us=3164 convert_us=3470
+1062: [INFO] movie h264: decoded frame=1860 pts=61966 ms 1280x720 hw=1 decode_us=5579 convert_us=3518
+1064: [INFO] movie h264: decoded frame=1890 pts=62966 ms 1280x720 hw=1 decode_us=2984 convert_us=3497
+1066: [INFO] movie h264: decoded frame=1920 pts=63966 ms 1280x720 hw=1 decode_us=7196 convert_us=3494
+1068: [INFO] movie h264: decoded frame=1950 pts=64966 ms 1280x720 hw=1 decode_us=5319 convert_us=3526
+1070: [INFO] movie h264: decoded frame=1980 pts=65966 ms 1280x720 hw=1 decode_us=5856 convert_us=3529
+1072: [INFO] movie h264: decoded frame=2010 pts=66966 ms 1280x720 hw=1 decode_us=4673 convert_us=3567
+1074: [INFO] movie h264: decoded frame=2040 pts=67966 ms 1280x720 hw=1 decode_us=3632 convert_us=3513
+1076: [INFO] movie h264: decoded frame=2070 pts=68966 ms 1280x720 hw=1 decode_us=2863 convert_us=3491
+1078: [INFO] movie h264: decoded frame=2100 pts=69966 ms 1280x720 hw=1 decode_us=5401 convert_us=3500
+1080: [INFO] movie h264: decoded frame=2130 pts=70966 ms 1280x720 hw=1 decode_us=5773 convert_us=3509
+1082: [INFO] movie h264: decoded frame=2160 pts=71966 ms 1280x720 hw=1 decode_us=5726 convert_us=3490
+1084: [INFO] movie h264: decoded frame=2190 pts=72966 ms 1280x720 hw=1 decode_us=4987 convert_us=3565
+1086: [INFO] movie h264: decoded frame=2220 pts=73966 ms 1280x720 hw=1 decode_us=5478 convert_us=3534
+1088: [INFO] movie h264: decoded frame=2250 pts=74966 ms 1280x720 hw=1 decode_us=4758 convert_us=3573
+1090: [INFO] movie h264: decoded frame=2280 pts=75966 ms 1280x720 hw=1 decode_us=6281 convert_us=3467
+1092: [INFO] movie h264: decoded frame=2310 pts=76966 ms 1280x720 hw=1 decode_us=5705 convert_us=3520
+1094: [INFO] movie h264: decoded frame=2340 pts=77966 ms 1280x720 hw=1 decode_us=3627 convert_us=3515
+1096: [INFO] movie h264: decoded frame=2370 pts=78966 ms 1280x720 hw=1 decode_us=4763 convert_us=3531
+1098: [INFO] movie h264: decoded frame=2400 pts=79966 ms 1280x720 hw=1 decode_us=3268 convert_us=3563
+1100: [INFO] movie h264: decoded frame=2430 pts=80966 ms 1280x720 hw=1 decode_us=3151 convert_us=3534
+1102: [INFO] movie h264: decoded frame=2460 pts=81966 ms 1280x720 hw=1 decode_us=5280 convert_us=3536
+1104: [INFO] movie h264: decoded frame=2490 pts=82966 ms 1280x720 hw=1 decode_us=4824 convert_us=3508
+1106: [INFO] movie h264: decoded frame=2520 pts=83966 ms 1280x720 hw=1 decode_us=3303 convert_us=3520
+1108: [INFO] movie h264: decoded frame=2550 pts=84966 ms 1280x720 hw=1 decode_us=4808 convert_us=3536
+1110: [INFO] movie h264: decoded frame=2580 pts=85966 ms 1280x720 hw=1 decode_us=3186 convert_us=3513
+1112: [INFO] movie h264: decoded frame=2610 pts=86966 ms 1280x720 hw=1 decode_us=4725 convert_us=3502
+1114: [INFO] movie h264: decoded frame=2640 pts=87966 ms 1280x720 hw=1 decode_us=5381 convert_us=3543
+1116: [INFO] movie h264: decoded frame=2670 pts=88966 ms 1280x720 hw=1 decode_us=9625 convert_us=3526
+1118: [INFO] movie h264: decoded frame=2700 pts=89966 ms 1280x720 hw=1 decode_us=5411 convert_us=3559
+1120: [INFO] movie h264: decoded frame=2730 pts=90966 ms 1280x720 hw=1 decode_us=2841 convert_us=3519
+1122: [INFO] movie h264: decoded frame=2760 pts=91966 ms 1280x720 hw=1 decode_us=3315 convert_us=3517
+1124: [INFO] movie h264: decoded frame=2790 pts=92966 ms 1280x720 hw=1 decode_us=4798 convert_us=3513
+1126: [INFO] movie h264: decoded frame=2820 pts=93966 ms 1280x720 hw=1 decode_us=5451 convert_us=3497
+1128: [INFO] movie h264: decoded frame=2850 pts=94966 ms 1280x720 hw=1 decode_us=4774 convert_us=3514
+1130: [INFO] movie h264: decoded frame=2880 pts=95966 ms 1280x720 hw=1 decode_us=5699 convert_us=3499
+1132: [INFO] movie h264: decoded frame=2910 pts=96966 ms 1280x720 hw=1 decode_us=4970 convert_us=3552
+1134: [INFO] movie h264: decoded frame=2940 pts=97966 ms 1280x720 hw=1 decode_us=5989 convert_us=3507
+1136: [INFO] movie h264: decoded frame=2970 pts=98966 ms 1280x720 hw=1 decode_us=2868 convert_us=3509
+1138: [INFO] movie h264: decoded frame=3000 pts=99966 ms 1280x720 hw=1 decode_us=7893 convert_us=3513
+1140: [INFO] movie h264: decoded frame=3030 pts=100966 ms 1280x720 hw=1 decode_us=4803 convert_us=3493
+1142: [INFO] movie h264: decoded frame=3060 pts=101966 ms 1280x720 hw=1 decode_us=3164 convert_us=3515
+1144: [INFO] movie h264: decoded frame=3090 pts=102966 ms 1280x720 hw=1 decode_us=3096 convert_us=3494
+1146: [INFO] movie h264: decoded frame=3120 pts=103966 ms 1280x720 hw=1 decode_us=5680 convert_us=3522
+1148: [INFO] movie h264: decoded frame=3150 pts=104966 ms 1280x720 hw=1 decode_us=4174 convert_us=3482
+1150: [INFO] movie h264: decoded frame=3180 pts=105966 ms 1280x720 hw=1 decode_us=8086 convert_us=3497
+1152: [INFO] movie h264: decoded frame=3210 pts=106966 ms 1280x720 hw=1 decode_us=4940 convert_us=3515
+1154: [INFO] movie h264: decoded frame=3240 pts=107966 ms 1280x720 hw=1 decode_us=5296 convert_us=3523
+1156: [INFO] movie h264: decoded frame=3270 pts=108966 ms 1280x720 hw=1 decode_us=7851 convert_us=3503
+1158: [INFO] movie h264: decoded frame=3300 pts=109966 ms 1280x720 hw=1 decode_us=5951 convert_us=3518
+1160: [INFO] movie h264: decoded frame=3330 pts=110966 ms 1280x720 hw=1 decode_us=4771 convert_us=3553
+1162: [INFO] movie h264: decoded frame=3360 pts=111966 ms 1280x720 hw=1 decode_us=3153 convert_us=3530
+1164: [INFO] movie h264: decoded frame=3390 pts=112966 ms 1280x720 hw=1 decode_us=5344 convert_us=3555
+1166: [INFO] movie h264: decoded frame=3420 pts=113966 ms 1280x720 hw=1 decode_us=6511 convert_us=3444
+1168: [INFO] movie h264: decoded frame=3450 pts=114966 ms 1280x720 hw=1 decode_us=10423 convert_us=3451
+1170: [INFO] movie h264: decoded frame=3480 pts=115966 ms 1280x720 hw=1 decode_us=5563 convert_us=3515
+1172: [INFO] movie h264: decoded frame=3510 pts=116966 ms 1280x720 hw=1 decode_us=8945 convert_us=3497
+1174: [INFO] movie h264: decoded frame=3540 pts=117966 ms 1280x720 hw=1 decode_us=2128 convert_us=3515
+1176: [INFO] movie h264: decoded frame=3570 pts=118966 ms 1280x720 hw=1 decode_us=5972 convert_us=3493
+
+## OP 结束（原始行 1178-1179）
+1178: [INFO] movie h264: end of stream after 3597 frames (3597 hardware)
+1179: [INFO] movie h264: finished flag set (eof=true stash=0 decoded=3597 hw=3597)

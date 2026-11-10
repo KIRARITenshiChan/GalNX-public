@@ -1,0 +1,63 @@
+RUN_START 2026-11-07T03:48:56+08:00
+GAME_MOVED
+STEPS=wait:22000;capture:t0-title;click:1386,638;wait:9000;capture:t1-loadlist;click:420,300;wait:24000;capture:t2-story;key:C;wait:1500;key:C;wait:1500;key:C;wait:1500;key:C;wait:1500;key:C;wait:1500;key:C;wait:1500;key:C;wait:1500;key:C;wait:1500;key:C;wait:1500;key:C;wait:1500;key:C;wait:1500;key:C;wait:1500;capture:t3-story-late;wait:5000;capture:t4-end
+[citron_run] input steps: 35 step(s) parsed
+[citron_run] shell elevated: 1
+[citron_run] game file: not staged (--no-stage); launching in place: /e/galnx-build/p30/out/IROSEKA_FHD-010047420000a000-v1.1.6-test.nsp
+[citron_run] game file: /e/galnx-build/p30/out/IROSEKA_FHD-010047420000a000-v1.1.6-test.nsp (type=nsp) staged at /e/galnx-build/p30/out/IROSEKA_FHD-010047420000a000-v1.1.6-test.nsp
+[citron_run] launched via runas-deelevated; polling up to 420 s for boot evidence
+[citron_run] input steps: waiting 1500 ms before running 35 step(s)
+[citron_run] input step 1/1 wait: ok (waited 22000ms)
+[citron_run] input step 2/2 capture: ok (bytes=1418845 nonblack=0.9018)
+[citron_run] input step 3/3 click: ok (focus_ok=1)
+[citron_run] input step 4/4 wait: ok (waited 9000ms)
+[citron_run] input step 5/5 capture: ok (bytes=1891036 nonblack=0.9018)
+[citron_run] input step 6/6 click: ok (focus_ok=1)
+[citron_run] input step 7/7 wait: ok (waited 24000ms)
+[citron_run] input step 8/8 capture: ok (bytes=1601509 nonblack=0.9018)
+[citron_run] input step 9/9 key: ok (keys_sent=1)
+[citron_run] input step 10/10 wait: ok (waited 1500ms)
+[citron_run] input step 11/11 key: ok (keys_sent=1)
+[citron_run] input step 12/12 wait: ok (waited 1500ms)
+[citron_run] input step 13/13 key: ok (keys_sent=1)
+[citron_run] input step 14/14 wait: ok (waited 1500ms)
+[citron_run] input step 15/15 key: ok (keys_sent=1)
+[citron_run] input step 16/16 wait: ok (waited 1500ms)
+[citron_run] input step 17/17 key: ok (keys_sent=1)
+[citron_run] input step 18/18 wait: ok (waited 1500ms)
+[citron_run] input step 19/19 key: ok (keys_sent=1)
+[citron_run] input step 20/20 wait: ok (waited 1500ms)
+[citron_run] input step 21/21 key: ok (keys_sent=1)
+[citron_run] input step 22/22 wait: ok (waited 1500ms)
+[citron_run] input step 23/23 key: ok (keys_sent=1)
+[citron_run] input step 24/24 wait: ok (waited 1500ms)
+[citron_run] input step 25/25 key: ok (keys_sent=1)
+[citron_run] input step 26/26 wait: ok (waited 1500ms)
+[citron_run] input step 27/27 key: ok (keys_sent=1)
+[citron_run] input step 28/28 wait: ok (waited 1500ms)
+[citron_run] input step 29/29 key: ok (keys_sent=1)
+[citron_run] input step 30/30 wait: ok (waited 1500ms)
+[citron_run] input step 31/31 key: ok (keys_sent=1)
+[citron_run] input step 32/32 wait: ok (waited 1500ms)
+[citron_run] input step 33/33 capture: ok (bytes=1792440 nonblack=0.9018)
+[citron_run] input step 34/34 wait: ok (waited 5000ms)
+[citron_run] input step 35/35 capture: ok (bytes=1792417 nonblack=0.9018)
+[citron_run] input steps done: ok=35 failed=0 diff_ratio=0.812134 final=E:\galnx-build\p30\run-lead-audio-jit\20261107-034903-IROSEKA_FHD-010047420000a000-v1.1.6-test\window-steps-final.png
+[citron_run] stopped citron pid(s) 32164
+{"nro":"/e/galnx-build/p30/out/IROSEKA_FHD-010047420000a000-v1.1.6-test.nsp","game_type":"nsp","game_path":"/e/galnx-build/p30/out/IROSEKA_FHD-010047420000a000-v1.1.6-test.nsp","stage_path":"/e/galnx-build/p30/out/IROSEKA_FHD-010047420000a000-v1.1.6-test.nsp","status":"loaded","window_title":"citron Nightly | 0237a9b88 | IROSEKA FHD (64-bit) | 1.1.6-test | NVIDIA","screenshot":"E:\\galnx-build\\p30\\run-lead-audio-jit\\20261107-034903-IROSEKA_FHD-010047420000a000-v1.1.6-test\\window.png","log_path":"E:\\galnx-build\\p30\\run-lead-audio-jit\\20261107-034903-IROSEKA_FHD-010047420000a000-v1.1.6-test\\citron_log.txt","boot_line":"[   2.532099] Frontend <Info> citron\\main.cpp:2475:BootGame: Booting game: 010047420000A000 | IROSEKA FHD (64-bit) | 1.1.6-test","run_dir":"E:\\galnx-build\\p30\\run-lead-audio-jit\\20261107-034903-IROSEKA_FHD-010047420000a000-v1.1.6-test","nro_staged":"E:\\galnx-build\\p30\\out\\IROSEKA_FHD-010047420000a000-v1.1.6-test.nsp","citron_exe":"E:\\Othergames\\Nintendo Switch\\Workspace\\GalNX\\workspaces\\web-02\\citron\\citron.exe","citron_build":"[   1.429363] Frontend <Info> citron\\main.cpp:411:GMainWindow: citron Version: citron Development Build | main-0237a9b88","expected_title":"IROSEKA","signals":{"title_match":true,"boot_line":true,"app_output":true,"app_output_source":"screenshot_nonblack"},"screenshot_info":{"method":"printwindow","bytes":1450097,"nonblack_ratio":0.9018},"input":{"injected":true,"key_method":"postmessage","keys_requested":[],"keys_sent":12,"focus_ok":false,"clicks":2,"screenshot_before":"","screenshot_after":"","diff_ratio":0,"nonblack_before":0.9018,"nonblack_after":0.9018,"region":"1728x1016 y=70-950","error":"","steps":[{"index":0,"action":"wait","argument":"wait:22000","status":"ok","detail":"waited 22000ms","screenshot":"","elapsed_ms":22178},{"index":1,"action":"capture","argument":"capture:t0-title","status":"ok","detail":"bytes=1418845 nonblack=0.9018","screenshot":"E:\\galnx-build\\p30\\run-lead-audio-jit\\20261107-034903-IROSEKA_FHD-010047420000a000-v1.1.6-test\\step-02-t0-title.png","elapsed_ms":1271},{"index":2,"action":"click","argument":"click:1386,638","status":"ok","detail":"focus_ok=1","screenshot":"","elapsed_ms":1588},{"index":3,"action":"wait","argument":"wait:9000","status":"ok","detail":"waited 9000ms","screenshot":"","elapsed_ms":9182},{"index":4,"action":"capture","argument":"capture:t1-loadlist","status":"ok","detail":"bytes=1891036 nonblack=0.9018","screenshot":"E:\\galnx-build\\p30\\run-lead-audio-jit\\20261107-034903-IROSEKA_FHD-010047420000a000-v1.1.6-test\\step-05-t1-loadlist.png","elapsed_ms":1255},{"index":5,"action":"click","argument":"click:420,300","status":"ok","detail":"focus_ok=1","screenshot":"","elapsed_ms":1559},{"index":6,"action":"wait","argument":"wait:24000","status":"ok","detail":"waited 24000ms","screenshot":"","elapsed_ms":24173},{"index":7,"action":"capture","argument":"capture:t2-story","status":"ok","detail":"bytes=1601509 nonblack=0.9018","screenshot":"E:\\galnx-build\\p30\\run-lead-audio-jit\\20261107-034903-IROSEKA_FHD-010047420000a000-v1.1.6-test\\step-08-t2-story.png","elapsed_ms":1262},{"index":8,"action":"key","argument":"key:C","status":"ok","detail":"keys_sent=1","screenshot":"","elapsed_ms":1171},{"index":9,"action":"wait","argument":"wait:1500","status":"ok","detail":"waited 1500ms","screenshot":"","elapsed_ms":1670},{"index":10,"action":"key","argument":"key:C","status":"ok","detail":"keys_sent=1","screenshot":"","elapsed_ms":1139},{"index":11,"action":"wait","argument":"wait:1500","status":"ok","detail":"waited 1500ms","screenshot":"","elapsed_ms":1673},{"index":12,"action":"key","argument":"key:C","status":"ok","detail":"keys_sent=1","screenshot":"","elapsed_ms":1155},{"index":13,"action":"wait","argument":"wait:1500","status":"ok","detail":"waited 1500ms","screenshot":"","elapsed_ms":1668},{"index":14,"action":"key","argument":"key:C","status":"ok","detail":"keys_sent=1","screenshot":"","elapsed_ms":1169},{"index":15,"action":"wait","argument":"wait:1500","status":"ok","detail":"waited 1500ms","screenshot":"","elapsed_ms":1669},{"index":16,"action":"key","argument":"key:C","status":"ok","detail":"keys_sent=1","screenshot":"","elapsed_ms":1185},{"index":17,"action":"wait","argument":"wait:1500","status":"ok","detail":"waited 1500ms","screenshot":"","elapsed_ms":1674},{"index":18,"action":"key","argument":"key:C","status":"ok","detail":"keys_sent=1","screenshot":"","elapsed_ms":1164},{"index":19,"action":"wait","argument":"wait:1500","status":"ok","detail":"waited 1500ms","screenshot":"","elapsed_ms":1668},{"index":20,"action":"key","argument":"key:C","status":"ok","detail":"keys_sent=1","screenshot":"","elapsed_ms":1198},{"index":21,"action":"wait","argument":"wait:1500","status":"ok","detail":"waited 1500ms","screenshot":"","elapsed_ms":1674},{"index":22,"action":"key","argument":"key:C","status":"ok","detail":"keys_sent=1","screenshot":"","elapsed_ms":1155},{"index":23,"action":"wait","argument":"wait:1500","status":"ok","detail":"waited 1500ms","screenshot":"","elapsed_ms":1684},{"index":24,"action":"key","argument":"key:C","status":"ok","detail":"keys_sent=1","screenshot":"","elapsed_ms":1177},{"index":25,"action":"wait","argument":"wait:1500","status":"ok","detail":"waited 1500ms","screenshot":"","elapsed_ms":1671},{"index":26,"action":"key","argument":"key:C","status":"ok","detail":"keys_sent=1","screenshot":"","elapsed_ms":1173},{"index":27,"action":"wait","argument":"wait:1500","status":"ok","detail":"waited 1500ms","screenshot":"","elapsed_ms":1673},{"index":28,"action":"key","argument":"key:C","status":"ok","detail":"keys_sent=1","screenshot":"","elapsed_ms":1173},{"index":29,"action":"wait","argument":"wait:1500","status":"ok","detail":"waited 1500ms","screenshot":"","elapsed_ms":1686},{"index":30,"action":"key","argument":"key:C","status":"ok","detail":"keys_sent=1","screenshot":"","elapsed_ms":1172},{"index":31,"action":"wait","argument":"wait:1500","status":"ok","detail":"waited 1500ms","screenshot":"","elapsed_ms":1668},{"index":32,"action":"capture","argument":"capture:t3-story-late","status":"ok","detail":"bytes=1792440 nonblack=0.9018","screenshot":"E:\\galnx-build\\p30\\run-lead-audio-jit\\20261107-034903-IROSEKA_FHD-010047420000a000-v1.1.6-test\\step-33-t3-story-late.png","elapsed_ms":1293},{"index":33,"action":"wait","argument":"wait:5000","status":"ok","detail":"waited 5000ms","screenshot":"","elapsed_ms":5183},{"index":34,"action":"capture","argument":"capture:t4-end","status":"ok","detail":"bytes=1792417 nonblack=0.9018","screenshot":"E:\\galnx-build\\p30\\run-lead-audio-jit\\20261107-034903-IROSEKA_FHD-010047420000a000-v1.1.6-test\\step-35-t4-end.png","elapsed_ms":1254}],"steps_failed":0,"steps_diff_ratio":0.812134,"steps_final":"E:\\galnx-build\\p30\\run-lead-audio-jit\\20261107-034903-IROSEKA_FHD-010047420000a000-v1.1.6-test\\window-steps-final.png","steps_error":""},"elapsed_s":21,"pid":32164,"error":"","admin_elevated_shell":true,"launch_route":"runas-deelevated","killed":true}
+CITRON_RC=0
+== audio_status.txt ==
+mode=jit driver=1 thread=1 alive=1 cpu=2 pages=5879 rendered_ms=125418 uptime_ms=125317 lag_ms=-101 underrun=0 max_refill_gap_ms=44 stalls=3 stall_ms=1200
+== audio_stall.txt ==
+pre stall=0 ms=1200 pages=3041 rendered_ms=64874 uptime_ms=64780 lag_ms=-94 underrun=0 gap_ms=44 t_us=193292898237
+post stall=1 ms=1200 pages=3097 rendered_ms=66069 uptime_ms=65982 lag_ms=-87 underrun=0 gap_ms=44 t_us=193294099833
+pre stall=1 ms=1200 pages=3564 rendered_ms=76032 uptime_ms=75930 lag_ms=-102 underrun=0 gap_ms=44 t_us=193304047694
+post stall=2 ms=1200 pages=3620 rendered_ms=77226 uptime_ms=77131 lag_ms=-95 underrun=0 gap_ms=44 t_us=193305249102
+pre stall=2 ms=1200 pages=4088 rendered_ms=87210 uptime_ms=87113 lag_ms=-97 underrun=0 gap_ms=44 t_us=193315230562
+post stall=3 ms=1200 pages=4144 rendered_ms=88405 uptime_ms=88314 lag_ms=-91 underrun=0 gap_ms=44 t_us=193316431949
+== async_status.txt ==
+enabled=1 create=0x0 start=0x0 hb=120000 stage=0 cpu=1 wdt=1 main=7488 stalled=0
+== frame_status.txt ==
+frame=7500 status=0 async=1
+RUN_END 2026-11-07T03:51:24+08:00
+RESTORED 2026-11-07T03:51:24+08:00

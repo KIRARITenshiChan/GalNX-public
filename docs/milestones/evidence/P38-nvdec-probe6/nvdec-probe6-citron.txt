@@ -1,0 +1,172 @@
+=== GalNX NVDEC probe6 v1 (nvtegra hwaccel) ===
+build: Nov  8 2026 21:33:55
+input: sdmc:/nvdec-poc.wmv
+frmrtq_postproc=7, bitrtq_postproc=31
+LoopFilter=0, ChromaFormat=1, Pulldown=1, Interlace: 0
+TFCTRflag=0, FINTERPflag=0
+BrokenLink=0, ClosedEntry=0, PanscanFlag=0
+RefDist=1, Postproc=1, FastUVMC=0, ExtMV=1
+DQuant=0, VSTransform=1, Overlap=0, Qmode=0
+frmrtq_postproc=7, bitrtq_postproc=31
+LoopFilter=0, ChromaFormat=1, Pulldown=1, Interlace: 0
+TFCTRflag=0, FINTERPflag=0
+BrokenLink=0, ClosedEntry=0, PanscanFlag=0
+RefDist=1, Postproc=1, FastUVMC=0, ExtMV=1
+DQuant=0, VSTransform=1, Overlap=0, Qmode=0
+swref: found=2 1920x1080 time=981.3 ms err=-
+swref[0]: target frame 1 -> ok
+swref[1]: target frame 30 -> ok
+frmrtq_postproc=7, bitrtq_postproc=31
+LoopFilter=0, ChromaFormat=1, Pulldown=1, Interlace: 0
+TFCTRflag=0, FINTERPflag=0
+BrokenLink=0, ClosedEntry=0, PanscanFlag=0
+RefDist=1, Postproc=1, FastUVMC=0, ExtMV=1
+DQuant=0, VSTransform=1, Overlap=0, Qmode=0
+hw: nvtegra device created
+hw: frames ctx 1920x1080 format=nvtegra sw=nv12
+frmrtq_postproc=7, bitrtq_postproc=31
+LoopFilter=0, ChromaFormat=1, Pulldown=1, Interlace: 0
+TFCTRflag=0, FINTERPflag=0
+BrokenLink=0, ClosedEntry=0, PanscanFlag=0
+RefDist=1, Postproc=1, FastUVMC=0, ExtMV=1
+DQuant=0, VSTransform=1, Overlap=0, Qmode=0
+info: 1920x1080 codec=vc1(70) pix=yuv420p fps=59.940 duration=25130 ms frames_hint=-1 hw_requested=1
+sdl: window=0x2101c144b0 renderer=0x2101be8830 texture=0x2107bfcaa0
+pkt[0] size=9198 head=c0 82 00 00 03 00 00 03 00 00 03 00 00 03 01 06 07 ee e1 f0 f8 7c 3e 1f 0f 87 c3 e1 f0 f8 7c 3e 
+pkt[1] size=1 head=f2 
+frame idx=1 1920x1080 pts=33ms dec=1.99 xfer=0.00 conv=46.64 hw=0
+bmp: sdmc:/probe6-f001.bmp rc=0
+cmp f001: skipped (ref=0x210169cb40 nv12=0x0 hw=0x0)
+pkt[2] size=11774 head=c0 83 00 00 03 00 00 03 00 00 03 02 00 00 03 00 00 03 00 80 00 00 10 00 00 03 00 06 00 00 03 00 
+frame idx=2 1920x1080 pts=66ms dec=14.32 xfer=0.00 conv=35.40 hw=0
+pkt[3] size=13562 head=c0 83 00 00 03 00 04 00 00 03 00 20 00 00 03 00 00 20 00 00 03 01 00 00 03 00 00 03 01 40 00 00 
+frame idx=3 1920x1080 pts=100ms dec=12.70 xfer=0.00 conv=36.78 hw=0
+pkt[4] size=16306 head=c0 80 89 7f fb ff c0 b1 85 ff ff ff ff 57 16 b5 af ff fd 38 3f fe 06 85 75 7f ff ff db ff 07 c6 
+frame idx=4 1920x1080 pts=133ms dec=19.26 xfer=0.00 conv=36.35 hw=0
+pkt[5] size=20168 head=c0 80 ff ed b3 8c 33 0c 30 c4 06 2e d0 79 b8 07 e2 38 8e 23 88 e2 38 8e 21 81 fc e5 21 0c 66 25 
+frame idx=5 1920x1080 pts=166ms dec=20.46 xfer=0.00 conv=37.07 hw=0
+pkt[6] size=23628 head=12 10 ff a0 c8 17 ff 84 0b 05 fd c1 3f ff 43 ff ee 2b 09 7f dc 5c ff ff ff ff fc d7 ff ff 73 ff 
+frame idx=6 1920x1080 pts=200ms dec=22.01 xfer=0.00 conv=40.47 hw=0
+pkt[7] size=20436 head=02 10 fc 0b e2 37 ff fe 1c 09 c1 70 4f fd e1 80 7e dc 56 ff 04 e0 b8 b9 ff f4 03 ff 02 fe 8b 84 
+frame idx=7 1920x1080 pts=233ms dec=30.47 xfer=0.00 conv=48.59 hw=0
+frame idx=8 1920x1080 pts=266ms dec=29.15 xfer=0.00 conv=49.17 hw=0
+frame idx=9 1920x1080 pts=300ms dec=28.83 xfer=0.00 conv=47.70 hw=0
+frame idx=10 1920x1080 pts=333ms dec=27.17 xfer=0.00 conv=45.94 hw=0
+frame idx=11 1920x1080 pts=367ms dec=23.08 xfer=0.00 conv=39.86 hw=0
+frame idx=12 1920x1080 pts=400ms dec=25.79 xfer=0.00 conv=39.07 hw=0
+frame idx=13 1920x1080 pts=433ms dec=29.65 xfer=0.00 conv=42.15 hw=0
+frame idx=14 1920x1080 pts=467ms dec=26.97 xfer=0.00 conv=45.92 hw=0
+frame idx=15 1920x1080 pts=500ms dec=30.79 xfer=0.00 conv=41.19 hw=0
+frame idx=16 1920x1080 pts=533ms dec=26.69 xfer=0.00 conv=40.97 hw=0
+frame idx=17 1920x1080 pts=567ms dec=36.50 xfer=0.00 conv=41.05 hw=0
+frame idx=18 1920x1080 pts=600ms dec=38.53 xfer=0.00 conv=42.87 hw=0
+frame idx=19 1920x1080 pts=633ms dec=34.05 xfer=0.00 conv=42.18 hw=0
+frame idx=20 1920x1080 pts=667ms dec=28.96 xfer=0.00 conv=33.21 hw=0
+frame idx=21 1920x1080 pts=700ms dec=34.53 xfer=0.00 conv=38.84 hw=0
+frame idx=22 1920x1080 pts=734ms dec=34.02 xfer=0.00 conv=34.50 hw=0
+frame idx=23 1920x1080 pts=767ms dec=35.54 xfer=0.00 conv=39.58 hw=0
+frame idx=24 1920x1080 pts=800ms dec=32.66 xfer=0.00 conv=34.93 hw=0
+frame idx=25 1920x1080 pts=834ms dec=37.41 xfer=0.00 conv=41.70 hw=0
+frame idx=26 1920x1080 pts=867ms dec=34.92 xfer=0.00 conv=48.07 hw=0
+frame idx=27 1920x1080 pts=900ms dec=32.52 xfer=0.00 conv=46.89 hw=0
+frame idx=28 1920x1080 pts=934ms dec=42.93 xfer=0.00 conv=40.27 hw=0
+frame idx=29 1920x1080 pts=967ms dec=43.48 xfer=0.00 conv=42.01 hw=0
+frame idx=30 1920x1080 pts=1001ms dec=34.09 xfer=0.00 conv=39.92 hw=0
+bmp: sdmc:/probe6-f030.bmp rc=0
+cmp f030: skipped (ref=0x2101ceaf60 nv12=0x0 hw=0x0)
+frame idx=31 1920x1080 pts=1034ms dec=25.33 xfer=0.00 conv=34.95 hw=0
+frame idx=32 1920x1080 pts=1067ms dec=27.48 xfer=0.00 conv=42.34 hw=0
+frame idx=33 1920x1080 pts=1101ms dec=34.53 xfer=0.00 conv=39.14 hw=0
+frame idx=34 1920x1080 pts=1134ms dec=34.60 xfer=0.00 conv=39.78 hw=0
+frame idx=35 1920x1080 pts=1167ms dec=30.80 xfer=0.00 conv=34.31 hw=0
+frame idx=36 1920x1080 pts=1201ms dec=27.86 xfer=0.00 conv=36.98 hw=0
+frame idx=37 1920x1080 pts=1234ms dec=28.59 xfer=0.00 conv=41.56 hw=0
+frame idx=38 1920x1080 pts=1267ms dec=26.09 xfer=0.00 conv=35.58 hw=0
+frame idx=39 1920x1080 pts=1301ms dec=29.50 xfer=0.00 conv=35.56 hw=0
+frame idx=40 1920x1080 pts=1334ms dec=32.38 xfer=0.00 conv=39.28 hw=0
+frame idx=41 1920x1080 pts=1368ms dec=32.20 xfer=0.00 conv=43.18 hw=0
+frame idx=42 1920x1080 pts=1401ms dec=40.78 xfer=0.00 conv=48.88 hw=0
+frame idx=43 1920x1080 pts=1434ms dec=36.84 xfer=0.00 conv=41.35 hw=0
+frame idx=44 1920x1080 pts=1468ms dec=31.14 xfer=0.00 conv=38.36 hw=0
+frame idx=45 1920x1080 pts=1501ms dec=35.56 xfer=0.00 conv=37.61 hw=0
+frame idx=46 1920x1080 pts=1534ms dec=31.64 xfer=0.00 conv=37.61 hw=0
+frame idx=47 1920x1080 pts=1568ms dec=37.60 xfer=0.00 conv=37.14 hw=0
+frame idx=48 1920x1080 pts=1601ms dec=39.04 xfer=0.00 conv=38.11 hw=0
+frame idx=49 1920x1080 pts=1634ms dec=41.94 xfer=0.00 conv=36.35 hw=0
+frame idx=50 1920x1080 pts=1668ms dec=37.13 xfer=0.00 conv=37.17 hw=0
+frame idx=51 1920x1080 pts=1701ms dec=37.88 xfer=0.00 conv=37.64 hw=0
+frame idx=52 1920x1080 pts=1735ms dec=41.65 xfer=0.00 conv=36.34 hw=0
+frame idx=53 1920x1080 pts=1768ms dec=42.37 xfer=0.00 conv=38.77 hw=0
+frame idx=54 1920x1080 pts=1801ms dec=49.23 xfer=0.00 conv=37.98 hw=0
+frame idx=55 1920x1080 pts=1835ms dec=44.19 xfer=0.00 conv=36.41 hw=0
+frame idx=56 1920x1080 pts=1868ms dec=47.43 xfer=0.00 conv=49.88 hw=0
+frame idx=57 1920x1080 pts=1901ms dec=53.47 xfer=0.00 conv=44.24 hw=0
+frame idx=58 1920x1080 pts=1935ms dec=49.04 xfer=0.00 conv=39.06 hw=0
+frame idx=59 1920x1080 pts=1968ms dec=46.72 xfer=0.00 conv=33.45 hw=0
+frame idx=60 1920x1080 pts=2002ms dec=35.68 xfer=0.00 conv=33.85 hw=0
+frame idx=61 1920x1080 pts=2035ms dec=46.60 xfer=0.00 conv=34.51 hw=0
+frame idx=62 1920x1080 pts=2068ms dec=47.74 xfer=0.00 conv=41.97 hw=0
+frame idx=63 1920x1080 pts=2102ms dec=39.48 xfer=0.00 conv=31.66 hw=0
+frame idx=64 1920x1080 pts=2135ms dec=42.60 xfer=0.00 conv=35.47 hw=0
+frame idx=65 1920x1080 pts=2168ms dec=44.96 xfer=0.00 conv=46.00 hw=0
+frame idx=66 1920x1080 pts=2202ms dec=43.46 xfer=0.00 conv=37.55 hw=0
+frame idx=67 1920x1080 pts=2235ms dec=40.81 xfer=0.00 conv=42.49 hw=0
+frame idx=68 1920x1080 pts=2268ms dec=36.02 xfer=0.00 conv=40.16 hw=0
+frame idx=69 1920x1080 pts=2302ms dec=37.49 xfer=0.00 conv=35.07 hw=0
+frame idx=70 1920x1080 pts=2335ms dec=39.39 xfer=0.00 conv=33.90 hw=0
+frame idx=71 1920x1080 pts=2369ms dec=58.55 xfer=0.00 conv=49.69 hw=0
+frame idx=72 1920x1080 pts=2402ms dec=46.96 xfer=0.00 conv=43.63 hw=0
+frame idx=73 1920x1080 pts=2435ms dec=45.79 xfer=0.00 conv=43.66 hw=0
+frame idx=74 1920x1080 pts=2469ms dec=42.42 xfer=0.00 conv=37.65 hw=0
+frame idx=75 1920x1080 pts=2502ms dec=36.61 xfer=0.00 conv=40.11 hw=0
+frame idx=76 1920x1080 pts=2535ms dec=36.16 xfer=0.00 conv=34.88 hw=0
+frame idx=77 1920x1080 pts=2569ms dec=37.21 xfer=0.00 conv=33.50 hw=0
+frame idx=78 1920x1080 pts=2602ms dec=33.49 xfer=0.00 conv=34.15 hw=0
+frame idx=79 1920x1080 pts=2635ms dec=36.60 xfer=0.00 conv=40.37 hw=0
+frame idx=80 1920x1080 pts=2669ms dec=33.52 xfer=0.00 conv=38.15 hw=0
+frame idx=81 1920x1080 pts=2702ms dec=25.17 xfer=0.00 conv=36.47 hw=0
+frame idx=82 1920x1080 pts=2736ms dec=35.08 xfer=0.00 conv=41.16 hw=0
+frame idx=83 1920x1080 pts=2769ms dec=39.45 xfer=0.00 conv=47.93 hw=0
+frame idx=84 1920x1080 pts=2802ms dec=32.29 xfer=0.00 conv=38.24 hw=0
+frame idx=85 1920x1080 pts=2836ms dec=34.82 xfer=0.00 conv=37.02 hw=0
+frame idx=86 1920x1080 pts=2869ms dec=37.55 xfer=0.00 conv=48.40 hw=0
+frame idx=87 1920x1080 pts=2902ms dec=36.69 xfer=0.00 conv=37.60 hw=0
+frame idx=88 1920x1080 pts=2936ms dec=36.13 xfer=0.00 conv=43.16 hw=0
+frame idx=89 1920x1080 pts=2969ms dec=26.74 xfer=0.00 conv=40.58 hw=0
+frame idx=90 1920x1080 pts=3003ms dec=25.63 xfer=0.00 conv=38.50 hw=0
+frame idx=91 1920x1080 pts=3036ms dec=27.25 xfer=0.00 conv=43.87 hw=0
+frame idx=92 1920x1080 pts=3069ms dec=39.63 xfer=0.00 conv=36.74 hw=0
+frame idx=93 1920x1080 pts=3103ms dec=34.96 xfer=0.00 conv=44.63 hw=0
+frame idx=94 1920x1080 pts=3136ms dec=31.72 xfer=0.00 conv=41.33 hw=0
+frame idx=95 1920x1080 pts=3169ms dec=29.58 xfer=0.00 conv=32.34 hw=0
+frame idx=96 1920x1080 pts=3203ms dec=20.91 xfer=0.00 conv=34.38 hw=0
+frame idx=97 1920x1080 pts=3236ms dec=22.03 xfer=0.00 conv=37.17 hw=0
+frame idx=98 1920x1080 pts=3269ms dec=19.50 xfer=0.00 conv=36.09 hw=0
+frame idx=99 1920x1080 pts=3303ms dec=19.05 xfer=0.00 conv=32.83 hw=0
+frame idx=100 1920x1080 pts=3336ms dec=21.02 xfer=0.00 conv=36.30 hw=0
+frame idx=101 1920x1080 pts=3370ms dec=21.25 xfer=0.00 conv=39.31 hw=0
+frame idx=102 1920x1080 pts=3403ms dec=21.08 xfer=0.00 conv=33.14 hw=0
+frame idx=103 1920x1080 pts=3436ms dec=25.11 xfer=0.00 conv=49.60 hw=0
+frame idx=104 1920x1080 pts=3470ms dec=20.77 xfer=0.00 conv=44.68 hw=0
+frame idx=105 1920x1080 pts=3503ms dec=26.89 xfer=0.00 conv=48.35 hw=0
+frame idx=106 1920x1080 pts=3536ms dec=25.11 xfer=0.00 conv=40.16 hw=0
+frame idx=107 1920x1080 pts=3570ms dec=21.88 xfer=0.00 conv=45.65 hw=0
+frame idx=108 1920x1080 pts=3603ms dec=24.12 xfer=0.00 conv=35.01 hw=0
+frame idx=109 1920x1080 pts=3636ms dec=19.46 xfer=0.00 conv=37.85 hw=0
+frame idx=110 1920x1080 pts=3670ms dec=15.88 xfer=0.00 conv=39.68 hw=0
+frame idx=111 1920x1080 pts=3703ms dec=19.63 xfer=0.00 conv=33.52 hw=0
+frame idx=112 1920x1080 pts=3737ms dec=16.84 xfer=0.00 conv=33.19 hw=0
+frame idx=113 1920x1080 pts=3770ms dec=17.41 xfer=0.00 conv=32.85 hw=0
+frame idx=114 1920x1080 pts=3803ms dec=16.30 xfer=0.00 conv=40.44 hw=0
+frame idx=115 1920x1080 pts=3837ms dec=22.50 xfer=0.00 conv=36.15 hw=0
+frame idx=116 1920x1080 pts=3870ms dec=20.83 xfer=0.00 conv=36.43 hw=0
+frame idx=117 1920x1080 pts=3903ms dec=21.62 xfer=0.00 conv=39.25 hw=0
+frame idx=118 1920x1080 pts=3937ms dec=21.18 xfer=0.00 conv=36.95 hw=0
+frame idx=119 1920x1080 pts=3970ms dec=20.86 xfer=0.00 conv=38.54 hw=0
+frame idx=120 1920x1080 pts=4004ms dec=20.68 xfer=0.00 conv=33.58 hw=0
+SUMMARY: rendered=120 hw_frames=0 targets=2 idx=120 elapsed=10027.3 ms
+avg: dec=31.82 xfer=0.00 conv=39.46 ms/frame, 11.97 fps
+PROBE6 verdict: hw=SOFTWARE-ONLY
+PROBE6 rc=0
+=== DONE ===
+files on sdmc: nvdec-probe6.txt / probe6-f001.bmp / probe6-f030.bmp

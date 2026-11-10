@@ -1,0 +1,73 @@
+=== case 1: 20261030-081745 detach job, WMI 子进程不继承 APPDATA → fail citron_user_dir_missing ===
+--- harness.err ---
+[citron_run] FAIL: citron_user_dir_missing (run Citron once, or set CITRON_USER_DIR)
+/e/Othergames/Nintendo Switch/Workspace/GalNX/scripts/citron_run.sh: line 246: /e/Othergames/Nintendo Switch/Workspace/GalNX/workspaces/citron-harness/runs/20261030-081745-m1-sdl2/harness.err: Device or resource busy
+
+--- .done ---
+status=fail
+rc=2
+finished=2026-10-30T00:17:51Z
+
+
+=== case 2: 20261030-081901 detach, runas 路由失效 + 陈旧日志假阳性（守卫修复前） ===
+--- harness.err ---
+[citron_run] shell elevated: 1
+[citron_run] game file: /e/galnx-build/m1-sdl2/m1-sdl2.nro (type=nro) staged at /c/Users/ACETaffy/AppData/Roaming/citron/sdmc/switch/galnx-harness/m1-sdl2.nro
+[citron_run] launched via runas-deelevated; polling up to 120 s for boot evidence
+[citron_run] no citron window found; screenshot skipped
+
+--- .done ---
+status=loaded
+rc=0
+finished=2026-10-30T00:21:28Z
+
+--- run.log ---
+launch mode : runas-deelevated
+wrapper     : D:\devkitPro\msys2\tmp\galnx-harness\launch-20261030-081901-m1-sdl2.cmd
+cmdline     : "E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\web-02\citron\citron.exe" -g "C:\Users\ACETaffy\AppData\Roaming\citron\sdmc\switch\galnx-harness\m1-sdl2.nro"
+game type   : nro
+game path   : /e/galnx-build/m1-sdl2/m1-sdl2.nro
+stage path  : /c/Users/ACETaffy/AppData/Roaming/citron/sdmc/switch/galnx-harness/m1-sdl2.nro
+status      : loaded
+game        : /e/galnx-build/m1-sdl2/m1-sdl2.nro (type nro)
+window title: 
+pid         : 
+elapsed_s   : 135
+boot line   : [   2.079589] Frontend <Info> citron\main.cpp:2475:BootGame: Booting game: 010047410000B0B4 | Kirikiroid2-NX (64-bit) | 1.0.1
+signals     : title_match=0 boot_line=1 app_output=0 ()
+screenshot  :  (, 0 bytes, nonblack=0)
+log         : E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\citron-harness\runs\20261030-081901-m1-sdl2\citron_log.txt
+error       : 
+
+
+=== case 3: 20261030-082919 detach, wrapper 落在 D:/devkitPro/msys2/tmp 取不到 + 新守卫正确判 timeout ===
+--- harness.err ---
+[citron_run] shell elevated: 1
+[citron_run] game file: /e/galnx-build/m1-sdl2/m1-sdl2.nro (type=nro) staged at /c/Users/ACETaffy/AppData/Roaming/citron/sdmc/switch/galnx-harness/m1-sdl2.nro
+[citron_run] launched via schtasks-limited; polling up to 90 s for boot evidence
+[citron_run] WARNING: citron log did not change since launch; discarding boot evidence (launcher may have failed)
+[citron_run] no citron window found; screenshot skipped
+
+--- .done ---
+status=timeout
+rc=1
+finished=2026-10-30T00:31:05Z
+
+--- run.log ---
+launch mode : schtasks-limited
+wrapper     : D:\devkitPro\msys2\tmp\galnx-harness\launch-20261030-082919-m1-sdl2.cmd
+cmdline     : "E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\web-02\citron\citron.exe" -g "C:\Users\ACETaffy\AppData\Roaming\citron\sdmc\switch\galnx-harness\m1-sdl2.nro"
+game type   : nro
+game path   : /e/galnx-build/m1-sdl2/m1-sdl2.nro
+stage path  : /c/Users/ACETaffy/AppData/Roaming/citron/sdmc/switch/galnx-harness/m1-sdl2.nro
+log baseline: size=39868 mtime=1793319800
+status      : timeout
+game        : /e/galnx-build/m1-sdl2/m1-sdl2.nro (type nro)
+window title: 
+pid         : 
+elapsed_s   : 94
+boot line   : 
+signals     : title_match=0 boot_line=0 app_output=0 ()
+screenshot  :  (, 0 bytes, nonblack=0)
+log         : E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\citron-harness\runs\20261030-082919-m1-sdl2\citron_log.txt
+error       : citron_not_started: no fresh citron log after launch (launch_route=schtasks-limited; launcher may have failed; see docs/environment/citron-harness.md)

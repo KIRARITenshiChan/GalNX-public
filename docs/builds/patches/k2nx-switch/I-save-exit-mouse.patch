@@ -1,0 +1,136 @@
+diff --git a/src/core/environ/cocos2d/MainScene.cpp b/src/core/environ/cocos2d/MainScene.cpp
+index facd7ed..17b3fd3 100644
+--- a/src/core/environ/cocos2d/MainScene.cpp
++++ b/src/core/environ/cocos2d/MainScene.cpp
+@@ -49,6 +49,27 @@ static void GalNXLog(const char *fmt, ...) {
+ #include "Exception.h"
+ #include "win32/SystemControl.h"
+ 
++// [GalNX] patch I: the game persists its settings, the save slot comments, the NEW marker and the
++// continue data only from MainWindow.finalize() (TraceSave + SystemSave). On Switch the close path
++// leaves the process before the TJS window is invalidated, so finalize never runs and all of those
++// values revert to the last properly closed session. Run the same two saves before leaving.
++static bool _galnxSaveOnExitDone = false;
++static void GalNX_SaveGameDataOnExit()
++{
++	if (_galnxSaveOnExitDone) return;
++	_galnxSaveOnExitDone = true;
++	try {
++		TVPExecuteScript(ttstr(TJS_W(
++			"if(MainObj !== void){"
++			"if(MainObj.TraceSave !== void)MainObj.TraceSave();"
++			"if(MainObj.SystemSave !== void)MainObj.SystemSave();"
++			"}")));
++		GalNXLog("[close] persisted system data (TraceSave + SystemSave)");
++	} catch (...) {
++		GalNXLog("[close] persisting system data raised an exception");
++	}
++}
++
+ USING_NS_CC;
+ 
+ enum SCENE_ORDER {
+@@ -1292,11 +1313,11 @@ public:
+                     // TJS world down out of order makes the game finalizers touch an already dead
+                     // MainWnd (Member SystemObj does not exist @line(365) checkdialog.tjs). Leave the
+                     // process instead, like the user initiated close path in OnCloseQueryCalled does.
+-                    GalNXLog("[close] program close of main window confirmed; terminating application");
+-                    TJSNativeInstance = NULL;
+-                    SetVisible(false);
+-                    TVPExitApplication(0);
+-                    return;
++					GalNX_SaveGameDataOnExit();
++					GalNXLog("[close] program close of main window confirmed; terminating application after save");
++					SetVisible(false);
++					scheduleOnce([this](float){ TVPExitApplication(0); }, 1.0f, "galnx-exit");
++					return;
+ #endif
+ 				} else 			{
+ 					// not the main window
+@@ -1415,8 +1436,10 @@ public:
+ 				// MainWnd die with: Member "SystemObj" does not exist. The game has already
+ 				// stored its data in its own close handler, so exiting the application is safe.
+ 				if (TJSNativeInstance && TJSNativeInstance->IsMainWindow()) {
+-					GalNXLog("[close] main window close confirmed; terminating application");
+-					TVPExitApplication(0);
++					GalNX_SaveGameDataOnExit();
++					GalNXLog("[close] main window close confirmed; terminating application after save");
++					SetVisible(false);
++					scheduleOnce([this](float){ TVPExitApplication(0); }, 1.0f, "galnx-exit");
+ 					return;
+ 				}
+ #endif
+@@ -2353,18 +2376,17 @@ void TVPMainScene::onTextInput(const std::string &text) {
+ }
+ 
+ void TVPMainScene::onAxisEvent(cocos2d::Controller* ctrl, int keyCode, cocos2d::Event *e) {
+-	if (!_currentWindowLayer || !_currentWindowLayer->PrimaryLayerArea) return;
+ #ifdef __SWITCH__
+     // [GalNX] patch G: the right stick drives the virtual cursor (the left stick is the wheel).
+     // The cursor is created on the first stick push so that ZR / ZL have something to click.
+-    if (!_virutalMouseMode && !_windowMgrOverlay && UINode->getChildren().empty() &&
++    if (!_virutalMouseMode && _currentWindowLayer && !_windowMgrOverlay && UINode->getChildren().empty() &&
+         (keyCode == cocos2d::Controller::JOYSTICK_RIGHT_X || keyCode == cocos2d::Controller::JOYSTICK_RIGHT_Y) &&
+         std::abs(ctrl->getKeyStatus(keyCode).value) > 0.5f) {
+         showVirtualMouseCursor(true);
+         _k2sStickCursor = true;
+     }
+     // move the cursor in GameNode space (y up; the stick y is down-positive)
+-    if (_virutalMouseMode && !_windowMgrOverlay && _mouseCursor &&
++    if (_virutalMouseMode && _currentWindowLayer && !_windowMgrOverlay && _mouseCursor &&
+         (keyCode == cocos2d::Controller::JOYSTICK_RIGHT_X || keyCode == cocos2d::Controller::JOYSTICK_RIGHT_Y)) {
+         const float dead = 0.15f;
+         float v = ctrl->getKeyStatus(keyCode).value;
+@@ -2397,6 +2419,7 @@ void TVPMainScene::onAxisEvent(cocos2d::Controller* ctrl, int keyCode, cocos2d::
+         return;
+     }
+ #endif
++	if (!_currentWindowLayer || !_currentWindowLayer->PrimaryLayerArea) return;
+ 	if (!_virutalMouseMode || _windowMgrOverlay) return;
+ 	const float threashold = 0.1f;
+ 	const cocos2d::Controller::KeyStatus& keyStatus = ctrl->getKeyStatus(keyCode);
+@@ -2644,14 +2667,22 @@ void TVPMainScene::onPadKeyDown(cocos2d::Controller* ctrl, int keyCode, cocos2d:
+         return;
+     case cocos2d::Controller::AXIS_RIGHT_TRIGGER:
+     case cocos2d::Controller::AXIS_LEFT_TRIGGER: {
++        // [GalNX] patch I: ZR / ZL are held mouse buttons, not one-shot clicks, so the right
++        // stick can drag a slider or scrollbar while the button stays down. A short tap ends
++        // with onMouseUp, which the game still handles as a normal click.
+         if (_currentWindowLayer) {
+-            if (!_mouseCursor || !_mouseCursor->isVisible()) showVirtualMouseCursor(true);
++            if (!_mouseCursor) showVirtualMouseCursor(true);
+             if (_mouseCursor) {
++                // [GalNX] patch I: ZR / ZL bring the cursor back after its 3 s fade-out
++                _mouseCursor->stopAllActions();
++                _mouseCursor->setOpacity(255);
++                _refadeMouseCursor();
+                 const bool rightClick = keyCode == cocos2d::Controller::AXIS_LEFT_TRIGGER;
+                 _mouseBtn = rightClick ? ::mbRight : ::mbLeft;
+-                _currentWindowLayer->onMouseClick(GameNode->convertToWorldSpace(_mouseCursor->getPosition()));
+-                _mouseBtn = ::mbLeft;
+-                GalNXLog("[pad] click %s", rightClick ? "right" : "left");
++                Vec2 pt = GameNode->convertToWorldSpace(_mouseCursor->getPosition());
++                _currentWindowLayer->onMouseMove(pt);
++                _currentWindowLayer->onMouseDown(pt);
++                GalNXLog("[pad] mouse down %s", rightClick ? "right" : "left");
+             }
+         }
+         return;
+@@ -2670,6 +2701,17 @@ void TVPMainScene::onPadKeyDown(cocos2d::Controller* ctrl, int keyCode, cocos2d:
+ }
+ 
+ void TVPMainScene::onPadKeyUp(cocos2d::Controller* ctrl, int keyCode, cocos2d::Event *e) {
++    // [GalNX] patch I: release the ZR / ZL held mouse button (drag support).
++    if (keyCode == cocos2d::Controller::AXIS_RIGHT_TRIGGER || keyCode == cocos2d::Controller::AXIS_LEFT_TRIGGER) {
++        if (_currentWindowLayer && _mouseCursor) {
++            const bool rightClick = keyCode == cocos2d::Controller::AXIS_LEFT_TRIGGER;
++            _mouseBtn = rightClick ? ::mbRight : ::mbLeft;
++            _currentWindowLayer->onMouseUp(GameNode->convertToWorldSpace(_mouseCursor->getPosition()));
++            _mouseBtn = ::mbLeft;
++            GalNXLog("[pad] mouse up %s", rightClick ? "right" : "left");
++        }
++        return;
++    }
+     // [GalNX] patch H: release the Ctrl that the R shoulder holds down.
+     if (keyCode == cocos2d::Controller::BUTTON_RIGHT_SHOULDER) {
+         if (_currentWindowLayer) {

@@ -1,0 +1,50 @@
+# Engine descriptor for the ONScripter-NX adapter (docs/engines/README.md).
+# Mirrors the built-in descriptor in src/galnx/engines/registry.py; kept as a
+# reference for adding adapters, and validated by tests/test_engines_descriptor.py.
+id: onscripter-nx
+display_name: ONScripter-NX
+upstream_url: https://github.com/clamintus/onscripter-nx
+pinned_commit: a8439a86393f74c503d28df176f010ca544af56f
+pinned_version: "ONScripter-NX@a8439a86 (v0.3.1, 2026-01-14)"
+license_spdx: GPL-2.0-or-later
+license_url: https://github.com/clamintus/onscripter-nx/blob/main/COPYING
+license_notes: >-
+  COPYING (18332 bytes) is the GPLv2 text; 24 of the 25 source/ files declare GPLv2 or any
+  later version in their file headers, so the combined work is GPL-2.0-or-later. Shipping a
+  built NRO therefore requires the corresponding source.
+target_kind: nro
+build_backend: devkitpro-make
+capabilities:
+  video:
+    supported: true
+    note: SDL2 renderer through switch-sdl2; Citron Nightly 0237a9b88 passed the R1-R5 run.
+  audio:
+    supported: false
+    note: SDL2_mixer plus switch-libvorbis/opus are linked in; audio output is not verified on hardware.
+  input:
+    supported: true
+    note: Keyboard/keypad mapping in source/switch_mitm.cpp; Citron captures keyboard only through PostMessage key events.
+  save:
+    supported: false
+    note: ONScripter writes save*.dat to the process CWD; writability under a RomFS-only install is not verified.
+  touch:
+    supported: false
+    note: Touch injection is commented out in the upstream Switch backend.
+default_input_profile: kb_mouse
+artifact_naming: "{id}-{version}.nro"
+content_layout:
+  mode: romfs
+  entry: ons-content
+  destination: romfs/
+  notes: >-
+    ONScripter-NX embeds the checked-out romfs/ directory at make time: copy the game content
+    into src/engine/romfs/ before building and run make clean afterwards. Content needs
+    *define/game/*start and at least one arc.nsa or arc.sar (a 0-byte placeholder passes the
+    startup gate).
+status: ready
+evidence_urls:
+  - docs/builds/007-onscripter-nx.md
+notes: >-
+  Verified end-to-end in Citron (docs/builds/007); hardware unverified. Open framework gaps:
+  no multi-game launcher (single arc.nsa directory model) and no save/load menu UI.
+  GPL-2.0-or-later distribution needs the corresponding source.

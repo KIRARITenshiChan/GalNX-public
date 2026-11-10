@@ -1,0 +1,87 @@
+[pad] key=1016 virt=0 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x0
+[tjs] loadui-nodlg -> 0
+[tjs] loadui-mainobj -> Object
+[tjs] loadui-open -> (object 0x20addf3c0:0x20addf3c0)
+[tjs] loadui-active -> (object 0x20addf3c0:0x20addf3c0)
+[tjs] loadui-ok -> load-ui-shown
+[pad] key=1008 virt=0 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x0
+[pad] key=1011 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1011 drawerOpen=0 cursor=(480.0,270.0)
+[pad] key=1011 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1011 drawerOpen=0 cursor=(480.0,246.0)
+[pad] key=1011 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1011 drawerOpen=0 cursor=(480.0,222.0)
+[pad] key=1011 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1011 drawerOpen=0 cursor=(480.0,198.0)
+[pad] key=1011 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1011 drawerOpen=0 cursor=(480.0,174.0)
+[pad] key=1011 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1011 drawerOpen=0 cursor=(480.0,150.0)
+[pad] key=1011 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1011 drawerOpen=0 cursor=(480.0,126.0)
+[pad] key=1011 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1011 drawerOpen=0 cursor=(480.0,102.0)
+[pad] key=1011 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1011 drawerOpen=0 cursor=(480.0,78.0)
+[pad] key=1012 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1012 drawerOpen=0 cursor=(480.0,54.0)
+[pad] key=1012 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1012 drawerOpen=0 cursor=(456.0,54.0)
+[pad] key=1012 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1012 drawerOpen=0 cursor=(432.0,54.0)
+[pad] key=1012 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1012 drawerOpen=0 cursor=(408.0,54.0)
+[pad] key=1012 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1012 drawerOpen=0 cursor=(384.0,54.0)
+[pad] key=1012 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1012 drawerOpen=0 cursor=(360.0,54.0)
+[pad] key=1012 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1012 drawerOpen=0 cursor=(336.0,54.0)
+[pad] key=1012 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1012 drawerOpen=0 cursor=(312.0,54.0)
+[pad] key=1012 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1012 drawerOpen=0 cursor=(288.0,54.0)
+[pad] key=1012 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1012 drawerOpen=0 cursor=(264.0,54.0)
+[pad] key=1012 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1012 drawerOpen=0 cursor=(240.0,54.0)
+[pad] key=1010 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1010 drawerOpen=0 cursor=(216.0,54.0)
+[pad] key=1010 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1010 drawerOpen=0 cursor=(216.0,78.0)
+[pad] key=1010 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1010 drawerOpen=0 cursor=(216.0,102.0)
+[pad] key=1010 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1010 drawerOpen=0 cursor=(216.0,126.0)
+[pad] key=1010 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1010 drawerOpen=0 cursor=(216.0,150.0)
+[pad] key=1010 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1010 drawerOpen=0 cursor=(216.0,174.0)
+[pad] key=1010 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1010 drawerOpen=0 cursor=(216.0,198.0)
+[pad] key=1010 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1010 drawerOpen=0 cursor=(216.0,222.0)
+[pad] key=1010 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1010 drawerOpen=0 cursor=(216.0,246.0)
+[pad] key=1010 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1010 drawerOpen=0 cursor=(216.0,270.0)
+[pad] key=1010 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1010 drawerOpen=0 cursor=(216.0,294.0)
+[pad] key=1010 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1010 drawerOpen=0 cursor=(216.0,318.0)
+[pad] key=1010 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1010 drawerOpen=0 cursor=(216.0,342.0)
+[pad] key=1010 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1010 drawerOpen=0 cursor=(216.0,366.0)
+[pad] key=1010 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1010 drawerOpen=0 cursor=(216.0,390.0)
+[pad] key=1004 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1004 drawerOpen=0 cursor=(216.0,414.0)
+[pad] key=1004 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[virt] key=1004 drawerOpen=0 cursor=(216.0,414.0)
+[pad] key=1021 virt=1 uiChildren=0 gamemenu=0x20a1d3ae0 cursor=0x212037040
+[tjs] preset-title -> eTJS: Member "f" does not exist
+[tjs] saveui-nodlg -> 0
+[tjs] ui-open -> (object 0x20adbb460:0x20adbb460)
+[tjs] ui-active -> (object 0x20adbb460:0x20adbb460)
+[tjs] ui-ok -> ui-shown

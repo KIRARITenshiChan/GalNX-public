@@ -1,0 +1,135 @@
+=== GalNX NVDEC probe5 v1 ===
+build: Nov  8 2026 15:48:46
+nv: keeping libnx default nv service type (probe3 decoded with it)
+--- Phase A: envideo MPEG-2 reference decode ---
+ref: arrays setup=344 bitstream=6426 sliceoffs=32
+ref: device_create rc=0 dev=0x5739c44020
+ref: device info tegra_layout=1
+ref: map_create(cmdbuf) rc=0
+ref: channel_create(nvdec) rc=0
+ref: channel_create(copy) rc=0
+ref: map_pin(cmdbuf, nvdec) rc=0
+ref: map_pin(cmdbuf, copy) rc=0
+ref: cmdbuf_create(nvdec) rc=0
+ref: cmdbuf_create(copy) rc=0
+ref: cmdbuf_map size=65536
+ref: cmdbuf_add_memory(nvdec) rc=0
+ref: cmdbuf_add_memory(copy) rc=0
+ref: map_create(input) size=8192 rc=0
+ref: map_pin(input, nvdec) rc=0
+ref: map_create(frame) size=24576 rc=0
+ref: map_pin(frame, nvdec) rc=0
+ref: map_pin(frame, copy) rc=0
+ref: map_create(result) size=24576 rc=0
+ref: map_pin(result, copy) rc=0
+ref: input layout status=0 setup=256 bitstream=768 sliceoffs=7424 input_size=8192
+ref: device tegra_layout=1 -> tileFormat=1 (setup was 1)
+ref: push nvdec commands
+ref: submit nvdec chapter
+ref: decode fence = 68719477795
+ref: decode signalled after 0 us (poll)
+ref: build copy chapter
+ref: submit copy chapter
+ref: copy fence = 111680022267
+ref: copy signalled after 0 us (poll)
+ref: status error=0 mbs_ok=64 mbs_err=0 cycles=5042 slice_err=0
+ref: status+00 = 40 00 00 00 00 00 00 00 b2 13 00 00 00 00 00 00
+ref: status+16 = 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ref: status+32 = 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ref: status+48 = 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ref: status verdict = OK
+ref: hash map(24576 B)=a2c4a330592602d5 nv12(24576 B)=a2c4a330592602d5 expected=a2c4a330592602d5
+ref: result+00 = 4d 47 4b 4e 47 4b 4e 48 4e 52 52 51 51 51 52 4f
+ref: result+16 = 52 50 4e 52 52 51 93 90 8f 8d 92 8b 93 93 8f 93
+ref: wrote sdmc:/probe5-mpeg2.nv12 (24576 B)
+ref: bmp rc=0
+REF_MPEG2: status=OK hash=MATCH verdict=PASS
+--- Phase A done rc=0 ---
+PHASE A verdict: PASS (rc=0)
+PHASE A files: sdmc:/probe5-mpeg2.nv12 sdmc:/probe5-mpeg2.bmp
+--- Phase B: FFmpeg VC-1 hwaccel probe (informational) ---
+input: sdmc:/nvdec-poc.wmv
+frmrtq_postproc=7, bitrtq_postproc=31
+LoopFilter=0, ChromaFormat=1, Pulldown=1, Interlace: 0
+TFCTRflag=0, FINTERPflag=0
+BrokenLink=0, ClosedEntry=0, PanscanFlag=0
+RefDist=1, Postproc=1, FastUVMC=0, ExtMV=1
+DQuant=0, VSTransform=1, Overlap=0, Qmode=0
+frmrtq_postproc=7, bitrtq_postproc=31
+LoopFilter=0, ChromaFormat=1, Pulldown=1, Interlace: 0
+TFCTRflag=0, FINTERPflag=0
+BrokenLink=0, ClosedEntry=0, PanscanFlag=0
+RefDist=1, Postproc=1, FastUVMC=0, ExtMV=1
+DQuant=0, VSTransform=1, Overlap=0, Qmode=0
+swref: found=2 1920x1080 time=1024.7 ms err=-
+swref[0]: target frame 1 -> ok
+swref[1]: target frame 30 -> ok
+frmrtq_postproc=7, bitrtq_postproc=31
+LoopFilter=0, ChromaFormat=1, Pulldown=1, Interlace: 0
+TFCTRflag=0, FINTERPflag=0
+BrokenLink=0, ClosedEntry=0, PanscanFlag=0
+RefDist=1, Postproc=1, FastUVMC=0, ExtMV=1
+DQuant=0, VSTransform=1, Overlap=0, Qmode=0
+frmrtq_postproc=7, bitrtq_postproc=31
+LoopFilter=0, ChromaFormat=1, Pulldown=1, Interlace: 0
+TFCTRflag=0, FINTERPflag=0
+BrokenLink=0, ClosedEntry=0, PanscanFlag=0
+RefDist=1, Postproc=1, FastUVMC=0, ExtMV=1
+DQuant=0, VSTransform=1, Overlap=0, Qmode=0
+info: 1920x1080 codec=vc1(70) pix=yuv420p fps=59.940 duration=25130 ms frames_hint=-1
+sdl: window=0x573a4594b0 renderer=0x573ae16c20 texture=0x5740e33dc0
+frame idx=1 1920x1080 pts=33ms dec=6.96 xfer=0.00 conv=35.45 hw=1
+bmp: sdmc:/probe5-f001.bmp rc=0
+frame idx=30 1920x1080 pts=1001ms dec=9.43 xfer=0.00 conv=35.34 hw=1
+bmp: sdmc:/probe5-f030.bmp rc=0
+decode error: avcodec_send_packet: Unknown error occurred (-1313558101 / 0xb1b4b1ab)
+--- probe report ---
+probe4: prefix=sdmc:/probe5 targets=1 30 
+pkt[0] size=9198 head = c0 82 00 00 03 00 00 03 00 00 03 00 00 03 01 06 07 ee e1 f0 f8 7c 3e 1f 0f 87 c3 e1 f0 f8 7c 3e
+pkt[1] size=1 head = f2
+f001: sw_fmt=nv12 1920x1080 ls=(1920,1920,0) off=(0,2088960,-136896512) map=3133440 B is_pitch=0 gob_height=2 colorspace=2 range=0
+f001: fence_poll NOT signalled after 2000000 us (poll rc=0), wait(0) rc=-3420
+f001: fence wait took=2000940 us
+f001: raw head = 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+f001: trial tile_rows=16 off1=2088960 rows0=1088 detile=2.97ms psnrY=0.71
+f001: trial tile_rows=16 off1=2073600 rows0=1080 detile=3.09ms psnrY=0.71
+f001: trial tile_rows=8 off1=2088960 rows0=1088 detile=3.12ms psnrY=0.71
+f001: trial tile_rows=8 off1=2073600 rows0=1080 detile=2.96ms psnrY=0.71
+f001: trial tile_rows=32 off1=2088960 rows0=1088 detile=3.14ms psnrY=0.71
+f001: trial tile_rows=32 off1=2073600 rows0=1080 detile=3.07ms psnrY=0.71
+f001: trial tile_rows=64 off1=2088960 rows0=1088 detile=2.97ms psnrY=0.71
+f001: trial tile_rows=64 off1=2073600 rows0=1080 detile=3.10ms psnrY=0.71
+f001: chosen tile_rows=16 off1=2088960 psnrY=0.71
+f001: wrote sdmc:/probe5-f001-raw.bin (3133440 B) rc=0
+f001: wrote sdmc:/probe5-f001-ref.yuv (3110400 B) rc=0
+f001: wrote sdmc:/probe5-f001-detiled.yuv (3110400 B) rc=0
+f001: detile=4.59ms convert=30.86ms
+pkt[2] size=11774 head = c0 83 00 00 03 00 00 03 00 00 03 02 00 00 03 00 00 03 00 80 00 00 10 00 00 03 00 06 00 00 03 00
+pkt[3] size=13562 head = c0 83 00 00 03 00 04 00 00 03 00 20 00 00 03 00 00 20 00 00 03 01 00 00 03 00 00 03 01 40 00 00
+pkt[4] size=16306 head = c0 80 89 7f fb ff c0 b1 85 ff ff ff ff 57 16 b5 af ff fd 38 3f fe 06 85 75 7f ff ff db ff 07 c6
+pkt[5] size=20168 head = c0 80 ff ed b3 8c 33 0c 30 c4 06 2e d0 79 b8 07 e2 38 8e 23 88 e2 38 8e 21 81 fc e5 21 0c 66 25
+pkt[6] size=23628 head = 12 10 ff a0 c8 17 ff 84 0b 05 fd c1 3f ff 43 ff ee 2b 09 7f dc 5c ff ff ff ff fc d7 ff ff 73 ff
+pkt[7] size=20436 head = 02 10 fc 0b e2 37 ff fe 1c 09 c1 70 4f fd e1 80 7e dc 56 ff 04 e0 b8 b9 ff f4 03 ff 02 fe 8b 84
+f030: sw_fmt=nv12 1920x1080 ls=(1920,1920,0) off=(0,2088960,-150028288) map=3133440 B is_pitch=0 gob_height=2 colorspace=2 range=0
+f030: fence_poll NOT signalled after 2000000 us (poll rc=0), wait(0) rc=-3420
+f030: fence wait took=2001001 us
+f030: raw head = 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+f030: trial tile_rows=16 off1=2088960 rows0=1088 detile=2.97ms psnrY=3.40
+f030: trial tile_rows=16 off1=2073600 rows0=1080 detile=3.11ms psnrY=3.40
+f030: trial tile_rows=8 off1=2088960 rows0=1088 detile=3.06ms psnrY=3.40
+f030: trial tile_rows=8 off1=2073600 rows0=1080 detile=2.94ms psnrY=3.40
+f030: trial tile_rows=32 off1=2088960 rows0=1088 detile=3.11ms psnrY=3.40
+f030: trial tile_rows=32 off1=2073600 rows0=1080 detile=3.00ms psnrY=3.40
+f030: trial tile_rows=64 off1=2088960 rows0=1088 detile=3.11ms psnrY=3.40
+f030: trial tile_rows=64 off1=2073600 rows0=1080 detile=3.10ms psnrY=3.40
+f030: chosen tile_rows=16 off1=2088960 psnrY=3.40
+f030: wrote sdmc:/probe5-f030-raw.bin (3133440 B) rc=0
+f030: wrote sdmc:/probe5-f030-ref.yuv (3110400 B) rc=0
+f030: wrote sdmc:/probe5-f030-detiled.yuv (3110400 B) rc=0
+f030: detile=4.48ms convert=30.86ms
+--- end report ---
+summary: rendered=2 skipped=71 hw=1 idx=73 elapsed=20130.8 ms
+decode-only: 275.76 ms/frame (3.63 fps, no Copy Engine transfer)
+PHASE B rc=0 (informational; see report above)
+=== DONE ===
+files on sdmc: probe5-mpeg2.* / probe5-f*.bmp / probe5-report.txt / nvdec-probe5.txt

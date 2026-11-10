@@ -1,0 +1,24 @@
+launch mode : schtasks-limited
+wrapper     : C:\ProgramData\galnx-harness\launch-20261105-233226-IROSEKA_FHD-010047420000a000-v1.1.1-test.cmd
+cmdline     : "E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\web-02\citron\citron.exe" -g "E:\galnx-build\p25\out\IROSEKA_FHD-010047420000a000-v1.1.1-test.nsp"
+game type   : nsp
+game path   : /e/galnx-build/p25/out/IROSEKA_FHD-010047420000a000-v1.1.1-test.nsp
+stage path  : /e/galnx-build/p25/out/IROSEKA_FHD-010047420000a000-v1.1.1-test.nsp
+log baseline: size=288306 mtime=1793892643
+status      : loaded
+game        : /e/galnx-build/p25/out/IROSEKA_FHD-010047420000a000-v1.1.1-test.nsp (type nsp)
+window title: citron Nightly | 0237a9b88 | IROSEKA FHD (64-bit) | 1.1.1-test | NVIDIA
+pid         : 32068
+elapsed_s   : 19
+boot line   : [   1.709423] Frontend <Info> citron\main.cpp:2475:BootGame: Booting game: 010047420000A000 | IROSEKA FHD (64-bit) | 1.1.1-test
+signals     : title_match=1 boot_line=1 app_output=1 (screenshot_nonblack)
+screenshot  : E:\galnx-build\p25\run-lead-v111c\20261105-233226-IROSEKA_FHD-010047420000a000-v1.1.1-test\window.png (printwindow, 1460636 bytes, nonblack=0.9018)
+log         : E:\galnx-build\p25\run-lead-v111c\20261105-233226-IROSEKA_FHD-010047420000a000-v1.1.1-test\citron_log.txt
+error       : 
+input       : injected=1 focus_ok= clicks=2 keys_sent=6 diff_ratio= region=1728x1016 y=70-950
+input shots : before= after=
+input error : 
+input steps : done=1 failed=0 diff_ratio=0.805479
+steps file  : E:\galnx-build\p25\run-lead-v111c\20261105-233226-IROSEKA_FHD-010047420000a000-v1.1.1-test\input-steps.tsv
+steps final : E:\galnx-build\p25\run-lead-v111c\20261105-233226-IROSEKA_FHD-010047420000a000-v1.1.1-test\window-steps-final.png
+steps error : 

@@ -1,0 +1,48 @@
+# P1d RomFS round-trip 校验汇总（E1/E3）
+日期: 2026-10-30
+方法: nstool v1.9.2 -x 抽 NCA -> --part1 抽 romfs -> cmp_tree.py 逐文件 sha256 比对（只读校验，不运行）
+
+## 1) 200 MiB 档（scale200-010047410000a020.nsp）
+- Program NCA d1fbdc9d5eb86abb40ab77c7b5c42b6b.nca 210,574,336 B；--fstree 12 条目
+- --part1 抽回后 12/12 文件 sha256 一致 → ROUNDTRIP OK
+
+## 2) 3400 MiB 档（scale3400-010047410000a030.nsp）
+- Program NCA d618a92001b7b50d00827d6254d6f8ce.nca 3,572,571,136 B；--fstree 30 行（12 条目）
+- --part1 抽回后 12/12 文件 sha256 一致 → ROUNDTRIP OK
+
+## 3) 2860 MiB 档 run1（scale2860-010047410000a050.nsp）
+- 108/108 文件、无缺失/多余；唯一 content_diff = game_files.txt：构建时点 romfs-a1 为 543 B 版（startup=/kirikiri/haruno），构建期间 Lead 更新为 552 B（startup=/kirikiri/haruno/data.xp3，sha256 e511f0d8c155e354699b3e19dd3031f6f73732f469cfc8ddba972ae5863a9b51），属并发编辑，非打包损失。
+- 结论：打包链路无损；NSP 内为构建时点快照。
+
+## 4) K2NX 修复版（Kirikiroid2-NX-fixed-010047410000b0b3.nsp，预编译 NRO -> NSP）
+- 修复前：83 files / 258,999 B（丢根级 DroidSansFallback.ttf 7,287,728 B + default.cur 4,286 B；258,999+7,287,728+4,286 = 7,551,013 精确吻合）
+- 修复后：85 files / 7,551,013 B；--part1 抽回 vs build/k2nx-fixed/in/extracted-romfs：
+  A files=85 bytes=7551013 / B files=85 bytes=7551013 / only_in_A=0 / only_in_B=0 / content_diff=0 → MATCH
+- 与 A1 源 romfs 的 UI 部分对比：85 文件 only_in_A=0、content_diff=0；
+  与 k2nx-ws/build/romfs（Lead 重建源码 romfs，85 文件 7,551,013 B）对比同样 MATCH（only_in_A=0、content_diff=0）。
+
+## 5) A1 最终（K2NX-A1-selfcontained-010047410000b0b2.nsp）
+- A/B: A files=108 bytes=2,878,185,598 / B files=108 bytes=2,878,185,598 / only_in_A=0 / only_in_B=0 / content_diff=0 → MATCH
+- payload 22 文件 22/22 sha256 一致：
+OK 15707da93ad08e82ac8db012d4c4d713a58b342833878f99ac17cd7405366415       198550 data.xp3
+OK 5fef39fd848185f7c257cd0fdaeef0eb3e3cff524c6eb10f4ca6cbdd7be91bcf          769 haruno.cf
+OK 9b4117f6ac83afe83b3cf398c82abba241c676ad464414e4cd210b0fc3cb5e65     22230877 image00.xp3
+OK 8285fc1d362a8553029418fe68225e581081805a247a247da8bc593722b0155f    542381164 image01.xp3
+OK 73c54d2887c97fa22c398d1b235fc6b97c40f4ab0bf45175e65a39b1dca599da    472173601 image02.xp3
+OK 5c396c7376de9b7b8b719d0b175dbade4f4a24c3d60f271898c3901ab789fc64     74766214 image02_2.xp3
+OK b95dda50401d245c2dca61791281f1904d16d829d5eb606f4c286c4b3232ff7b     31429614 image03.xp3
+OK a89bdf9aade10c656fa2b5254b5033c5046e00492d6b5fb619596180f9591e81    646837304 image04.xp3
+OK e6b9f07ac64f23da14b110b1cba62610dead654129b3b7ff67f5b1b5eed14e1c     14762304 image06.xp3
+OK ee24984680b6a47089044d7669663d11772d870b09c6d0e582b95f3efd00a702    110513170 media.xp3
+OK 0118480c7adfb2788c2d5fcbf37003ea8b8580f49b07e07c07aad6bf69545c19    164394346 movie.xp3
+OK 125dc3ce7d521df1b9543bd3fd964897b7755eed460a0ba56df08d24cdab0080        86016 plugin/csvParser.tpm
+OK 9c1890f29c96a1f99bb77ec845421d171c47bd16de478ede5b93c4e9a793afa6       237568 plugin/extrans.tpm
+OK 17aa4050c737aeb26abfdb9b495d178fd25436c25d1130fe9e37139710823fd7       128000 plugin/fstat.tpm
+OK d61a1d88eb9037503fefe4992b2ff7888c274f8bf30402d8c472433d748f7990       126976 plugin/layerExImage.tpm
+OK ca0f7dfc1808f49300199e2f45d05004c08f2e7615adabcb982b0ebca22d728d       229376 plugin/windowEx.tpm
+OK 3bcfdd03704af07a8758e2484a9014a510e34c4e7a58a2a55b32a59289b13d5e        57856 plugin/wumsadp.tpm
+OK 302b1eb97ed0f6110904e84c11bf7436e4cdddd414f4d24d105aba687f32b47f       200704 plugin/wuvorbis.tpm
+OK b07ed66c9eee9f8f9587bed67d55ec8283460de705b39bc62b19f4cadd491b19      1551254 scenario.xp3
+OK fa10a3d537c82a73e88b81128fe97cc25d8ecc6acebf5fd0bc81cff007444ab5     17431512 voice01.xp3
+OK 55ef1c310b3337915655863a2c738e0c49202848b59fd0b640d5e32daf287a6d    717704696 voice02.xp3
+OK 63988dff208c153968b9e0edb7dd9c2732af6479650116c5ba9a01d371fec874     53192145 voice02_2.xp3

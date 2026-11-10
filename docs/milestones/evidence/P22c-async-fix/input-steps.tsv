@@ -1,0 +1,73 @@
+0	wait	wait:16000	ok	waited 16000ms		16869
+1	capture	capture:c0-title	ok	bytes=1418874 nonblack=0.9018	E:\galnx-build\p22\run-nsp-clean\20261105-161131-IROSEKA_FHD-010047420000a000-v1.1.0-test\step-02-c0-title.png	2616
+2	click	click:1386,638	ok	focus_ok=1		2336
+3	wait	wait:6000	ok	waited 6000ms		6889
+4	capture	capture:c1-list	ok	bytes=1824072 nonblack=0.9018	E:\galnx-build\p22\run-nsp-clean\20261105-161131-IROSEKA_FHD-010047420000a000-v1.1.0-test\step-05-c1-list.png	2696
+5	click	click:455,911	ok	focus_ok=1		2420
+6	wait	wait:18000	ok	waited 18000ms		18855
+7	capture	capture:c2-story	ok	bytes=1776802 nonblack=0.9018	E:\galnx-build\p22\run-nsp-clean\20261105-161131-IROSEKA_FHD-010047420000a000-v1.1.0-test\step-08-c2-story.png	2765
+8	key	key:C	ok	keys_sent=1		2012
+9	wait	wait:4000	ok	waited 4000ms		4838
+10	key	key:C	ok	keys_sent=1		2028
+11	wait	wait:4000	ok	waited 4000ms		4841
+12	key	key:C	ok	keys_sent=1		1950
+13	wait	wait:4000	ok	waited 4000ms		4860
+14	key	key:C	ok	keys_sent=1		1949
+15	wait	wait:4000	ok	waited 4000ms		4858
+16	key	key:C	ok	keys_sent=1		1935
+17	wait	wait:4000	ok	waited 4000ms		4884
+18	key	key:C	ok	keys_sent=1		1949
+19	wait	wait:4000	ok	waited 4000ms		4883
+20	key	key:C	ok	keys_sent=1		2027
+21	wait	wait:4000	ok	waited 4000ms		4843
+22	key	key:C	ok	keys_sent=1		1919
+23	wait	wait:4000	ok	waited 4000ms		4907
+24	key	key:C	ok	keys_sent=1		1963
+25	wait	wait:4000	ok	waited 4000ms		4857
+26	key	key:C	ok	keys_sent=1		1917
+27	wait	wait:4000	ok	waited 4000ms		4855
+28	capture	capture:c3-min1	ok	bytes=1738726 nonblack=0.9018	E:\galnx-build\p22\run-nsp-clean\20261105-161131-IROSEKA_FHD-010047420000a000-v1.1.0-test\step-29-c3-min1.png	2646
+29	key	key:C	ok	keys_sent=1		2104
+30	wait	wait:4000	ok	waited 4000ms		4840
+31	key	key:C	ok	keys_sent=1		1840
+32	wait	wait:4000	ok	waited 4000ms		4827
+33	key	key:C	ok	keys_sent=1		1918
+34	wait	wait:4000	ok	waited 4000ms		4858
+35	key	key:C	ok	keys_sent=1		1983
+36	wait	wait:4000	ok	waited 4000ms		4855
+37	key	key:C	ok	keys_sent=1		2013
+38	wait	wait:4000	ok	waited 4000ms		4866
+39	key	key:C	ok	keys_sent=1		1935
+40	wait	wait:4000	ok	waited 4000ms		4855
+41	key	key:C	ok	keys_sent=1		1921
+42	wait	wait:4000	ok	waited 4000ms		4850
+43	key	key:C	ok	keys_sent=1		1892
+44	wait	wait:4000	ok	waited 4000ms		4855
+45	key	key:C	ok	keys_sent=1		1953
+46	wait	wait:4000	ok	waited 4000ms		4881
+47	key	key:C	ok	keys_sent=1		1953
+48	wait	wait:4000	ok	waited 4000ms		4839
+49	capture	capture:c4-min2	ok	bytes=1734304 nonblack=0.9018	E:\galnx-build\p22\run-nsp-clean\20261105-161131-IROSEKA_FHD-010047420000a000-v1.1.0-test\step-50-c4-min2.png	2605
+50	key	key:C	ok	keys_sent=1		2013
+51	wait	wait:4000	ok	waited 4000ms		4857
+52	key	key:C	ok	keys_sent=1		1876
+53	wait	wait:4000	ok	waited 4000ms		4872
+54	key	key:C	ok	keys_sent=1		1983
+55	wait	wait:4000	ok	waited 4000ms		4847
+56	key	key:C	ok	keys_sent=1		1930
+57	wait	wait:4000	ok	waited 4000ms		4860
+58	key	key:C	ok	keys_sent=1		1933
+59	wait	wait:4000	ok	waited 4000ms		4856
+60	key	key:C	ok	keys_sent=1		1949
+61	wait	wait:4000	ok	waited 4000ms		4840
+62	key	key:C	ok	keys_sent=1		1996
+63	wait	wait:4000	ok	waited 4000ms		4858
+64	key	key:C	ok	keys_sent=1		1908
+65	wait	wait:4000	ok	waited 4000ms		4860
+66	key	key:C	ok	keys_sent=1		1955
+67	wait	wait:4000	ok	waited 4000ms		4884
+68	key	key:C	ok	keys_sent=1		1907
+69	wait	wait:4000	ok	waited 4000ms		4872
+70	capture	capture:c5-min3	ok	bytes=1728833 nonblack=0.9018	E:\galnx-build\p22\run-nsp-clean\20261105-161131-IROSEKA_FHD-010047420000a000-v1.1.0-test\step-71-c5-min3.png	2664
+71	wait	wait:4000	ok	waited 4000ms		4839
+72	capture	capture:c7-final	ok	bytes=1728833 nonblack=0.9018	E:\galnx-build\p22\run-nsp-clean\20261105-161131-IROSEKA_FHD-010047420000a000-v1.1.0-test\step-73-c7-final.png	2676

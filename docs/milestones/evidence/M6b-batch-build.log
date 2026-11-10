@@ -1,0 +1,197 @@
+++ date -u +%Y-%m-%dT%H:%M:%SZ
++ echo '### M6-b batch build evidence generated at 2026-10-29T20:06:40Z'
+### M6-b batch build evidence generated at 2026-10-29T20:06:40Z
++ echo '### host toolchain fingerprint'
+### host toolchain fingerprint
++ python --version
+Python 3.12.10
++ cmake --version
++ head -n 1
+cmake version 4.0.2
++ /d/devkitPro/devkitA64/bin/aarch64-none-elf-gcc.exe --version
++ head -n 1
+aarch64-none-elf-gcc.exe (devkitA64) 16.1.0
++ echo '### reset demo state'
+### reset demo state
++ rm -rf '/e/Othergames/Nintendo Switch/Workspace/GalNX/examples/batch/.galnx' '/e/Othergames/Nintendo Switch/Workspace/GalNX/examples/batch/out'
++ echo '### run 1: batch build --dir examples/batch (first run: cache miss + one broken manifest)'
+### run 1: batch build --dir examples/batch (first run: cache miss + one broken manifest)
++ python -m galnx batch build --dir '/e/Othergames/Nintendo Switch/Workspace/GalNX/examples/batch'
+batch root: E:/Othergames/Nintendo Switch/Workspace/GalNX/examples/batch
+4 project(s): 3 ok, 0 warn, 1 fail, 0 skipped in 0.336s
+cache: 0 hit(s), 1 miss(es); built 1
+  [OK] demo-a.yaml  adapter=krkrsdl2  0.018s
+  [OK] demo-b.yaml  adapter=brewser  0.019s
+  [FAIL] demo-broken.yaml  adapter=-  0.013s
+    fail: <root>: 'engine' is a required property
+    fail: switch/title_id: 'NOT-A-TITLE-ID' does not match '^01[0-9A-Fa-f]{14}$'
+  [OK] demo-build.yaml  adapter=custom  0.285s
+report: E:/Othergames/Nintendo Switch/Workspace/GalNX/examples/batch/.galnx/batch-report-20261029T200641Z.json
+latest: E:/Othergames/Nintendo Switch/Workspace/GalNX/examples/batch/.galnx/latest.json
++ echo RC=2
+RC=2
++ cp '/e/Othergames/Nintendo Switch/Workspace/GalNX/examples/batch/.galnx/latest.json' '/e/Othergames/Nintendo Switch/Workspace/GalNX/docs/milestones/evidence/M6b-batch-build-report.json'
++ echo '### run 2: batch build --dir examples/batch (second run: cache hit, nothing rebuilt)'
+### run 2: batch build --dir examples/batch (second run: cache hit, nothing rebuilt)
++ python -m galnx batch build --dir '/e/Othergames/Nintendo Switch/Workspace/GalNX/examples/batch'
+batch root: E:/Othergames/Nintendo Switch/Workspace/GalNX/examples/batch
+4 project(s): 3 ok, 0 warn, 1 fail, 0 skipped in 0.221s
+cache: 1 hit(s), 0 miss(es); built 0
+  [OK] demo-a.yaml  adapter=krkrsdl2  0.018s
+  [OK] demo-b.yaml  adapter=brewser  0.015s
+  [FAIL] demo-broken.yaml  adapter=-  0.013s
+    fail: <root>: 'engine' is a required property
+    fail: switch/title_id: 'NOT-A-TITLE-ID' does not match '^01[0-9A-Fa-f]{14}$'
+  [OK] demo-build.yaml  adapter=custom  0.173s
+report: E:/Othergames/Nintendo Switch/Workspace/GalNX/examples/batch/.galnx/batch-report-20261029T200642Z.json
+latest: E:/Othergames/Nintendo Switch/Workspace/GalNX/examples/batch/.galnx/latest.json
++ echo RC=2
+RC=2
++ echo '### run 3: batch build --dir examples/batch --rebuild (force rebuild)'
+### run 3: batch build --dir examples/batch --rebuild (force rebuild)
++ python -m galnx batch build --dir '/e/Othergames/Nintendo Switch/Workspace/GalNX/examples/batch' --rebuild
+batch root: E:/Othergames/Nintendo Switch/Workspace/GalNX/examples/batch
+4 project(s): 3 ok, 0 warn, 1 fail, 0 skipped in 0.179s
+cache: 0 hit(s), 0 miss(es); built 1
+  [OK] demo-a.yaml  adapter=krkrsdl2  0.017s
+  [OK] demo-b.yaml  adapter=brewser  0.017s
+  [FAIL] demo-broken.yaml  adapter=-  0.017s
+    fail: <root>: 'engine' is a required property
+    fail: switch/title_id: 'NOT-A-TITLE-ID' does not match '^01[0-9A-Fa-f]{14}$'
+  [OK] demo-build.yaml  adapter=custom  0.126s
+report: E:/Othergames/Nintendo Switch/Workspace/GalNX/examples/batch/.galnx/batch-report-20261029T200642Z_2.json
+latest: E:/Othergames/Nintendo Switch/Workspace/GalNX/examples/batch/.galnx/latest.json
++ echo RC=2
+RC=2
++ echo '### run 4: remove artifact then batch build --dir examples/batch (stale cache entry -> warn + rebuild)'
+### run 4: remove artifact then batch build --dir examples/batch (stale cache entry -> warn + rebuild)
++ rm -f '/e/Othergames/Nintendo Switch/Workspace/GalNX/examples/batch/out/demo.bin'
++ python -m galnx batch build --dir '/e/Othergames/Nintendo Switch/Workspace/GalNX/examples/batch'
+batch root: E:/Othergames/Nintendo Switch/Workspace/GalNX/examples/batch
+4 project(s): 2 ok, 1 warn, 1 fail, 0 skipped in 0.317s
+cache: 0 hit(s), 1 miss(es); built 1
+  [OK] demo-a.yaml  adapter=krkrsdl2  0.017s
+  [OK] demo-b.yaml  adapter=brewser  0.019s
+  [FAIL] demo-broken.yaml  adapter=-  0.015s
+    fail: <root>: 'engine' is a required property
+    fail: switch/title_id: 'NOT-A-TITLE-ID' does not match '^01[0-9A-Fa-f]{14}$'
+  [WARN] demo-build.yaml  adapter=custom  0.265s
+report: E:/Othergames/Nintendo Switch/Workspace/GalNX/examples/batch/.galnx/batch-report-20261029T200643Z.json
+latest: E:/Othergames/Nintendo Switch/Workspace/GalNX/examples/batch/.galnx/latest.json
++ echo RC=2
+RC=2
++ echo '### run 5: batch build --dir examples/batch --no-cache (cache read/write disabled)'
+### run 5: batch build --dir examples/batch --no-cache (cache read/write disabled)
++ python -m galnx batch build --dir '/e/Othergames/Nintendo Switch/Workspace/GalNX/examples/batch' --no-cache
+batch root: E:/Othergames/Nintendo Switch/Workspace/GalNX/examples/batch
+4 project(s): 3 ok, 0 warn, 1 fail, 0 skipped in 0.183s
+cache: 0 hit(s), 0 miss(es); built 1
+  [OK] demo-a.yaml  adapter=krkrsdl2  0.017s
+  [OK] demo-b.yaml  adapter=brewser  0.017s
+  [FAIL] demo-broken.yaml  adapter=-  0.014s
+    fail: <root>: 'engine' is a required property
+    fail: switch/title_id: 'NOT-A-TITLE-ID' does not match '^01[0-9A-Fa-f]{14}$'
+  [OK] demo-build.yaml  adapter=custom  0.134s
+report: E:/Othergames/Nintendo Switch/Workspace/GalNX/examples/batch/.galnx/batch-report-20261029T200644Z.json
+latest: E:/Othergames/Nintendo Switch/Workspace/GalNX/examples/batch/.galnx/latest.json
++ echo RC=2
+RC=2
++ echo '### run 6: batch lock --dir examples/batch (write .galnx/engine-lock.json)'
+### run 6: batch lock --dir examples/batch (write .galnx/engine-lock.json)
++ python -m galnx batch lock --dir '/e/Othergames/Nintendo Switch/Workspace/GalNX/examples/batch'
+lock: E:\Othergames\Nintendo Switch\Workspace\GalNX\examples\batch\.galnx\engine-lock.json (4 project(s))
+  warn: demo-broken.yaml: manifest.engine is missing or not a mapping
++ echo RC=2
+RC=2
++ cat '/e/Othergames/Nintendo Switch/Workspace/GalNX/examples/batch/.galnx/engine-lock.json'
+{
+  "generated_at": "2026-10-29T20:06:44Z",
+  "projects": {
+    "demo-a.yaml": {
+      "artifact": "",
+      "engine": {
+        "adapter": "krkrsdl2",
+        "build_backend": "cmake-switch",
+        "pinned_commit": "124bdf841f09e7ce02aa99b7b55791a0f7a900ff"
+      },
+      "manifest": "demo-a.yaml",
+      "manifest_sha256": "3616ab1ac998bac76bfe356d8c7d4f359d02221ddecaeca05bcaeb4171d4dd66",
+      "path": "demo-a.yaml",
+      "toolchain": {
+        "cmake": "cmake version 4.0.2",
+        "devkitpro_gcc": "aarch64-none-elf-gcc.exe (devkitA64) 16.1.0"
+      }
+    },
+    "demo-b.yaml": {
+      "artifact": "",
+      "engine": {
+        "adapter": "brewser",
+        "build_backend": "prebuilt",
+        "pinned_commit": "8040580e92e40a60f704a6478ee296b105212f1b"
+      },
+      "manifest": "demo-b.yaml",
+      "manifest_sha256": "aef3196c7e70062c32f7fafce17b783877579f5a75b6364273ba7f9db81e741a",
+      "path": "demo-b.yaml",
+      "toolchain": {
+        "cmake": "cmake version 4.0.2",
+        "devkitpro_gcc": "aarch64-none-elf-gcc.exe (devkitA64) 16.1.0"
+      }
+    },
+    "demo-broken.yaml": {
+      "artifact": "",
+      "engine": {
+        "adapter": "",
+        "build_backend": "",
+        "pinned_commit": ""
+      },
+      "error": "manifest.engine is missing or not a mapping",
+      "manifest": "demo-broken.yaml",
+      "manifest_sha256": "cbf6a8d6fb4b3f187ea4cead140be746f3cee1757da1bcbdea4a1ab7062b16cb",
+      "path": "demo-broken.yaml",
+      "toolchain": {
+        "cmake": "cmake version 4.0.2",
+        "devkitpro_gcc": "aarch64-none-elf-gcc.exe (devkitA64) 16.1.0"
+      }
+    },
+    "demo-build.yaml": {
+      "artifact": "out/demo.bin",
+      "engine": {
+        "adapter": "custom",
+        "build_backend": "none",
+        "pinned_commit": "0123456789abcdef0123456789abcdef01234567"
+      },
+      "manifest": "demo-build.yaml",
+      "manifest_sha256": "0de1b4bc9ccb454986dedfb2a44886c7d700544a0de533b7af3c55e9a0a05910",
+      "path": "demo-build.yaml",
+      "toolchain": {
+        "cmake": "cmake version 4.0.2",
+        "devkitpro_gcc": "aarch64-none-elf-gcc.exe (devkitA64) 16.1.0"
+      }
+    }
+  },
+  "schema_version": 1,
+  "toolchain": {
+    "cmake": "cmake version 4.0.2",
+    "devkitpro_gcc": "aarch64-none-elf-gcc.exe (devkitA64) 16.1.0"
+  }
+}+ echo '### run 7: batch build --dir examples/batch --locked (lock verified, cache hit)'
+### run 7: batch build --dir examples/batch --locked (lock verified, cache hit)
++ python -m galnx batch build --dir '/e/Othergames/Nintendo Switch/Workspace/GalNX/examples/batch' --locked
+batch root: E:/Othergames/Nintendo Switch/Workspace/GalNX/examples/batch
+4 project(s): 3 ok, 0 warn, 1 fail, 0 skipped in 0.231s
+cache: 1 hit(s), 0 miss(es); built 0
+  [OK] demo-a.yaml  adapter=krkrsdl2  0.153s
+  [OK] demo-b.yaml  adapter=brewser  0.018s
+  [FAIL] demo-broken.yaml  adapter=-  0.015s
+    fail: <root>: 'engine' is a required property
+    fail: switch/title_id: 'NOT-A-TITLE-ID' does not match '^01[0-9A-Fa-f]{14}$'
+  [OK] demo-build.yaml  adapter=custom  0.045s
+report: E:/Othergames/Nintendo Switch/Workspace/GalNX/examples/batch/.galnx/batch-report-20261029T200645Z.json
+latest: E:/Othergames/Nintendo Switch/Workspace/GalNX/examples/batch/.galnx/latest.json
++ echo RC=2
+RC=2
++ echo '### cleanup demo state (reports stay in evidence only)'
+### cleanup demo state (reports stay in evidence only)
++ rm -rf '/e/Othergames/Nintendo Switch/Workspace/GalNX/examples/batch/.galnx' '/e/Othergames/Nintendo Switch/Workspace/GalNX/examples/batch/out'
++ echo '### done'
+### done

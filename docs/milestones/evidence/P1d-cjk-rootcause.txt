@@ -1,0 +1,22 @@
+# P1d CJK 口口（中文显示为方框）根因与修复验证（E1/E3）
+日期: 2026-10-30 06:19-06:35 (+08:00)
+现象: Citron 用 NSP 形态启动 K2NX 时，文件选择器里的中文目录名显示为「口口」；NRO 形态无此问题（audit-web A/B）。
+结论: 重打包丢文件，不是 RomFS 层差异。
+
+## 证据链
+1. K2NX v1.0.1 NRO 内嵌 romfs（ASET.romfs，绝对偏移 0x212BB0E，镜像 7,556,968 B）正确解包应得 85 文件 / 7,551,013 B，其中包含根级文件：
+   - DroidSansFallback.ttf 7,287,728 B sha256 76aafe35ec7b42188704ac45c8e9cdcc023296c9fa1e786c8f14e0fc1b7c048f（CJK 字体）
+   - default.cur 4,286 B sha256 0f35ae91e83282db89a82124973d7752ccf0f73d97a518caf9c01c222ec6a927
+2. 旧版 build_pilot_nsp.sh 解包只得到 83 files / 258,999 B；258,999 + 7,287,728 + 4,286 = 7,551,013 精确吻合 → 恰为两个根级文件丢失。
+3. 算法根因：RomFS 遍历起点为 root 目录项；旧实现 stack 从 root.child（目录链 root[2]）开始，root 自己的文件链 root[3] 从未遍历，导致所有根级文件被静默丢弃（无 WARN）。
+4. 修复：在 stack 初始化后显式遍历 root 文件链（root_file = root[3]; while != 0xFFFFFFFF: file_entry(...); append; root_file = sibling），并加注释说明 root 文件链不可从子目录链到达。
+5. 修复后重打 K2NX 预编译 NRO（title_id 010047410000b0b3）:
+   - 解包统计 85 files / 7,551,013 payload bytes of 7,556,968 image bytes
+   - NSP Kirikiroid2-NX-fixed-010047410000b0b3.nsp 29,877,976 B sha256 2bc724555ffa5c3f229748c68e6f06a1b13326619bf8162f045eb5964008dead（比 b0b1 22,587,096 B 大 7,290,880 B ≈ 字体+光标+表开销）
+   - nstool --part1 抽回 romfs 与解包目录逐文件比对：85/85 MATCH（only_in 0、content_diff 0），字体/光标均在
+6. 与 A1 源 romfs（nsp/romfs-a1，来自 Lead 重建 k2nx-ws/build/romfs）对比：UI 85 文件 only_in_A=0、content_diff=0 → A1 使用的 UI 资源已含 CJK 字体。
+7. A1 最终 NSP round-trip：108/108 文件 MATCH，字体 sha256 与上述一致。
+
+## 影响与建议
+- 修复后 CJK 显示应在 NSP 形态恢复正常；b0b3 NSP 可用于 audit-web 复测（Prebuilt NRO -> NSP 链路）。
+- 该 bug 属脚本实现层（romfs 解包遍历），不影响源码重建产物路径（romfs 直接来自 build/romfs）；A1 最终包不受影响。

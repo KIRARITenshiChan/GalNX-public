@@ -1,0 +1,45 @@
+diff --git a/src/core/environ/cocos2d/MainScene.cpp b/src/core/environ/cocos2d/MainScene.cpp
+index 247641e..0ab664a 100644
+--- a/src/core/environ/cocos2d/MainScene.cpp
++++ b/src/core/environ/cocos2d/MainScene.cpp
+@@ -2375,8 +2375,39 @@ void TVPMainScene::onPadKeyDown(cocos2d::Controller* ctrl, int keyCode, cocos2d:
+ 	}
+ #endif
+ 	if (!UINode->getChildren().empty()) return;
+-#ifdef __SWITCH__
++	// [GalNX] controller-driven virtual mouse cursor (needed when there is no touch screen: docked / TV mode):
++	//   PLUS  -> toggle the K2S virtual cursor on/off
++	//   DPAD  -> move the cursor in 24 px steps while it is shown
++	//   A / B -> left / right click at the cursor (handled below)
++	// This intentionally does not use onAxisEvent(): that handler bails out when the window has no
++	// PrimaryLayerArea (the case for KAG3 games), so the stick could never show the cursor.
++	if (keyCode == cocos2d::Controller::BUTTON_START || keyCode == cocos2d::Controller::BUTTON_SELECT) {
++		toggleVirtualMouseCursor();
++		return;
++	}
++	if (_virutalMouseMode && !_windowMgrOverlay && _mouseCursor &&
++		(keyCode == cocos2d::Controller::BUTTON_DPAD_LEFT || keyCode == cocos2d::Controller::BUTTON_DPAD_RIGHT ||
++		 keyCode == cocos2d::Controller::BUTTON_DPAD_UP || keyCode == cocos2d::Controller::BUTTON_DPAD_DOWN)) {
++		Vec2 pt = _mouseCursor->getPosition();
++		const float step = 24.f;
++		switch (keyCode) {
++		case cocos2d::Controller::BUTTON_DPAD_LEFT: pt.x -= step; break;
++		case cocos2d::Controller::BUTTON_DPAD_RIGHT: pt.x += step; break;
++		case cocos2d::Controller::BUTTON_DPAD_UP: pt.y += step; break;
++		default: pt.y -= step; break;
++		}
++		Size size = GameNode->getContentSize();
++		pt.x = std::max(0.f, std::min(pt.x, size.width));
++		pt.y = std::max(0.f, std::min(pt.y, size.height));
++		_mouseCursor->stopAllActions();
++		_mouseCursor->setOpacity(255);
++		_mouseCursor->setPosition(pt);
++		_refadeMouseCursor();
++		if (_currentWindowLayer) _currentWindowLayer->onMouseMove(GameNode->convertToWorldSpace(pt));
++		return;
++	}
+ 	// [K2S] with the virtual mouse cursor shown, A = left click and B = right click at the cursor
++#ifdef __SWITCH__
+ 	if (_virutalMouseMode && !_windowMgrOverlay && _mouseCursor && _currentWindowLayer &&
+ 		(keyCode == cocos2d::Controller::BUTTON_A || keyCode == cocos2d::Controller::BUTTON_B)) {
+ 		_mouseBtn = keyCode == cocos2d::Controller::BUTTON_A ? ::mbLeft : ::mbRight;

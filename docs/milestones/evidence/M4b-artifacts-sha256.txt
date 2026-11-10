@@ -1,0 +1,9 @@
+aca5f494dff67141be252ed0d83e6f692377438025ed1ef823f89593a73084fb  506  examples/web-vn/manifest.json
+a28594ea7c3735be5f4c3df592e861568f7b901c61684faa5190c5e45522feb3  9558  examples/web-vn/index.html
+8ce31f5b7dfb617c18a705d0c5fc955b59f60d445b5a76e250a1dd98ccd04b13  76546123  workspaces/web-01/brewser.nro (external input)
+00e0d0a0b94633539348e56ce39b872db21eb1f09e9f3035506634a431a449f0  1774  docs/milestones/evidence/M4b-brewser-run.json
+60c0cbd9f31694c43a95be0864a40b87ec0b533854b48dda7329b075a7b48c1c  8306  docs/milestones/evidence/M4b-citron-log-slice.txt
+7183c12b19a6a2921aa16c610b3d8c5e3632da8b49c9d668865ecc8ea6352ee0  177678  docs/milestones/evidence/M4b-endingA.png
+d8d012379e69069ecd9b34411c8cfabdd688ddd309aa66d21804d2aba79e5798  176543  docs/milestones/evidence/M4b-endingB.png
+f065d6099aae09cca5c8b71b01a04e9a73f21fc87c5715f6f1695ea4570410bd  6134  docs/milestones/evidence/M4b-input-injection.json
+f9b802be3502e88dc40449f8923dc508f05bbe9f8f56a7217d2d51cade57103b  171263  docs/milestones/evidence/M4b-title.png

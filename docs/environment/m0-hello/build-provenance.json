@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-29T22:12:21+08:00",
+  "host_os": "Windows_NT 10.0.26100 x64 (16 cores)",
+  "msys2": "MSYS2 at D:/devkitPro/msys2; MSYSTEM=MSYS; runtime 3.6.11-00eb8435.x86_64; /etc/fstab maps D:/devkitPro to /opt/devkitpro",
+  "devkitpro_path": "D:/devkitPro (MSYS2: /opt/devkitpro); DEVKITPRO=/opt/devkitpro",
+  "toolchain_packages": {
+    "devkitA64": "r30-1",
+    "devkita64-gcc": "16.1.0-1",
+    "devkita64-binutils": "2.46.0-1",
+    "devkita64-newlib": "4.6.0.20260123-4",
+    "devkita64-rules": "1.1.1-1",
+    "devkitA64-gdb": "14.1-1",
+    "libnx": "4.12.0-1",
+    "switch-tools": "1.13.1-1",
+    "switch-pkg-config": "0.28-4",
+    "switch-cmake": "1.5.2-1",
+    "devkita64-cmake": "1.1.3-1",
+    "switch-examples": "20260201-1",
+    "deko3d": "0.5.0-1",
+    "uam": "1.1.0-2",
+    "general-tools": "1.4.4-1",
+    "catnip": "0.2.0-1",
+    "devkit-env": "1.0.1-2",
+    "make": "4.4.1"
+  },
+  "build_dir": "E:/galnx-build/m0-hello",
+  "trace_dir": "E:/Othergames/Nintendo Switch/Workspace/GalNX/workspaces/m0-hello",
+  "make_exit": 0,
+  "artifacts": {
+    "nro": {
+      "bytes": 166085,
+      "sha256": "a341e7750e099da94c12541d8fb173793cc348688824c69f5f76c7ce29b9318b"
+    },
+    "elf": {
+      "bytes": 2878832,
+      "sha256": "71179a97c0c556b7433101e6f6525f8d8ba84ae439a0740f085c815e1ef8ef6c"
+    },
+    "nacp": {
+      "bytes": 16384,
+      "sha256": "88115686a4c3eb71efdee214ad42bfc107865403c50b6ec35b948b62894e360f"
+    }
+  },
+  "env_snapshot_sha256": "be93518c79b8a0b128845d7219ff4fdf47777bcd8bbf393836b36266409d8fd1",
+  "notes": [
+    "source = devkitPro official template $DEVKITPRO/examples/switch/templates/application (switch-examples 20260201-1), unmodified",
+    "make invoked as: make -j4 in /e/galnx-build/m0-hello; build.log sha256 4692f60fb68aae291ee7e84b493628a114cda7b1ada4480d01ac935b18c8b737",
+    "inputs: Makefile 7654 B sha256 ef3376322f62bb88339bc61a5299b3bc130eb9c794b594f3ff41d41ce44ff50f; source/main.c 1820 B sha256 b2dcdd896f4a420b4b0053194a63f7ddc8572e4892692edc69285c112dea84d0",
+    "build directory must contain no spaces: template Makefile runs $(MAKE) -C $(BUILD) -f $(CURDIR)/Makefile without quoting; 8.3 short paths and junctions are resolved back to long paths by MSYS2",
+    "build succeeded (make_exit=0); NRO was NOT run in an emulator or on hardware, so runtime behavior is unverified",
+    "no SDL2/freetype/mpv portlibs linked; switch-sdl2 was pre-downloaded to pacman cache only (not installed)",
+    "single build only; reproducibility (same hash on rebuild) not tested",
+    "host name in build.log is GBK-encoded and appears garbled if read as UTF-8; other fields are ASCII",
+    "recorded by audit-switch for task-8 (M0 devkitPro measurement archive), 2026-10-29"
+  ]
+}

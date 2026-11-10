@@ -1,0 +1,8 @@
+0 build Oct 30 2026 06:28:53
+1 static-init start (image base 0x80000000, 305 init entries)
+2 prioritized static-init done (TU constructors next)
+3 main
+4 logging ready
+5 romfs ok
+5b galnx payload
+6 app delegate created, entering run()

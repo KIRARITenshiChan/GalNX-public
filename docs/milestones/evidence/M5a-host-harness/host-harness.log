@@ -1,0 +1,1609 @@
+
+running 3 tests
+booted: virtual 1024x640, rss 0 MiB -> 0 MiB, files opened: ["E:/galnx-build/m5-harness-content\\.\\painter.hcb", "default.ttf"]
+frame 0: heap 6162 KiB (peak 8011 KiB) without textures, rss 0 MiB, textures 7 (0 MiB), CPU images 2 (0 MiB), sprites 3227, additive 0, solids 0, audio loaded 0 played 0
+frame 60: heap 6163 KiB (peak 13094 KiB) without textures, rss 0 MiB, textures 7 (0 MiB), CPU images 2 (0 MiB), sprites 196847, additive 0, solids 0, audio loaded 0 played 0
+frame 120: heap 6164 KiB (peak 13094 KiB) without textures, rss 0 MiB, textures 7 (0 MiB), CPU images 2 (0 MiB), sprites 390467, additive 0, solids 0, audio loaded 0 played 0
+frame 180: heap 6164 KiB (peak 13094 KiB) without textures, rss 0 MiB, textures 7 (0 MiB), CPU images 2 (0 MiB), sprites 584087, additive 0, solids 0, audio loaded 0 played 0
+frame 240: heap 6166 KiB (peak 13094 KiB) without textures, rss 0 MiB, textures 7 (0 MiB), CPU images 2 (0 MiB), sprites 777707, additive 0, solids 0, audio loaded 0 played 0
+done: 300 frames at 1280x720, peak rss 0 MiB, peak texture memory 0 MiB, avg 14.81 ms/frame (13.95 ms of it in the rasterizer), worst 24.94 ms
+test no_std_harness::boots_and_runs_a_real_game ... ok
+booted: virtual 1024x640, rss 0 MiB -> 0 MiB, files opened: ["E:/galnx-build/m5-harness-content\\.\\painter.hcb", "default.ttf"]
+slot file is 433986 bytes
+thumbnail is 96x72
+test no_std_harness::saves_and_loads_a_slot has been running for over 60 seconds
+test no_std_harness::the_global_save_is_written_and_read_back has been running for over 60 seconds
+test no_std_harness::saves_and_loads_a_slot ... FAILED
+booted: virtual 1024x640, rss 0 MiB -> 0 MiB, files opened: ["E:/galnx-build/m5-harness-content\\.\\painter.hcb", "default.ttf"]
+global save is 262184 bytes
+2 lines marked as read
+test no_std_harness::the_global_save_is_written_and_read_back ... ok
+
+failures:
+
+failures:
+    no_std_harness::saves_and_loads_a_slot
+
+test result: FAILED. 2 passed; 1 failed; 0 ignored; 0 measured; 49 filtered out; finished in 102.31s
+
+HARNESS_EXIT=101
+
+---STDERR---
+warning: profiles for the non root package will be ignored, specify profiles at the workspace root:
+package:   E:\galnx-build\m5-rfvp\crates\rfvp\Cargo.toml
+workspace: E:\galnx-build\m5-rfvp\Cargo.toml
+warning: profiles for the non root package will be ignored, specify profiles at the workspace root:
+package:   E:\galnx-build\m5-rfvp\crates\luax-lsp\Cargo.toml
+workspace: E:\galnx-build\m5-rfvp\Cargo.toml
+   Compiling proc-macro2 v1.0.106
+   Compiling quote v1.0.45
+   Compiling unicode-ident v1.0.24
+   Compiling libm v0.2.16
+   Compiling version_check v0.9.5
+   Compiling zerocopy v0.8.48
+   Compiling thiserror v2.0.18
+   Compiling serde_core v1.0.228
+   Compiling cfg-if v1.0.4
+   Compiling syn v1.0.109
+   Compiling autocfg v1.5.0
+   Compiling serde v1.0.228
+   Compiling once_cell v1.21.4
+   Compiling anyhow v1.0.102
+   Compiling spin v0.9.8
+   Compiling hexf-parse v0.2.1
+   Compiling adler v1.0.2
+   Compiling either v1.15.0
+   Compiling lazy_static v1.5.0
+   Compiling encoding_rs v0.8.35
+   Compiling miniz_oxide v0.7.4
+   Compiling itertools v0.12.1
+   Compiling petitset v0.2.1
+   Compiling bitflags v2.13.2
+   Compiling ahash v0.8.12
+   Compiling num-traits v0.2.19
+   Compiling byteorder v1.5.0
+   Compiling atomic_refcell v0.1.14
+   Compiling log v0.4.34
+   Compiling bytes v1.11.1
+   Compiling syn v2.0.117
+   Compiling core_maths v0.1.1
+   Compiling ab_glyph_rasterizer v0.1.10
+   Compiling ttf-parser v0.25.1
+   Compiling hexf v0.2.1
+   Compiling twofloat v0.7.0
+   Compiling owned_ttf_parser v0.25.1
+   Compiling ab_glyph v0.2.32
+   Compiling thiserror-impl v2.0.18
+   Compiling serde_derive v1.0.228
+   Compiling bytemuck_derive v1.10.2
+   Compiling enum-map-derive v0.17.0
+   Compiling enum-map v2.7.3
+   Compiling bytemuck v1.25.0
+   Compiling cobs v0.3.0
+   Compiling glam v0.27.0
+   Compiling hashbrown v0.14.5
+   Compiling hecs v0.10.5
+   Compiling postcard v1.1.3
+   Compiling rfvp v0.7.0 (E:\galnx-build\m5-rfvp\crates\rfvp)
+warning: unused imports: `SystemTime` and `UNIX_EPOCH`
+  --> crates\rfvp\src\platform_time.rs:92:60
+   |
+92 | pub use no_std_time::{set_host_time_us, Duration, Instant, SystemTime, UNIX_EPOCH};
+   |                                                            ^^^^^^^^^^  ^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `ToString`
+ --> crates\rfvp\src\script\parser.rs:1:29
+  |
+1 | use alloc::string::{String, ToString};
+  |                             ^^^^^^^^
+
+warning: unused imports: `String`, `ToString`, `boxed::Box`, `format`, `vec::Vec`, and `vec`
+ --> crates\rfvp\src\subsystem\mod.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+  |     ^^^^^^
+5 |     string::{String, ToString},
+  |              ^^^^^^  ^^^^^^^^
+6 |     vec,
+  |     ^^^
+7 |     vec::Vec,
+  |     ^^^^^^^^
+
+warning: unused import: `crate::script::Variant`
+ --> crates\rfvp\src\subsystem\anzu_scene.rs:1:5
+  |
+1 | use crate::script::Variant;
+  |     ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `String`, `ToString`, `boxed::Box`, `format`, `vec::Vec`, and `vec`
+ --> crates\rfvp\src\subsystem\anzu_scene.rs:4:5
+  |
+4 |     boxed::Box,
+  |     ^^^^^^^^^^
+5 |     format,
+  |     ^^^^^^
+6 |     string::{String, ToString},
+  |              ^^^^^^  ^^^^^^^^
+7 |     vec,
+  |     ^^^
+8 |     vec::Vec,
+  |     ^^^^^^^^
+
+warning: unused imports: `String`, `ToString`, `boxed::Box`, `format`, `vec::Vec`, and `vec`
+ --> crates\rfvp\src\subsystem\components\mod.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+  |     ^^^^^^
+5 |     string::{String, ToString},
+  |              ^^^^^^  ^^^^^^^^
+6 |     vec,
+  |     ^^^
+7 |     vec::Vec,
+  |     ^^^^^^^^
+
+warning: unused imports: `String`, `ToString`, `boxed::Box`, `format`, `vec::Vec`, and `vec`
+ --> crates\rfvp\src\subsystem\components\syscalls\mod.rs:4:5
+  |
+4 |     boxed::Box,
+  |     ^^^^^^^^^^
+5 |     format,
+  |     ^^^^^^
+6 |     string::{String, ToString},
+  |              ^^^^^^  ^^^^^^^^
+7 |     vec,
+  |     ^^^
+8 |     vec::Vec,
+  |     ^^^^^^^^
+
+warning: unused imports: `String`, `ToString`, `boxed::Box`, `format`, `vec::Vec`, and `vec`
+ --> crates\rfvp\src\subsystem\components\syscalls\color.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+  |     ^^^^^^
+5 |     string::{String, ToString},
+  |              ^^^^^^  ^^^^^^^^
+6 |     vec,
+  |     ^^^
+7 |     vec::Vec,
+  |     ^^^^^^^^
+
+warning: unused imports: `String`, `ToString`, `boxed::Box`, `format`, `vec::Vec`, and `vec`
+ --> crates\rfvp\src\subsystem\components\syscalls\cursor.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+  |     ^^^^^^
+5 |     string::{String, ToString},
+  |              ^^^^^^  ^^^^^^^^
+6 |     vec,
+  |     ^^^
+7 |     vec::Vec,
+  |     ^^^^^^^^
+
+warning: unused imports: `String`, `ToString`, `boxed::Box`, `format`, `vec::Vec`, and `vec`
+ --> crates\rfvp\src\subsystem\components\syscalls\flag.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+  |     ^^^^^^
+5 |     string::{String, ToString},
+  |              ^^^^^^  ^^^^^^^^
+6 |     vec,
+  |     ^^^
+7 |     vec::Vec,
+  |     ^^^^^^^^
+
+warning: unused imports: `format`, `vec::Vec`, and `vec`
+ --> crates\rfvp\src\subsystem\components\syscalls\generated.rs:4:5
+  |
+4 |     format,
+  |     ^^^^^^
+5 |     string::{String, ToString},
+6 |     vec,
+  |     ^^^
+7 |     vec::Vec,
+  |     ^^^^^^^^
+
+warning: unused imports: `String`, `ToString`, `boxed::Box`, `format`, `vec::Vec`, and `vec`
+ --> crates\rfvp\src\subsystem\components\syscalls\graph.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+  |     ^^^^^^
+5 |     string::{String, ToString},
+  |              ^^^^^^  ^^^^^^^^
+6 |     vec,
+  |     ^^^
+7 |     vec::Vec,
+  |     ^^^^^^^^
+
+warning: unused imports: `String`, `ToString`, `boxed::Box`, `format`, `vec::Vec`, and `vec`
+ --> crates\rfvp\src\subsystem\components\syscalls\history.rs:5:5
+  |
+5 |     boxed::Box,
+  |     ^^^^^^^^^^
+6 |     format,
+  |     ^^^^^^
+7 |     string::{String, ToString},
+  |              ^^^^^^  ^^^^^^^^
+8 |     vec,
+  |     ^^^
+9 |     vec::Vec,
+  |     ^^^^^^^^
+
+warning: unused imports: `String`, `ToString`, `boxed::Box`, `format`, `vec::Vec`, and `vec`
+ --> crates\rfvp\src\subsystem\components\syscalls\input.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+  |     ^^^^^^
+5 |     string::{String, ToString},
+  |              ^^^^^^  ^^^^^^^^
+6 |     vec,
+  |     ^^^
+7 |     vec::Vec,
+  |     ^^^^^^^^
+
+warning: unused imports: `ToString`, `boxed::Box`, `format`, and `vec`
+ --> crates\rfvp\src\subsystem\components\syscalls\legacy.rs:5:5
+  |
+5 |     boxed::Box,
+  |     ^^^^^^^^^^
+6 |     format,
+  |     ^^^^^^
+7 |     string::{String, ToString},
+  |                      ^^^^^^^^
+8 |     vec,
+  |     ^^^
+
+warning: unused imports: `String`, `ToString`, `boxed::Box`, `format`, `vec::Vec`, and `vec`
+ --> crates\rfvp\src\subsystem\components\syscalls\motion.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+  |     ^^^^^^
+5 |     string::{String, ToString},
+  |              ^^^^^^  ^^^^^^^^
+6 |     vec,
+  |     ^^^
+7 |     vec::Vec,
+  |     ^^^^^^^^
+
+warning: unused import: `boxed::Box`
+ --> crates\rfvp\src\subsystem\components\syscalls\movie.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+
+warning: unused imports: `String`, `ToString`, `boxed::Box`, `format`, `vec::Vec`, and `vec`
+ --> crates\rfvp\src\subsystem\components\syscalls\other_anm.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+  |     ^^^^^^
+5 |     string::{String, ToString},
+  |              ^^^^^^  ^^^^^^^^
+6 |     vec,
+  |     ^^^
+7 |     vec::Vec,
+  |     ^^^^^^^^
+
+warning: unused macro definition: `UNUSED`
+  --> crates\rfvp\src\subsystem\components\syscalls\other_anm.rs:29:14
+   |
+29 | macro_rules! UNUSED {
+   |              ^^^^^^
+   |
+   = note: `#[warn(unused_macros)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `boxed::Box`, `format`, and `vec`
+ --> crates\rfvp\src\subsystem\components\syscalls\parts.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+  |     ^^^^^^
+5 |     string::{String, ToString},
+6 |     vec,
+  |     ^^^
+
+warning: unused imports: `String`, `boxed::Box`, `format`, `vec::Vec`, and `vec`
+ --> crates\rfvp\src\subsystem\components\syscalls\saveload.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+  |     ^^^^^^
+5 |     string::{String, ToString},
+  |              ^^^^^^
+6 |     vec,
+  |     ^^^
+7 |     vec::Vec,
+  |     ^^^^^^^^
+
+warning: unused imports: `String`, `boxed::Box`, `format`, `vec::Vec`, and `vec`
+ --> crates\rfvp\src\subsystem\components\syscalls\sound.rs:5:5
+  |
+5 |     boxed::Box,
+  |     ^^^^^^^^^^
+6 |     format,
+  |     ^^^^^^
+7 |     string::{String, ToString},
+  |              ^^^^^^
+8 |     vec,
+  |     ^^^
+9 |     vec::Vec,
+  |     ^^^^^^^^
+
+warning: unused imports: `String`, `ToString`, `boxed::Box`, `format`, `vec::Vec`, and `vec`
+ --> crates\rfvp\src\subsystem\components\syscalls\text.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+  |     ^^^^^^
+5 |     string::{String, ToString},
+  |              ^^^^^^  ^^^^^^^^
+6 |     vec,
+  |     ^^^
+7 |     vec::Vec,
+  |     ^^^^^^^^
+
+warning: unused imports: `String`, `ToString`, `boxed::Box`, `format`, `vec::Vec`, and `vec`
+ --> crates\rfvp\src\subsystem\components\syscalls\thread.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+  |     ^^^^^^
+5 |     string::{String, ToString},
+  |              ^^^^^^  ^^^^^^^^
+6 |     vec,
+  |     ^^^
+7 |     vec::Vec,
+  |     ^^^^^^^^
+
+warning: unused imports: `String`, `ToString`, `boxed::Box`, `format`, `vec::Vec`, and `vec`
+ --> crates\rfvp\src\subsystem\components\syscalls\timer.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+  |     ^^^^^^
+5 |     string::{String, ToString},
+  |              ^^^^^^  ^^^^^^^^
+6 |     vec,
+  |     ^^^
+7 |     vec::Vec,
+  |     ^^^^^^^^
+
+warning: unused imports: `String`, `ToString`, `boxed::Box`, `vec::Vec`, and `vec`
+ --> crates\rfvp\src\subsystem\components\syscalls\utils.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+5 |     string::{String, ToString},
+  |              ^^^^^^  ^^^^^^^^
+6 |     vec,
+  |     ^^^
+7 |     vec::Vec,
+  |     ^^^^^^^^
+
+warning: type `nullsub_2` should have an upper camel case name
+   --> crates\rfvp\src\subsystem\components\syscalls\utils.rs:381:12
+    |
+381 | pub struct nullsub_2;
+    |            ^^^^^^^^^ help: convert the identifier to upper camel case: `Nullsub2`
+    |
+    = note: `#[warn(non_camel_case_types)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: unused imports: `boxed::Box`, `format`, and `vec`
+ --> crates\rfvp\src\subsystem\global_savedata.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+  |     ^^^^^^
+5 |     string::{String, ToString},
+6 |     vec,
+  |     ^^^
+
+warning: unused imports: `String`, `ToString`, `boxed::Box`, `format`, `vec::Vec`, and `vec`
+ --> crates\rfvp\src\subsystem\resources\mod.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+  |     ^^^^^^
+5 |     string::{String, ToString},
+  |              ^^^^^^  ^^^^^^^^
+6 |     vec,
+  |     ^^^
+7 |     vec::Vec,
+  |     ^^^^^^^^
+
+warning: unused imports: `String`, `ToString`, `boxed::Box`, and `format`
+ --> crates\rfvp\src\subsystem\resources\color_manager.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+  |     ^^^^^^
+5 |     string::{String, ToString},
+  |              ^^^^^^  ^^^^^^^^
+
+warning: unused imports: `String`, `ToString`, `boxed::Box`, `format`, `vec::Vec`, and `vec`
+ --> crates\rfvp\src\subsystem\resources\flag_manager.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+  |     ^^^^^^
+5 |     string::{String, ToString},
+  |              ^^^^^^  ^^^^^^^^
+6 |     vec,
+  |     ^^^
+7 |     vec::Vec,
+  |     ^^^^^^^^
+
+warning: unused imports: `ToString`, `boxed::Box`, `format`, and `vec`
+ --> crates\rfvp\src\subsystem\resources\gaiji_manager.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+  |     ^^^^^^
+5 |     string::{String, ToString},
+  |                      ^^^^^^^^
+6 |     vec,
+  |     ^^^
+
+warning: unused imports: `boxed::Box` and `format`
+ --> crates\rfvp\src\subsystem\resources\graph_buff.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+  |     ^^^^^^
+
+warning: unused import: `ImageBuffer`
+  --> crates\rfvp\src\subsystem\resources\graph_buff.rs:12:45
+   |
+12 | use image::{DynamicImage, GenericImageView, ImageBuffer};
+   |                                             ^^^^^^^^^^^
+
+warning: unused imports: `ToString`, `boxed::Box`, `format`, and `vec`
+ --> crates\rfvp\src\subsystem\resources\history_manager.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+  |     ^^^^^^
+5 |     string::{String, ToString},
+  |                      ^^^^^^^^
+6 |     vec,
+  |     ^^^
+
+warning: unused imports: `String`, `ToString`, `boxed::Box`, and `format`
+ --> crates\rfvp\src\subsystem\resources\input_manager.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+  |     ^^^^^^
+5 |     string::{String, ToString},
+  |              ^^^^^^  ^^^^^^^^
+
+warning: unused import: `sync::Mutex`
+ --> crates\rfvp\src\subsystem\resources\input_manager.rs:9:11
+  |
+9 | use std::{sync::Mutex, vec};
+  |           ^^^^^^^^^^^
+
+warning: unused imports: `ToString` and `boxed::Box`
+ --> crates\rfvp\src\subsystem\resources\motion_manager\mod.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+5 |     string::{String, ToString},
+  |                      ^^^^^^^^
+
+warning: unused imports: `ToString` and `boxed::Box`
+ --> crates\rfvp\src\subsystem\resources\motion_manager\alpha.rs:4:5
+  |
+4 |     boxed::Box,
+  |     ^^^^^^^^^^
+5 |     format,
+6 |     string::{String, ToString},
+  |                      ^^^^^^^^
+
+warning: unused imports: `ToString` and `boxed::Box`
+ --> crates\rfvp\src\subsystem\resources\motion_manager\anim.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+5 |     string::{String, ToString},
+  |                      ^^^^^^^^
+
+warning: unused imports: `String`, `ToString`, `boxed::Box`, `format`, `vec::Vec`, and `vec`
+ --> crates\rfvp\src\subsystem\resources\motion_manager\dissolve2.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+  |     ^^^^^^
+5 |     string::{String, ToString},
+  |              ^^^^^^  ^^^^^^^^
+6 |     vec,
+  |     ^^^
+7 |     vec::Vec,
+  |     ^^^^^^^^
+
+warning: unused imports: `String`, `ToString`, `boxed::Box`, `format`, `vec::Vec`, and `vec`
+ --> crates\rfvp\src\subsystem\resources\motion_manager\lip.rs:4:5
+  |
+4 |     boxed::Box,
+  |     ^^^^^^^^^^
+5 |     format,
+  |     ^^^^^^
+6 |     string::{String, ToString},
+  |              ^^^^^^  ^^^^^^^^
+7 |     vec,
+  |     ^^^
+8 |     vec::Vec,
+  |     ^^^^^^^^
+
+warning: unused imports: `ToString`, `boxed::Box`, and `vec`
+ --> crates\rfvp\src\subsystem\resources\motion_manager\normal_move.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+5 |     string::{String, ToString},
+  |                      ^^^^^^^^
+6 |     vec,
+  |     ^^^
+
+warning: unused imports: `ToString`, `boxed::Box`, and `vec`
+ --> crates\rfvp\src\subsystem\resources\motion_manager\rotation_move.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+5 |     string::{String, ToString},
+  |                      ^^^^^^^^
+6 |     vec,
+  |     ^^^
+
+warning: unused imports: `ToString`, `boxed::Box`, and `vec`
+ --> crates\rfvp\src\subsystem\resources\motion_manager\s2_move.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+5 |     string::{String, ToString},
+  |                      ^^^^^^^^
+6 |     vec,
+  |     ^^^
+
+warning: unused imports: `ToString` and `boxed::Box`
+ --> crates\rfvp\src\subsystem\resources\motion_manager\snow.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+5 |     string::{String, ToString},
+  |                      ^^^^^^^^
+
+warning: unnecessary parentheses around `if` condition
+   --> crates\rfvp\src\subsystem\resources\motion_manager\snow.rs:440:24
+    |
+440 |                     if (old_y > new_y && (-half_flake_h * v7) > v13_val) {
+    |                        ^                                               ^
+    |
+    = note: `#[warn(unused_parens)]` (part of `#[warn(unused)]`) on by default
+help: remove these parentheses
+    |
+440 -                     if (old_y > new_y && (-half_flake_h * v7) > v13_val) {
+440 +                     if old_y > new_y && (-half_flake_h * v7) > v13_val {
+    |
+
+warning: unused imports: `ToString`, `boxed::Box`, `vec::Vec`, and `vec`
+ --> crates\rfvp\src\subsystem\resources\motion_manager\v3d.rs:4:5
+  |
+4 |     boxed::Box,
+  |     ^^^^^^^^^^
+5 |     format,
+6 |     string::{String, ToString},
+  |                      ^^^^^^^^
+7 |     vec,
+  |     ^^^
+8 |     vec::Vec,
+  |     ^^^^^^^^
+
+warning: unused imports: `ToString`, `boxed::Box`, and `vec`
+ --> crates\rfvp\src\subsystem\resources\motion_manager\z_move.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+5 |     string::{String, ToString},
+  |                      ^^^^^^^^
+6 |     vec,
+  |     ^^^
+
+warning: unused import: `copy_rect`
+  --> crates\rfvp\src\subsystem\resources\motion_manager\mod.rs:27:25
+   |
+27 | use super::graph_buff::{copy_rect, copy_rect_clipped, GraphBuff, GraphBuffSnapshotV1};
+   |                         ^^^^^^^^^
+
+warning: unused import: `bail`
+  --> crates\rfvp\src\subsystem\resources\motion_manager\mod.rs:43:14
+   |
+43 | use anyhow::{bail, Result};
+   |              ^^^^
+
+warning: unused import: `image::GenericImageView`
+  --> crates\rfvp\src\subsystem\resources\motion_manager\mod.rs:45:5
+   |
+45 | use image::GenericImageView;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `boxed::Box` and `format`
+ --> crates\rfvp\src\subsystem\resources\parts_manager.rs:4:5
+  |
+4 |     boxed::Box,
+  |     ^^^^^^^^^^
+5 |     format,
+  |     ^^^^^^
+
+warning: unused imports: `ToString`, `boxed::Box`, and `vec`
+ --> crates\rfvp\src\subsystem\resources\prim.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+5 |     string::{String, ToString},
+  |                      ^^^^^^^^
+6 |     vec,
+  |     ^^^
+
+warning: unused import: `boxed::Box`
+ --> crates\rfvp\src\subsystem\resources\text_manager.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+
+warning: unused imports: `boxed::Box` and `format`
+ --> crates\rfvp\src\subsystem\resources\texture.rs:5:5
+  |
+5 |     boxed::Box,
+  |     ^^^^^^^^^^
+6 |     format,
+  |     ^^^^^^
+
+warning: unused import: `std::path::Path`
+  --> crates\rfvp\src\subsystem\resources\texture.rs:18:5
+   |
+18 | use std::path::Path;
+   |     ^^^^^^^^^^^^^^^
+
+warning: unused imports: `String`, `ToString`, `boxed::Box`, `format`, and `vec`
+ --> crates\rfvp\src\subsystem\resources\thread_manager.rs:4:5
+  |
+4 |     boxed::Box,
+  |     ^^^^^^^^^^
+5 |     format,
+  |     ^^^^^^
+6 |     string::{String, ToString},
+  |              ^^^^^^  ^^^^^^^^
+7 |     vec,
+  |     ^^^
+
+warning: unused imports: `String`, `ToString`, `boxed::Box`, `format`, `vec::Vec`, and `vec`
+ --> crates\rfvp\src\subsystem\resources\thread_wrapper.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+  |     ^^^^^^
+5 |     string::{String, ToString},
+  |              ^^^^^^  ^^^^^^^^
+6 |     vec,
+  |     ^^^
+7 |     vec::Vec,
+  |     ^^^^^^^^
+
+warning: unused imports: `String`, `ToString`, `boxed::Box`, `format`, `vec::Vec`, and `vec`
+ --> crates\rfvp\src\subsystem\resources\time.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+  |     ^^^^^^
+5 |     string::{String, ToString},
+  |              ^^^^^^  ^^^^^^^^
+6 |     vec,
+  |     ^^^
+7 |     vec::Vec,
+  |     ^^^^^^^^
+
+warning: unused imports: `String`, `ToString`, `boxed::Box`, and `format`
+ --> crates\rfvp\src\subsystem\resources\timer_manager.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+  |     ^^^^^^
+5 |     string::{String, ToString},
+  |              ^^^^^^  ^^^^^^^^
+
+warning: unused imports: `String`, `ToString`, `boxed::Box`, `format`, `vec::Vec`, and `vec`
+ --> crates\rfvp\src\subsystem\resources\window.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+  |     ^^^^^^
+5 |     string::{String, ToString},
+  |              ^^^^^^  ^^^^^^^^
+6 |     vec,
+  |     ^^^
+7 |     vec::Vec,
+  |     ^^^^^^^^
+
+warning: unused imports: `String`, `ToString`, `boxed::Box`, `format`, and `vec`
+ --> crates\rfvp\src\subsystem\save_state.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+  |     ^^^^^^
+5 |     string::{String, ToString},
+  |              ^^^^^^  ^^^^^^^^
+6 |     vec,
+  |     ^^^
+
+warning: unused imports: `String`, `ToString`, `format`, `vec::Vec`, and `vec`
+ --> crates\rfvp\src\subsystem\scene.rs:5:5
+  |
+5 |     format,
+  |     ^^^^^^
+6 |     string::{String, ToString},
+  |              ^^^^^^  ^^^^^^^^
+7 |     vec,
+  |     ^^^
+8 |     vec::Vec,
+  |     ^^^^^^^^
+
+warning: unused imports: `String`, `ToString`, `boxed::Box`, `format`, `vec::Vec`, and `vec`
+ --> crates\rfvp\src\subsystem\scheduler.rs:4:5
+  |
+4 |     boxed::Box,
+  |     ^^^^^^^^^^
+5 |     format,
+  |     ^^^^^^
+6 |     string::{String, ToString},
+  |              ^^^^^^  ^^^^^^^^
+7 |     vec,
+  |     ^^^
+8 |     vec::Vec,
+  |     ^^^^^^^^
+
+warning: unused imports: `String`, `ToString`, `boxed::Box`, `format`, `vec::Vec`, and `vec`
+ --> crates\rfvp\src\subsystem\state.rs:3:5
+  |
+3 |     boxed::Box,
+  |     ^^^^^^^^^^
+4 |     format,
+  |     ^^^^^^
+5 |     string::{String, ToString},
+  |              ^^^^^^  ^^^^^^^^
+6 |     vec,
+  |     ^^^
+7 |     vec::Vec,
+  |     ^^^^^^^^
+
+warning: unused imports: `ToString`, `format`, and `vec`
+ --> crates\rfvp\src\subsystem\world.rs:4:5
+  |
+4 |     format,
+  |     ^^^^^^
+5 |     string::{String, ToString},
+  |                      ^^^^^^^^
+6 |     vec,
+  |     ^^^
+
+warning: unused imports: `AudioSlientOn`, `SoundSlientOn`, and `SoundVolume`
+  --> crates\rfvp\src\subsystem\world.rs:58:42
+   |
+58 |     AudioLoad, AudioPlay, AudioSilentOn, AudioSlientOn, AudioState, AudioStop, AudioType, AudioVol,
+   |                                          ^^^^^^^^^^^^^
+59 |     SoundLoad, SoundMasterVol, SoundPlay, SoundSilentOn, SoundSlientOn, SoundStop, SoundType,
+   |                                                          ^^^^^^^^^^^^^
+60 |     SoundTypeVol, SoundVol, SoundVolume,
+   |                             ^^^^^^^^^^^
+
+warning: unused import: `DebugMessage`
+  --> crates\rfvp\src\subsystem\world.rs:72:17
+   |
+72 |     BreakPoint, DebugMessage, FloatToInt, IntToText, Rand, SysAtSkipName, SysProjFolder,
+   |                 ^^^^^^^^^^^^
+
+warning: unused import: `super::resources::color_manager::ColorManager`
+  --> crates\rfvp\src\subsystem\world.rs:95:5
+   |
+95 | use super::resources::color_manager::ColorManager;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `crate::subsystem::components::syscalls::generated`
+   --> crates\rfvp\src\subsystem\world.rs:101:5
+    |
+101 | use crate::subsystem::components::syscalls::generated;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `ToString`
+  --> crates\rfvp\src\utils_no_std.rs:34:33
+   |
+34 |     use alloc::string::{String, ToString};
+   |                                 ^^^^^^^^
+
+warning: unused import: `Seek`
+ --> crates\rfvp\src\host_api\audio.rs:9:21
+  |
+9 | use std::io::{Read, Seek, SeekFrom};
+  |                     ^^^^
+
+warning: unused import: `Read`
+ --> crates\rfvp\src\host_api\audio.rs:9:15
+  |
+9 | use std::io::{Read, Seek, SeekFrom};
+  |               ^^^^
+
+warning: unused import: `core_maths::CoreFloat`
+  --> crates\rfvp\src\host_api\soft_raster.rs:15:5
+   |
+15 | use core_maths::CoreFloat;
+   |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `core_maths::CoreFloat`
+  --> crates\rfvp\src\font.rs:35:5
+   |
+35 | use core_maths::CoreFloat;
+   |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `core_maths::CoreFloat`
+ --> crates\rfvp\src\rendering\prim_commands.rs:5:5
+  |
+5 | use core_maths::CoreFloat;
+  |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `core_maths::CoreFloat`
+  --> crates\rfvp\src\subsystem\resources\text_manager.rs:23:5
+   |
+23 | use core_maths::CoreFloat;
+   |     ^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `GenericImageView`
+ --> crates\rfvp\src\rendering\mask_dissolve.rs:8:27
+  |
+8 | use image::{DynamicImage, GenericImageView, RgbaImage};
+  |                           ^^^^^^^^^^^^^^^^
+
+warning: unused import: `GenericImageView`
+  --> crates\rfvp\src\subsystem\resources\graph_buff.rs:12:27
+   |
+12 | use image::{DynamicImage, GenericImageView, ImageBuffer};
+   |                           ^^^^^^^^^^^^^^^^
+
+warning: variable does not need to be mutable
+   --> crates\rfvp\src\no_std_core.rs:420:13
+    |
+420 |         let mut screen = parser.get_screen_size();
+    |             ----^^^^^^
+    |             |
+    |             help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `virtual_size`
+    --> crates\rfvp\src\rendering\prim_commands.rs:1118:5
+     |
+1118 |     virtual_size: (u32, u32),
+     |     ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_virtual_size`
+     |
+     = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates\rfvp\src\subsystem\components\syscalls\graph.rs:433:9
+    |
+433 |     let mut x = x.as_int().unwrap_or(0);
+    |         ----^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates\rfvp\src\subsystem\components\syscalls\graph.rs:434:9
+    |
+434 |     let mut y = y.as_int().unwrap_or(0);
+    |         ----^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates\rfvp\src\subsystem\components\syscalls\graph.rs:504:9
+    |
+504 |     let mut x = x.as_int().unwrap_or(0);
+    |         ----^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates\rfvp\src\subsystem\components\syscalls\graph.rs:505:9
+    |
+505 |     let mut y = y.as_int().unwrap_or(0);
+    |         ----^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates\rfvp\src\subsystem\components\syscalls\graph.rs:580:9
+    |
+580 |     let mut x = x.as_int().unwrap_or(0);
+    |         ----^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates\rfvp\src\subsystem\components\syscalls\graph.rs:581:9
+    |
+581 |     let mut y = y.as_int().unwrap_or(0);
+    |         ----^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates\rfvp\src\subsystem\components\syscalls\graph.rs:650:9
+    |
+650 |     let mut x = x.as_int().unwrap_or(0);
+    |         ----^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates\rfvp\src\subsystem\components\syscalls\graph.rs:651:9
+    |
+651 |     let mut y = y.as_int().unwrap_or(0);
+    |         ----^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates\rfvp\src\subsystem\components\syscalls\graph.rs:652:9
+    |
+652 |     let mut w = w.as_int().unwrap_or(0);
+    |         ----^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates\rfvp\src\subsystem\components\syscalls\graph.rs:653:9
+    |
+653 |     let mut h = h.as_int().unwrap_or(0);
+    |         ----^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates\rfvp\src\subsystem\components\syscalls\graph.rs:697:9
+    |
+697 |     let mut u = match u.as_int() {
+    |         ----^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates\rfvp\src\subsystem\components\syscalls\graph.rs:705:9
+    |
+705 |     let mut v = match v.as_int() {
+    |         ----^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates\rfvp\src\subsystem\components\syscalls\graph.rs:747:9
+    |
+747 |     let mut x = if !x.is_nil() {
+    |         ----^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates\rfvp\src\subsystem\components\syscalls\graph.rs:764:9
+    |
+764 |     let mut y = if !y.is_nil() {
+    |         ----^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates\rfvp\src\subsystem\components\syscalls\graph.rs:814:9
+    |
+814 |     let mut w = if !w.is_nil() {
+    |         ----^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates\rfvp\src\subsystem\components\syscalls\graph.rs:831:9
+    |
+831 |     let mut h = if !h.is_nil() {
+    |         ----^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates\rfvp\src\subsystem\components\syscalls\motion.rs:175:9
+    |
+175 |     let mut src_x = match src_x {
+    |         ----^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates\rfvp\src\subsystem\components\syscalls\motion.rs:180:9
+    |
+180 |     let mut src_y = match src_y {
+    |         ----^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates\rfvp\src\subsystem\components\syscalls\motion.rs:185:9
+    |
+185 |     let mut dst_x = match dst_x {
+    |         ----^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates\rfvp\src\subsystem\components\syscalls\motion.rs:190:9
+    |
+190 |     let mut dst_y = match dst_y {
+    |         ----^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: value assigned to `slot_id` is never read
+   --> crates\rfvp\src\subsystem\components\syscalls\saveload.rs:108:31
+    |
+108 |             let mut slot_id = 0;
+    |                               ^
+    |
+    = help: maybe it is overwritten before being read?
+    = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: value assigned to `texture_id` is never read
+   --> crates\rfvp\src\subsystem\components\syscalls\saveload.rs:109:34
+    |
+109 |             let mut texture_id = 0;
+    |                                  ^
+    |
+    = help: maybe it is overwritten before being read?
+
+warning: variable does not need to be mutable
+   --> crates\rfvp\src\subsystem\components\syscalls\text.rs:333:9
+    |
+333 |     let mut space_vertical = match space_vertical {
+    |         ----^^^^^^^^^^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates\rfvp\src\subsystem\components\syscalls\text.rs:337:9
+    |
+337 |     let mut space_horizon = match space_horizon {
+    |         ----^^^^^^^^^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates\rfvp\src\subsystem\components\syscalls\text.rs:341:9
+    |
+341 |     let mut text_start_vertical = match text_start_vertical {
+    |         ----^^^^^^^^^^^^^^^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates\rfvp\src\subsystem\components\syscalls\text.rs:345:9
+    |
+345 |     let mut text_start_horizon = match text_start_horizon {
+    |         ----^^^^^^^^^^^^^^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates\rfvp\src\subsystem\components\syscalls\text.rs:349:9
+    |
+349 |     let mut ruby_horizon = match ruby_horizon {
+    |         ----^^^^^^^^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates\rfvp\src\subsystem\components\syscalls\text.rs:353:9
+    |
+353 |     let mut ruby_vertical = match ruby_vertical {
+    |         ----^^^^^^^^^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: value assigned to `enqueue` is never read
+   --> crates\rfvp\src\subsystem\resources\input_manager.rs:384:27
+    |
+384 |         let mut enqueue = false;
+    |                           ^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+
+warning: value assigned to `should_record` is never read
+   --> crates\rfvp\src\subsystem\resources\input_manager.rs:443:33
+    |
+443 |         let mut should_record = false;
+    |                                 ^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+
+warning: value assigned to `prev_bits` is never read
+   --> crates\rfvp\src\subsystem\resources\input_manager.rs:444:29
+    |
+444 |         let mut prev_bits = 0u32;
+    |                             ^^^^
+    |
+    = help: maybe it is overwritten before being read?
+
+warning: value assigned to `should_record` is never read
+   --> crates\rfvp\src\subsystem\resources\input_manager.rs:482:33
+    |
+482 |         let mut should_record = false;
+    |                                 ^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+
+warning: value assigned to `prev_bits` is never read
+   --> crates\rfvp\src\subsystem\resources\input_manager.rs:483:29
+    |
+483 |         let mut prev_bits = 0u32;
+    |                             ^^^^
+    |
+    = help: maybe it is overwritten before being read?
+
+warning: variable does not need to be mutable
+  --> crates\rfvp\src\subsystem\resources\motion_manager\normal_move.rs:22:13
+   |
+22 |         let mut cur: i16 = prim_id as i16;
+   |             ----^^^
+   |             |
+   |             help: remove this `mut`
+
+warning: variable does not need to be mutable
+  --> crates\rfvp\src\subsystem\resources\motion_manager\rotation_move.rs:22:13
+   |
+22 |         let mut cur: i16 = prim_id as i16;
+   |             ----^^^
+   |             |
+   |             help: remove this `mut`
+
+warning: variable does not need to be mutable
+  --> crates\rfvp\src\subsystem\resources\motion_manager\s2_move.rs:22:13
+   |
+22 |         let mut cur: i16 = prim_id as i16;
+   |             ----^^^
+   |             |
+   |             help: remove this `mut`
+
+warning: unused variable: `half_w`
+   --> crates\rfvp\src\subsystem\resources\motion_manager\snow.rs:223:13
+    |
+223 |         let half_w = (game_w as f32) * 0.5_f32;
+    |             ^^^^^^ help: if this is intentional, prefix it with an underscore: `_half_w`
+
+warning: unused variable: `half_h`
+   --> crates\rfvp\src\subsystem\resources\motion_manager\snow.rs:224:13
+    |
+224 |         let half_h = (game_h as f32) * 0.5_f32;
+    |             ^^^^^^ help: if this is intentional, prefix it with an underscore: `_half_h`
+
+warning: variable does not need to be mutable
+  --> crates\rfvp\src\subsystem\resources\motion_manager\z_move.rs:22:13
+   |
+22 |         let mut cur: i16 = prim_id as i16;
+   |             ----^^^
+   |             |
+   |             help: remove this `mut`
+
+warning: value assigned to `edge_x` is never read
+   --> crates\rfvp\src\subsystem\resources\motion_manager\mod.rs:680:34
+    |
+680 |                 let mut edge_x = 0i32;
+    |                                  ^^^^
+    |
+    = help: maybe it is overwritten before being read?
+
+warning: value assigned to `edge_y` is never read
+   --> crates\rfvp\src\subsystem\resources\motion_manager\mod.rs:681:34
+    |
+681 |                 let mut edge_y = 0i32;
+    |                                  ^^^^
+    |
+    = help: maybe it is overwritten before being read?
+
+warning: value assigned to `line_has_any` is never read
+    --> crates\rfvp\src\subsystem\resources\text_manager.rs:3086:9
+     |
+3086 |         line_has_any = false;
+     |         ^^^^^^^^^^^^^^^^^^^^
+     |
+     = help: maybe it is overwritten before being read?
+
+warning: value assigned to `line_has_any` is never read
+    --> crates\rfvp\src\subsystem\resources\text_manager.rs:2759:25
+     |
+2759 |                         line_has_any = false;
+     |                         ^^^^^^^^^^^^^^^^^^^^
+     |
+     = help: maybe it is overwritten before being read?
+
+warning: value assigned to `line_has_any` is never read
+    --> crates\rfvp\src\subsystem\resources\text_manager.rs:2874:25
+     |
+2874 |                         line_has_any = false;
+     |                         ^^^^^^^^^^^^^^^^^^^^
+     |
+     = help: maybe it is overwritten before being read?
+
+warning: value assigned to `line_has_any` is never read
+    --> crates\rfvp\src\subsystem\resources\text_manager.rs:2948:25
+     |
+2948 |                         line_has_any = false;
+     |                         ^^^^^^^^^^^^^^^^^^^^
+     |
+     = help: maybe it is overwritten before being read?
+
+warning: type `SavedStackInfo` is more private than the item `script::Variant::SavedStackInfo::0`
+   --> crates\rfvp\src\script\mod.rs:100:20
+    |
+100 |     SavedStackInfo(SavedStackInfo),
+    |                    ^^^^^^^^^^^^^^ field `script::Variant::SavedStackInfo::0` is reachable at visibility `pub`
+    |
+note: but type `SavedStackInfo` is only usable at visibility `pub(self)`
+   --> crates\rfvp\src\script\mod.rs:21:1
+    |
+ 21 | struct SavedStackInfo {
+    | ^^^^^^^^^^^^^^^^^^^^^
+    = note: `#[warn(private_interfaces)]` on by default
+
+warning: type `SavedStackInfo` is more private than the item `script::Variant::as_saved_stack_info_mut`
+   --> crates\rfvp\src\script\mod.rs:189:5
+    |
+189 |     pub fn as_saved_stack_info_mut(&mut self) -> Option<&mut SavedStackInfo> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ method `script::Variant::as_saved_stack_info_mut` is reachable at visibility `pub`
+    |
+note: but type `SavedStackInfo` is only usable at visibility `pub(self)`
+   --> crates\rfvp\src\script\mod.rs:21:1
+    |
+ 21 | struct SavedStackInfo {
+    | ^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `BIG` is never used
+  --> crates\rfvp\src\no_std_harness.rs:42:15
+   |
+42 |     pub const BIG: usize = 32 * 1024;
+   |               ^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `range_f32` is never used
+  --> crates\rfvp\src\platform_random.rs:65:8
+   |
+65 | pub fn range_f32(start: f32, end: f32) -> f32 {
+   |        ^^^^^^^^^
+
+warning: struct `SystemTime` is never constructed
+  --> crates\rfvp\src\platform_time.rs:71:16
+   |
+71 |     pub struct SystemTime {
+   |                ^^^^^^^^^^
+
+warning: constant `UNIX_EPOCH` is never used
+  --> crates\rfvp\src\platform_time.rs:75:15
+   |
+75 |     pub const UNIX_EPOCH: SystemTime = SystemTime { us: 0 };
+   |               ^^^^^^^^^^
+
+warning: associated items `now` and `duration_since` are never used
+  --> crates\rfvp\src\platform_time.rs:78:16
+   |
+77 |     impl SystemTime {
+   |     --------------- associated items in this implementation
+78 |         pub fn now() -> Self {
+   |                ^^^
+...
+82 |         pub fn duration_since(&self, earlier: SystemTime) -> Result<Duration, Duration> {
+   |                ^^^^^^^^^^^^^^
+
+warning: methods `wants_snapshot` and `set_snapshot` are never used
+  --> crates\rfvp\src\rendering\mask_dissolve.rs:27:12
+   |
+25 | impl MaskDissolveFrame {
+   | ---------------------- methods in this implementation
+26 |     /// Whether the renderer must capture the frame it last showed (before drawing the next one).
+27 |     pub fn wants_snapshot(&self, motion: &MotionManager) -> bool {
+   |            ^^^^^^^^^^^^^^
+...
+33 |     pub fn set_snapshot(&mut self, motion: &MotionManager, frame: RgbaImage) {
+   |            ^^^^^^^^^^^^
+
+warning: method `update_prim` is never used
+   --> crates\rfvp\src\subsystem\anzu_scene.rs:189:8
+    |
+ 30 | impl AnzuScene {
+    | -------------- method in this implementation
+...
+189 |     fn update_prim(&mut self, _game_data: &mut GameData, _elapsed: u64) {}
+    |        ^^^^^^^^^^^
+
+warning: function `variant_truthy` is never used
+   --> crates\rfvp\src\subsystem\components\syscalls\legacy.rs:136:4
+    |
+136 | fn variant_truthy(arg: &Variant) -> bool {
+    |    ^^^^^^^^^^^^^^
+
+warning: field `current_event` is never read
+   --> crates\rfvp\src\subsystem\resources\input_manager.rs:120:5
+    |
+110 | pub struct InputManager {
+    |            ------------ field in this struct
+...
+120 |     current_event: PressItem,
+    |     ^^^^^^^^^^^^^
+    |
+    = note: `InputManager` has a derived impl for the trait `Debug`, but this is intentionally ignored during dead code analysis
+
+warning: methods `is_reverse`, `get_duration`, `get_elapsed`, and `get_anm_type` are never used
+  --> crates\rfvp\src\subsystem\resources\motion_manager\alpha.rs:72:12
+   |
+45 | impl AlphaMotion {
+   | ---------------- methods in this implementation
+...
+72 |     pub fn is_reverse(&self) -> bool {
+   |            ^^^^^^^^^^
+...
+84 |     pub fn get_duration(&self) -> i32 {
+   |            ^^^^^^^^^^^^
+...
+88 |     pub fn get_elapsed(&self) -> i32 {
+   |            ^^^^^^^^^^^
+...
+92 |     pub fn get_anm_type(&self) -> AlphaMotionType {
+   |            ^^^^^^^^^^^^
+
+warning: methods `is_active` and `reset` are never used
+  --> crates\rfvp\src\subsystem\resources\motion_manager\dissolve2.rs:70:19
+   |
+42 | impl Dissolve2State {
+   | ------------------- methods in this implementation
+...
+70 |     pub(crate) fn is_active(&self) -> bool {
+   |                   ^^^^^^^^^
+...
+74 |     pub(crate) fn reset(&mut self) {
+   |                   ^^^^^
+
+warning: associated function `new` is never used
+  --> crates\rfvp\src\subsystem\resources\motion_manager\snow.rs:22:12
+   |
+21 | impl SnowFlake {
+   | -------------- associated function in this implementation
+22 |     pub fn new() -> Self {
+   |            ^^^
+
+warning: methods `get_src_x`, `get_src_y`, `get_src_z`, `get_duration`, `get_elapsed`, and `get_reverse` are never used
+   --> crates\rfvp\src\subsystem\resources\motion_manager\v3d.rs:70:12
+    |
+ 53 | impl V3dMotion {
+    | -------------- methods in this implementation
+...
+ 70 |     pub fn get_src_x(&self) -> i32 {
+    |            ^^^^^^^^^
+...
+ 78 |     pub fn get_src_y(&self) -> i32 {
+    |            ^^^^^^^^^
+...
+ 86 |     pub fn get_src_z(&self) -> i32 {
+    |            ^^^^^^^^^
+...
+ 94 |     pub fn get_duration(&self) -> i32 {
+    |            ^^^^^^^^^^^^
+...
+ 98 |     pub fn get_elapsed(&self) -> i32 {
+    |            ^^^^^^^^^^^
+...
+106 |     pub fn get_reverse(&self) -> bool {
+    |            ^^^^^^^^^^^
+
+warning: function `fontitem_char_count` is never used
+   --> crates\rfvp\src\subsystem\resources\text_manager.rs:154:4
+    |
+154 | fn fontitem_char_count(it: &FontItem) -> usize {
+    |    ^^^^^^^^^^^^^^^^^^^
+
+warning: method `primary` is never used
+   --> crates\rfvp\src\subsystem\resources\text_manager.rs:340:8
+    |
+331 | impl FontFallbackSet {
+    | -------------------- method in this implementation
+...
+340 |     fn primary(&self) -> &Font {
+    |        ^^^^^^^
+
+warning: methods `gaiji_draw_bounds`, `draw_gaiji_unit`, `draw_string_unit`, `clear_visible_surface`, and `rebuild_visible_surface_from_cache` are never used
+    --> crates\rfvp\src\subsystem\resources\text_manager.rs:2219:8
+     |
+1312 | impl TextItem {
+     | ------------- methods in this implementation
+...
+2219 |     fn gaiji_draw_bounds(
+     |        ^^^^^^^^^^^^^^^^^
+...
+2410 |     fn draw_gaiji_unit(
+     |        ^^^^^^^^^^^^^^^
+...
+2446 |     fn draw_string_unit(
+     |        ^^^^^^^^^^^^^^^^
+...
+2590 |     fn clear_visible_surface(&mut self) {
+     |        ^^^^^^^^^^^^^^^^^^^^^
+...
+2644 |     fn rebuild_visible_surface_from_cache(&mut self) {
+     |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: method `as_24bit_texture` is never used
+   --> crates\rfvp\src\subsystem\resources\texture.rs:511:8
+    |
+ 97 | impl NvsgTexture {
+    | ---------------- method in this implementation
+...
+511 |     fn as_24bit_texture(&self, index: usize) -> Result<ImageBuffer<image::Rgb<u8>, Vec<u8>>> {
+    |        ^^^^^^^^^^^^^^^^
+
+warning: fields `frame_number` and `measure_start` are never read
+  --> crates\rfvp\src\subsystem\resources\time.rs:25:9
+   |
+23 |     pub struct Time {
+   |                ---- fields in this struct
+24 |         delta_duration: Duration,
+25 |         frame_number: u64,
+   |         ^^^^^^^^^^^^
+26 |         measure_start: Instant,
+   |         ^^^^^^^^^^^^^
+
+warning: method `frame` is never used
+  --> crates\rfvp\src\subsystem\resources\time.rs:51:23
+   |
+43 |     impl Time {
+   |     --------- method in this implementation
+...
+51 |         pub(crate) fn frame(&mut self) -> Duration {
+   |                       ^^^^^
+
+warning: method `add_delta_duration` is never used
+   --> crates\rfvp\src\subsystem\resources\time.rs:224:23
+    |
+185 |     impl Timers {
+    |     ----------- method in this implementation
+...
+224 |         pub(crate) fn add_delta_duration(&mut self, delta_duration: Duration) {
+    |                       ^^^^^^^^^^^^^^^^^^
+
+warning: methods `set_dimensions` and `reset_future_settings` are never used
+  --> crates\rfvp\src\subsystem\resources\window.rs:47:19
+   |
+37 | impl Window {
+   | ----------- methods in this implementation
+...
+47 |     pub(crate) fn set_dimensions(&mut self, width: u32, height: u32) {
+   |                   ^^^^^^^^^^^^^^
+...
+60 |     pub(crate) fn reset_future_settings(&mut self) {
+   |                   ^^^^^^^^^^^^^^^^^^^^^
+
+warning: enum `SceneAction` is never used
+  --> crates\rfvp\src\subsystem\scene.rs:30:17
+   |
+30 | pub(crate) enum SceneAction {
+   |                 ^^^^^^^^^^^
+
+warning: struct `SceneMachine` is never constructed
+  --> crates\rfvp\src\subsystem\scene.rs:39:19
+   |
+39 | pub(crate) struct SceneMachine {
+   |                   ^^^^^^^^^^^^
+
+warning: method `apply_scene_action` is never used
+  --> crates\rfvp\src\subsystem\scene.rs:44:19
+   |
+43 | impl SceneMachine {
+   | ----------------- method in this implementation
+44 |     pub(crate) fn apply_scene_action(&mut self, action: SceneAction, data: &mut GameData) {
+   |                   ^^^^^^^^^^^^^^^^^^
+
+warning: field `0` is never read
+  --> crates\rfvp\src\subsystem\scene.rs:75:12
+   |
+75 |     Switch(Box<dyn Scene>),
+   |     ------ ^^^^^^^^^^^^^^
+   |     |
+   |     field in this variant
+   |
+help: consider changing the field to be of unit type to suppress this warning while preserving the field numbering, or remove the field
+   |
+75 -     Switch(Box<dyn Scene>),
+75 +     Switch(()),
+   |
+
+warning: method `action` is never used
+  --> crates\rfvp\src\subsystem\scene.rs:92:19
+   |
+85 | impl SceneController {
+   | -------------------- method in this implementation
+...
+92 |     pub(crate) fn action(&mut self) -> Option<SceneTrans> {
+   |                   ^^^^^^
+
+warning: struct `Scheduler` is never constructed
+  --> crates\rfvp\src\subsystem\scheduler.rs:13:19
+   |
+13 | pub(crate) struct Scheduler {
+   |                   ^^^^^^^^^
+
+warning: methods `add_system` and `execute` are never used
+  --> crates\rfvp\src\subsystem\scheduler.rs:18:19
+   |
+17 | impl Scheduler {
+   | -------------- methods in this implementation
+18 |     pub(crate) fn add_system(&mut self, system: fn(&mut GameData)) {
+   |                   ^^^^^^^^^^
+...
+21 |     pub(crate) fn execute(&mut self, data: &mut GameData) {
+   |                   ^^^^^^^
+
+warning: `rfvp` (lib test) generated 157 warnings (run `cargo fix --lib -p rfvp --tests` to apply 104 suggestions)
+    Finished `release` profile [optimized] target(s) in 19.66s
+     Running unittests src\lib.rs (m5-harness-target\release\deps\rfvp-30d5043da93e3605.exe)
+
+thread 'no_std_harness::saves_and_loads_a_slot' (38428) panicked at crates\rfvp\src\no_std_harness.rs:891:5:
+assertion `left != right` failed: the story did not move on
+  left: 11908318807776354367
+ right: 11908318807776354367
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+error: test failed, to rerun pass `--lib`
