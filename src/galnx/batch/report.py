@@ -14,13 +14,21 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable, Sequence
 
-REPORT_SCHEMA_VERSION = 1
+REPORT_SCHEMA_VERSION = 2
 REPORT_DIRNAME = ".galnx"
 REPORT_PREFIX = "batch-report-"
 REPORT_SUFFIX = ".json"
 LATEST_NAME = "latest.json"
 DEFAULT_KEEP = 10
 PROJECT_STATUSES = ("ok", "warn", "fail", "skipped")
+BUILD_STATES = (
+    "not_run",
+    "not_configured",
+    "executed",
+    "cache_hit",
+    "failed",
+    "skipped",
+)
 
 
 class ReportError(ValueError):
@@ -65,11 +73,22 @@ def build_report(
         "fail": 0,
         "skipped": 0,
         "duration_s": _round(duration_s),
+        "executed": 0,
+        "not_configured": 0,
+        "cache_hits": 0,
+        "cache_misses": 0,
     }
     for project in projects:
         status = str(project.get("status", ""))
-        if status in totals:
+        if status in PROJECT_STATUSES:
             totals[status] += 1
+        build_state = str(project.get("build_state", ""))
+        if build_state == "executed":
+            totals["executed"] += 1
+        elif build_state == "not_configured":
+            totals["not_configured"] += 1
+        if (project.get("cache") or {}).get("hit"):
+            totals["cache_hits"] += 1
     return {
         "schema_version": REPORT_SCHEMA_VERSION,
         "generated_at": generated,
@@ -358,14 +377,25 @@ def print_summary(report: dict[str, Any], written: dict[str, Any] | None = None)
                 int(totals.get("built") or 0),
             )
         )
+    print(
+        "build: %d executed, %d not configured, %d cache hit(s)"
+        % (
+            int(totals.get("executed") or 0),
+            int(totals.get("not_configured") or 0),
+            int(totals.get("cache_hits") or 0),
+        )
+    )
     for project in report.get("projects") or []:
+        build_state = project.get("build_state")
+        state_suffix = "  build=%s" % build_state if build_state else ""
         print(
-            "  [%s] %s  adapter=%s  %.3fs"
+            "  [%s] %s  adapter=%s  %.3fs%s"
             % (
                 str(project.get("status", "?")).upper(),
                 project.get("path", ""),
                 project.get("adapter") or "-",
                 float(project.get("duration_s") or 0.0),
+                state_suffix,
             )
         )
         for error in project.get("errors") or []:

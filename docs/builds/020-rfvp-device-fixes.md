@@ -158,7 +158,7 @@ git apply .../rfvp-device-fixes.patch
 env MSYSTEM=MSYS CHERE_INVOKING=1 /d/devkitPro/msys2/usr/bin/bash.exe -lc 'bash /e/galnx-build/m5-switch-build3.sh'
 
 # 3) Citron 验证（进标题后真鼠标点 New Game）
-export CITRON_USER_DIR="C:/Users/ACETaffy/AppData/Roaming/citron"
+export CITRON_USER_DIR="C:/Users/<user>/AppData/Roaming/citron"
 export TEMP=/c/Users/ACETaffy/AppData/Local/Temp
 bash scripts/citron_run.sh --nro .../rfvp.nro --detach --timeout 300 --settle 8 \
   --input-steps 'wait:9000;click:1386,560;wait:55000;key:K*8;key:N;key:C'

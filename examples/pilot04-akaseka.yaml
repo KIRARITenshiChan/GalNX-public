@@ -1,3 +1,5 @@
+# NOTE: this is a real pilot record (game-specific evidence), not a reusable template.
+# For a new port start from examples/templates/minimal-manifest.yaml.
 # GalNX P42 pilot manifest - rfvp AKASEKA HD (iroseka FD) self-contained NSP.
 #
 # Game: 映入红瞳的世界 HD (AKASEKA_HD), FAVORITE, Chinese-patched release.

@@ -134,6 +134,55 @@ class CacheTests(unittest.TestCase):
         self.assertEqual(fingerprint["devkitpro_gcc"], "unknown")
         self.assertEqual(fingerprint["cmake"], "tool v1")
 
+    def test_read_and_verify_reject_old_schema_entries(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            key = "f" * 64
+            artifact = root / "out" / "demo.bin"
+            artifact.parent.mkdir(parents=True)
+            artifact.write_bytes(b"abc")
+            meta = build.entry_path(root, key)
+            meta.parent.mkdir(parents=True)
+            legacy = {
+                "schema_version": 1,
+                "key": key,
+                "artifact_abs": str(artifact),
+                "artifact_rel": "out/demo.bin",
+                "size": 3,
+                "sha256": build.sha256_file(artifact),
+            }
+            meta.write_text(json.dumps(legacy), encoding="utf-8")
+            self.assertIsNone(build.read_cache_entry(root, key))
+            ok, reason = build.verify_cache_entry(legacy)
+            self.assertFalse(ok)
+            self.assertIn("schema_version", reason)
+
+    def test_payload_includes_inputs_and_toolchain_sections(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "src").mkdir()
+            (root / "src" / "main.c").write_bytes(b"int main;")
+            config = self.config(
+                root,
+                inputs=[{"path": "src"}],
+                toolchain_components=["devkitpro_gcc", "cmake"],
+            )
+            data = data_with_build(commands=[["python", "build.py"]], artifact="out/demo.bin")
+            payload = build.cache_payload(
+                "project.yaml",
+                data,
+                config,
+                fingerprint=dict(FINGERPRINT),
+                root=root,
+            )
+            self.assertEqual(payload["schema"], build.CACHE_SCHEMA_VERSION)
+            self.assertEqual(payload["schema"], 2)
+            self.assertEqual(payload["inputs"]["state"], "ok")
+            self.assertEqual(payload["toolchain"]["components"], ["devkitpro_gcc", "cmake"])
+            self.assertEqual(payload["toolchain"]["degraded"], [])
+            self.assertIn("platform", payload["host_platform"])
+            self.assertEqual(payload["cache"]["miss_reasons"], [])
+
 
 if __name__ == "__main__":
     unittest.main()

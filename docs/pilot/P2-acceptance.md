@@ -154,7 +154,7 @@ romfs:/game_files.txt            # version=pilot01-r2 / target=/kirikiri/haruno 
 
 ## 4. 运行验收实测
 
-环境：Citron Nightly `0237a9b88`（Windows x64）、Vulkan、`sd/mc` 根 = `C:/Users/ACETaffy/AppData/Roaming/citron/sdmc`。
+环境：Citron Nightly `0237a9b88`（Windows x64）、Vulkan、`sd/mc` 根 = `C:/Users/<user>/AppData/Roaming/citron/sdmc`。
 
 ### 4.1 全新 SD 首启（S2）
 

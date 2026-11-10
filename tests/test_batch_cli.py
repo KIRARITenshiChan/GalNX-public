@@ -64,7 +64,10 @@ class BatchCliTests(unittest.TestCase):
             code, out = run_cli(["batch", "run", "--dir", str(root), "--json"])
             self.assertEqual(code, 0)
             report = json.loads(out)
-            self.assertEqual(report["totals"]["ok"], 1)
+            # krkrsdl2 is research-level (emulator-verified only), so the project
+            # status is warn: exit code stays 0 because there is no failure.
+            self.assertEqual(report["totals"]["ok"], 0)
+            self.assertEqual(report["totals"]["warn"], 1)
             self.assertTrue((root / ".galnx" / "latest.json").is_file())
 
     def test_run_failing_project_returns_2(self) -> None:
@@ -76,7 +79,8 @@ class BatchCliTests(unittest.TestCase):
             self.assertEqual(code, 2)
             report = json.loads(out)
             self.assertEqual(report["totals"]["fail"], 1)
-            self.assertEqual(report["totals"]["ok"], 1)
+            self.assertEqual(report["totals"]["ok"], 0)
+            self.assertEqual(report["totals"]["warn"], 1)
 
     def test_run_human_summary(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

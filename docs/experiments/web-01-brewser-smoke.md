@@ -31,7 +31,7 @@
 - SD 卡根：`Ryujinx-canary/portable/sdcard`（默认 portable 布局）；日志目录：`Ryujinx-canary/portable/Logs/`（Ryujinx 只保留最近几个日志文件，旧文件会被清理——这是部分日志无法附上的原因）。
 - **必须去提权启动**：本 agent 的 shell 是 elevated，直接 `Start-Process Ryujinx.exe` 会弹模态错误框：原文 **"Ryujinx is not intended to be run as an administrator."**（截图 `evidence/ryu-dialog-01.png`）。可行方式：`runas /trustlevel:0x20000 <wrapper.cmd>`（用户提供的 Run.bat 同款思路），wrapper .cmd 内用完整引号命令行 `"Ryujinx.exe" "<path>.nro"`；直接给 `runas` 传整串带空格参数会被拆散（日志 `The file was not found: 'Switch\Ryujinx-canary\...'`，见 `evidence/logs/attempt3-arg-split.log`）。
 - 实际启动命令：
-  - `powershell Start-Process runas.exe -ArgumentList '/trustlevel:0x20000','C:\Users\ACETaffy\glx\launch-ryujinx-hbmenu.cmd'`（同类还有 launch-ryujinx-appstore.cmd / launch-ryujinx-nxjs.cmd）
+  - `powershell Start-Process runas.exe -ArgumentList '/trustlevel:0x20000','C:\Users\<user>\glx\launch-ryujinx-hbmenu.cmd'`（同类还有 launch-ryujinx-appstore.cmd / launch-ryujinx-nxjs.cmd）
   - wrapper 内容：`@echo off` / `cd /d "E:\Othergames\Nintendo Switch\Ryujinx-canary"` / `"E:\...\Ryujinx.exe" "E:\...\portable\sdcard\switch\<file>.nro"`
 - 截图方式：`window_capture`（DWM thumbnail，不抢焦点），证据见第 8 节。
 

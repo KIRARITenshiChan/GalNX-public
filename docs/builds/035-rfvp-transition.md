@@ -152,7 +152,7 @@ Citron GPU 取证：
 
 ~~~
 export CITRON_USER_DIR=/c/Users/ACETaffy/AppData/Roaming/citron
-export APPDATA='C:\Users\ACETaffy\AppData\Roaming'
+export APPDATA='C:\Users\<user>\AppData\Roaming'
 cd "/e/Othergames/Nintendo Switch/Workspace/GalNX"
 bash scripts/citron_run.sh --nro /e/galnx-build/p28/rfvp-v114/target/rfvp-switch/switch/rfvp.nro \
   --out /e/galnx-build/p28/run-keep --timeout 240 --settle 8 --keep \

@@ -1,6 +1,6 @@
 launch mode : schtasks-limited
 wrapper     : C:\ProgramData\galnx-harness\launch-20261106-052325-rfvp.cmd
-cmdline     : "E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\web-02\citron\citron.exe" -g "C:\Users\ACETaffy\AppData\Roaming\citron\sdmc\switch\galnx-harness\rfvp.nro"
+cmdline     : "E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\web-02\citron\citron.exe" -g "C:\Users\<user>\AppData\Roaming\citron\sdmc\switch\galnx-harness\rfvp.nro"
 game type   : nro
 game path   : /e/galnx-build/p25/rfvp-v111/target/rfvp-switch/switch/rfvp.nro
 stage path  : /c/Users/ACETaffy/AppData/Roaming/citron/sdmc/switch/galnx-harness/rfvp.nro

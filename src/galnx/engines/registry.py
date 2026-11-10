@@ -15,6 +15,7 @@ from pathlib import Path
 from typing import Any, Iterable, Mapping
 
 from .descriptor import (
+    CAPABILITY_KEYS,
     EngineDescriptor,
     EngineDescriptorError,
     load_descriptor,
@@ -30,15 +31,26 @@ class EngineRegistryError(ValueError):
 def _capabilities(
     notes: Mapping[str, str] | None = None,
     supported: Mapping[str, bool] | None = None,
+    verification: Mapping[str, str] | None = None,
+    backends: Mapping[str, str] | None = None,
 ) -> dict[str, dict[str, Any]]:
+    """Build the six-entry capability mapping for a built-in descriptor."""
     notes = notes or {}
-    flags = {"video": True, "audio": True, "input": True, "save": True, "touch": False}
+    verification = verification or {}
+    backends = backends or {}
+    flags = {"graphics": True, "movie": True, "audio": True, "input": True, "save": True, "touch": False}
     flags.update(supported or {})
-    supported = flags
-    return {
-        key: {"supported": supported[key], "note": notes.get(key, "")}
-        for key in ("video", "audio", "input", "save", "touch")
-    }
+    result: dict[str, dict[str, Any]] = {}
+    for key in CAPABILITY_KEYS:
+        entry: dict[str, Any] = {
+            "supported": flags[key],
+            "note": notes.get(key, ""),
+            "verification": verification.get(key, "unknown"),
+        }
+        if key in backends:
+            entry["backend"] = backends[key]
+        result[key] = entry
+    return result
 
 
 def _builtin(descriptor: EngineDescriptor) -> EngineDescriptor:
@@ -65,13 +77,29 @@ KRKRSDL2 = _builtin(EngineDescriptor(
     ),
     target_kind="nro",
     build_backend="cmake-switch",
-    capabilities=_capabilities({
-        "video": "SDL2 renderer through switch-sdl2 + EGL (Mesa Nouveau).",
-        "audio": "FAudio (built from external/FAudio) plus the SDL2 audio device.",
-        "input": "SDL2 joystick/keyboard; the GalNX input layer injects keyboard/mouse events.",
-        "save": "KiriKiri save data through the libnx save namespace (per-title).",
-        "touch": "Not wired in the upstream SDL2 backend.",
-    }),
+    capabilities=_capabilities(
+        notes={
+            "graphics": "SDL2 renderer through switch-sdl2 + EGL (Mesa Nouveau).",
+            "movie": "Upstream movie path (FFmpeg/AVI) is linked but no run has exercised video playback.",
+            "audio": "FAudio (built from external/FAudio) plus the SDL2 audio device; no run has verified sound output.",
+            "input": "SDL2 joystick/keyboard; the GalNX input layer injects keyboard/mouse events. Citron M1 title + advance passed.",
+            "save": "KiriKiri save data through the libnx save namespace (per-title); not exercised in the M1 run.",
+            "touch": "Not wired in the upstream SDL2 backend.",
+        },
+        verification={
+            "graphics": "emulator_verified",
+            "movie": "unknown",
+            "audio": "unknown",
+            "input": "emulator_verified",
+            "save": "unknown",
+            "touch": "unknown",
+        },
+        backends={
+            "graphics": "sdl2-egl",
+            "movie": "ffmpeg",
+            "audio": "faudio+sdl2",
+        },
+    ),
     default_input_profile="krkrsdl2",
     artifact_naming="{id}-{version}.nro",
     content_layout={
@@ -80,7 +108,23 @@ KRKRSDL2 = _builtin(EngineDescriptor(
         "destination": "romfs/data.xp3",
         "notes": "Upstream CMake takes -DEMBED_DATA_PATH=<file> and embeds it as romfs/<basename> through elf2nro.",
     },
-    status="ready",
+    status="research",
+    status_reason=(
+        "Emulator-level only: a clean GalNX build renders the title screen and advances text in "
+        "Citron Nightly 0237a9b88, but no Switch hardware run exists yet, audio/movie/save are "
+        "unverified and the engine has no on-device launcher/menu work. Use it for build plans and "
+        "emulator experiments, not for device claims."
+    ),
+    verification={
+        "status": "emulator_verified",
+        "hardware": "Citron Nightly 0237a9b88 (Windows, Vulkan)",
+        "tested_at": "2026-10-26",
+        "evidence": (
+            "docs/builds/001-krkrsdl2-upstream.md",
+            "docs/builds/004-krkrsdl2-switch-fixes.md",
+        ),
+        "notes": "Title screen plus input passed in Citron; no Switch hardware run.",
+    },
     evidence_urls=(
         "docs/builds/001-krkrsdl2-upstream.md",
         "docs/builds/004-krkrsdl2-switch-fixes.md",
@@ -104,13 +148,30 @@ BREWSER = _builtin(EngineDescriptor(
     ),
     target_kind="web",
     build_backend="prebuilt",
-    capabilities=_capabilities({
-        "video": "V8 + Skia Canvas2D, WebGL 1/2 through Mesa Nouveau.",
-        "audio": "Web Audio API bridged onto the nx.js audio backend.",
-        "input": "Web Gamepad/keyboard events; the GalNX input layer supplies the keyboard/mouse defaults.",
-        "save": "localStorage/IndexedDB persisted to sdmc under sdmc:/switch/brewser (globally shared, not a per-app sandbox).",
-        "touch": "Touch events are exposed to web apps.",
-    }, {"touch": True}),
+    capabilities=_capabilities(
+        notes={
+            "graphics": "V8 + Skia Canvas2D, WebGL 1/2 through Mesa Nouveau; Citron smoke render passed.",
+            "movie": "HTML5 video depends on the nx.js runtime codecs; playback has not been exercised.",
+            "audio": "Web Audio API bridged onto the nx.js audio backend; sound output has not been exercised.",
+            "input": "Web Gamepad/keyboard events; the GalNX input layer supplies the keyboard/mouse defaults.",
+            "save": "localStorage/IndexedDB persisted under sdmc:/switch/brewser (globally shared). Citron runs show values do not survive a restart.",
+            "touch": "Touch events are exposed to web apps; not exercised.",
+        },
+        supported={"touch": True},
+        verification={
+            "graphics": "emulator_verified",
+            "movie": "unknown",
+            "audio": "unknown",
+            "input": "source_review",
+            "save": "emulator_verified",
+            "touch": "source_review",
+        },
+        backends={
+            "graphics": "skia+webgl",
+            "audio": "web-audio",
+            "movie": "html5-video",
+        },
+    ),
     default_input_profile="kb_mouse",
     artifact_naming="brewser.nro",
     content_layout={
@@ -119,7 +180,23 @@ BREWSER = _builtin(EngineDescriptor(
         "destination": "sdmc:/switch/brewser/apps/<app-id>/",
         "notes": "Sideload a directory named after the reverse-domain app id; brewser.nro itself is copied to sdmc:/switch/brewser.nro. Saves and config live under sdmc:/switch/brewser/.",
     },
-    status="ready",
+    status="research",
+    status_reason=(
+        "Emulator-only web runtime: the prebuilt brewser.nro loads HTML/Canvas2D/WebGL apps in "
+        "Citron, but localStorage does not survive a restart (M4-g), no Switch hardware run exists, "
+        "and save/audio/video behaviour is unverified."
+    ),
+    verification={
+        "status": "emulator_verified",
+        "hardware": "Citron Nightly 0237a9b88 (Windows, Vulkan)",
+        "tested_at": "2026-10-29",
+        "evidence": (
+            "docs/audit/02-web.md",
+            "docs/experiments/web-02-citron-smoke.md",
+            "docs/builds/006-brewser-web-adapter.md",
+        ),
+        "notes": "Prebuilt NRO renders HTML/Canvas2D/WebGL in Citron; localStorage persistence across runs disproved.",
+    },
     artifact_sha256="8ce31f5b7dfb617c18a705d0c5fc955b59f60d445b5a76e250a1dd98ccd04b13",
     evidence_urls=(
         "docs/audit/02-web.md",
@@ -143,13 +220,29 @@ ONSCRIPTER_NX = _builtin(EngineDescriptor(
     ),
     target_kind="nro",
     build_backend="devkitpro-make",
-    capabilities=_capabilities({
-        "video": "SDL2 renderer through switch-sdl2; Citron Nightly 0237a9b88 passed the R1-R5 run.",
-        "audio": "SDL2_mixer plus switch-libvorbis/opus are linked in; audio output is not verified on hardware.",
-        "input": "Keyboard/keypad mapping in source/switch_mitm.cpp; Citron captures keyboard only through PostMessage key events.",
-        "save": "ONScripter writes save*.dat to the process CWD; writability under a RomFS-only install is not verified.",
-        "touch": "Touch injection is commented out in the upstream Switch backend.",
-    }, {"audio": False, "save": False}),
+    capabilities=_capabilities(
+        notes={
+            "graphics": "SDL2 renderer through switch-sdl2; Citron Nightly 0237a9b88 passed the R1-R5 run.",
+            "movie": "Upstream movie playback is linked but no run has exercised video content.",
+            "audio": "SDL2_mixer plus switch-libvorbis/opus are linked in; audio output is not verified on hardware.",
+            "input": "Keyboard/keypad mapping in source/switch_mitm.cpp; Citron R2/R5 exercised advance and both branches.",
+            "save": "ONScripter writes save*.dat to the process CWD; writability under a RomFS-only install is not verified.",
+            "touch": "Touch injection is commented out in the upstream Switch backend.",
+        },
+        supported={"audio": False, "save": False},
+        verification={
+            "graphics": "emulator_verified",
+            "movie": "unknown",
+            "audio": "unknown",
+            "input": "emulator_verified",
+            "save": "unknown",
+            "touch": "unknown",
+        },
+        backends={
+            "graphics": "sdl2",
+            "audio": "sdl2-mixer+vorbis",
+        },
+    ),
     default_input_profile="kb_mouse",
     artifact_naming="{id}-{version}.nro",
     content_layout={
@@ -158,7 +251,23 @@ ONSCRIPTER_NX = _builtin(EngineDescriptor(
         "destination": "romfs/",
         "notes": "ONScripter-NX embeds the checked-out romfs/ directory at make time: copy the game content into src/engine/romfs/ before building and run make clean afterwards. Content needs *define/game/*start and at least one arc.nsa or arc.sar (a 0-byte placeholder passes the startup gate).",
     },
-    status="ready",
+    status="research",
+    status_reason=(
+        "Build- and emulator-verified only: a clean devkitPro build runs self-authored *define "
+        "content through R1-R5 in Citron, but there is no Switch hardware run, no multi-game "
+        "launcher/menu or save UI, and GPL-2.0-or-later distribution needs legal sign-off plus the "
+        "corresponding source."
+    ),
+    verification={
+        "status": "emulator_verified",
+        "hardware": "Citron Nightly 0237a9b88 (Windows, Vulkan)",
+        "tested_at": "2026-10-30",
+        "evidence": (
+            "docs/builds/007-onscripter-nx.md",
+            "docs/engines/verification-matrix.md",
+        ),
+        "notes": "Self-authored *define content passed R1-R5 (startup, advance, two branches); no Switch hardware run.",
+    },
     evidence_urls=("docs/builds/007-onscripter-nx.md",),
     notes="Verified end-to-end in Citron (docs/builds/007); hardware unverified. Open framework gaps: no multi-game launcher (single arc.nsa directory model) and no save/load menu UI. GPL-2.0-or-later distribution needs the corresponding source.",
 ))
@@ -222,7 +331,19 @@ class EngineRegistry:
         loaded: list[EngineDescriptor] = []
         paths = sorted(list(directory_path.glob("*.yaml")) + list(directory_path.glob("*.yml")))
         for path in paths:
-            loaded.append(self.load_file(path, replace=replace))
+            descriptor = load_descriptor(path)
+            existing = self.get(descriptor.id)
+            if existing is not None and not replace:
+                if existing.to_dict() == descriptor.to_dict():
+                    # Descriptor directories may mirror the built-ins (examples/engines/
+                    # does): an identical copy is a no-op, not a registry conflict.
+                    continue
+                raise EngineRegistryError(
+                    "engine adapter %r is already registered with a different descriptor"
+                    % descriptor.id
+                )
+            self.register(descriptor, replace=replace)
+            loaded.append(descriptor)
         return loaded
 
     def summary(self) -> list[dict[str, Any]]:

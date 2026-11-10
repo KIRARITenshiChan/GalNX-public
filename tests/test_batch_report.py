@@ -39,7 +39,7 @@ class BatchReportTests(unittest.TestCase):
     def test_build_report_totals(self) -> None:
         projects = [project("a.yaml", "ok"), project("b.yaml", "fail"), project("c.yaml", "warn")]
         report = batch.build_report("/tmp/root", projects, 1.5, generated_at="2026-10-30T03:00:00Z")
-        self.assertEqual(report["schema_version"], 1)
+        self.assertEqual(report["schema_version"], 2)
         self.assertEqual(report["generated_at"], "2026-10-30T03:00:00Z")
         totals = report["totals"]
         self.assertEqual((totals["total"], totals["ok"], totals["warn"], totals["fail"], totals["skipped"]), (3, 1, 1, 1, 0))
@@ -62,7 +62,7 @@ class BatchReportTests(unittest.TestCase):
             names = sorted(p.name for p in (root / batch.REPORT_DIRNAME).glob(batch.REPORT_PREFIX + "*.json"))
             self.assertEqual(len(names), 2)
             latest = json.loads(Path(written[-1]["latest"]).read_text(encoding="utf-8"))
-            self.assertEqual(latest["schema_version"], 1)
+            self.assertEqual(latest["schema_version"], 2)
             self.assertEqual(len(latest["projects"]), 1)
 
     def test_load_report_errors(self) -> None:

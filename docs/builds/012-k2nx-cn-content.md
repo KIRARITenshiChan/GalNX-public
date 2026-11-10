@@ -102,7 +102,7 @@ Scripts.execStorage("sys_source/Init.tjs");
 
 ## 6. 验证（CN7，模拟器级）
 
-- 部署：三包覆盖到 `C:/Users/ACETaffy/AppData/Roaming/citron/sdmc/kirikiri/haruno/`（marker `.galnx_extracted` 已存在 → 跳过解包），跑 K2NX NRO（干净构建）。
+- 部署：三包覆盖到 `C:/Users/<user>/AppData/Roaming/citron/sdmc/kirikiri/haruno/`（marker `.galnx_extracted` 已存在 → 跳过解包），跑 K2NX NRO（干净构建）。
 - run dir：`E:/Othergames/Nintendo Switch/Workspace/GalNX/workspaces/citron-harness/runs/20261030-153915-kirikiroid2`
 - k2s：`E:/galnx-build/pilot-01/p4/cn7/k2s_cn7.txt`（2,142 行，sha `c7fa504d8c16f828f779130a6c6d737c4cc199f8d71d780d80448f98d8a7e282`）
   - autopath 计数：scenario.xp3 根 2、`@_共通/` 44、`a_菜乃花/` 43、`b_このみ/` 32、`c_花梨/` 39、`d_雨音/` 46、`e_彩菜/` 18、`Replay/` 13、`エクストラ/` 0、`体験版/` 0

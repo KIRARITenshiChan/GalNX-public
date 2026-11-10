@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://galnx.local/schemas/engine.schema.json",
   "title": "GalNX Engine Descriptor",
-  "description": "Versioned record of one engine/runtime adapter: upstream source, pinned commit, license, target, build backend, capabilities, default input profile, artifact naming and content layout.",
+  "description": "Versioned record of one engine runtime adapter: upstream source, pinned commit, license, target, build backend, capability model, default input profile, artifact naming, content layout and the engine-level verification summary.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -45,7 +45,6 @@
     },
     "license_spdx": {
       "type": "string",
-      "minLength": 1,
       "description": "SPDX license id for the component GalNX depends on."
     },
     "license_url": {
@@ -80,87 +79,33 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "video",
         "audio",
         "input",
         "save",
         "touch"
       ],
+      "description": "Capability model: graphics renders the game, movie decodes video. Deprecated alias video -> graphics is accepted with a warning during loading; never write video in a new descriptor.",
       "properties": {
-        "video": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "supported"
-          ],
-          "properties": {
-            "supported": {
-              "type": "boolean"
-            },
-            "note": {
-              "type": "string"
-            }
-          }
+        "graphics": {
+          "$ref": "#/$defs/capability"
+        },
+        "movie": {
+          "$ref": "#/$defs/capability"
         },
         "audio": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "supported"
-          ],
-          "properties": {
-            "supported": {
-              "type": "boolean"
-            },
-            "note": {
-              "type": "string"
-            }
-          }
+          "$ref": "#/$defs/capability"
         },
         "input": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "supported"
-          ],
-          "properties": {
-            "supported": {
-              "type": "boolean"
-            },
-            "note": {
-              "type": "string"
-            }
-          }
+          "$ref": "#/$defs/capability"
         },
         "save": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "supported"
-          ],
-          "properties": {
-            "supported": {
-              "type": "boolean"
-            },
-            "note": {
-              "type": "string"
-            }
-          }
+          "$ref": "#/$defs/capability"
         },
         "touch": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "supported"
-          ],
-          "properties": {
-            "supported": {
-              "type": "boolean"
-            },
-            "note": {
-              "type": "string"
-            }
-          }
+          "$ref": "#/$defs/capability"
+        },
+        "video": {
+          "$ref": "#/$defs/capability"
         }
       }
     },
@@ -237,7 +182,6 @@
       "properties": {
         "url": {
           "type": "string",
-          "minLength": 1,
           "description": "Clone URL used when --fetch is given (git clone)."
         },
         "commit": {
@@ -285,7 +229,6 @@
         "properties": {
           "path": {
             "type": "string",
-            "minLength": 1,
             "description": "Path to a unified git patch (relative to the working directory or the descriptor file)."
           },
           "notes": {
@@ -343,6 +286,100 @@
           }
         },
         "workdir": {
+          "type": "string"
+        }
+      }
+    },
+    "verification": {
+      "$ref": "#/$defs/engineVerification"
+    }
+  },
+  "$defs": {
+    "capability": {
+      "type": "object",
+      "description": "One capability entry. supported/note stay backwards compatible; verification records how the claim was checked.",
+      "additionalProperties": false,
+      "required": [
+        "supported"
+      ],
+      "properties": {
+        "supported": {
+          "type": "boolean"
+        },
+        "note": {
+          "type": "string",
+          "description": "Free-form note; required by the loader but not by the raw JSON schema."
+        },
+        "verification": {
+          "type": "string",
+          "enum": [
+            "source_review",
+            "build_verified",
+            "emulator_verified",
+            "device_verified",
+            "game_verified",
+            "partial",
+            "unknown",
+            "in_progress"
+          ],
+          "description": "Required for graphics/movie/audio/input/save; optional for touch."
+        },
+        "backend": {
+          "type": "string",
+          "description": "Implementation backend, e.g. sdl2-egl, ffmpeg, nvdec, sdl2-mixer+vorbis."
+        },
+        "features": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Named sub-features, e.g. nv12-zero-copy, h264-hw-decode, software-fallback."
+        },
+        "details": {
+          "type": "object",
+          "description": "Arbitrary JSON object for backend-specific details; documentation only, never parsed by the build."
+        }
+      }
+    },
+    "engineVerification": {
+      "type": "object",
+      "description": "Engine-level verification summary (the whole engine, not one game). Per-game acceptance lives in docs/engines/verification-matrix.md.",
+      "additionalProperties": false,
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Verification level for the engine as a whole, e.g. device_verified, emulator_verified, partial, unknown."
+        },
+        "hardware": {
+          "type": "string",
+          "description": "Hardware/emulator used, e.g. Nintendo Switch, Citron Nightly 0237a9b88."
+        },
+        "firmware": {
+          "type": "string",
+          "description": "Firmware version, empty when not recorded."
+        },
+        "atmosphere": {
+          "type": "string",
+          "description": "Atmosphere version, empty when not recorded."
+        },
+        "tested_at": {
+          "type": "string",
+          "description": "Date of the latest verification run (YYYY-MM-DD)."
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Repository paths or URLs that back the summary."
+        },
+        "notes": {
           "type": "string"
         }
       }

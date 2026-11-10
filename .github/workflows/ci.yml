@@ -1,0 +1,83 @@
+# GalNX continuous integration — the portable subset of the release gate.
+#
+# The real 0.1.0 gate also needs a Windows host with devkitPro, Rust and the
+# FFmpeg nvtegra build to produce NSPs; that part runs on the maintainer's
+# machine and is documented in docs/release/0.1.0-preview.md. This workflow
+# covers everything that can be verified from a clean checkout: the Python
+# package, the test suite, the schema/descriptor references, the SBOM check,
+# the public-tree sanitizer and the CLI smoke commands.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    # The repository is developed on Windows and parts of the test suite assert
+    # Windows path semantics; cross-platform CI is a known follow-up.
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+
+      - name: Import smoke test
+        run: |
+          python -c "import galnx, yaml, jsonschema; print('galnx', galnx.__version__ if hasattr(galnx, '__version__') else 'imported')"
+
+      - name: Run test suite
+        run: python -m pytest -q
+        env:
+          PYTHONPATH: src
+
+      - name: CLI smoke tests
+        run: |
+          python -m galnx --version
+          python -m galnx --help
+          python -m galnx input list --json
+          python -m galnx engines list --json
+          python -m galnx engines info --engines-dir examples/engines rfvp
+          python -m galnx engines plan --manifest examples/pilot04-akaseka.yaml --engines-dir examples/engines --json
+        env:
+          PYTHONPATH: src
+
+      # The pilot manifests intentionally declare no build.commands, so the
+      # contract requires exit code 3 (not_configured). Assert both the plan
+      # output and that exit code instead of pretending a build ran.
+      - name: Build plan smoke test (no execution, expect not_configured)
+        shell: bash
+        run: |
+          python -m galnx build run --manifest examples/pilot04-akaseka.yaml --dry-run --json
+          code=$?
+          if [ "$code" -ne 3 ]; then
+            echo "expected exit 3 (not_configured), got $code"
+            exit 1
+          fi
+        env:
+          PYTHONPATH: src
+
+      - name: License inventory (SBOM) check
+        run: python scripts/check_license_inventory.py --json
+
+      - name: Build the public release tree and scan it
+        run: |
+          python scripts/public_release_sanitize.py --out .ci/public --zip .ci/public.zip --force
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: galnx-public-tree
+          path: .ci/public.zip
+          if-no-files-found: error

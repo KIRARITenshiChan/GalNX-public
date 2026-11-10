@@ -377,6 +377,20 @@ def cmd_engines_info(args: argparse.Namespace) -> int:
     print("  adapter:     %s (plan_build, verify_artifact, run_spec)" % type(adapter).__name__)
     supported = [key for key, value in descriptor.capabilities.items() if value.get("supported")]
     print("  capabilities: %s" % (", ".join(sorted(supported)) or "none"))
+    evidence = [
+        "%s=%s" % (key, value.get("verification", "unknown"))
+        for key, value in sorted(descriptor.capabilities.items())
+        if value.get("verification")
+    ]
+    if evidence:
+        print("  verification: %s" % " ".join(evidence))
+    engine_verification = descriptor.verification or {}
+    if engine_verification.get("status"):
+        tested = engine_verification.get("tested_at") or "date not recorded"
+        print(
+            "  engine verification: %s (tested %s)"
+            % (engine_verification["status"], tested)
+        )
     if problems:
         print("")
         print("Problems:")
@@ -474,6 +488,7 @@ def _engine_plan_result(args: argparse.Namespace, manifest_path: Path, plan, che
             "version": __version__,
             "manifest": str(manifest_path),
             "ok": ok,
+            "plan_only": True,
             "errors": errors,
             "warnings": warnings,
             "checks": [check.to_dict() for check in checks],
@@ -487,6 +502,8 @@ def _engine_plan_result(args: argparse.Namespace, manifest_path: Path, plan, che
             payload["run_spec"] = plan.run_spec
         print(json.dumps(payload, ensure_ascii=False, indent=2))
         return 0 if ok else 2
+    print("plan only: engine descriptors are advisory; nothing is built or executed")
+    print("")
     if plan is not None:
         _print_engine_plan(plan)
         print("")
@@ -575,7 +592,7 @@ def cmd_batch_build(args: argparse.Namespace) -> int:
         print(json.dumps(report, ensure_ascii=False, indent=2))
     else:
         batch_layer.print_summary(report, written)
-    return 0 if report["totals"]["fail"] == 0 else 2
+    return build_exit_code(report["totals"])
 
 
 def cmd_batch_lock(args: argparse.Namespace) -> int:
@@ -608,8 +625,92 @@ def cmd_batch_lock(args: argparse.Namespace) -> int:
     return 0 if not errors else 2
 
 
+def build_exit_code(totals: dict) -> int:
+    """Map build totals to the CLI exit code.
+
+    0 = at least one build executed, 2 = a project failed, 3 = nothing to
+    execute because no manifest declared build.commands.
+    """
+
+    if int(totals.get("fail") or 0) > 0:
+        return 2
+    if int(totals.get("executed") or 0) == 0 and int(totals.get("not_configured") or 0) > 0:
+        return 3
+    return 0
+
+
+def _print_build_plan(plan: dict, stream=None) -> None:
+    out = stream or sys.stdout
+    print("build plan: %s" % plan.get("manifest", ""), file=out)
+    print("  state:    %s" % plan.get("state", ""), file=out)
+    print("  workdir:  %s" % plan.get("workdir", ""), file=out)
+    print("  artifact: %s" % (plan.get("artifact") or "(none)"), file=out)
+    print("  timeout:  %ss" % plan.get("timeout_s", ""), file=out)
+    env = plan.get("env") or {}
+    names = env.get("names") or []
+    sensitive = set(env.get("sensitive") or [])
+    if names:
+        shown = [name + " (value hidden)" if name in sensitive else name for name in names]
+        print("  env:      %s" % ", ".join(shown), file=out)
+    commands = plan.get("commands") or []
+    if not commands:
+        print("  (no build.commands declared; nothing will run)", file=out)
+    for item in commands:
+        print("", file=out)
+        print("%d. %s" % (item.get("index", 1), item.get("command", "")), file=out)
+        print(
+            "   cwd: %s  timeout: %ss  shell: %s"
+            % (
+                item.get("cwd", ""),
+                item.get("timeout_s", ""),
+                "yes" if item.get("shell") else "no",
+            ),
+            file=out,
+        )
+
+
 def cmd_build_run(args: argparse.Namespace) -> int:
     manifest = Path(args.manifest)
+    if args.dry_run:
+        data, errors = manifest_module.load_and_validate(
+            manifest, engines_dir=args.engines_dir
+        )
+        if data is None or errors:
+            for message in errors or ["manifest is empty"]:
+                print("FAIL  %s" % message)
+            return 2
+        try:
+            plan = build_layer.plan_build_commands(manifest, data, manifest.stem)
+        except (build_layer.BuildError, ValueError) as exc:
+            print("FAIL  %s" % exc)
+            return 2
+        if args.json:
+            print(json.dumps(plan, ensure_ascii=False, indent=2))
+        else:
+            _print_build_plan(plan)
+        return 0 if plan.get("state") == "configured" else 3
+    # Trust boundary: a manifest is executable configuration.  Resolve and print
+    # the exact commands, workdir, timeout and env *names* (values masked) before
+    # anything is spawned, then require an interactive confirmation unless --yes.
+    data, errors = manifest_module.load_and_validate(manifest, engines_dir=args.engines_dir)
+    if data is None or errors:
+        for message in errors or ["manifest is empty"]:
+            print("FAIL  %s" % message)
+        return 2
+    try:
+        plan = build_layer.plan_build_commands(manifest, data, manifest.stem)
+    except (build_layer.BuildError, ValueError) as exc:
+        print("FAIL  %s" % exc)
+        return 2
+    if args.json:
+        _print_build_plan(plan, stream=sys.stderr)
+    else:
+        _print_build_plan(plan)
+    if plan.get("state") == "configured" and not args.yes and sys.stdin.isatty():
+        answer = input("Execute these commands? [y/N] ")
+        if answer.strip().lower() not in {"y", "yes"}:
+            print("aborted: user declined; nothing was executed")
+            return 2
     root = manifest.resolve().parent
     try:
         report = batch_layer.run_batch_build(
@@ -627,7 +728,7 @@ def cmd_build_run(args: argparse.Namespace) -> int:
         print(json.dumps(report, ensure_ascii=False, indent=2))
     else:
         batch_layer.print_summary(report, written)
-    return 0 if report["totals"]["fail"] == 0 else 2
+    return build_exit_code(report["totals"])
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -832,6 +933,16 @@ def build_parser() -> argparse.ArgumentParser:
     q.add_argument("--no-cache", action="store_true", help="disable the artifact cache")
     q.add_argument(
         "--rebuild", action="store_true", help="ignore cached artifacts and rebuild"
+    )
+    q.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="print the resolved build contract without executing anything",
+    )
+    q.add_argument(
+        "--yes",
+        action="store_true",
+        help="skip the interactive confirmation before executing build.commands (CI)",
     )
     q.add_argument("--json", action="store_true", help="machine-readable report on stdout")
     q.set_defaults(func=cmd_build_run)

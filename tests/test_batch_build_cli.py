@@ -94,7 +94,9 @@ class BatchBuildCliTests(unittest.TestCase):
         self.assertEqual(totals["cache_hits"], 0)
         self.assertEqual(totals["cache_misses"], 1)
         project = report["projects"][0]
-        self.assertEqual(project["status"], "ok")
+        # engine.status warns because krkrsdl2 is research-level; the build itself
+        # succeeded, so the project is warn but the run exits 0.
+        self.assertEqual(project["status"], "warn")
         self.assertEqual(project["cache"]["hit"], False)
         self.assertRegex(project["cache"]["key"], r"^[0-9a-f]{64}$")
         self.assertRegex(project["artifact"]["sha256"], r"^[0-9a-f]{64}$")
@@ -111,7 +113,7 @@ class BatchBuildCliTests(unittest.TestCase):
         self.assertEqual(code, 0, output)
         hit = json.loads(output)["projects"][0]
         self.assertEqual(hit["cache"]["hit"], True)
-        self.assertEqual(hit["status"], "ok")
+        self.assertEqual(hit["status"], "warn")
         self.assertEqual(json.loads(output)["totals"]["built"], 0)
         self.assertIn("cache.hit", {check["id"] for check in hit["checks"]})
         self.assertGreaterEqual(self.build_count(), 2)
@@ -195,7 +197,8 @@ class BatchBuildCliTests(unittest.TestCase):
         self.assertEqual(code, 2, output)
         report = json.loads(output)
         self.assertEqual(report["totals"]["total"], 2)
-        self.assertEqual(report["totals"]["ok"], 1)
+        self.assertEqual(report["totals"]["ok"], 0)
+        self.assertEqual(report["totals"]["warn"], 1)
         self.assertEqual(report["totals"]["fail"], 1)
         self.assertTrue((self.root / "out" / "demo.bin").is_file())
 
@@ -212,7 +215,8 @@ class BatchBuildCliTests(unittest.TestCase):
         self.assertEqual(code, 0, output)
         report = json.loads(output)
         self.assertEqual([stage["name"] for stage in report["projects"][0]["stages"]], ["manifest", "preflight", "engines"])
-        self.assertNotIn("cache_hits", report["totals"])
+        self.assertEqual(report["totals"].get("cache_hits"), 0)
+        self.assertEqual(report["totals"].get("executed"), 0)
 
     def test_batch_build_rejects_missing_directory(self) -> None:
         code, output = run_cli(["batch", "build", "--dir", str(self.root / "missing")])

@@ -81,7 +81,7 @@
 ## 7. 协作与证据约定
 
 - Citron 单实例：同一时刻只允许一个任务使用；启动前 `tasklist` 断言 0 实例、三重校验（status=loaded、窗口标题匹配、PID 与 run 目录一致）、只 kill 自己 PID、用完 `taskkill` 并回报释放时间。**本轮教训**：两个任务同时启动会因 yuzu 系单实例转发混跑同一进程（`docs/pilot/P2-acceptance.md` §4.5 与 task-38 记录）。
-- 游戏原件 `E:/Othergames/Galgame/` 只读；运行副本在 `C:/Users/ACETaffy/AppData/Roaming/citron/sdmc/kirikiri/haruno/`（3.4 GB），可随时删除重跑。
+- 游戏原件 `E:/Othergames/Galgame/` 只读；运行副本在 `C:/Users/<user>/AppData/Roaming/citron/sdmc/kirikiri/haruno/`（3.4 GB），可随时删除重跑。
 - 证据分级沿用 `docs/milestones/README.md`（E1 原始日志 / E2 截图 / E3 哈希元数据 / E4 源码片段）；仓库只收结论 + 关键截图，完整 run 目录留在 `workspaces/`（gitignored）。
 - 一切产物不入库：NRO/NSP/游戏数据/keys；`workspaces/`、`.galnx/` 已 gitignore。NSP 只在 `E:/galnx-build/pilot-01/out/`。
 

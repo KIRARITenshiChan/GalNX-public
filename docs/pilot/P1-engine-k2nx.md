@@ -44,7 +44,7 @@ per-game 偏好写在**游戏所在目录**：MainScene.cpp:1739-1740 在 startu
 
 ### 0.5 建议的下一步（给 Lead 的排期建议）
 
-1. **P2-1（先验证能不能直启）**：打 A1 自动启动补丁 → 本机构建 NRO → Citron 用**现有 SD 数据目录**（C:/Users/ACETaffy/AppData/Roaming/citron/sdmc/kirikiri/haruno，已存在）验证「跳过选择器、直接进游戏、手柄可操作」。这一步不涉及 3.4GB ROMFS 打包，成本最低，能最早暴露插件/渲染问题。
+1. **P2-1（先验证能不能直启）**：打 A1 自动启动补丁 → 本机构建 NRO → Citron 用**现有 SD 数据目录**（C:/Users/<user>/AppData/Roaming/citron/sdmc/kirikiri/haruno，已存在）验证「跳过选择器、直接进游戏、手柄可操作」。这一步不涉及 3.4GB ROMFS 打包，成本最低，能最早暴露插件/渲染问题。
 2. **P2-2（再做自包含）**：把游戏数据放进 ROMFS + 打 A2 首启解包补丁 → 删除 SD 上已解包目录 → 验证首次启动解包 + 二次启动直读 marker。
 3. **P3（出包）**：ELF → NSO/NPDM/NACP → hacBrewPack 生成带 ROMFS 的 NSP（复用 docs/builds/005 的链路），Citron 安装后验收。
 4. CI（§7）只用于「让构建可重复」，不阻塞 P2-1 本机构建。
@@ -448,7 +448,7 @@ src/core/environ/switch/SwitchUtils.cpp:100-108 注释原文（E4）：
 
 **E2（截图）**：`step-02-t90.png` 与 `step-04-t180.png` 均为 1,728x1,016、各 **2,551,781 B、sha256 均 `3fa32cd3f75b0b794cd24335e48fcdd8f24a93981c930c5a7bda939dd20ba9ca`**（逐字节相同；第三张 `step-06-t300.png` 同样 2,551,781 B / 同哈希 ⇒ 到 300 s 仍完全静止、无崩溃）。`window.png`（06:54 首次截图）显示的是游戏自身启动前的 CAUTION / 18 禁提示画面（1,101,196 B / sha256 `497b057da85370d00861e9f07169b39669464d006e459211091c53969d248d07`），数秒后自动前进到标题；另有 `window-steps-final.png` 2,551,775 B（标题，PNG 压缩差异导致哈希不同）。内容为游戏标题画面（晴のちきっと菜の花びより Logo + 菜单 はじめから / ロード / クイックロード / コンティニュー / コンフィグ / スペシャル / 終了する），Citron 状态栏 `Scale: 1x  Game: 60 FPS  Frame: 16.67 ms`。`window.png` 1,101,196 B / sha256 `497b057da85370d00861e9f07169b39669464d006e459211091c53969d248d07`。
 
-**E1（`C:/Users/ACETaffy/AppData/Roaming/citron/sdmc/switch/kirikiroid2/k2s_log.txt`：123 行、7,492 B、sha256 `0bb6f611f05d0105ef424cdf3f9a3dfd3f4322f0b1a77e9be524a8f3bb30b51c`）**，原文摘录（按文件顺序）：
+**E1（`C:/Users/<user>/AppData/Roaming/citron/sdmc/switch/kirikiroid2/k2s_log.txt`：123 行、7,492 B、sha256 `0bb6f611f05d0105ef424cdf3f9a3dfd3f4322f0b1a77e9be524a8f3bb30b51c`）**，原文摘录（按文件顺序）：
 
 ~~~
 Kirikiroid2-Switch log (build Oct 30 2026 06:42:14)
@@ -536,7 +536,7 @@ Input #0, mpeg, from 'logo.mpg':
 
 **标题菜单点击坐标定标（供后续复跑与 P2-a 用）**：对 1,728x1,016 的 Citron 截图做像素统计，16:9 游戏区精确落在 **x 112..1615（宽 1504）、y 117..962（高 846）**，缩放 **1.175**（1504/1280 = 846/720）；换算公式 `px = 112 + 1.175·X`、`py = 117 + 1.175·Y`（X,Y 为 K2NX 的 1280x720 游戏虚拟坐标）。标题菜单「はじめから」的虚拟矩形（`TitleObject.tjs` 的 `[TitleCreate]` 循环：x=180, y=675, w=114, h=27）→ 窗口像素 x 323..458 / y 910..942，**中心 ≈ (390, 925)**。此前 audit-web 用的 `click:380,905` 换算回虚拟坐标为 (228, 670.6)，y 比按钮上沿（675）高 4.4 px ⇒ **落空**；由此也可解释 06:40 那次 run 的 `steps_diff_ratio=0.795` 只是标题动画（云/光）造成的假阳性，不能作为「点击成功」判据——应以 `k2s_log` 出现 `Scenario loaded : start.ks` 为准。
 
-**手柄操作路径（Citron 键盘映射实测配置，`C:/Users/ACETaffy/AppData/Roaming/citron/config/qt-config.ini`）**：`player_0_lstick="engine:analog_from_button,modifier:…code$016777248…,left:…code$065…,up:…code$087…,right:…code$068…,down:…code$083…,modifier_scale:0.500000"` ⇒ **键盘 A(65)=左、W(87)=上、D(68)=右、S(83)=下 模拟左摇杆**（Shift 为半速 modifier）。K2NX 侧：左摇杆首次推动即 `showVirtualMouseCursor(true)` 并置 `_k2sStickCursor`，之后按 `step = 12·v·|v| + sign`（满杆 13 px/次，dead=0.15）移动虚拟光标并转发 `onMouseMove`；`onPadKeyDown` 在无 UI 子节点时把 **A = 虚拟光标处左键单击、B = 右键单击**，D-pad 不移动光标（见 §2.13.5）。⇒ 「手柄操作」在源码层可行，但需要**左摇杆把光标移到菜单矩形内再按 A**；键盘模拟摇杆可作为 Citron 上的注入通道，真机验证归 P4。
+**手柄操作路径（Citron 键盘映射实测配置，`C:/Users/<user>/AppData/Roaming/citron/config/qt-config.ini`）**：`player_0_lstick="engine:analog_from_button,modifier:…code$016777248…,left:…code$065…,up:…code$087…,right:…code$068…,down:…code$083…,modifier_scale:0.500000"` ⇒ **键盘 A(65)=左、W(87)=上、D(68)=右、S(83)=下 模拟左摇杆**（Shift 为半速 modifier）。K2NX 侧：左摇杆首次推动即 `showVirtualMouseCursor(true)` 并置 `_k2sStickCursor`，之后按 `step = 12·v·|v| + sign`（满杆 13 px/次，dead=0.15）移动虚拟光标并转发 `onMouseMove`；`onPadKeyDown` 在无 UI 子节点时把 **A = 虚拟光标处左键单击、B = 右键单击**，D-pad 不移动光标（见 §2.13.5）。⇒ 「手柄操作」在源码层可行，但需要**左摇杆把光标移到菜单矩形内再按 A**；键盘模拟摇杆可作为 Citron 上的注入通道，真机验证归 P4。
 
 **结论**：A1 自包含 NSP 在 Citron 上完成「加载 → 首启空间预检 → 22 文件 / 2,737 MiB 解包（≈14 s）→ 写 marker + autostart → A1 自动启动 → 5 插件别名激活 → 14 xp3 挂载 → 启动脚本链 → 标题画面 60 FPS」全链路，**P3 的「已打包 NSP + 直接启动」已在模拟器上成立**；剩余缺口是「菜单点击/手柄推进」注入通道（U14）与真机验证（P4）。
 
@@ -553,7 +553,7 @@ Input #0, mpeg, from 'logo.mpg':
 
 **修复（零重建，已落地）**：keymap 注入点是「每游戏偏好文件」，因为 `MainScene.cpp:1749-1757` 用 `IndividualConfigManager::GetKeyMap()` 填 `_keymap[物理VK] = _keymap[目标VK]`，而 `IndividualConfigManager.cpp:49-58 UsePreferenceAt(folder)` 读的是 `<folder>/Kirikiroid2Preference.xml`（`folder = PathSplit(startup).first` = `/kirikiri/haruno`），`GlobalConfigManager.cpp:69-76` 解析 `<KeyMap key="int" value="int"/>`。
 
-- 文件：`C:/Users/ACETaffy/AppData/Roaming/citron/sdmc/kirikiri/haruno/Kirikiroid2Preference.xml`（1,293 B，sha256 `aa4fa8aab256f73c6d73111a62305f7078bd9c1eca3cd9d9128d0a51abef9543`；归档副本 `E:/galnx-build/pilot-01/patches/keymap/Kirikiroid2Preference.xml`）。
+- 文件：`C:/Users/<user>/AppData/Roaming/citron/sdmc/kirikiri/haruno/Kirikiroid2Preference.xml`（1,293 B，sha256 `aa4fa8aab256f73c6d73111a62305f7078bd9c1eca3cd9d9128d0a51abef9543`；归档副本 `E:/galnx-build/pilot-01/patches/keymap/Kirikiroid2Preference.xml`）。
 - 内容：`<GlobalPreference>` + `<KeyMap key="448" value="13"/>`（A→VK_RETURN）、449→27（B→ESC）、451→32（X→SPACE）、437/438/439/440→37/38/39/40（D-pad→方向键）。
 - 语义：Map 的 key=物理 VK（VK_PAD*）、value=目标 VK；`_keymap` 是 `static tjs_uint16 _keymap[0x200]`（`MainScene.cpp:64`），448 在界内。
 
@@ -750,7 +750,7 @@ applicationDidFinishLaunching
 
 | 阶段 | 改动 | 游戏数据位置 | 验收标准 | 预计工作量 |
 | --- | --- | --- | --- | --- |
-| P2-1 直启验证 | patch C + A1 | 现有 SD 目录（C:/Users/ACETaffy/AppData/Roaming/citron/sdmc/kirikiri/haruno，3.4 GB 已在） | Citron 启动 NRO 后**不出现文件选择器**，直接进游戏标题/主菜单；手柄 A 可推进；k2s_log.txt 无 "An exception occured"；出现 5 条 [GalNX] internal plugin loaded 日志 | 0.5–1 天（构建打通后） |
+| P2-1 直启验证 | patch C + A1 | 现有 SD 目录（C:/Users/<user>/AppData/Roaming/citron/sdmc/kirikiri/haruno，3.4 GB 已在） | Citron 启动 NRO 后**不出现文件选择器**，直接进游戏标题/主菜单；手柄 A 可推进；k2s_log.txt 无 "An exception occured"；出现 5 条 [GalNX] internal plugin loaded 日志 | 0.5–1 天（构建打通后） |
 | P2-2 自包含 | + A2（+ 把数据塞 ROMFS） | ROMFS（首启解包到 SD） | 删除 SD 上的 kirikiri/haruno 后首次启动：解包 → 自动进游戏；第二次启动 <10 秒跳过解包；SD 侧文件数/总字节与源一致（至少抽样 10 个文件 sha256 一致） | 0.5 天 |
 | P3 出包 | ELF → NSO → NPDM/NACP → hacBrewPack | ROMFS（NSP 内） | Citron 安装 NSP 并启动：自包含 + 直接进游戏 + 手柄可操作；NSP 大小与 ROMFS 内容相符 | 0.5–1 天（P1-d 并行提供打包脚本） |
 | P4 真机 | 无改动（title takeover 运行） | 同 P3 | 真机首次启动解包 → 进游戏；性能达到可玩（目标 30 fps，软渲染下需实测） | 后续里程碑 |
@@ -1234,7 +1234,7 @@ build_k2.sh 的实现细节：source /etc/profile.d/devkit-env.sh；用 **/opt/d
 - E1 崩溃日志副本：E:/galnx-build/pilot-01/refs/k2s_log-prev-20261030-0603.txt（4,604 B，sha256 891e90ca1bab38afdf6bf9c9e040128d3a68a1b3bf161af40e4fd36c108fb945）
 - 脚本提取报告：E:/galnx-build/pilot-01/report_scripts2.txt（tjs 全文摘录）、report_plugins_scan.txt（插件名扫描）、report_k2nx_plugins.txt（内建 NCB 名）
 - 游戏脚本副本：E:/galnx-build/pilot-01/extract/data/sys_source/（30 个 tjs，只读提取用于插件调用点分析）
-- 游戏 plugin/ 目录：C:/Users/ACETaffy/AppData/Roaming/citron/sdmc/kirikiri/haruno/plugin/（只列文件名与大小）
+- 游戏 plugin/ 目录：C:/Users/<user>/AppData/Roaming/citron/sdmc/kirikiri/haruno/plugin/（只列文件名与大小）
 - 关联文档：docs/pilot/README.md（P1 任务书与风险登记）、docs/builds/005-nsp-selfcontained.md（NSP 链路）、docs/audit/06-engines-refresh.md（引擎候选）、docs/packaging/README.md（打包契约）
 
 ### 9.2 关键源码位置（K2NX HEAD e96b6034）

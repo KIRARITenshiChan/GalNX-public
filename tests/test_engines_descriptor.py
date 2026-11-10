@@ -21,6 +21,12 @@ CORE_KEYS = [
     "license_spdx", "target_kind", "build_backend", "default_input_profile",
     "artifact_naming", "content_layout", "status", "artifact_sha256",
 ]
+CAPABILITY_KEYS = ["audio", "graphics", "input", "movie", "save", "touch"]
+OPTIONAL_KEYS = ["verification"]
+VERIFICATIONS = [
+    "source_review", "build_verified", "emulator_verified", "device_verified",
+    "game_verified", "partial", "unknown", "in_progress",
+]
 
 
 def descriptor_dict(engine_id="krkrsdl2"):
@@ -41,7 +47,9 @@ class BuiltinDescriptorTests(unittest.TestCase):
             with self.subTest(engine=engine_id):
                 descriptor = engines.BUILTIN_ENGINES[engine_id]
                 self.assertEqual(descriptor.validate(), [])
-                self.assertTrue(descriptor.is_ready)
+                self.assertFalse(descriptor.is_ready)
+                self.assertEqual(descriptor.status, "research")
+                self.assertEqual(descriptor.warnings, ())
 
     def test_builtin_descriptors_match_schema(self):
         for engine_id in ("krkrsdl2", "brewser", "onscripter-nx"):
@@ -50,7 +58,7 @@ class BuiltinDescriptorTests(unittest.TestCase):
 
     def test_to_dict_and_summary_keys(self):
         data = engines.KRKRSDL2.to_dict()
-        self.assertEqual(sorted(data), sorted(KRKR_KEYS))
+        self.assertEqual(sorted(data), sorted(KRKR_KEYS + OPTIONAL_KEYS))
         summary = engines.KRKRSDL2.summary()
         self.assertEqual(len(summary), 11)
         self.assertIn("license_spdx", summary)
@@ -92,24 +100,32 @@ class BuiltinDescriptorTests(unittest.TestCase):
         self.assertEqual(descriptor.default_input_profile, "kb_mouse")
         self.assertIn(descriptor.default_input_profile, list_builtin_names())
         self.assertEqual(sorted(engines.CAPABILITY_KEYS), sorted(descriptor.capabilities))
-        self.assertTrue(descriptor.capabilities["video"]["supported"])
+        self.assertEqual(sorted(descriptor.capabilities), CAPABILITY_KEYS)
+        self.assertTrue(descriptor.capabilities["graphics"]["supported"])
         self.assertTrue(descriptor.capabilities["input"]["supported"])
+        self.assertTrue(descriptor.capabilities["movie"]["supported"])
+        self.assertEqual(descriptor.capabilities["movie"]["verification"], "unknown")
         self.assertFalse(descriptor.capabilities["audio"]["supported"])
         self.assertFalse(descriptor.capabilities["save"]["supported"])
         self.assertFalse(descriptor.capabilities["touch"]["supported"])
+        for name in engines.REQUIRED_VERIFICATION_KEYS:
+            self.assertIn(descriptor.capabilities[name]["verification"], VERIFICATIONS)
         self.assertEqual(
             engines.format_artifact_name(descriptor, "1.0.0"),
             "onscripter-nx-1.0.0.nro",
         )
 
-    def test_capabilities_cover_five_keys(self):
+    def test_capabilities_cover_six_keys(self):
         for engine_id in ("krkrsdl2", "brewser", "onscripter-nx"):
             with self.subTest(engine=engine_id):
                 capabilities = engines.BUILTIN_ENGINES[engine_id].capabilities
-                self.assertEqual(sorted(capabilities), ["audio", "input", "save", "touch", "video"])
+                self.assertEqual(sorted(capabilities), CAPABILITY_KEYS)
+                self.assertNotIn("video", capabilities)
                 for name, entry in capabilities.items():
                     self.assertIsInstance(entry["supported"], bool)
                     self.assertIsInstance(entry["note"], str)
+                    if name in engines.REQUIRED_VERIFICATION_KEYS:
+                        self.assertIn(entry["verification"], VERIFICATIONS, name)
 
 
 class ArtifactNamingTests(unittest.TestCase):
@@ -124,7 +140,8 @@ class ArtifactNamingTests(unittest.TestCase):
                                               pinned_commit="0" * 40, license_spdx="MIT", license_url="https://example.invalid/license",
                                               target_kind="nro", build_backend="prebuilt", pinned_version="v1",
                                               artifact_naming="{id}-{version}.nro",
-                                              capabilities={key: {"supported": True, "note": ""} for key in engines.CAPABILITY_KEYS})
+                                              capabilities={key: {"supported": True, "note": "", "verification": "unknown"}
+                                                            for key in engines.CAPABILITY_KEYS})
         self.assertEqual(engines.format_artifact_name(descriptor), "demo-v1.nro")
 
     def test_placeholders(self):
@@ -238,7 +255,7 @@ class ValidationTests(unittest.TestCase):
 
     def test_blocked_requires_reason(self):
         with self.assertRaises(engines.EngineDescriptorError) as ctx:
-            engines.descriptor_from_dict(self._bad(status="blocked"))
+            engines.descriptor_from_dict(self._bad(status="blocked", status_reason=""))
         self.assertIn("status_reason", str(ctx.exception))
         data = self._bad(status="blocked", status_reason="upstream does not boot on firmware 23.0.0")
         descriptor = engines.descriptor_from_dict(data)
@@ -262,6 +279,76 @@ class ValidationTests(unittest.TestCase):
         problems = descriptor.validate()
         self.assertTrue(any("id:" in problem for problem in problems))
         self.assertTrue(any("license_spdx" in problem for problem in problems))
+
+
+class DescriptorVerificationTests(unittest.TestCase):
+    def test_video_alias_maps_to_graphics_with_warning(self):
+        data = descriptor_dict()
+        capabilities = {
+            name: dict(entry)
+            for name, entry in data["capabilities"].items()
+            if name in ("audio", "input", "save", "touch")
+        }
+        capabilities["video"] = {"supported": True, "note": "legacy renderer"}
+        data["capabilities"] = capabilities
+        descriptor = engines.descriptor_from_dict(data)
+        self.assertEqual(sorted(descriptor.capabilities), CAPABILITY_KEYS)
+        self.assertTrue(descriptor.capabilities["graphics"]["supported"])
+        self.assertEqual(descriptor.capabilities["graphics"]["verification"], "unknown")
+        self.assertFalse(descriptor.capabilities["movie"]["supported"])
+        self.assertEqual(descriptor.validate(), [])
+        self.assertEqual(len(descriptor.warnings), 1)
+        self.assertIn("video", descriptor.warnings[0])
+        self.assertIn("graphics", descriptor.warnings[0])
+
+    def test_missing_required_verification_is_rejected(self):
+        data = descriptor_dict()
+        del data["capabilities"]["graphics"]["verification"]
+        with self.assertRaises(engines.EngineDescriptorError) as ctx:
+            engines.descriptor_from_dict(data)
+        self.assertIn("capabilities.graphics.verification", str(ctx.exception))
+
+    def test_invalid_verification_is_rejected(self):
+        data = descriptor_dict()
+        data["capabilities"]["graphics"]["verification"] = "device-tested"
+        with self.assertRaises(engines.EngineDescriptorError) as ctx:
+            engines.descriptor_from_dict(data)
+        message = str(ctx.exception)
+        self.assertIn("graphics", message)
+        self.assertIn("verification", message)
+        self.assertIn("device-tested", message)
+
+    def test_touch_verification_is_optional(self):
+        data = descriptor_dict()
+        del data["capabilities"]["touch"]["verification"]
+        descriptor = engines.descriptor_from_dict(data)
+        self.assertEqual(descriptor.validate(), [])
+
+    def test_capability_backend_features_details_roundtrip(self):
+        data = descriptor_dict()
+        data["capabilities"]["movie"]["backend"] = "nvdec+nvtegra"
+        data["capabilities"]["movie"]["features"] = ["h264", "nvidia-nv12-zero-copy"]
+        data["capabilities"]["movie"]["details"] = {"max_width": 1920}
+        descriptor = engines.descriptor_from_dict(data)
+        movie = descriptor.to_dict()["capabilities"]["movie"]
+        self.assertEqual(movie["backend"], "nvdec+nvtegra")
+        self.assertEqual(movie["features"], ["h264", "nvidia-nv12-zero-copy"])
+        self.assertEqual(movie["details"], {"max_width": 1920})
+
+    def test_engine_verification_block_roundtrips(self):
+        data = descriptor_dict()
+        verification = data["verification"]
+        self.assertEqual(verification["status"], "emulator_verified")
+        descriptor = engines.descriptor_from_dict(data)
+        self.assertEqual(descriptor.verification["status"], "emulator_verified")
+        self.assertEqual(descriptor.to_dict()["verification"], verification)
+
+    def test_engine_verification_unknown_key_rejected(self):
+        data = descriptor_dict()
+        data["verification"]["unknown_key"] = "x"
+        with self.assertRaises(engines.EngineDescriptorError) as ctx:
+            engines.descriptor_from_dict(data)
+        self.assertIn("verification", str(ctx.exception))
 
 
 class FileLoadingTests(unittest.TestCase):

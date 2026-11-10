@@ -25,7 +25,35 @@ ENGINE_SCHEMA_NAME = "engine.schema.json"
 TARGET_KINDS = ("nro", "self_contained_nsp", "web")
 BUILD_BACKENDS = ("cmake-switch", "make-switch", "devkitpro-make", "custom-script", "prebuilt", "none")
 STATUSES = ("ready", "research", "blocked")
-CAPABILITY_KEYS = ("video", "audio", "input", "save", "touch")
+CAPABILITY_KEYS = ("graphics", "movie", "audio", "input", "save", "touch")
+# "video" was the pre-0.1-preview name for what is now "graphics" (graphics
+# rendering, not movie decoding). It is still accepted when loading a
+# descriptor, mapped onto "graphics", and reported as a deprecation warning.
+DEPRECATED_CAPABILITY_ALIASES = {"video": "graphics"}
+# How strongly one capability has been verified. "device_verified" is the
+# strongest evidence for the engine runtime itself; "game_verified" records a
+# specific game's acceptance on top of it (see docs/engines/verification-matrix.md).
+CAPABILITY_VERIFICATIONS = (
+    "source_review",
+    "build_verified",
+    "emulator_verified",
+    "device_verified",
+    "game_verified",
+    "partial",
+    "unknown",
+    "in_progress",
+)
+REQUIRED_VERIFICATION_KEYS = ("graphics", "movie", "audio", "input", "save")
+CAPABILITY_FIELDS = ("supported", "note", "verification", "backend", "features", "details")
+ENGINE_VERIFICATION_KEYS = (
+    "status",
+    "hardware",
+    "firmware",
+    "atmosphere",
+    "tested_at",
+    "evidence",
+    "notes",
+)
 CONTENT_MODES = ("romfs", "sdmc", "none")
 CONTENT_LAYOUT_KEYS = ("mode", "entry", "destination", "notes")
 SOURCE_KEYS = ("url", "commit", "submodules")
@@ -148,10 +176,15 @@ def format_artifact_name(descriptor: "EngineDescriptor", version: str = "") -> s
 class EngineDescriptor:
     """A validated engine adapter descriptor.
 
-    capabilities maps capability name (video/audio/input/save/touch) to
-    {"supported": bool, "note": str}. content_layout describes where the game
-    content lives for this runtime: romfs (embedded in the NRO), sdmc (SD card
-    tree for a runtime such as Brewser) or none.
+    capabilities maps capability name (graphics/movie/audio/input/save/touch)
+    to a mapping with "supported" (bool, kept for compatibility), "note" (str),
+    "verification" (one of CAPABILITY_VERIFICATIONS) and optional "backend",
+    "features" and "details". content_layout describes where the game content
+    lives for this runtime: romfs (embedded in the NRO), sdmc (SD card tree for
+    a runtime such as Brewser) or none. verification is the optional engine-level
+    block (status/hardware/firmware/atmosphere/tested_at/evidence/notes) that
+    records the engine runtime's overall verification state; per-game acceptance
+    lives in docs/engines/verification-matrix.md.
     """
 
     id: str
@@ -177,10 +210,16 @@ class EngineDescriptor:
     patches: tuple[dict[str, Any], ...] = ()
     portlibs: tuple[dict[str, Any], ...] = ()
     build: dict[str, Any] = field(default_factory=dict)
+    verification: dict[str, Any] = field(default_factory=dict)
+    warnings: tuple[str, ...] = ()
 
     @property
     def is_ready(self) -> bool:
         return self.status == "ready"
+
+    def validate_with_warnings(self) -> tuple[list[str], list[str]]:
+        """Return (problems, warnings); warnings do not invalidate the descriptor."""
+        return self.validate(), list(self.warnings)
 
     def validate(self) -> list[str]:
         """Return semantic problems (not covered by the JSON schema)."""
@@ -206,18 +245,7 @@ class EngineDescriptor:
             problems.append("license_url: required (link to the license evidence)")
         if self.target_kind not in TARGET_KINDS:
             problems.append("target_kind: must be one of %s" % (TARGET_KINDS,))
-        for key in CAPABILITY_KEYS:
-            entry = self.capabilities.get(key)
-            if not isinstance(entry, Mapping):
-                problems.append("capabilities.%s: required (supported/note)" % key)
-                continue
-            if not isinstance(entry.get("supported"), bool):
-                problems.append("capabilities.%s.supported: must be a boolean" % key)
-            if not isinstance(entry.get("note", ""), str):
-                problems.append("capabilities.%s.note: must be a string" % key)
-        for key in self.capabilities:
-            if key not in CAPABILITY_KEYS:
-                problems.append("capabilities.%s: unknown capability (allowed: %s)" % (key, ", ".join(CAPABILITY_KEYS)))
+        problems.extend(_capability_problems(self.capabilities))
         if self.default_input_profile not in list_builtin_names():
             problems.append(
                 "default_input_profile: %r is not a built-in input profile (built-in: %s)"
@@ -261,6 +289,7 @@ class EngineDescriptor:
         for index, url in enumerate(self.evidence_urls):
             if not isinstance(url, str) or not url:
                 problems.append("evidence_urls[%d]: must be a non-empty string" % index)
+        problems.extend(_verification_problems(self.verification))
         problems.extend(_source_problems(self.source))
         if self.source.get("commit") and self.pinned_commit and self.source["commit"] != self.pinned_commit:
             problems.append("source.commit: must match pinned_commit when both are set")
@@ -270,10 +299,7 @@ class EngineDescriptor:
         return problems
 
     def to_dict(self) -> dict[str, Any]:
-        capability_dict = {
-            key: {"supported": bool(entry.get("supported")), "note": str(entry.get("note", ""))}
-            for key, entry in self.capabilities.items()
-        }
+        capability_dict = _dump_capabilities(self.capabilities)
         data: dict[str, Any] = {
             "id": self.id,
             "display_name": self.display_name,
@@ -305,6 +331,8 @@ class EngineDescriptor:
             data["portlibs"] = [dict(item) for item in self.portlibs]
         if self.build:
             data["build"] = _dump_build(self.build)
+        if self.verification:
+            data["verification"] = _dump_verification(self.verification)
         return data
 
     def summary(self) -> dict[str, Any]:
@@ -327,15 +355,211 @@ def _normalise_capabilities(value: Any) -> dict[str, dict[str, Any]]:
     result: dict[str, dict[str, Any]] = {}
     if not isinstance(value, Mapping):
         return result
-    for key, entry in value.items():
-        if isinstance(entry, Mapping):
-            result[str(key)] = {
-                "supported": bool(entry.get("supported", False)),
-                "note": str(entry.get("note", "") or ""),
-            }
-        else:
+    entries: dict[str, Any] = dict(value)
+    legacy_alias_used = any(alias in entries for alias in DEPRECATED_CAPABILITY_ALIASES)
+    # "video" is the deprecated alias of "graphics"; map it before validation.
+    for alias, target in DEPRECATED_CAPABILITY_ALIASES.items():
+        if alias in entries:
+            if target not in entries:
+                entries[target] = entries[alias]
+            del entries[alias]
+    # Legacy 5-key descriptors predate the explicit "movie" capability; keep
+    # them loadable by attaching an unknown, unsupported movie entry.
+    if legacy_alias_used and "movie" not in entries:
+        entries["movie"] = {
+            "supported": False,
+            "note": "Deprecated legacy descriptor: movie capability added with supported=false.",
+            "verification": "unknown",
+        }
+    for key, entry in entries.items():
+        if not isinstance(entry, Mapping):
             result[str(key)] = {"supported": False, "note": ""}
+            continue
+        item: dict[str, Any] = {
+            "supported": bool(entry.get("supported", False)),
+            "note": str(entry.get("note", "") or ""),
+        }
+        if entry.get("verification") is not None:
+            item["verification"] = str(entry.get("verification"))
+        if entry.get("backend") is not None:
+            item["backend"] = str(entry.get("backend"))
+        if entry.get("features") is not None:
+            item["features"] = entry.get("features")
+        if entry.get("details") is not None:
+            item["details"] = entry.get("details")
+        result[str(key)] = item
+    if legacy_alias_used:
+        # Pre-model descriptors predate the verification field; record them as
+        # unknown instead of rejecting the file, and say so through a warning.
+        for key in REQUIRED_VERIFICATION_KEYS:
+            item = result.get(key)
+            if isinstance(item, dict) and not item.get("verification"):
+                item["verification"] = "unknown"
     return result
+
+
+def _dump_capabilities(capabilities: Mapping[str, Any]) -> dict[str, dict[str, Any]]:
+    data: dict[str, dict[str, Any]] = {}
+    for key, entry in capabilities.items():
+        if not isinstance(entry, Mapping):
+            continue
+        item: dict[str, Any] = {
+            "supported": bool(entry.get("supported")),
+            "note": str(entry.get("note", "") or ""),
+        }
+        if entry.get("verification"):
+            item["verification"] = str(entry["verification"])
+        if entry.get("backend"):
+            item["backend"] = str(entry["backend"])
+        features = entry.get("features")
+        if isinstance(features, (list, tuple)) and features:
+            item["features"] = [str(feature) for feature in features]
+        details = entry.get("details")
+        if isinstance(details, Mapping) and details:
+            item["details"] = dict(details)
+        data[key] = item
+    return data
+
+
+def _capability_problems(capabilities: Any) -> list[str]:
+    problems: list[str] = []
+    if not isinstance(capabilities, Mapping):
+        return ["capabilities: must be a mapping"]
+    for key in CAPABILITY_KEYS:
+        entry = capabilities.get(key)
+        if not isinstance(entry, Mapping):
+            problems.append(
+                "capabilities.%s: required (supported/note/verification)" % key
+            )
+            continue
+        if not isinstance(entry.get("supported"), bool):
+            problems.append("capabilities.%s.supported: must be a boolean" % key)
+        if not isinstance(entry.get("note", ""), str):
+            problems.append("capabilities.%s.note: must be a string" % key)
+        verification = entry.get("verification")
+        if key in REQUIRED_VERIFICATION_KEYS:
+            if not verification:
+                problems.append(
+                    "capabilities.%s.verification: required (one of: %s)"
+                    % (key, ", ".join(CAPABILITY_VERIFICATIONS))
+                )
+            elif verification not in CAPABILITY_VERIFICATIONS:
+                problems.append(
+                    "capabilities.%s.verification: %r is not one of: %s"
+                    % (key, verification, ", ".join(CAPABILITY_VERIFICATIONS))
+                )
+        elif verification and verification not in CAPABILITY_VERIFICATIONS:
+            problems.append(
+                "capabilities.%s.verification: %r is not one of: %s"
+                % (key, verification, ", ".join(CAPABILITY_VERIFICATIONS))
+            )
+        backend = entry.get("backend")
+        if backend is not None and not isinstance(backend, str):
+            problems.append("capabilities.%s.backend: must be a string" % key)
+        features = entry.get("features")
+        if features is not None:
+            if not isinstance(features, (list, tuple)):
+                problems.append("capabilities.%s.features: must be a list of strings" % key)
+            else:
+                for index, feature in enumerate(features):
+                    if not isinstance(feature, str) or not feature:
+                        problems.append(
+                            "capabilities.%s.features[%d]: must be a non-empty string" % (key, index)
+                        )
+        details = entry.get("details")
+        if details is not None and not isinstance(details, Mapping):
+            problems.append("capabilities.%s.details: must be a mapping" % key)
+    for key in capabilities:
+        if key in DEPRECATED_CAPABILITY_ALIASES:
+            continue
+        if key not in CAPABILITY_KEYS:
+            problems.append(
+                "capabilities.%s: unknown capability (allowed: %s)"
+                % (key, ", ".join(CAPABILITY_KEYS))
+            )
+    return problems
+
+
+def _capability_alias_warnings(capabilities: Any) -> list[str]:
+    if not isinstance(capabilities, Mapping):
+        return []
+    warnings: list[str] = []
+    for alias, target in DEPRECATED_CAPABILITY_ALIASES.items():
+        if alias not in capabilities:
+            continue
+        if target in capabilities:
+            warnings.append(
+                "capabilities.%s: deprecated alias of %r; ignored because %r is present"
+                % (alias, target, target)
+            )
+        else:
+            warnings.append(
+                "capabilities.%s: deprecated alias of %r; mapped automatically (rename to %r in new descriptors)"
+                % (alias, target, target)
+            )
+    return warnings
+
+
+def capability_warnings(data: Any) -> list[str]:
+    """Deprecation warnings for one raw descriptor mapping (e.g. video -> graphics)."""
+    if not isinstance(data, Mapping):
+        return []
+    return _capability_alias_warnings(data.get("capabilities"))
+
+
+def _normalise_verification(value: Any) -> dict[str, Any]:
+    if not isinstance(value, Mapping):
+        return {}
+    result: dict[str, Any] = {}
+    for key in ("status", "hardware", "firmware", "atmosphere", "tested_at", "notes"):
+        if key in value:
+            result[key] = str(value.get(key, "") or "")
+    if "evidence" in value:
+        evidence = value.get("evidence") or ()
+        if isinstance(evidence, (list, tuple)):
+            result["evidence"] = [str(item) for item in evidence]
+        else:
+            result["evidence"] = evidence
+    return result
+
+
+def _dump_verification(verification: Mapping[str, Any]) -> dict[str, Any]:
+    data: dict[str, Any] = {}
+    for key in ("status", "hardware", "firmware", "atmosphere", "tested_at", "notes"):
+        if key in verification:
+            data[key] = str(verification.get(key, ""))
+    evidence = verification.get("evidence")
+    if isinstance(evidence, (list, tuple)):
+        data["evidence"] = [str(item) for item in evidence]
+    return data
+
+
+def _verification_problems(verification: Any) -> list[str]:
+    if not verification:
+        return []
+    if not isinstance(verification, Mapping):
+        return ["verification: must be a mapping"]
+    problems: list[str] = []
+    for key in verification:
+        if key not in ENGINE_VERIFICATION_KEYS:
+            problems.append(
+                "verification.%s: unknown key (allowed: %s)"
+                % (key, ", ".join(ENGINE_VERIFICATION_KEYS))
+            )
+    status = verification.get("status", "")
+    if not isinstance(status, str) or not status:
+        problems.append("verification.status: required when the verification block is present")
+    for key in ("hardware", "firmware", "atmosphere", "tested_at", "notes"):
+        if key in verification and not isinstance(verification.get(key), str):
+            problems.append("verification.%s: must be a string" % key)
+    evidence = verification.get("evidence", ())
+    if not isinstance(evidence, (list, tuple)):
+        problems.append("verification.evidence: must be a list")
+    else:
+        for index, item in enumerate(evidence):
+            if not isinstance(item, str) or not item:
+                problems.append("verification.evidence[%d]: must be a non-empty string" % index)
+    return problems
 
 
 def _normalise_layout(value: Any) -> dict[str, Any]:
@@ -549,7 +773,9 @@ def _build_problems(build: Any) -> list[str]:
     return problems
 
 
-def _descriptor_from_data(data: Mapping[str, Any]) -> EngineDescriptor:
+def _descriptor_from_data(
+    data: Mapping[str, Any], warnings: Iterable[str] = ()
+) -> EngineDescriptor:
     evidence = data.get("evidence_urls") or ()
     if isinstance(evidence, str):
         evidence = (evidence,)
@@ -578,6 +804,8 @@ def _descriptor_from_data(data: Mapping[str, Any]) -> EngineDescriptor:
         patches=_normalise_patches(data.get("patches")),
         portlibs=_normalise_portlibs(data.get("portlibs")),
         build=_normalise_build(data.get("build")),
+        verification=_normalise_verification(data.get("verification")),
+        warnings=tuple(warnings),
     )
     problems = descriptor.validate()
     if problems:
@@ -595,7 +823,7 @@ def descriptor_from_dict(data: Any, validate_schema: bool = True) -> EngineDescr
         schema_errors = validate_descriptor_data(data)
         if schema_errors:
             raise EngineDescriptorError("invalid engine descriptor: %s" % "; ".join(schema_errors))
-    return _descriptor_from_data(data)
+    return _descriptor_from_data(data, _capability_alias_warnings(data.get("capabilities")))
 
 
 def load_descriptor(path: str | Path) -> EngineDescriptor:

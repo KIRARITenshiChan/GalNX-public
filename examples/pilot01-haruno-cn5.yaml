@@ -1,3 +1,5 @@
+# NOTE: this is a real pilot record (game-specific evidence), not a reusable template.
+# For a new port start from examples/templates/minimal-manifest.yaml.
 # GalNX P5 pilot manifest - self-contained CN (localized) NSP, build A10.
 #
 # A9 = A8 plus patch H (docs/builds/014-k2nx-input-tweaks.md): R shoulder = held Ctrl

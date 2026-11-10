@@ -23,7 +23,7 @@
 | `config.toml`（86 B） | `[game]` / `hcb = "Sakura.hcb"` / `nls = "sjis"` |
 | NRO | `E:/galnx-build/m5-rfvp/target/rfvp-switch/switch/rfvp.nro` 7,929,912 B（v1.0.8，P11–P20） |
 
-**陷阱：Citron 实际读取的是** `C:/Users/ACETaffy/AppData/Roaming/citron/sdmc/switch/rfvp/game`，该路径当前是一份 **7.5 GB 真实拷贝**（此前用 git-bash `ln -s` 时 MSYS 退化成复制，无 reparse point）。**改 `config.toml` 必须改 sdmc 里那份**，改 `E:/galnx-build/sakura-test/game` 不影响运行。两处现均为 `nls="sjis"`。
+**陷阱：Citron 实际读取的是** `C:/Users/<user>/AppData/Roaming/citron/sdmc/switch/rfvp/game`，该路径当前是一份 **7.5 GB 真实拷贝**（此前用 git-bash `ln -s` 时 MSYS 退化成复制，无 reparse point）。**改 `config.toml` 必须改 sdmc 里那份**，改 `E:/galnx-build/sakura-test/game` 不影响运行。两处现均为 `nls="sjis"`。
 
 ## 3. 启动与输入注入
 

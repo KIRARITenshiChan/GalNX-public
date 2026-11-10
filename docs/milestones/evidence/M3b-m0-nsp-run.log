@@ -1,6 +1,6 @@
 launch mode : runas-deelevated
-wrapper     : C:\Users\ACETaffy\AppData\Local\Temp\galnx-harness\launch-20261030-021746-m0-real-build1.cmd
-cmdline     : "E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\web-02\citron\citron.exe" -g "C:\Users\ACETaffy\AppData\Roaming\citron\sdmc\switch\galnx-harness\m0-real-build1.nsp"
+wrapper     : C:\Users\<user>\AppData\Local\Temp\galnx-harness\launch-20261030-021746-m0-real-build1.cmd
+cmdline     : "E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\web-02\citron\citron.exe" -g "C:\Users\<user>\AppData\Roaming\citron\sdmc\switch\galnx-harness\m0-real-build1.nsp"
 game type   : nsp
 game path   : /e/galnx-build/m3-tools/out/m0-real-build1.nsp
 stage path  : /c/Users/ACETaffy/AppData/Roaming/citron/sdmc/switch/galnx-harness/m0-real-build1.nsp

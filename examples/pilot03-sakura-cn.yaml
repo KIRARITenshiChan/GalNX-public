@@ -1,3 +1,5 @@
+# NOTE: this is a real pilot record (game-specific evidence), not a reusable template.
+# For a new port start from examples/templates/minimal-manifest.yaml.
 # GalNX P22 pilot manifest - rfvp さくら、もゆ。 HD Re:GENERATION 中文副标题（Sakura CN）
 #
 # 与 examples/pilot03-sakura.yaml 同源，仅内容包不同：

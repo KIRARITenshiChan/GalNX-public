@@ -55,21 +55,29 @@ class BatchRunnerTests(unittest.TestCase):
             root = Path(tmp)
             write_yaml(root / "project.yaml", manifest(root, "demo-a"))
             report = batch.run_batch(root)
-            self.assertEqual(report["schema_version"], 1)
+            self.assertEqual(report["schema_version"], 2)
             self.assertEqual(report["root"], root.resolve().as_posix())
             totals = report["totals"]
             self.assertEqual(totals["total"], 1)
-            self.assertEqual(totals["ok"], 1)
+            # Built-in adapters are documented as research/emulator-verified, so the
+            # engines stage reports warn (engine.status) rather than ok. The project is
+            # healthy when there is no failure and no error.
+            self.assertEqual(totals["ok"], 0)
+            self.assertEqual(totals["warn"], 1)
             self.assertEqual(totals["fail"], 0)
             project = report["projects"][0]
-            self.assertEqual(project["status"], "ok")
+            self.assertEqual(project["status"], "warn")
             self.assertEqual([s["name"] for s in project["stages"]], ["manifest", "preflight", "engines"])
-            for stage in project["stages"]:
-                self.assertEqual(stage["status"], "ok")
+            stages = {s["name"]: s["status"] for s in project["stages"]}
+            self.assertEqual(stages["manifest"], "ok")
+            self.assertEqual(stages["preflight"], "ok")
+            self.assertEqual(stages["engines"], "warn")
             check_ids = {c["id"] for c in project["checks"]}
             self.assertIn("engine.plan", check_ids)
             self.assertIn("engine.artifact", check_ids)
             self.assertIn("manifest.parse", check_ids)
+            warn_ids = {c["id"] for c in project["checks"] if c["status"] == "warn"}
+            self.assertIn("engine.status", warn_ids)
             self.assertEqual(project["errors"], [])
 
     def test_bad_yaml_does_not_stop_others(self) -> None:
@@ -81,7 +89,8 @@ class BatchRunnerTests(unittest.TestCase):
             report = batch.run_batch(root)
             totals = report["totals"]
             self.assertEqual(totals["total"], 3)
-            self.assertEqual(totals["ok"], 2)
+            self.assertEqual(totals["ok"], 0)
+            self.assertEqual(totals["warn"], 2)
             self.assertEqual(totals["fail"], 1)
             by_path = {p["path"]: p for p in report["projects"]}
             broken = by_path["b-broken.yaml"]

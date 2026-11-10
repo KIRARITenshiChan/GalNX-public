@@ -1,3 +1,5 @@
+# NOTE: this is a real pilot record (game-specific evidence), not a reusable template.
+# For a new port start from examples/templates/minimal-manifest.yaml.
 # GalNX P5 pilot manifest - self-contained CN (localized) NSP, build A8.
 # A8 = A7 (CN content + localized opening) plus patch G (controller mapping v2 and
 # the three device-side fixes documented in docs/builds/013-k2nx-controller-v2.md);

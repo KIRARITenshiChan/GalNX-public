@@ -224,7 +224,7 @@ M3-b（audit-web）用 Citron `0237a9b88` 直接 `citron.exe -g /e/galnx-build/m
 | `E:\Othergames\Nintendo Switch\Ryujinx-canary\portable\system\prod.keys` | 12,007 B | 本任务实际使用（mtime 2026-03-19 07:25:45 +0800） |
 | 同目录 `title.keys` | 11,492 B | 未使用 |
 | `%APPDATA%\citron\keys\prod.keys` | 12,007 B | Citron 自带；本轮未使用 |
-| `C:\Users\ACETaffy\.switch\prod.keys` | — | **不存在**（原计划首选路径，实测缺失） |
+| `C:\Users\<user>\.switch\prod.keys` | — | **不存在**（原计划首选路径，实测缺失） |
 
 脚本只接受显式 `--keyset <path>`，只记录 path/size/sha256/mtime 元数据，不读取、不复制、不打印 key 内容。
 

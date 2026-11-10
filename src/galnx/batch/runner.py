@@ -523,6 +523,12 @@ def run_batch_build(
         and not item["cache"].get("hit")
         and item["cache"].get("key")
     )
+    totals["executed"] = sum(
+        1 for item in projects if item.get("build_state") == "executed"
+    )
+    totals["not_configured"] = sum(
+        1 for item in projects if item.get("build_state") == "not_configured"
+    )
     totals["built"] = sum(
         1
         for item in projects
@@ -651,6 +657,23 @@ def build_project(
                 stages.append(build_stage)
                 artifact = _artifact_report(build_value.get("artifact") or {})
                 build_commands = build_value.get("commands") or []
+    build_state = "not_run"
+    if cache_value.get("hit"):
+        build_state = "cache_hit"
+    else:
+        final_build = next(
+            (item for item in stages if item.get("name") == BUILD_STAGE), None
+        )
+        if final_build is not None:
+            check_ids = {str(check.get("id")) for check in final_build.get("checks", [])}
+            if final_build.get("status") == "fail":
+                build_state = "failed"
+            elif "build.not_configured" in check_ids:
+                build_state = "not_configured"
+            elif final_build.get("status") in ("ok", "warn"):
+                build_state = "executed"
+            else:
+                build_state = "skipped"
     checks = [check for stage in stages for check in stage["checks"]]
     errors: list[str] = []
     for check in checks:
@@ -672,6 +695,7 @@ def build_project(
             "hit": bool(cache_value.get("hit")),
             "key": str(cache_value.get("key") or ""),
         },
+        "build_state": build_state,
         "commands": build_commands,
     }
     if artifact:
@@ -743,8 +767,14 @@ def _cache_stage(
     no_cache: bool,
     rebuild: bool,
 ) -> tuple[list[Any], Any]:
-    if not config.executable:
-        checks = [_check("cache.skip", "skip", "no build.commands/artifact configured")]
+    if not config.has_commands:
+        checks = [
+            _check(
+                "cache.not_configured",
+                "skip",
+                "manifest declares no build.commands; nothing to cache",
+            )
+        ]
         return checks, {"hit": False, "key": ""}
     if no_cache:
         checks = [_check("cache.disabled", "skip", "cache disabled (--no-cache)")]
@@ -760,18 +790,35 @@ def _cache_stage(
             "pinned_commit": descriptor.pinned_commit,
             "build_backend": descriptor.build_backend,
         }
-    payload = build_layer.cache_payload(_display_path(root, target), data, config, engine=engine)
+    payload = build_layer.cache_payload(
+        _display_path(root, target), data, config, engine=engine, root=root
+    )
+    cache_info = payload.get("cache") or {}
+    blocking = list(cache_info.get("blocking_reasons") or [])
+    if blocking:
+        checks = [_check("cache.miss", "warn", "; ".join(blocking))]
+        return checks, {"hit": False, "key": "", "payload": None}
+    degraded = list(cache_info.get("degraded_reasons") or [])
+    degraded_checks = (
+        [_check("cache.degraded", "warn", "; ".join(degraded))] if degraded else []
+    )
     key = build_layer.cache_key(payload)
     entry = build_layer.read_cache_entry(root, key)
     if entry is None:
-        checks = [_check("cache.miss", "ok", "no cached artifact for key %s" % key[:16])]
+        checks = degraded_checks + [
+            _check("cache.miss", "ok", "no cached artifact for key %s" % key[:16])
+        ]
         return checks, {"hit": False, "key": key, "payload": payload}
     ok, reason = build_layer.verify_cache_entry(entry)
     if not ok:
-        checks = [_check("cache.stale", "warn", reason or "cached artifact is invalid")]
+        checks = degraded_checks + [
+            _check("cache.stale", "warn", reason or "cached artifact is invalid")
+        ]
         return checks, {"hit": False, "key": key, "payload": payload, "stale": True}
     artifact = build_layer.artifact_from_entry(entry)
-    checks = [_check("cache.hit", "ok", build_layer.describe_artifact(artifact))]
+    checks = degraded_checks + [
+        _check("cache.hit", "ok", build_layer.describe_artifact(artifact))
+    ]
     return checks, {
         "hit": True,
         "key": key,
@@ -790,9 +837,15 @@ def _build_stage(
     *,
     no_cache: bool,
 ) -> tuple[list[Any], Any]:
-    if not config.executable:
-        checks = [_check("build.skip", "skip", "no build.commands/artifact configured")]
-        return checks, {"artifact": {}, "commands": []}
+    if not config.has_commands:
+        checks = [
+            _check(
+                "build.not_configured",
+                "skip",
+                "manifest declares no build.commands; nothing was executed",
+            )
+        ]
+        return checks, {"artifact": {}, "commands": [], "build_state": "not_configured"}
     started = time.perf_counter()
     logs_dir = root / ".galnx" / "logs"
     label = _manifest_name(data, target)
@@ -820,7 +873,7 @@ def _build_stage(
             exit_code if exit_code is not None else "timeout"
         )
         checks.append(_check("build.result", "fail", detail))
-        return checks, {"artifact": artifact, "commands": commands}
+        return checks, {"artifact": artifact, "commands": commands, "build_state": "failed"}
     artifact = build_layer.compute_artifact(config.workdir, config.artifact) or {}
     if not artifact:
         checks.append(
@@ -831,8 +884,10 @@ def _build_stage(
                 "checked relative to %s" % config.workdir,
             )
         )
-        checks.append(_check("build.result", "fail", "build finished without the declared artifact"))
-        return checks, {"artifact": {}, "commands": commands}
+        checks.append(
+            _check("build.result", "fail", "build finished without the declared artifact")
+        )
+        return checks, {"artifact": {}, "commands": commands, "build_state": "failed"}
     checks.append(_check("build.artifact", "ok", build_layer.describe_artifact(artifact)))
     cache = cache_value if isinstance(cache_value, dict) else {}
     key = str(cache.get("key") or "")
@@ -848,7 +903,7 @@ def _build_stage(
         )
         checks.append(_check("build.cache", "ok", "cached artifact under key %s" % key[:16]))
     checks.append(_check("build.result", "ok", "%d command(s) succeeded" % len(results)))
-    return checks, {"artifact": artifact, "commands": commands}
+    return checks, {"artifact": artifact, "commands": commands, "build_state": "executed"}
 
 
 def _command_report(result: Any) -> dict[str, Any]:

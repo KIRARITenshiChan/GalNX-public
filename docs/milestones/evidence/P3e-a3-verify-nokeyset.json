@@ -15,7 +15,7 @@
     "sha256": "",
     "note": "explicitly supplied keyset; contents intentionally not recorded"
   },
-  "work_dir": "C:\\Users\\ACETaffy\\AppData\\Local\\Temp\\galnx-nsp-verify-kf7_pqqj",
+  "work_dir": "C:\Users\<user>\\AppData\\Local\\Temp\\galnx-nsp-verify-kf7_pqqj",
   "provenance": null,
   "verify": {
     "ok": true,

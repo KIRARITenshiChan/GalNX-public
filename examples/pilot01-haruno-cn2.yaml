@@ -1,3 +1,5 @@
+# NOTE: this is a real pilot record (game-specific evidence), not a reusable template.
+# For a new port start from examples/templates/minimal-manifest.yaml.
 # GalNX P5 pilot manifest - self-contained CN (localized) NSP, build A7.
 # A7 = A6 (data/scenario/image00 repacked from the public CN script repo) plus a
 # localized opening movie: game/movie.xp3 is repacked with the Chinese-hardcoded

@@ -21,10 +21,10 @@
 [   0.602035] Frontend <Error> citron\game_list.cpp:3354:LoadCompatibilityList: Game compatibility list is empty or unreadable
 [   0.769933] Frontend <Info> citron\game_list.cpp:2711:DonePopulating: Mirroring: Performing one-time startup sync...
 [   1.136015] Frontend <Info> citron\main.cpp:2322:BootGame: citron starting...
-[   1.137260] Config <Info> frontend_common\config.cpp:75:WriteToIni: Writing Global configuration to: C:\Users\ACETaffy\AppData\Roaming\citron\config\qt-config.ini
-[   1.139811] Config <Info> frontend_common\config.cpp:75:WriteToIni: Writing Global configuration to: C:\Users\ACETaffy\AppData\Roaming\citron\config\qt-config.ini
-[   1.142404] Config <Info> frontend_common\config.cpp:75:WriteToIni: Writing Game Specific configuration to: C:\Users\ACETaffy\AppData\Roaming\citron\config\custom\krkrsdl2.nro.ini
-[   1.144940] Config <Info> frontend_common\config.cpp:75:WriteToIni: Writing Game Specific configuration to: C:\Users\ACETaffy\AppData\Roaming\citron\config\custom\krkrsdl2.nro.ini
+[   1.137260] Config <Info> frontend_common\config.cpp:75:WriteToIni: Writing Global configuration to: C:\Users\<user>\AppData\Roaming\citron\config\qt-config.ini
+[   1.139811] Config <Info> frontend_common\config.cpp:75:WriteToIni: Writing Global configuration to: C:\Users\<user>\AppData\Roaming\citron\config\qt-config.ini
+[   1.142404] Config <Info> frontend_common\config.cpp:75:WriteToIni: Writing Game Specific configuration to: C:\Users\<user>\AppData\Roaming\citron\config\custom\krkrsdl2.nro.ini
+[   1.144940] Config <Info> frontend_common\config.cpp:75:WriteToIni: Writing Game Specific configuration to: C:\Users\<user>\AppData\Roaming\citron\config\custom\krkrsdl2.nro.ini
 [   1.148559] Config <Info> common\settings.cpp:118:LogSettings: citron Configuration:
 [   1.148569] Config <Info> common\settings.cpp:111:operator (): -- Audio.output_engine: auto
 [   1.148571] Config <Info> common\settings.cpp:111:operator (): -- Audio.output_device: auto
@@ -211,11 +211,11 @@
 [   1.148687] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.login_share_applet_mode: HLE
 [   1.148688] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.wifi_web_auth_applet_mode: HLE
 [   1.148688] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.my_page_applet_mode: LLE
-[   1.148691] Config <Info> common\settings.cpp:115:operator (): DataStorage_CacheDir: C:\Users\ACETaffy\AppData\Roaming\citron\cache
-[   1.148691] Config <Info> common\settings.cpp:115:operator (): DataStorage_ConfigDir: C:\Users\ACETaffy\AppData\Roaming\citron\config
-[   1.148692] Config <Info> common\settings.cpp:115:operator (): DataStorage_LoadDir: C:/Users/ACETaffy/AppData/Roaming/citron/load
-[   1.148693] Config <Info> common\settings.cpp:115:operator (): DataStorage_NANDDir: C:/Users/ACETaffy/AppData/Roaming/citron/nand
-[   1.148693] Config <Info> common\settings.cpp:115:operator (): DataStorage_SDMCDir: C:/Users/ACETaffy/AppData/Roaming/citron/sdmc
+[   1.148691] Config <Info> common\settings.cpp:115:operator (): DataStorage_CacheDir: C:\Users\<user>\AppData\Roaming\citron\cache
+[   1.148691] Config <Info> common\settings.cpp:115:operator (): DataStorage_ConfigDir: C:\Users\<user>\AppData\Roaming\citron\config
+[   1.148692] Config <Info> common\settings.cpp:115:operator (): DataStorage_LoadDir: C:/Users/<user>/AppData/Roaming/citron/load
+[   1.148693] Config <Info> common\settings.cpp:115:operator (): DataStorage_NANDDir: C:/Users/<user>/AppData/Roaming/citron/nand
+[   1.148693] Config <Info> common\settings.cpp:115:operator (): DataStorage_SDMCDir: C:/Users/<user>/AppData/Roaming/citron/sdmc
 [   1.269752] Service.FS <Info> core\hle\service\filesystem\filesystem.cpp:445:CreateSaveDataFactory: Save Path: Using default NAND as the base.
 [   1.269868] Service.FS <Info> core\hle\service\filesystem\filesystem.cpp:477:CreateSaveDataFactory: Save Path: No overrides found. Using the determined base directory.
 [   1.269958] Core <Info> core\core.cpp:392:Load: Loading Kirikiri SDL2 (0000000000000000) ...

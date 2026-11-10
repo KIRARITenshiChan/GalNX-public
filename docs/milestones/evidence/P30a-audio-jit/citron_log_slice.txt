@@ -21,10 +21,10 @@
 [   1.432984] Frontend <Error> citron\game_list.cpp:3354:LoadCompatibilityList: Game compatibility list is empty or unreadable
 [   1.636543] Frontend <Info> citron\game_list.cpp:2711:DonePopulating: Mirroring: Performing one-time startup sync...
 [   1.897144] Frontend <Info> citron\main.cpp:2322:BootGame: citron starting...
-[   1.901136] Config <Info> frontend_common\config.cpp:75:WriteToIni: Writing Global configuration to: C:\Users\ACETaffy\AppData\Roaming\citron\config\qt-config.ini
-[   1.903403] Config <Info> frontend_common\config.cpp:75:WriteToIni: Writing Global configuration to: C:\Users\ACETaffy\AppData\Roaming\citron\config\qt-config.ini
-[   1.908660] Config <Info> frontend_common\config.cpp:75:WriteToIni: Writing Game Specific configuration to: C:\Users\ACETaffy\AppData\Roaming\citron\config\custom\010047420000A000.ini
-[   1.910098] Config <Info> frontend_common\config.cpp:75:WriteToIni: Writing Game Specific configuration to: C:\Users\ACETaffy\AppData\Roaming\citron\config\custom\010047420000A000.ini
+[   1.901136] Config <Info> frontend_common\config.cpp:75:WriteToIni: Writing Global configuration to: C:\Users\<user>\AppData\Roaming\citron\config\qt-config.ini
+[   1.903403] Config <Info> frontend_common\config.cpp:75:WriteToIni: Writing Global configuration to: C:\Users\<user>\AppData\Roaming\citron\config\qt-config.ini
+[   1.908660] Config <Info> frontend_common\config.cpp:75:WriteToIni: Writing Game Specific configuration to: C:\Users\<user>\AppData\Roaming\citron\config\custom\010047420000A000.ini
+[   1.910098] Config <Info> frontend_common\config.cpp:75:WriteToIni: Writing Game Specific configuration to: C:\Users\<user>\AppData\Roaming\citron\config\custom\010047420000A000.ini
 [   1.912753] Config <Info> common\settings.cpp:118:LogSettings: citron Configuration:
 [   1.912760] Config <Info> common\settings.cpp:111:operator (): -- Audio.output_engine: auto
 [   1.912761] Config <Info> common\settings.cpp:111:operator (): -- Audio.output_device: auto
@@ -211,11 +211,11 @@
 [   1.912872] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.login_share_applet_mode: HLE
 [   1.912872] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.wifi_web_auth_applet_mode: HLE
 [   1.912873] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.my_page_applet_mode: LLE
-[   1.912874] Config <Info> common\settings.cpp:115:operator (): DataStorage_CacheDir: C:\Users\ACETaffy\AppData\Roaming\citron\cache
-[   1.912875] Config <Info> common\settings.cpp:115:operator (): DataStorage_ConfigDir: C:\Users\ACETaffy\AppData\Roaming\citron\config
-[   1.912876] Config <Info> common\settings.cpp:115:operator (): DataStorage_LoadDir: C:/Users/ACETaffy/AppData/Roaming/citron/load
-[   1.912876] Config <Info> common\settings.cpp:115:operator (): DataStorage_NANDDir: C:/Users/ACETaffy/AppData/Roaming/citron/nand
-[   1.912877] Config <Info> common\settings.cpp:115:operator (): DataStorage_SDMCDir: C:/Users/ACETaffy/AppData/Roaming/citron/sdmc
+[   1.912874] Config <Info> common\settings.cpp:115:operator (): DataStorage_CacheDir: C:\Users\<user>\AppData\Roaming\citron\cache
+[   1.912875] Config <Info> common\settings.cpp:115:operator (): DataStorage_ConfigDir: C:\Users\<user>\AppData\Roaming\citron\config
+[   1.912876] Config <Info> common\settings.cpp:115:operator (): DataStorage_LoadDir: C:/Users/<user>/AppData/Roaming/citron/load
+[   1.912876] Config <Info> common\settings.cpp:115:operator (): DataStorage_NANDDir: C:/Users/<user>/AppData/Roaming/citron/nand
+[   1.912877] Config <Info> common\settings.cpp:115:operator (): DataStorage_SDMCDir: C:/Users/<user>/AppData/Roaming/citron/sdmc
 [   1.948246] Loader <Info> core\file_sys\patch_manager.cpp:178:PatchExeFS: Patching ExeFS for title_id=010047420000A000
 [   1.948548] Loader <Info> core\file_sys\patch_manager.cpp:351:PatchExeFS:     ExeFS: LayeredExeFS patches applied successfully
 [   2.050151] Loader <Info> core\file_sys\patch_manager.cpp:452:HasNSOPatch: Querying NSO patch existence for build_id=E0158F72A4B51951DBE2B76D2B3FB3423E5F916C, name=main
@@ -249,7 +249,7 @@
 [   2.533577] Render.Vulkan <Info> video_core\renderer_vulkan\vk_pipeline_cache.cpp:632:LoadDiskResources: Total Pipeline Count: 4
 [   2.533664] Render.Vulkan <Info> video_core\renderer_vulkan\vk_pipeline_cache.cpp:694:CreateGraphicsPipeline: 0xd84844bcabb1ce4f
 [   2.533668] Render.Vulkan <Info> video_core\renderer_vulkan\vk_pipeline_cache.cpp:694:CreateGraphicsPipeline: 0x25bcb3a3eaccd4d7
-[   2.536652] Render.Vulkan <Info> video_core\renderer_vulkan\vk_pipeline_cache.cpp:912:SerializeVulkanPipelineCache: Vulkan driver pipelines cached at: C:\Users\ACETaffy\AppData\Roaming\citron\shader\010047420000a000\vulkan_pipelines.bin
+[   2.536652] Render.Vulkan <Info> video_core\renderer_vulkan\vk_pipeline_cache.cpp:912:SerializeVulkanPipelineCache: Vulkan driver pipelines cached at: C:\Users\<user>\AppData\Roaming\citron\shader\010047420000a000\vulkan_pipelines.bin
 [   2.537069] Service.AOC <Warning> core\hle\service\aoc\addon_content_manager.cpp:54:AccumulateAOCTitleIDs: Accumulated 0 AOC title IDs
 [   2.540545] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:76:SynthesizeSystemArchive: Synthesizing system archive 'TimeZoneBinary' (0x010000000000080E).
 [   2.541180] Service.FS <Info> core\file_sys\system_archive\system_archive.cpp:94:SynthesizeSystemArchive:     - System archive generation successful!

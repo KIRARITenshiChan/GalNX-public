@@ -2,6 +2,12 @@
 
 本目录只登记**GalNX 仓库内合法再分发的第三方资源**（字体、图标、测试夹具等），并保存其许可原文。
 
+## 机器可读清单与校验
+
+- [inventory.yaml](inventory.yaml)：仓库全部第三方组件与产物的许可清单（33 个组件 / 4 个产物），字段说明见文件头。
+- [../../scripts/check_license_inventory.py](../../scripts/check_license_inventory.py)：清单校验器，运行 `python scripts/check_license_inventory.py --json`（退出码 0/1）。
+- 仓库级分发边界与合规结论（含 FFmpeg GPL 风险）见 [../../THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md)。
+
 ## 硬性规则
 
 1. **不放商业游戏数据**：任何商业游戏的脚本/图片/音频/ROM/存档一律不进本仓库，也不作为构建输入提交。

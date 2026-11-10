@@ -21,10 +21,10 @@
 [   2.171019] Frontend <Error> citron\game_list.cpp:3354:LoadCompatibilityList: Game compatibility list is empty or unreadable
 [   2.475349] Frontend <Info> citron\game_list.cpp:2711:DonePopulating: Mirroring: Performing one-time startup sync...
 [   2.820024] Frontend <Info> citron\main.cpp:2322:BootGame: citron starting...
-[   2.821227] Config <Info> frontend_common\config.cpp:75:WriteToIni: Writing Global configuration to: C:\Users\ACETaffy\AppData\Roaming\citron\config\qt-config.ini
-[   2.824361] Config <Info> frontend_common\config.cpp:75:WriteToIni: Writing Global configuration to: C:\Users\ACETaffy\AppData\Roaming\citron\config\qt-config.ini
-[   2.829240] Config <Info> frontend_common\config.cpp:75:WriteToIni: Writing Game Specific configuration to: C:\Users\ACETaffy\AppData\Roaming\citron\config\custom\rfvp.nro.ini
-[   2.832152] Config <Info> frontend_common\config.cpp:75:WriteToIni: Writing Game Specific configuration to: C:\Users\ACETaffy\AppData\Roaming\citron\config\custom\rfvp.nro.ini
+[   2.821227] Config <Info> frontend_common\config.cpp:75:WriteToIni: Writing Global configuration to: C:\Users\<user>\AppData\Roaming\citron\config\qt-config.ini
+[   2.824361] Config <Info> frontend_common\config.cpp:75:WriteToIni: Writing Global configuration to: C:\Users\<user>\AppData\Roaming\citron\config\qt-config.ini
+[   2.829240] Config <Info> frontend_common\config.cpp:75:WriteToIni: Writing Game Specific configuration to: C:\Users\<user>\AppData\Roaming\citron\config\custom\rfvp.nro.ini
+[   2.832152] Config <Info> frontend_common\config.cpp:75:WriteToIni: Writing Game Specific configuration to: C:\Users\<user>\AppData\Roaming\citron\config\custom\rfvp.nro.ini
 [   2.835442] Config <Info> common\settings.cpp:118:LogSettings: citron Configuration:
 [   2.835455] Config <Info> common\settings.cpp:111:operator (): -- Audio.output_engine: auto
 [   2.835457] Config <Info> common\settings.cpp:111:operator (): -- Audio.output_device: auto
@@ -211,11 +211,11 @@
 [   2.835577] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.login_share_applet_mode: HLE
 [   2.835578] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.wifi_web_auth_applet_mode: HLE
 [   2.835578] Config <Info> common\settings.cpp:111:operator (): -- LibraryApplet.my_page_applet_mode: LLE
-[   2.835580] Config <Info> common\settings.cpp:115:operator (): DataStorage_CacheDir: C:\Users\ACETaffy\AppData\Roaming\citron\cache
-[   2.835582] Config <Info> common\settings.cpp:115:operator (): DataStorage_ConfigDir: C:\Users\ACETaffy\AppData\Roaming\citron\config
-[   2.835582] Config <Info> common\settings.cpp:115:operator (): DataStorage_LoadDir: C:/Users/ACETaffy/AppData/Roaming/citron/load
-[   2.835583] Config <Info> common\settings.cpp:115:operator (): DataStorage_NANDDir: C:/Users/ACETaffy/AppData/Roaming/citron/nand
-[   2.835583] Config <Info> common\settings.cpp:115:operator (): DataStorage_SDMCDir: C:/Users/ACETaffy/AppData/Roaming/citron/sdmc
+[   2.835580] Config <Info> common\settings.cpp:115:operator (): DataStorage_CacheDir: C:\Users\<user>\AppData\Roaming\citron\cache
+[   2.835582] Config <Info> common\settings.cpp:115:operator (): DataStorage_ConfigDir: C:\Users\<user>\AppData\Roaming\citron\config
+[   2.835582] Config <Info> common\settings.cpp:115:operator (): DataStorage_LoadDir: C:/Users/<user>/AppData/Roaming/citron/load
+[   2.835583] Config <Info> common\settings.cpp:115:operator (): DataStorage_NANDDir: C:/Users/<user>/AppData/Roaming/citron/nand
+[   2.835583] Config <Info> common\settings.cpp:115:operator (): DataStorage_SDMCDir: C:/Users/<user>/AppData/Roaming/citron/sdmc
 [   2.943642] Service.FS <Warning> core\file_sys\romfs_factory.cpp:25:RomFSFactory: Unable to read base RomFS
 [   2.943664] Service.FS <Info> core\hle\service\filesystem\filesystem.cpp:445:CreateSaveDataFactory: Save Path: Using default NAND as the base.
 [   2.943988] Service.FS <Info> core\hle\service\filesystem\filesystem.cpp:477:CreateSaveDataFactory: Save Path: No overrides found. Using the determined base directory.

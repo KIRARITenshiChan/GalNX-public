@@ -1,5 +1,5 @@
 # unpacked payload listing: sdmc:/kirikiri (P3-f)
-root=C:/Users/ACETaffy/AppData/Roaming/citron/sdmc/kirikiri
+root=C:/Users/<user>/AppData/Roaming/citron/sdmc/kirikiri
 # size_bytes  relpath
 1293 ./haruno/Kirikiroid2Preference.xml
 198550 ./haruno/data.xp3

@@ -76,6 +76,6 @@ hacBrewPack 摘要（节选）:
 ## 8. 本机实际可用 keyset 位置（只记路径/大小，不记内容；2026-10-30 核对）
 - E:\Othergames\Nintendo Switch\Ryujinx-canary\portable\system\prod.keys（12,007 B，mtime 2026-03-19 07:25:45 +0800；本任务实际使用）
 - 同目录 title.keys 11,492 B
-- C:\Users\ACETaffy\.switch\prod.keys：不存在（原计划首选路径，实测缺失）
+- C:\Users\<user>\.switch\prod.keys：不存在（原计划首选路径，实测缺失）
 - %APPDATA%\citron\keys\ 下另有 prod.keys 12,007 B + title.keys 11,492 B（Citron 自带；本轮未使用）
 （以上只记文件路径与大小；未读取、未打印、未复制任何 key 内容。）

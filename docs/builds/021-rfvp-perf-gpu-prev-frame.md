@@ -179,7 +179,7 @@ env MSYSTEM=MSYS CHERE_INVOKING=1 /d/devkitPro/msys2/usr/bin/bash.exe -lc 'bash 
 Citron perf 探针（脚本 `E:/galnx-build/m5-rfvp-run/run-perf4.sh`，输出 run dir）：
 
 ```bash
-"D:/Scoop/apps/git/current/bin/bash.exe" -c 'export CITRON_USER_DIR="C:/Users/ACETaffy/AppData/Roaming/citron"; export TEMP=/c/Users/ACETaffy/AppData/Local/Temp; bash /e/galnx-build/m5-rfvp-run/run-perf4.sh'
+"D:/Scoop/apps/git/current/bin/bash.exe" -c 'export CITRON_USER_DIR="C:/Users/<user>/AppData/Roaming/citron"; export TEMP=/c/Users/ACETaffy/AppData/Local/Temp; bash /e/galnx-build/m5-rfvp-run/run-perf4.sh'
 ```
 
 读结果：`<run dir>/citron_log.txt` 中 `rfvp: frame N slow` 行即 §5 数据源；

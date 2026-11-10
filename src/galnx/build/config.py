@@ -13,12 +13,26 @@ from typing import Any, Mapping, Sequence, Union
 
 DEFAULT_TIMEOUT_S = 600.0
 
+# Toolchain components whose unknown version makes a build non-cacheable by
+# default.  Manifests may override this with ``build.toolchain_components``.
+DEFAULT_TOOLCHAIN_COMPONENTS = ("devkitpro_gcc", "cmake", "ninja")
+
 # Either an argv vector (executed with shell=False) or a shell command string.
 Command = Union[tuple[str, ...], str]
 
 
 class BuildError(ValueError):
     """Raised when a manifest build section cannot be interpreted."""
+
+
+@dataclass(frozen=True)
+class BuildInput:
+    """One explicit build input declared under ``build.inputs``."""
+
+    path: str
+    kind: str = "tree"
+    optional: bool = False
+    ignore: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -31,11 +45,36 @@ class BuildConfig:
     env: dict[str, str] = field(default_factory=dict)
     timeout_s: float = DEFAULT_TIMEOUT_S
     raw: dict[str, Any] = field(default_factory=dict)
+    inputs: tuple[BuildInput, ...] = ()
+    toolchain_components: tuple[str, ...] = DEFAULT_TOOLCHAIN_COMPONENTS
+
+    @property
+    def has_commands(self) -> bool:
+        return bool(self.commands)
+
+    @property
+    def has_artifact(self) -> bool:
+        return bool(self.artifact)
+
+    @property
+    def execution_state(self) -> str:
+        """Classify the build section for reporting.
+
+        configured     -- commands and artifact are both declared
+        not_configured -- neither is declared; nothing to execute
+        incomplete     -- only one of the two is declared (rejected by the parser)
+        """
+
+        if self.commands and self.artifact:
+            return "configured"
+        if not self.commands and not self.artifact:
+            return "not_configured"
+        return "incomplete"
 
     @property
     def executable(self) -> bool:
         """True when the manifest declares commands *and* an artifact."""
-        return bool(self.commands) and bool(self.artifact)
+        return self.execution_state == "configured"
 
 
 def _mapping(value: Any, where: str) -> Mapping[str, Any]:
@@ -85,6 +124,68 @@ def _env(value: Any) -> dict[str, str]:
     return result
 
 
+_INPUT_KEYS = frozenset({"path", "kind", "optional", "ignore"})
+_INPUT_KINDS = ("file", "tree")
+
+
+def _build_inputs(value: Any) -> tuple[BuildInput, ...]:
+    if value is None:
+        return ()
+    if not isinstance(value, (list, tuple)):
+        raise BuildError("build.inputs must be an array")
+    inputs: list[BuildInput] = []
+    for index, item in enumerate(value):
+        where = "build.inputs[%d]" % index
+        mapping = _mapping(item, where)
+        unknown = sorted(set(mapping) - _INPUT_KEYS)
+        if unknown:
+            raise BuildError("%s: unknown key(s): %s" % (where, ", ".join(unknown)))
+        raw_path = mapping.get("path")
+        if not isinstance(raw_path, str) or not raw_path.strip():
+            raise BuildError("%s.path must be a non-empty string" % where)
+        kind = mapping.get("kind", "tree")
+        if kind not in _INPUT_KINDS:
+            raise BuildError("%s.kind must be one of: file, tree" % where)
+        optional = mapping.get("optional", False)
+        if not isinstance(optional, bool):
+            raise BuildError("%s.optional must be a boolean" % where)
+        raw_ignore = mapping.get("ignore")
+        ignore: tuple[str, ...] = ()
+        if raw_ignore is not None:
+            if not isinstance(raw_ignore, (list, tuple)):
+                raise BuildError("%s.ignore must be an array" % where)
+            patterns: list[str] = []
+            for pattern_index, pattern in enumerate(raw_ignore):
+                if not isinstance(pattern, str) or not pattern.strip():
+                    raise BuildError(
+                        "%s.ignore[%d]: expected a non-empty string"
+                        % (where, pattern_index)
+                    )
+                patterns.append(pattern)
+            ignore = tuple(patterns)
+        inputs.append(
+            BuildInput(path=raw_path, kind=kind, optional=optional, ignore=ignore)
+        )
+    return tuple(inputs)
+
+
+def _toolchain_components(value: Any) -> tuple[str, ...]:
+    if value is None:
+        return DEFAULT_TOOLCHAIN_COMPONENTS
+    if not isinstance(value, (list, tuple)):
+        raise BuildError("build.toolchain_components must be an array")
+    components: list[str] = []
+    for index, item in enumerate(value):
+        if not isinstance(item, str) or not item.strip():
+            raise BuildError(
+                "build.toolchain_components[%d]: expected a non-empty string" % index
+            )
+        components.append(item)
+    if not components:
+        raise BuildError("build.toolchain_components must not be empty")
+    return tuple(components)
+
+
 def parse_build_section(data: Mapping[str, Any], manifest_path: Path | str) -> BuildConfig:
     """Interpret a manifest dict into a :class:`BuildConfig`.
 
@@ -126,6 +227,28 @@ def parse_build_section(data: Mapping[str, Any], manifest_path: Path | str) -> B
         artifact = raw_artifact
 
     env = _env(build.get("env"))
+    inputs = _build_inputs(build.get("inputs"))
+    toolchain_components = _toolchain_components(build.get("toolchain_components"))
+
+    # A build contract is either fully declared or absent.  Commands without an
+    # artifact can never produce a verifiable result, and an artifact without
+    # commands cannot be produced by the workbench.
+    if commands and not artifact:
+        raise BuildError(
+            "build.artifact is required when build.commands is declared"
+            " (steps that only live in scripts stay scripts, not manifests)"
+        )
+    if artifact and not commands:
+        raise BuildError("build.commands is required when build.artifact is declared")
+
+    if artifact is not None:
+        escaped = (workdir / artifact).resolve()
+        try:
+            escaped.relative_to(workdir)
+        except ValueError:
+            raise BuildError(
+                "build.artifact must stay inside build.workdir: %s" % artifact
+            ) from None
 
     raw_timeout = build.get("timeout_s", DEFAULT_TIMEOUT_S)
     if isinstance(raw_timeout, bool) or not isinstance(raw_timeout, (int, float)):
@@ -141,6 +264,8 @@ def parse_build_section(data: Mapping[str, Any], manifest_path: Path | str) -> B
         env=env,
         timeout_s=timeout_s,
         raw=dict(build),
+        inputs=inputs,
+        toolchain_components=toolchain_components,
     )
 
 

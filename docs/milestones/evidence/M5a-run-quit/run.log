@@ -1,6 +1,6 @@
 launch mode : runas-deelevated
-wrapper     : C:\Users\ACETaffy\AppData\Local\Temp\galnx-harness\launch-20261030-033329-rfvp.cmd
-cmdline     : "E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\web-02\citron\citron.exe" -g "C:\Users\ACETaffy\AppData\Roaming\citron\sdmc\switch\galnx-harness\rfvp.nro"
+wrapper     : C:\Users\<user>\AppData\Local\Temp\galnx-harness\launch-20261030-033329-rfvp.cmd
+cmdline     : "E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\web-02\citron\citron.exe" -g "C:\Users\<user>\AppData\Roaming\citron\sdmc\switch\galnx-harness\rfvp.nro"
 game type   : nro
 game path   : /e/galnx-build/m5-artifacts/rfvp.nro
 stage path  : /c/Users/ACETaffy/AppData/Roaming/citron/sdmc/switch/galnx-harness/rfvp.nro

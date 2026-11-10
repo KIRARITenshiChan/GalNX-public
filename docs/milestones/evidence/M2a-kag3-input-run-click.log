@@ -1,6 +1,6 @@
 launch mode : runas-deelevated
-wrapper     : C:\Users\ACETaffy\AppData\Local\Temp\galnx-harness\launch-20261030-020438-krkrsdl2.cmd
-cmdline     : "E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\web-02\citron\citron.exe" -g "C:\Users\ACETaffy\AppData\Roaming\citron\sdmc\switch\galnx-harness\krkrsdl2.nro"
+wrapper     : C:\Users\<user>\AppData\Local\Temp\galnx-harness\launch-20261030-020438-krkrsdl2.cmd
+cmdline     : "E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\web-02\citron\citron.exe" -g "C:\Users\<user>\AppData\Roaming\citron\sdmc\switch\galnx-harness\krkrsdl2.nro"
 status      : loaded
 window title: citron Nightly | 0237a9b88 | Kirikiri SDL2 (64-bit) | NVIDIA
 pid         : 12348

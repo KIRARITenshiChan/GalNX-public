@@ -1,6 +1,6 @@
 launch mode : schtasks-limited
 wrapper     : C:\ProgramData\galnx-harness\launch-20261030-091112-Kirikiroid2-NX-010047410000A000.cmd
-cmdline     : "E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\web-02\citron\citron.exe" -g "C:\Users\ACETaffy\AppData\Roaming\citron\sdmc\switch\galnx-harness\Kirikiroid2-NX-010047410000A000.nsp"
+cmdline     : "E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\web-02\citron\citron.exe" -g "C:\Users\<user>\AppData\Roaming\citron\sdmc\switch\galnx-harness\Kirikiroid2-NX-010047410000A000.nsp"
 game type   : nsp
 game path   : /e/galnx-build/pilot-01/p3/out/Kirikiroid2-NX-010047410000A000.nsp
 stage path  : /c/Users/ACETaffy/AppData/Roaming/citron/sdmc/switch/galnx-harness/Kirikiroid2-NX-010047410000A000.nsp

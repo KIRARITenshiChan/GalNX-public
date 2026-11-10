@@ -1,3 +1,5 @@
+# NOTE: this is a real pilot record (game-specific evidence), not a reusable template.
+# For a new port start from examples/templates/minimal-manifest.yaml.
 # GalNX P11 pilot manifest - rfvp (Rust FVP) IROSEKA_FHD self-contained NSP.
 #
 # Game: 五彩斑斓的世界 HD Re:GENERATION (IROSEKA_FHD), Favorite, 2022 HD remaster.

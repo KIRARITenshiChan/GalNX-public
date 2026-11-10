@@ -2,7 +2,10 @@
 
 Public API:
   descriptor  EngineDescriptor, EngineDescriptorError, load_descriptor,
-              descriptor_from_dict, validate_descriptor_data, format_artifact_name
+              descriptor_from_dict, validate_descriptor_data, format_artifact_name,
+              capability model constants (CAPABILITY_KEYS, CAPABILITY_VERIFICATIONS,
+              DEPRECATED_CAPABILITY_ALIASES, ENGINE_VERIFICATION_KEYS) and
+              capability_warnings
   registry    EngineRegistry, EngineRegistryError, BUILTIN_ENGINES,
               builtin_registry, registry_for_manifest, validate_manifest_engine,
               manifest_engine_warnings
@@ -12,8 +15,13 @@ Public API:
 from .descriptor import (
     ARTIFACT_PLACEHOLDERS,
     BUILD_BACKENDS,
+    CAPABILITY_FIELDS,
     CAPABILITY_KEYS,
+    CAPABILITY_VERIFICATIONS,
     CONTENT_MODES,
+    DEPRECATED_CAPABILITY_ALIASES,
+    ENGINE_VERIFICATION_KEYS,
+    REQUIRED_VERIFICATION_KEYS,
     ENGINE_SCHEMA_NAME,
     EngineDescriptor,
     EngineDescriptorError,
@@ -21,6 +29,7 @@ from .descriptor import (
     TARGET_KINDS,
     TARGET_SUFFIXES,
     artifact_placeholders,
+    capability_warnings,
     check_descriptor_file,
     descriptor_from_dict,
     format_artifact_name,
@@ -85,10 +94,15 @@ __all__ = [
     "BUILD_BACKENDS",
     "BUILTIN_ENGINES",
     "BUILTIN_ORDER",
+    "CAPABILITY_FIELDS",
     "CAPABILITY_KEYS",
+    "CAPABILITY_VERIFICATIONS",
     "CHECK_STATUSES",
     "CONTENT_MODES",
+    "DEPRECATED_CAPABILITY_ALIASES",
     "ENGINE_SCHEMA_NAME",
+    "ENGINE_VERIFICATION_KEYS",
+    "REQUIRED_VERIFICATION_KEYS",
     "EngineAdapter",
     "EngineDescriptor",
     "EngineDescriptorError",
@@ -106,6 +120,7 @@ __all__ = [
     "artifact_placeholders",
     "artifact_version",
     "builtin_registry",
+    "capability_warnings",
     "check_descriptor_file",
     "checks_to_dict",
     "build_spec",

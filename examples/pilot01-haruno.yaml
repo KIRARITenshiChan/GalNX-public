@@ -1,3 +1,5 @@
+# NOTE: this is a real pilot record (game-specific evidence), not a reusable template.
+# For a new port start from examples/templates/minimal-manifest.yaml.
 # GalNX P3-e pilot manifest - self-contained NSP for the first vertical pilot.
 #
 # Game: 晴霁之后定是菜花盛开的好天气 (haruno), KiriKiri2 + Kikyou ADV, original

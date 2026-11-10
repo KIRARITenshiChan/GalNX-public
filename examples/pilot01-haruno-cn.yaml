@@ -1,3 +1,5 @@
+# NOTE: this is a real pilot record (game-specific evidence), not a reusable template.
+# For a new port start from examples/templates/minimal-manifest.yaml.
 # GalNX P5 pilot manifest - self-contained CN (localized) NSP for the first
 # vertical pilot. Engine and TitleID are identical to examples/pilot01-haruno.yaml
 # (the A5 build); only the romfs payload differs: data.xp3 / scenario.xp3 /

@@ -91,7 +91,7 @@ bash scripts/build_nsp_game.sh --elf /e/galnx-build/m5-rfvp/target/rfvp-switch/s
 
 ## 5. Citron 逐项验证
 
-运行姿势：`"D:/Scoop/apps/git/current/bin/bash.exe" -c 'export CITRON_USER_DIR="C:/Users/ACETaffy/AppData/Roaming/citron"; export TEMP=/c/Users/ACETaffy/AppData/Local/Temp; bash <脚本>'`，脚本内调 `scripts/citron_run.sh --nro <nro> --detach --timeout 400 --settle 8 --out <dir> --input-steps "..."`，run dir 出现 `.done` 即结束。Citron 键盘→手柄映射：C=pad A、X=pad B、V=pad X、Z=pad Y、Q=L、E=R、R=ZL、T=ZR、M=Plus、N=Minus、方向键=dpad、WASD=lstick、IJKL=rstick。
+运行姿势：`"D:/Scoop/apps/git/current/bin/bash.exe" -c 'export CITRON_USER_DIR="C:/Users/<user>/AppData/Roaming/citron"; export TEMP=/c/Users/ACETaffy/AppData/Local/Temp; bash <脚本>'`，脚本内调 `scripts/citron_run.sh --nro <nro> --detach --timeout 400 --settle 8 --out <dir> --input-steps "..."`，run dir 出现 `.done` 即结束。Citron 键盘→手柄映射：C=pad A、X=pad B、V=pad X、Z=pad Y、Q=L、E=R、R=ZL、T=ZR、M=Plus、N=Minus、方向键=dpad、WASD=lstick、IJKL=rstick。
 
 | # | 项 | 期望 | 证据（run / 文件 / SHA-256 前 8） | 结论 |
 | --- | --- | --- | --- | --- |

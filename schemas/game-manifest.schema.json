@@ -258,6 +258,55 @@
           "exclusiveMinimum": 0,
           "default": 600,
           "description": "Per-command timeout in seconds (default 600)."
+        },
+        "inputs": {
+          "type": "array",
+          "description": "Explicit build inputs whose content is part of the cache key. Relative paths resolve against the manifest directory; absolute paths are also accepted. Missing optional inputs do not invalidate the cache; missing required inputs do.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "path"
+            ],
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "file",
+                  "tree"
+                ],
+                "default": "tree",
+                "description": "file hashes a single file; tree hashes a recursively collected, sorted file list."
+              },
+              "optional": {
+                "type": "boolean",
+                "default": false,
+                "description": "When true, a missing path is recorded but does not invalidate the cache."
+              },
+              "ignore": {
+                "type": "array",
+                "description": "Glob patterns excluded from a tree input (for example *.o or target/). .git and .galnx are always excluded.",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        },
+        "toolchain_components": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "Toolchain fingerprint components that must be known for a cache hit. Defaults to devkitpro_gcc, cmake and ninja; any declared component whose version is unknown turns the lookup into a miss.",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
         }
       }
     },
@@ -298,5 +347,53 @@
       "type": "object",
       "description": "Optional payload plan for self-contained NSPs: which romfs files ship and where the engine copies them on first run. Structure is validated in detail by src/galnx/payload against schemas/payload.schema.json; see docs/packaging/payload.md."
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": [
+          "build"
+        ],
+        "properties": {
+          "build": {
+            "required": [
+              "commands"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "build": {
+            "required": [
+              "artifact"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [
+          "build"
+        ],
+        "properties": {
+          "build": {
+            "required": [
+              "artifact"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "build": {
+            "required": [
+              "commands"
+            ]
+          }
+        }
+      }
+    }
+  ]
 }

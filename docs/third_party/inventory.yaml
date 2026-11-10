@@ -1,0 +1,985 @@
+# GalNX 0.1 Preview — 第三方组件清单（SBOM）
+# 机器可读组件清单，配套校验器 scripts/check_license_inventory.py。
+# 本文件只记录许可证与分发事实，不构成法律意见；分发决策见 THIRD_PARTY_NOTICES.md §0。
+#
+# 字段约定：
+# - license_spdx：SPDX 标识符；无法映射到 SPDX 时写空字符串并用 license_name + license_url，
+#   或写 NOASSERTION 并给出 license_name + license_url 与 notes 说明。
+# - license_family：permissive / weak-copyleft / copyleft / custom / public-domain / unknown。
+# - link_mode：static / dynamic / none / na（none=不参与链接；na=资源/工具）。
+# - distribution_class：runtime-linked / runtime-bundled / build-only / development-only。
+# - included_in_nsp=true 的组件必须给出 artifacts（scope.artifacts 中的 id）。
+# - obligations 词表（自由文本，建议使用）：include_license_text / include_copyright_notice /
+#   provide_corresponding_source / provide_relink_mechanism / state_modifications /
+#   no_additional_restrictions / restriction_no_rar_reimplementation / no_redistribution_until_permission。
+# - evidence 条目：{type: repo|local|url, path|ref|url, note}；repo.path 是仓库相对路径且必须存在。
+schema_version: 1
+generated_at: 2026-11-11
+scope:
+  project: GalNX（Nintendo Switch Galgame 移植框架）
+  baseline_commit: 974a4141af4a86a83f9434ea69ebb9dc9ffe4834
+  baseline_date: 2026-11-11
+  distribution_note: 当前所有 NSP 均为内部自用测试产物，未对外分发。分发决策 = 方案 B（2026-11-11 拍板）：保留 NVDEC + GPL-2.0-or-later 合规分发；GalNX 公共仓库只分发 MIT 编排层与上游 MPL/MIT 补丁，不含任何 NSP 二进制；若将来对外分发 NSP，随包提供对应源码（rvfp fork + FFmpeg nvtegra 分支 + 构建脚本）与许可文本。详见 THIRD_PARTY_NOTICES.md §0。
+  artifacts:
+    - id: iroseka-nsp
+      description: IROSEKA FHD 自包含测试 NSP（rfvp 引擎 + GPL FFmpeg nvtegra 硬解）
+      version: 1.2.5-test
+      size_bytes: 10087541464
+      sha256: f686084205890638fda6bee97a5359774f5a8306beec9d161dc3f39093e815e8
+      path: /e/galnx-build/p46/out/IROSEKA_FHD-010047420000a000.nsp
+      distributed: false
+      evidence:
+        - path: docs/builds/052-rfvp-p45-sync.md
+          note: NSP 体积/sha256/ELF sha256 记录（L40-L45）
+        - path: docs/builds/046-op-h264-nvtegra.md
+          note: H.264 NV12/NVDEC 路径与打包命令（L138-L143）
+    - id: sakura-nsp
+      description: SAKURA MOYU CN 自包含测试 NSP（rfvp 引擎 + GPL FFmpeg nvtegra 硬解）
+      version: 1.3.3-test
+      size_bytes: 8116841176
+      sha256: 965ee35682df72969465f321c3699ba377a545774745d57234983a14472f2b5f
+      path: /e/galnx-build/p46/out/SAKURA_MOYU_CN-010047420000c200.nsp
+      distributed: false
+      evidence:
+        - path: docs/builds/052-rfvp-p45-sync.md
+          note: 第二包体积/sha256 记录（L40-L45）
+    - id: k2nx-a10-nsp
+      description: Kirikiroid2-NX A10 CN 自包含 NSP（K2 1.3.9 + 补丁 A-J）
+      version: 1.0.9
+      sha256: 0efc23f66f57a016c15ea3944cdb8ce5b396f03f6bef3b8f5ddc1794d03186f2
+      path: ""
+      distributed: false
+      evidence:
+        - path: examples/engines/kirikiroid2-nx.yaml
+          note: artifact_sha256 与版本记录
+        - path: docs/builds/012-k2nx-cn-content.md
+          note: CN payload 与 romfs 内容记录（L120）
+    - id: m1-kag3-demo
+      description: M1 KAG3 演示 NRO（内嵌 IPAexGothic；workspaces/ 产物不入库）
+      version: 0.1-demo
+      distributed: false
+      evidence:
+        - path: docs/third_party/README.md
+          note: IPAexGothic 仅用于 M1 测试夹具的登记
+components:
+  - id: galnx
+    name: GalNX framework（本仓库）
+    upstream: https://github.com/KIRARITenshiChan/GalNX
+    version_or_commit: 974a4141af4a86a83f9434ea69ebb9dc9ffe4834（审计基线 HEAD）
+    license_spdx: MIT
+    license_file: LICENSE
+    license_family: permissive
+    link_mode: na
+    included_in_nsp: false
+    distribution_class: development-only
+    artifacts: []
+    patches: []
+    obligations:
+      - include_license_text
+      - include_copyright_notice
+    evidence:
+      - type: repo
+        path: LICENSE
+        note: MIT 全文（Copyright 2026 KIRARITenshiChan）
+      - type: repo
+        path: pyproject.toml
+        note: license = {text = "MIT"}
+    notes: 仅开发工具链（Python CLI、打包与校验脚本），不链接进 NSP。
+
+  - id: rfvp
+    name: rfvp（FVP 兼容运行时，含 GalNX Switch 后端补丁）
+    upstream: https://github.com/xmoezzz/rfvp
+    version_or_commit: 9f07adef2eb5d559777f9bf59a67b756875cb24f（HEAD 2026-10-25；version tag 0.7.0 = 99435f22）
+    license_spdx: MPL-2.0
+    license_file: docs/builds/patches/rfvp-switch/LICENSE
+    license_family: weak-copyleft
+    link_mode: static
+    included_in_nsp: true
+    distribution_class: runtime-linked
+    artifacts:
+      - iroseka-nsp
+      - sakura-nsp
+    patches:
+      - docs/builds/patches/rfvp-switch/P40-op-h264.diff
+      - docs/builds/patches/rfvp-switch/P40b-nv12-color.diff
+      - docs/builds/patches/rfvp-switch/P40c-op-story-trigger.diff
+      - docs/builds/patches/rfvp-switch/P41-snow-particles.diff
+      - docs/builds/patches/rfvp-switch/rfvp-async-decode.patch
+      - docs/builds/patches/rfvp-switch/rfvp-async-fix.patch
+      - docs/builds/patches/rfvp-switch/rfvp-async-off.patch
+      - docs/builds/patches/rfvp-switch/rfvp-async-prefetch.patch
+      - docs/builds/patches/rfvp-switch/rfvp-async-toggle.patch
+      - docs/builds/patches/rfvp-switch/rfvp-async-watchdog.patch
+      - docs/builds/patches/rfvp-switch/rfvp-audio-continuity.patch
+      - docs/builds/patches/rfvp-switch/rfvp-audio-jit.patch
+      - docs/builds/patches/rfvp-switch/rfvp-cache.patch
+      - docs/builds/patches/rfvp-switch/rfvp-device-fixes.patch
+      - docs/builds/patches/rfvp-switch/rfvp-full.diff
+      - docs/builds/patches/rfvp-switch/rfvp-input-remap.patch
+      - docs/builds/patches/rfvp-switch/rfvp-input.patch
+      - docs/builds/patches/rfvp-switch/rfvp-nv12-zerocopy.patch
+      - docs/builds/patches/rfvp-switch/rfvp-op-audio.patch
+      - docs/builds/patches/rfvp-switch/rfvp-op-movie.patch
+      - docs/builds/patches/rfvp-switch/rfvp-op-quality.patch
+      - docs/builds/patches/rfvp-switch/rfvp-perf-gpu-prev-frame.patch
+      - docs/builds/patches/rfvp-switch/rfvp-perf.patch
+      - docs/builds/patches/rfvp-switch/rfvp-romfs.patch
+      - docs/builds/patches/rfvp-switch/rfvp-save-lazy.patch
+      - docs/builds/patches/rfvp-switch/rfvp-sd-read.patch
+      - docs/builds/patches/rfvp-switch/rfvp-sdl2-backend.patch
+      - docs/builds/patches/rfvp-switch/rfvp-transition.patch
+      - docs/builds/patches/rfvp-switch/rfvp-wmv2-padding.patch
+    obligations:
+      - include_license_text
+      - provide_corresponding_source
+      - state_modifications
+    evidence:
+      - type: repo
+        path: examples/engines/rfvp.yaml
+        note: pinned_commit / license_spdx / license_url 记录
+      - type: repo
+        path: docs/builds/patches/LICENSE.md
+        note: 上游 LICENSE 哈希与补丁目录许可映射
+      - type: repo
+        path: docs/builds/052-rfvp-p45-sync.md
+        note: 最终 ELF/NSP 体积与 sha256（L17、L40-L45）
+    notes: >-
+      MPL-2.0 是文件级 copyleft：分发含修改的二进制时须提供被修改源文件与 MPL-2.0 文本。
+      本项目把全部修改以 diff 形式公开在 docs/builds/patches/rfvp-switch/，满足源文件可获取性。
+      rfvp 的 Rust 代码静态编进 rfvp.elf，再进 NSP 的 exefs/main。
+
+  - id: ffmpeg-nvtegra
+    name: FFmpeg（averne/FFmpeg nvtegra 分支，--enable-gpl 构建）
+    upstream: https://github.com/averne/FFmpeg
+    version_or_commit: caeec83b791be08ed43468a2ef426d6901d51c78（nvtegra 分支 tip，2024-10-06；本地构建于 2026-11-09/10）
+    license_spdx: GPL-2.0-or-later
+    license_name: GNU General Public License v2 or later（FFmpeg 配置自报 GPL version 2 or later）
+    license_url: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+    license_family: copyleft
+    link_mode: static
+    included_in_nsp: true
+    distribution_class: runtime-linked
+    artifacts:
+      - iroseka-nsp
+      - sakura-nsp
+    patches: []
+    obligations:
+      - include_license_text
+      - include_copyright_notice
+      - provide_corresponding_source
+      - state_modifications
+      - no_additional_restrictions
+      - provide_build_scripts
+    evidence:
+      - type: local
+        ref: /e/galnx-build/nvdec/ffmpeg-build-nvtegra/config.h
+        note: >-
+          FFMPEG_CONFIGURATION 含 --enable-gpl --enable-nvtegra
+          --enable-hwaccel='vc1_nvtegra,wmv3_nvtegra,h264_nvtegra'；
+          FFMPEG_LICENSE "GPL version 2 or later"；CONFIG_GPL=1
+      - type: local
+        ref: /e/galnx-build/nvdec/research/ffmpeg-nvtegra/configure
+        note: 第 3156 行 nvtegra_deps="gpl"（nvtegra 硬依赖 GPL；去掉 --enable-gpl 无法启用 nvtegra）
+      - type: local
+        ref: /e/galnx-build/nvdec/research/ffmpeg-nvtegra/libavcodec/nvtegra_decode.c
+        note: 文件头声明 GNU GPL v2 or later（Copyright (c) 2024 averne）
+      - type: local
+        ref: /e/galnx-build/p40/rfvp/target/rfvp-switch-runtime/rfvp.elf
+        note: >-
+          20,418,056 B sha256 296b198c6b1dc970ed6544cac40c0c4da97bf581dda031c0a8acb4cc0a073973；
+          静态链接证据：578 个 SDL_/av*/nx_ 等前缀符号 + 1249 个 C++ 修饰符号；
+          ELF 中 libdeflate 符号 0 个，deflate_/inflate_ 符号来自 zlib
+      - type: repo
+        path: docs/builds/046-op-h264-nvtegra.md
+        note: NVDEC 接入与打包记录（L87-L143）
+    notes: >-
+      事实：--enable-gpl 不是可选装饰，而是 nvtegra hwaccel 的前置条件（configure:3156
+      nvtegra_deps="gpl"）；保留 NVDEC 就必须接受 GPL。GalNX 决策 B（2026-11-11 拍板）：
+      保留 NVDEC，rfvp/NSP 整体按 GPL-2.0-or-later 组合作品处理。GalNX 公共仓库不包含任何
+      NSP 二进制（只发布 MIT 编排层与上游 MPL/MIT 补丁）；NSP 由用户本机构建/安装，属于
+      GPL 组合作品的私有使用。若将来对外分发 NSP，分发义务 = 提供对应源码（rvfp fork、
+      FFmpeg nvtegra 分支 caeec83b、构建脚本）与 GPL-2.0 文本。方案 A（去 NVDEC 改软解）
+      已否决：会推翻 P40/P44 已验收的 60fps 硬解成果（probe9 硬解 decode 0.44 ms）。
+
+  - id: sdl2
+    name: SDL2（devkitPro switch-sdl2）
+    upstream: https://github.com/libsdl-org/SDL
+    version_or_commit: 2.28.5（devkitPro 包 2.28.5-4）
+    license_spdx: Zlib
+    license_url: https://github.com/libsdl-org/SDL/blob/SDL2/LICENSE.txt
+    license_family: permissive
+    link_mode: static
+    included_in_nsp: true
+    distribution_class: runtime-linked
+    artifacts:
+      - iroseka-nsp
+      - sakura-nsp
+    patches: []
+    obligations:
+      - include_license_text
+      - include_copyright_notice
+      - state_modifications
+    evidence:
+      - type: local
+        ref: /d/devkitPro/portlibs/switch/include/SDL2/SDL_version.h
+        note: SDL_MAJOR_VERSION 2 / SDL_MINOR_VERSION 28 / SDL_PATCHLEVEL 5
+      - type: local
+        ref: /d/devkitPro/msys2/var/lib/pacman/local/switch-sdl2-2.28.5-4/desc
+        note: 包元数据 license=LGPL，但上游 SDL2 实际为 zlib 许可，按上游归类（差异见 notes）
+      - type: url
+        url: https://api.github.com/repos/libsdl-org/SDL/contents/LICENSE.txt?ref=SDL2
+        note: 上游 SDL2 zlib 许可原文（GitHub API contents，884 B）
+    notes: >-
+      上游 SDL2 使用 zlib 许可（LICENSE.txt 884 B，sha256 e9adee4484511b4b1730461679fed21d9b13d88e，
+      https://api.github.com/repos/libsdl-org/SDL/contents/LICENSE.txt?ref=SDL2）。
+      devkitPro 包元数据写 LGPL 与上游不一致，本清单按上游 zlib 处理，并要求分发时保留版权声明。
+
+  - id: zlib
+    name: zlib（devkitPro switch-zlib）
+    upstream: https://zlib.net
+    version_or_commit: 1.3.1（devkitPro 包 1.3.1-1）
+    license_spdx: Zlib
+    license_url: https://zlib.net/zlib_license.html
+    license_family: permissive
+    link_mode: static
+    included_in_nsp: true
+    distribution_class: runtime-linked
+    artifacts:
+      - iroseka-nsp
+      - sakura-nsp
+    patches: []
+    obligations:
+      - include_license_text
+      - include_copyright_notice
+      - state_modifications
+    evidence:
+      - type: local
+        ref: /d/devkitPro/portlibs/switch/include/zlib.h
+        note: ZLIB_VERSION "1.3.1"
+      - type: local
+        ref: /e/galnx-build/p40/rfvp/platform/switch/build_switch.sh
+        note: 链接命令含 -lz（L76-L82）
+    notes: rfvp Switch 后端链接 -lz；许可与 zlib 官方一致。
+
+  - id: libdeflate
+    name: libdeflate（P18 试用，未进入最终构建）
+    upstream: https://github.com/ebiggers/libdeflate
+    version_or_commit: 1.24（头文件 LIBDEFLATE_VERSION_STRING "1.24"；非 devkitPro 包管理安装；未进入最终 ELF）
+    license_spdx: MIT
+    license_url: https://github.com/ebiggers/libdeflate/blob/master/LICENSE
+    license_family: permissive
+    link_mode: none
+    included_in_nsp: false
+    distribution_class: build-only
+    patches: []
+    obligations: []
+    evidence:
+      - type: local
+        ref: /d/devkitPro/portlibs/switch/include/libdeflate.h
+        note: LIBDEFLATE_VERSION_MAJOR 1 / MINOR 24 / STRING "1.24"
+      - type: local
+        ref: /d/devkitPro/portlibs/switch/lib/libdeflate.a
+        note: 16,652 B，mtime 2026-11-01 15:36:05；pacman -Qo 报 "No package owns"（手工残留）
+      - type: repo
+        path: docs/builds/024-rfvp-async-decode.md
+        note: >-
+          负结果记录：libdeflate 交叉编译接入后 Citron 启动 5.58 s 崩溃
+          （Cannot execute instruction at unmapped address 0x0），已回退 zlib。
+      - type: local
+        ref: /e/galnx-build/p40/rfvp/target/rfvp-switch-runtime/rfvp.elf
+        note: >-
+          20,418,056 B sha256 296b198c…；aarch64-none-elf-nm 中 libdeflate 符号 0 个；
+          rfvp.map 中 zlib 引用 109 处、libdeflate 仅 1 处（链接行残留 -ldeflate，归档成员未被拉入）。
+    notes: >-
+      未进入最终构建：P18 试用 libdeflate 接入后 Citron 立即崩溃
+      （Cannot execute instruction at unmapped address 0x0，见 docs/builds/024），随后回退
+      devkitPro zlib。最终 rfvp.elf 由 -lz 提供 deflate/inflate 实现，libdeflate 符号 0 个；
+      build_switch.sh 链接行虽仍保留 -ldeflate，但静态归档成员未被引用、未进入产物。
+      该库来源不可追溯（不在 pacman），仅作 build-only 历史记录，不承担运行时分发义务。
+
+  - id: mesa-switch
+    name: Mesa EGL/GLAPI（devkitPro switch-mesa 静态库）
+    upstream: https://gitlab.freedesktop.org/mesa/mesa
+    version_or_commit: 20.1.0（devkitPro 包 20.1.0-5）
+    license_spdx: MIT
+    license_url: https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/docs/license.rst
+    license_family: permissive
+    link_mode: static
+    included_in_nsp: true
+    distribution_class: runtime-linked
+    artifacts:
+      - iroseka-nsp
+      - sakura-nsp
+    patches: []
+    obligations:
+      - include_license_text
+      - include_copyright_notice
+    evidence:
+      - type: local
+        ref: /d/devkitPro/msys2/var/lib/pacman/local/switch-mesa-20.1.0-5/desc
+        note: 包元数据 license=MIT；pacman -Qo 确认 libEGL.a / libglapi.a 归该包
+      - type: local
+        ref: /e/galnx-build/p40/rfvp/platform/switch/build_switch.sh
+        note: 链接命令含 -lEGL -lglapi（L76-L82）
+    notes: 仅用 EGL/GLAPI 头与静态库做画面呈现（Switch 的 nwindow/GL 路径），不涉及 Mesa 驱动实现。
+
+  - id: libdrm-nouveau
+    name: libdrm_nouveau（devkitPro switch-libdrm_nouveau）
+    upstream: https://gitlab.freedesktop.org/mesa/drm
+    version_or_commit: 1.0.1（devkitPro 包 1.0.1-2）
+    license_spdx: MIT
+    license_url: https://gitlab.freedesktop.org/mesa/drm/-/blob/main/README.md
+    license_family: permissive
+    link_mode: static
+    included_in_nsp: true
+    distribution_class: runtime-linked
+    artifacts:
+      - iroseka-nsp
+      - sakura-nsp
+    patches: []
+    obligations:
+      - include_license_text
+      - include_copyright_notice
+    evidence:
+      - type: local
+        ref: /d/devkitPro/msys2/var/lib/pacman/local/switch-libdrm_nouveau-1.0.1-2/desc
+        note: 包元数据 license=MIT
+      - type: local
+        ref: /e/galnx-build/p40/rfvp/platform/switch/build_switch.sh
+        note: 链接命令含 -ldrm_nouveau（L76-L82）
+    notes: 供 Switch GPU 通道/缓冲区接口使用。
+
+  - id: libnx
+    name: libnx（Switch 自制系统库）
+    upstream: https://github.com/switchbrew/libnx
+    version_or_commit: 4.12.0（devkitPro 包 4.12.0-1）
+    license_spdx: ISC
+    license_file: docs/audit/00-switch-base.md
+    license_family: permissive
+    link_mode: static
+    included_in_nsp: true
+    distribution_class: runtime-linked
+    artifacts:
+      - iroseka-nsp
+      - sakura-nsp
+      - k2nx-a10-nsp
+    patches: []
+    obligations:
+      - include_license_text
+      - include_copyright_notice
+    evidence:
+      - type: local
+        ref: /d/devkitPro/msys2/var/lib/pacman/local/libnx-4.12.0-1/desc
+        note: 包元数据 license=custom；上游实为 ISC，按上游归类
+      - type: repo
+        path: docs/audit/00-switch-base.md
+        note: 记录上游 LICENSE.md 731 B sha256 b8327e3f77c35baf0840797b542c67e5918367fe
+    notes: pacman 元数据 custom 与上游 ISC 不一致，本清单按上游 ISC 处理。libnx 静态链接进所有 NRO/NSP。
+
+  - id: gcc-runtime
+    name: GCC 运行时（libstdc++ / libgcc，静态链接进 ELF）
+    upstream: https://gcc.gnu.org
+    version_or_commit: GCC 16.1.0（devkitA64 r30 工具链随附）
+    license_spdx: GPL-3.0-or-later WITH GCC-exception-3.1
+    license_url: https://www.gnu.org/licenses/gcc-exception-3.1.html
+    license_family: weak-copyleft
+    link_mode: static
+    included_in_nsp: true
+    distribution_class: runtime-bundled
+    artifacts:
+      - iroseka-nsp
+      - sakura-nsp
+    patches: []
+    obligations:
+      - include_license_text
+    evidence:
+      - type: local
+        ref: /e/galnx-build/p40/rfvp/platform/switch/build_switch.sh
+        note: 链接命令含 -lstdc++（L76-L82）
+      - type: local
+        ref: /e/galnx-build/p40/rfvp/target/rfvp-switch-runtime/rfvp.elf
+        note: nm 统计出 1249 个 C++ 修饰符号（_Z 前缀），确认 libstdc++ 静态参与链接
+    notes: >-
+      GCC Runtime Library Exception 3.1 允许把 libstdc++/libgcc 目标码静态链接进非 GPL 程序并分发，
+      无需开源该程序；保留许可声明即可。若未来切换到无异常路径可评估 static-libstdc++ 体积裁剪。
+
+  - id: devkita64-toolchain
+    name: devkitA64 工具链（GCC 16.1.0 / binutils 2.46.0 / newlib 4.6.0）
+    upstream: https://devkitpro.org
+    version_or_commit: devkitA64 r30（GCC 16.1.0-1、binutils 2.46.0-1、newlib 4.6.0.20260123-4）
+    license_spdx: GPL-3.0-or-later AND LGPL-3.0-or-later AND GPL-2.0-or-later
+    license_name: GCC GPL-3.0-or-later / binutils GPL-3.0-or-later+LGPL / newlib BSD-style
+    license_url: https://devkitpro.org/wiki/Licensing
+    license_family: copyleft
+    link_mode: na
+    included_in_nsp: false
+    distribution_class: build-only
+    artifacts: []
+    patches: []
+    obligations: []
+    evidence:
+      - type: local
+        ref: /d/devkitPro/msys2/var/lib/pacman/local/devkita64-gcc-16.1.0-1/desc
+        note: license=GPL-3.0-or-later
+      - type: local
+        ref: /d/devkitPro/msys2/var/lib/pacman/local/devkita64-binutils-2.46.0-1/desc
+        note: license=GPL-3.0-or-later AND GPL-2.0-or-later AND LGPL-3.0-or-later AND LGPL-2.0-or-later
+      - type: repo
+        path: docs/environment/devkitpro-2026-10-29.md
+        note: 本机 devkitPro 安装实测记录（版本、包清单）
+    notes: >-
+      交叉编译器只在构建期使用，不随 NSP 分发。其产物中静态链接的 libstdc++/libgcc
+      由单独条目 gcc-runtime 覆盖（GCC Runtime Library Exception）。
+
+  - id: switch-tools
+    name: switch-tools（elf2nso / elf2nro / nxlink / nacptool / npdmtool）
+    upstream: https://github.com/switchbrew/switch-tools
+    version_or_commit: 1.13.1
+    license_spdx: ISC
+    license_url: https://github.com/switchbrew/switch-tools/blob/master/COPYING
+    license_family: permissive
+    link_mode: na
+    included_in_nsp: false
+    distribution_class: build-only
+    artifacts: []
+    patches: []
+    obligations: []
+    evidence:
+      - type: repo
+        path: docs/audit/00-switch-base.md
+        note: 记录 switch-tools 1.13.1 COPYING 726 B ISC；依赖 zlib + liblz4
+    notes: 构建期把 ELF 转 NSO/NRO 并做 nacp/npdm 处理；不进入 NSP。
+
+  - id: hacbrewpack
+    name: hacBrewPack（NSP 打包器，子进程调用）
+    upstream: https://github.com/rlaphoenix/hacBrewPack
+    version_or_commit: v3.05（745b16ecfc9ce055743067d200572204cb2aac6c）
+    license_spdx: GPL-2.0-only
+    license_url: https://github.com/rlaphoenix/hacBrewPack/blob/master/LICENSE
+    license_family: copyleft
+    link_mode: na
+    included_in_nsp: false
+    distribution_class: development-only
+    artifacts: []
+    patches: []
+    obligations: []
+    evidence:
+      - type: repo
+        path: docs/TOOLCHAIN_AUDIT.md
+        note: 第 96 行记录版本/commit 与 GPL-2.0-only；仅子进程调用，不链接
+    notes: >-
+      只以独立可执行文件子进程方式打包 NSP，其 GPL 代码不进入 NSP。注意：分发 NSP 时
+      不因 hacBrewPack 触发 GPL；但分发 hacBrewPack 自身二进制需遵守 GPL-2.0-only。
+
+  - id: nstool
+    name: nstool（NSP 解析/校验工具）
+    upstream: https://github.com/jakcron/nstool
+    version_or_commit: v1.9.2（e89ea84b）
+    license_spdx: MIT
+    license_url: https://github.com/jakcron/nstool/blob/master/LICENSE
+    license_family: permissive
+    link_mode: na
+    included_in_nsp: false
+    distribution_class: development-only
+    artifacts: []
+    patches: []
+    obligations: []
+    evidence:
+      - type: repo
+        path: docs/TOOLCHAIN_AUDIT.md
+        note: 第 97 行记录版本/commit 与 MIT；作为必装校验工具
+    notes: 仅构建/验收期调用，不进入 NSP。
+
+  - id: nton
+    name: NTON（NSP 打包/转换工具，参考实现）
+    upstream: https://github.com/jakcron/NTON
+    version_or_commit: v3.0.1（c5d543a9）
+    license_spdx: GPL-3.0-only
+    license_url: https://github.com/jakcron/NTON/blob/master/LICENSE
+    license_family: copyleft
+    link_mode: na
+    included_in_nsp: false
+    distribution_class: development-only
+    artifacts: []
+    patches: []
+    obligations: []
+    evidence:
+      - type: repo
+        path: docs/TOOLCHAIN_AUDIT.md
+        note: 第 95 行记录 NTON v3.0.1 c5d543a9 GPL-3.0-only
+    notes: 未作为产物组成部分；仅研究/参考 NSP 格式时使用，不链接、不随 NSP 分发。
+
+  - id: kirikiroid2-nx
+    name: Kirikiroid2-NX（KiriKiri2 引擎 Switch 移植）
+    upstream: https://github.com/Erige005/Kirikiroid2-NX
+    version_or_commit: e96b6034c292c6ccdb099823ab6a0a6b505f77f3（v1.0.1，2026-10-18）
+    license_spdx: NOASSERTION
+    license_name: KiriKiri License（BSD 风格，日文条款；非 SPDX）
+    license_url: https://github.com/Erige005/Kirikiroid2-NX/blob/main/LICENSE
+    license_file: docs/builds/patches/k2nx-switch/LICENSE
+    license_family: custom
+    link_mode: static
+    included_in_nsp: true
+    distribution_class: runtime-linked
+    artifacts:
+      - k2nx-a10-nsp
+    patches:
+      - docs/builds/patches/k2nx-switch/A-autostart.patch
+      - docs/builds/patches/k2nx-switch/B-extract-v2.patch
+      - docs/builds/patches/k2nx-switch/C-plugin-alias.patch
+      - docs/builds/patches/k2nx-switch/D-virtual-mouse-dpad.patch
+      - docs/builds/patches/k2nx-switch/E-controller-ui-saveload.patch
+      - docs/builds/patches/k2nx-switch/F-close-exit.patch
+      - docs/builds/patches/k2nx-switch/G-controller-input-v2.patch
+      - docs/builds/patches/k2nx-switch/H-input-tweaks.patch
+      - docs/builds/patches/k2nx-switch/I-save-exit-mouse.patch
+      - docs/builds/patches/k2nx-switch/k2nx-patched-vs-v1.0.1.diff
+      - docs/builds/patches/k2nx-patched-vs-v1.0.1.diff
+    obligations:
+      - include_license_text
+      - include_copyright_notice
+      - state_modifications
+    evidence:
+      - type: repo
+        path: examples/engines/kirikiroid2-nx.yaml
+        note: 上游 commit / 许可 NOASSERTION / 捆绑组件说明
+      - type: repo
+        path: docs/builds/patches/k2nx-switch/LICENSE
+        note: 44,184 B 上游 LICENSE 全文（含 libjpeg-turbo/libpng/FreeType/Apache-2.0 等第三方段落）
+      - type: repo
+        path: docs/pilot/P1-engine-k2nx.md
+        note: 第 81 行逐项记录上游 THIRD_PARTY_LICENSES.md 内容
+    notes: >-
+      KiriKiri 许可是 BSD 风格三条件（源码/二进制再分发保留版权声明、条件与免责声明；
+      未经书面许可不得用作者名做宣传），另附多段第三方许可。分发 K2NX NSP 时须随附
+      KiriKiri license 全文 + 上游 THIRD_PARTY_LICENSES.md，并保留 Erige005/zeas2/W.Dee 署名。
+      keymap/*.xml 是运行时配置文件（本仓库 MIT），不属于补丁。
+
+  - id: cocos2d-x
+    name: cocos2d-x（K2NX 图形/场景引擎）
+    upstream: https://github.com/cocos2d/cocos2d-x
+    version_or_commit: 3.11.1
+    license_spdx: MIT
+    license_url: https://github.com/cocos2d/cocos2d-x/blob/v3/cocos2d-x/LICENSE
+    license_family: permissive
+    link_mode: static
+    included_in_nsp: true
+    distribution_class: runtime-linked
+    artifacts:
+      - k2nx-a10-nsp
+    patches: []
+    obligations:
+      - include_license_text
+      - include_copyright_notice
+    evidence:
+      - type: repo
+        path: docs/pilot/P1-engine-k2nx.md
+        note: 第 81 行 THIRD_PARTY_LICENSES 记录 cocos2d-x 3.11.1 MIT；随附 v3-deps-94（zlib/MIT/BSD/Apache-2.0）
+    notes: 由 K2NX 源码树内 cocos2d 目录静态编入；其依赖 v3-deps-94 的许可已在 THIRD_PARTY_LICENSES 覆盖。
+
+  - id: ffmpeg-k2nx
+    name: FFmpeg 3.2.19（K2NX 用，LGPL 构建）
+    upstream: https://ffmpeg.org
+    version_or_commit: 3.2.19（K2NX 需要 pre-5.0 API；devkitPro FFmpeg 7.1 不能替代）
+    license_spdx: LGPL-2.1-or-later
+    license_url: https://ffmpeg.org/legal.html
+    license_family: weak-copyleft
+    link_mode: static
+    included_in_nsp: true
+    distribution_class: runtime-linked
+    artifacts:
+      - k2nx-a10-nsp
+    patches: []
+    obligations:
+      - include_license_text
+      - provide_corresponding_source
+      - provide_relink_mechanism
+    evidence:
+      - type: repo
+        path: docs/pilot/P1-engine-k2nx.md
+        note: 第 81 行记录 FFmpeg 3.2.19 LGPL-2.1-or-later，上游声明无 GPL 部分且提供重链接手段
+      - type: repo
+        path: examples/engines/kirikiroid2-nx.yaml
+        note: portlibs 清单记录 ffmpeg 3.2.19 下载 URL 与构建约束
+    notes: >-
+      LGPL-2.1 静态链接进 K2NX NSP：分发时须提供对应源码（或书面要约）、保留许可文本，
+      并提供可让用户重新链接修改版 LGPL 库的手段（对象文件/静态库与构建脚本即可满足）。
+      上游 THIRD_PARTY_LICENSES.md 已声明该手段；GalNX 分发 K2NX NSP 时应保留同样声明。
+
+  - id: opencv
+    name: OpenCV 3.4.20（K2NX 仅 core,imgproc）
+    upstream: https://github.com/opencv/opencv
+    version_or_commit: 3.4.20（BUILD_LIST=core,imgproc）
+    license_spdx: BSD-3-Clause
+    license_url: https://github.com/opencv/opencv/blob/3.4.20/LICENSE
+    license_family: permissive
+    link_mode: static
+    included_in_nsp: true
+    distribution_class: runtime-linked
+    artifacts:
+      - k2nx-a10-nsp
+    patches: []
+    obligations:
+      - include_license_text
+      - include_copyright_notice
+    evidence:
+      - type: repo
+        path: docs/pilot/P1-engine-k2nx.md
+        note: 第 81 行记录 OpenCV 3.4.20 BSD-3-Clause
+      - type: repo
+        path: examples/engines/kirikiroid2-nx.yaml
+        note: portlibs 记录下载 URL 与 BUILD_LIST
+    notes: 仅 core/imgproc 两个模块参与构建以减小体积。
+
+  - id: libiconv
+    name: GNU libiconv 1.17（K2NX 编码转换）
+    upstream: https://www.gnu.org/software/libiconv/
+    version_or_commit: "1.17"
+    license_spdx: LGPL-2.1-or-later
+    license_url: https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+    license_family: weak-copyleft
+    link_mode: static
+    included_in_nsp: true
+    distribution_class: runtime-linked
+    artifacts:
+      - k2nx-a10-nsp
+    patches: []
+    obligations:
+      - include_license_text
+      - provide_corresponding_source
+      - provide_relink_mechanism
+    evidence:
+      - type: repo
+        path: docs/pilot/P1-engine-k2nx.md
+        note: 第 81 行记录 libiconv 1.17 LGPL-2.1-or-later
+      - type: repo
+        path: examples/engines/kirikiroid2-nx.yaml
+        note: portlibs 记录下载 URL
+    notes: 静态链接的 LGPL 组件，与 K2NX 的 FFmpeg 3.2.19 一并履行源码/重链接义务。
+
+  - id: unrar
+    name: UnRAR 5.6.5（K2NX 解包 RAR 素材）
+    upstream: https://www.rarlab.com/rar_add.htm
+    version_or_commit: 5.6.5
+    license_spdx: ""
+    license_name: UnRAR License（限制性，非 OSI/自由软件许可）
+    license_url: https://www.rarlab.com/rar/unrarsrc-5.6.5.tar.gz
+    license_family: custom
+    link_mode: static
+    included_in_nsp: true
+    distribution_class: runtime-linked
+    artifacts:
+      - k2nx-a10-nsp
+    patches: []
+    obligations:
+      - include_license_text
+      - include_copyright_notice
+      - restriction_no_rar_reimplementation
+    evidence:
+      - type: repo
+        path: docs/pilot/P1-engine-k2nx.md
+        note: 第 81 行记录 UnRAR 5.6.5 license：不得用来重建 RAR 压缩算法
+      - type: repo
+        path: examples/engines/kirikiroid2-nx.yaml
+        note: portlibs 记录 unrar 5.6.5 下载 URL 与「restricts redistribution」
+    notes: >-
+      UnRAR 许可允许随程序分发解压功能，但禁止用其源码重建 RAR 压缩算法、禁止用其实现
+      创建 RAR 压缩器。K2NX 只做解压用途，符合限制；但该许可不是自由软件许可，
+      公开发布二进制前应评估是否可接受。
+
+  - id: libbpg
+    name: libbpg 0.9.8（BPG 图片解码，仅 decoder）
+    upstream: https://bellard.org/bpg/
+    version_or_commit: 0.9.8（decoder only）
+    license_spdx: BSD-2-Clause AND LGPL-2.1-or-later
+    license_name: libbpg BSD 风格许可 + 内嵌 HEVC 解码器 LGPL
+    license_url: https://bellard.org/bpg/
+    license_family: weak-copyleft
+    link_mode: static
+    included_in_nsp: true
+    distribution_class: runtime-linked
+    artifacts:
+      - k2nx-a10-nsp
+    patches: []
+    obligations:
+      - include_license_text
+      - include_copyright_notice
+      - provide_corresponding_source
+    evidence:
+      - type: repo
+        path: docs/pilot/P1-engine-k2nx.md
+        note: 第 81 行记录 libbpg 0.9.8 BSD + bundled HEVC LGPL
+      - type: repo
+        path: examples/engines/kirikiroid2-nx.yaml
+        note: portlibs 记录下载 URL
+    notes: 内嵌 HEVC 解码器为 LGPL 部分，分发时按 LGPL 提供源码；BPG 本体按 BSD 风格许可。
+
+  - id: jxrlib
+    name: jxrlib（JPEG XR 解码）
+    upstream: https://github.com/4creators/jxrlib
+    version_or_commit: master 分支（未锁定 commit，可复现性风险）
+    license_spdx: BSD-2-Clause
+    license_url: https://github.com/4creators/jxrlib/blob/master/LICENSE
+    license_family: permissive
+    link_mode: static
+    included_in_nsp: true
+    distribution_class: runtime-linked
+    artifacts:
+      - k2nx-a10-nsp
+    patches: []
+    obligations:
+      - include_license_text
+      - include_copyright_notice
+      - state_modifications
+    evidence:
+      - type: repo
+        path: docs/pilot/P1-engine-k2nx.md
+        note: 第 81 行记录 jxrlib BSD-2-Clause
+      - type: repo
+        path: examples/engines/kirikiroid2-nx.yaml
+        note: portlibs 记录 jxrlib master.tar.gz 未 pin
+    notes: 上游构建脚本拉 master 归档而非固定 commit/tag，属可复现性风险（非许可风险），建议后续 pin。
+
+  - id: blend2d
+    name: Blend2D（K2NX 2D 渲染）
+    upstream: https://github.com/blend2d/blend2d
+    version_or_commit: d2027ebfd6aaf53b190b6b3b497425fc85f14251
+    license_spdx: Zlib
+    license_url: https://github.com/blend2d/blend2d/blob/master/LICENSE.md
+    license_family: permissive
+    link_mode: static
+    included_in_nsp: true
+    distribution_class: runtime-linked
+    artifacts:
+      - k2nx-a10-nsp
+    patches: []
+    obligations:
+      - include_license_text
+      - include_copyright_notice
+      - state_modifications
+    evidence:
+      - type: repo
+        path: docs/pilot/P1-engine-k2nx.md
+        note: 第 81 行记录 Blend2D d2027eb（zlib）
+      - type: repo
+        path: examples/engines/kirikiroid2-nx.yaml
+        note: portlibs 记录固定 commit
+    notes: 固定 commit 构建，可复现。
+
+  - id: lzma-sdk-p7zip
+    name: LZMA SDK / p7zip（K2NX 压缩库）
+    upstream: https://www.7-zip.org/sdk.html
+    version_or_commit: LZMA SDK（随 K2NX 源码树内置）+ p7zip 部分
+    license_spdx: ""
+    license_name: LZMA SDK public domain + p7zip LGPL-2.1-or-later + unRAR restriction
+    license_url: https://www.7-zip.org/sdk.html
+    license_family: weak-copyleft
+    link_mode: static
+    included_in_nsp: true
+    distribution_class: runtime-linked
+    artifacts:
+      - k2nx-a10-nsp
+    patches: []
+    obligations:
+      - include_license_text
+      - provide_corresponding_source
+    evidence:
+      - type: repo
+        path: docs/pilot/P1-engine-k2nx.md
+        note: 第 81 行记录 p7zip/LZMA SDK LGPL-2.1 + unRAR restriction / public domain
+    notes: >-
+      LZMA SDK 本体为 public domain；p7zip 相关代码 LGPL-2.1-or-later 并带 unRAR 限制。
+      K2NX 用它处理归档，静态链接，按 LGPL 履行源码义务。
+
+  - id: droidsansfallback
+    name: DroidSansFallback.ttf（K2NX romfs 中文字体）
+    upstream: https://android.googlesource.com/platform/frameworks/base/+/master/data/fonts/DroidSansFallback.ttf
+    version_or_commit: AOSP 内置字体（K2NX romfs 内 7,287,728 B）
+    license_spdx: Apache-2.0
+    license_url: https://www.apache.org/licenses/LICENSE-2.0
+    license_family: permissive
+    link_mode: na
+    included_in_nsp: true
+    distribution_class: runtime-bundled
+    artifacts:
+      - k2nx-a10-nsp
+    patches: []
+    obligations:
+      - include_license_text
+      - include_copyright_notice
+    evidence:
+      - type: repo
+        path: docs/pilot/P1-engine-k2nx.md
+        note: 第 81 行记录 DroidSansFallback Apache-2.0（AOSP）
+      - type: repo
+        path: docs/builds/012-k2nx-cn-content.md
+        note: 第 120 行记录 romfs 内置 DroidSansFallback.ttf 7,287,728 B
+    notes: 作为资源文件打包进 K2NX romfs，不需要链接；分发时保留 Apache-2.0 许可与 NOTICE。
+
+  - id: haruno-script
+    name: haruno_script（X'moe 汉化脚本，K2NX CN payload 来源）
+    upstream: https://github.com/t-satoru-Studio/haruno_script
+    version_or_commit: main 分支（最后 push 2022-02-27T04:15:20Z；未锁定 commit）
+    license_spdx: NOASSERTION
+    license_name: 无许可证文件（默认版权保留，All rights reserved）
+    license_url: https://github.com/t-satoru-Studio/haruno_script
+    license_family: unknown
+    link_mode: na
+    included_in_nsp: true
+    distribution_class: runtime-bundled
+    artifacts:
+      - k2nx-a10-nsp
+    patches: []
+    obligations:
+      - no_redistribution_until_permission
+    evidence:
+      - type: local
+        ref: https://api.github.com/repos/t-satoru-Studio/haruno_script
+        note: license=null；pushed_at 2022-02-27T04:15:20Z；description 表明为 X'moe Project 汉化脚本
+      - type: repo
+        path: docs/pilot/P1-game-audit.md
+        note: P1-c 审计记录汉化补丁禁止提取/移植/商用，且 xmoe 与 K2NX 插件不兼容
+    notes: >-
+      P0 风险：仓库无 LICENSE（GitHub API license=null），默认版权保留；汉化 Readme 明确禁止
+      提取文本、禁止移植、禁止商用。K2NX CN NSP 内的中文文本（data.xp3/scenario.xp3/image00.xp3
+      重打包产物）来自该脚本 → 不得公开发布 CN NSP，只能本地自用；如需公开，必须先取得
+      X'moe/t-satoru-Studio 授权或改用自行翻译的脚本。
+
+  - id: ipaexgothic
+    name: IPAexGothic 004.01（ipaexg.ttf）
+    upstream: https://moji.or.jp/ipafont/
+    version_or_commit: "004.01"
+    license_spdx: ""
+    license_name: IPA Font License 1.0
+    license_url: https://moji.or.jp/ipafont/license/
+    license_file: docs/third_party/fonts/IPA_Font_License_Agreement_v1.0.txt
+    license_family: custom
+    link_mode: na
+    included_in_nsp: false
+    distribution_class: runtime-bundled
+    artifacts: []
+    patches: []
+    obligations:
+      - include_license_text
+      - include_copyright_notice
+    evidence:
+      - type: repo
+        path: docs/third_party/README.md
+        note: 登记 IPAexGothic 004.01 6,099,900 B sha256 3b9955a5…、许可原文路径与哈希
+    notes: >-
+      仅用于 M1 KAG3 测试内容包（workspaces/ 产物不入库），不随 0.1 Preview NSP 分发。
+      IPA Font License 1.0 允许再分发/嵌入，但须随附许可文本；不得单独销售字体文件。
+
+  - id: onscripter-nx
+    name: ONScripter-NX（NScripter 运行时，第 3 引擎适配器）
+    upstream: https://github.com/clamintus/onscripter-nx
+    version_or_commit: a8439a86393f74c503d28df176f010ca544af56f（v0.3.1，2026-01-14）
+    license_spdx: GPL-2.0-or-later
+    license_url: https://github.com/clamintus/onscripter-nx/blob/main/LICENSE
+    license_family: copyleft
+    link_mode: static
+    included_in_nsp: false
+    distribution_class: runtime-linked
+    artifacts: []
+    patches: []
+    obligations:
+      - include_license_text
+      - provide_corresponding_source
+      - state_modifications
+      - no_additional_restrictions
+    evidence:
+      - type: repo
+        path: examples/engines/onscripter-nx.yaml
+        note: pinned commit / GPL-2.0-or-later 记录
+      - type: repo
+        path: docs/engines/README.md
+        note: 第 3 适配器注册与构建后端说明
+    notes: >-
+      不在 0.1 Preview 的 rfvp/K2NX 产物中；若分发由它构建的 NRO/NSP，则整个二进制
+      为 GPL-2.0-or-later 组合作品，须提供完整对应源码。选它做引擎适配需先评估传染范围。
+
+  - id: krkrsdl2
+    name: krkrsdl2（KiriKiri2 SDL2 运行时，引擎适配器）
+    upstream: https://github.com/krkrsdl2/krkrsdl2
+    version_or_commit: 124bdf841f09e7ce02aa99b7b55791a0f7a900ff（2026-10-01）
+    license_spdx: MIT
+    license_url: https://github.com/krkrsdl2/krkrsdl2/blob/master/LICENSE
+    license_family: permissive
+    link_mode: static
+    included_in_nsp: false
+    distribution_class: runtime-linked
+    artifacts: []
+    patches:
+      - docs/builds/patches/krkrsdl2-switch-emulator/krkrsdl2-switch-emulator-fixes.patch
+    obligations:
+      - include_license_text
+      - include_copyright_notice
+      - state_modifications
+    evidence:
+      - type: repo
+        path: examples/engines/krkrsdl2.yaml
+        note: pinned commit 与 MIT 记录
+      - type: repo
+        path: docs/builds/patches/krkrsdl2-switch-emulator/LICENSE
+        note: 上游 MIT LICENSE 原文（1,070 B sha256 964036d9…）
+    notes: 不在 0.1 Preview 产物中；Pilot 阶段用于 KiriKiri2 引擎验证。
+
+  - id: brewser
+    name: Brewser（Web/VN 运行时，引擎适配器）
+    upstream: https://github.com/Brewser-Project/brewser
+    version_or_commit: 8040580e92e40a60f704a6478ee296b105212f1b
+    license_spdx: MPL-2.0
+    license_url: https://github.com/Brewser-Project/brewser/blob/main/LICENSE
+    license_family: weak-copyleft
+    link_mode: static
+    included_in_nsp: false
+    distribution_class: runtime-linked
+    artifacts: []
+    patches: []
+    obligations:
+      - include_license_text
+      - provide_corresponding_source
+      - state_modifications
+    evidence:
+      - type: repo
+        path: examples/engines/brewser.yaml
+        note: pinned commit / MPL-2.0 记录
+    notes: 不在 0.1 Preview 产物中；预编译分发形态（prebuilt），若分发须履行 MPL-2.0 文件级义务。
+
+  - id: atmosphere
+    name: Atmosphère（真机测试环境，非分发组件）
+    upstream: https://github.com/Atmosphere-NX/Atmosphere
+    version_or_commit: 1.12.1（本机测试环境；不随仓库分发）
+    license_spdx: GPL-2.0-only
+    license_url: https://github.com/Atmosphere-NX/Atmosphere/blob/master/LICENSE
+    license_family: copyleft
+    link_mode: na
+    included_in_nsp: false
+    distribution_class: development-only
+    artifacts: []
+    patches: []
+    obligations: []
+    evidence:
+      - type: repo
+        path: docs/audit/00-switch-base.md
+        note: 测试环境背景记录（仅用于真机验证，不作为依赖）
+    notes: 用户自有真机环境；GalNX 不打包、不分发 Atmosphère。
+
+  - id: nx-hbloader
+    name: nx-hbloader（Homebrew 启动器，测试环境）
+    upstream: https://github.com/switchbrew/nx-hbloader
+    version_or_commit: v2.4.5（82b95122）
+    license_spdx: ISC
+    license_url: https://github.com/switchbrew/nx-hbloader/blob/master/LICENSE
+    license_family: permissive
+    link_mode: na
+    included_in_nsp: false
+    distribution_class: development-only
+    artifacts: []
+    patches: []
+    obligations: []
+    evidence:
+      - type: repo
+        path: docs/audit/00-switch-base.md
+        note: 记录 nx-hbloader 已迁至 switchbrew v2.4.5 ISC（原 PLAN URL 404）
+    notes: 仅测试环境说明，不属于 GalNX 依赖或分发物。

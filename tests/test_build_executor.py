@@ -94,7 +94,10 @@ class ExecutorTests(unittest.TestCase):
                 "text = Path('order.txt').read_text()\n"
                 "Path('order.txt').write_text(text + '+two')\n",
             )
-            data = build_data(commands=[[sys.executable, first.name], [sys.executable, second.name]])
+            data = build_data(
+                commands=[[sys.executable, first.name], [sys.executable, second.name]],
+                artifact="order.txt",
+            )
             results, ok = build.run_build_commands(root / "project.yaml", data, root / "logs", "demo")
             self.assertTrue(ok)
             self.assertEqual(len(results), 2)
@@ -108,7 +111,8 @@ class ExecutorTests(unittest.TestCase):
                 commands=[
                     [sys.executable, "-c", "import sys; sys.exit(3)"],
                     [sys.executable, "-c", "open('should_not_exist.txt', 'w').write('x')"],
-                ]
+                ],
+                artifact="out/demo.bin",
             )
             results, ok = build.run_build_commands(root / "project.yaml", data, root / "logs", "demo")
             self.assertFalse(ok)
@@ -124,6 +128,7 @@ class ExecutorTests(unittest.TestCase):
             root = Path(tmp)
             data = build_data(
                 commands=[[sys.executable, "-c", "import time; time.sleep(5)"]],
+                artifact="out/demo.bin",
                 timeout_s=0.5,
             )
             results, ok = build.run_build_commands(root / "project.yaml", data, root / "logs", "demo")
@@ -136,7 +141,7 @@ class ExecutorTests(unittest.TestCase):
     def test_shell_string_command(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            data = build_data(commands=["echo hello from galnx"])
+            data = build_data(commands=["echo hello from galnx"], artifact="out/shell.txt")
             results, ok = build.run_build_commands(root / "project.yaml", data, root / "logs", "demo")
             self.assertTrue(ok)
             self.assertEqual(len(results), 1)

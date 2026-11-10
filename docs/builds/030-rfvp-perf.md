@@ -165,7 +165,7 @@ cmd.exe /c E:\galnx-build\p24\launch-build.cmd
 ### 6.4 基线轮异常中止（证据链）
 
 - 路线时间戳（`input-steps.tsv`）：step128 key M（Plus）@399.8 s → step130 capture 失败 @~404.4 s → step131 key X @405.7 s，即 Citron 在 Plus 按下后 4–5 s 消失。
-- Citron 日志（`C:/Users/ACETaffy/AppData/Roaming/citron/log/citron_log.txt`）最后一条 perf 行为 t=398.376（frame 23328）；t=407.048 起依次出现：`Service.NVDRV <Warning> nvhost_gpu.cpp:162 SetErrorNotifier (STUBBED)` → `syncpoint_manager.cpp:74/113 Assertion Failed` ×12 → `nvmap.cpp:273 UnpinHandle: Pin count imbalance detected` → `AM SetFocusHandlingMode`/`SetOutOfFocusSuspendingEnabled` → `VI SetWindowVisibility managed_layer=1 visible=false` → `bootmanager.h:110 ForceStop` ×4 → `ShutdownMainProcess [Before: 4038MB] -> [After: 3003MB]` → `OnEmulationStopped: … Emulation stopped`。
+- Citron 日志（`C:/Users/<user>/AppData/Roaming/citron/log/citron_log.txt`）最后一条 perf 行为 t=398.376（frame 23328）；t=407.048 起依次出现：`Service.NVDRV <Warning> nvhost_gpu.cpp:162 SetErrorNotifier (STUBBED)` → `syncpoint_manager.cpp:74/113 Assertion Failed` ×12 → `nvmap.cpp:273 UnpinHandle: Pin count imbalance detected` → `AM SetFocusHandlingMode`/`SetOutOfFocusSuspendingEnabled` → `VI SetWindowVisibility managed_layer=1 visible=false` → `bootmanager.h:110 ForceStop` ×4 → `ShutdownMainProcess [Before: 4038MB] -> [After: 3003MB]` → `OnEmulationStopped: … Emulation stopped`。
 - 无 guest 崩溃、无新 crash dump（最新仍是 22:22 的 `citron.exe.31964.dmp` 69,946,267 B，属更早的字体合成崩溃）；harness 只记录到窗口消失（`GetWindowRect failed`），`result.json` 仍为 status=loaded / killed=false。
 - 根因未定论，候选：① Citron NVDRV syncpoint 断言导致模拟线程被自停（与高纹理 churn 相关，未证）；② guest 主动退出（无法解释为何恰在 Plus 后）；③ 外部干预（已排除，当时只有本轮的 test2 前序流程在排队）。
 - 影响：基线数据只覆盖前 407 s；两轮前 128 s 的 diag 内容完全一致（同为 10 次 graph decode、154 次 texture put，见 6.5），故**前段对比成立**，后段（含 Plus 菜单/存档界面）缺失；2026-11-05 23:33/23:36 两次补跑基线均 abort（见 §7.7），故以「同内容前 407 s」为正式对比窗口。
@@ -252,7 +252,7 @@ python /e/galnx-build/p24/parse_diag.py /e/galnx-build/p24/evidence/test2/debug_
 - 路线：`E:/galnx-build/p22/steps-long.json`（6,631 B，sha256 `617310b8776d26687f76d6801ad886d1d78361e17b4836506ec392d360449f23`，162 步，纯 wait 累计 329,000 ms）
 - 统计产物：`E:/galnx-build/p24/compare-win.json`（同内容窗口 max_frame=6828 / max_t=128 s）、`E:/galnx-build/p24/compare-full.json`（全量）、`evidence/<label>/perf-full.json`、`evidence/test2/diag-full.json`（基线 diag-w128 数值已并入 `compare-win.json`，原始 diag 文件丢失）、`E:/galnx-build/p24/perf-test2.json`（22:27 独立重复轮留档）
 - Citron run 目录：baseline `E:/galnx-build/p24/run-baseline/20261105-225832-IROSEKA_FHD-010047420000a000/`（result.json 22,805 B）、test2 `E:/galnx-build/p24/run-test2/20261105-230948-IROSEKA_FHD-010047420000a000/`（result.json 23,185 B，12 张 step-*.png 截图，含 `step-162-t9-final.png`）
-- 基线轮中止现场：`C:/Users/ACETaffy/AppData/Roaming/citron/log/citron_log.txt` t=398.376→407.048 段；更早的字体合成崩溃转储 `C:/Users/ACETaffy/AppData/Local/CrashDumps/citron.exe.31964.dmp` 69,946,267 B（与本轮结论无关）。
+- 基线轮中止现场：`C:/Users/<user>/AppData/Roaming/citron/log/citron_log.txt` t=398.376→407.048 段；更早的字体合成崩溃转储 `C:/Users/<user>/AppData/Local/CrashDumps/citron.exe.31964.dmp` 69,946,267 B（与本轮结论无关）。
 - 补跑 abort 现场：`E:/galnx-build/p24/session-baseline.log`（第 1 次，23:33:42 建 job、23:34:45 窗口消失无 result.json）、`E:/galnx-build/p24/evidence/baseline-abort-20261105-2334/`（abort 轮残片：async_status.txt 81 B、debug_report.txt 91,236 B、frame_status.txt 28 B、perf_slow.log 2,633 B）。原 407 s 基线原始日志已被第 2 次补跑的 `rm -rf evidence/baseline` 覆盖，统计数值见 `compare-win.json`/`compare-full.json` 与 §6.2/§6.5。
 
 ## 10. 结论

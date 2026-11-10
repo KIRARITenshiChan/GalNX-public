@@ -87,6 +87,23 @@ class RegistryTests(unittest.TestCase):
                 engines.EngineRegistry.builtin().load_dir(missing)
             self.assertIn("directory not found", str(ctx.exception))
 
+    def test_load_dir_skips_identical_builtin_duplicates(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            write_descriptor(tmp, engines.KRKRSDL2.to_dict())
+            registry = engines.EngineRegistry.builtin()
+            loaded = registry.load_dir(tmp)
+            self.assertEqual(loaded, [])
+            self.assertEqual(registry.ids(), ("brewser", "krkrsdl2", "onscripter-nx"))
+
+    def test_load_dir_rejects_conflicting_duplicate(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            data = engines.KRKRSDL2.to_dict()
+            data["status_reason"] = "locally patched fork"
+            write_descriptor(tmp, data)
+            with self.assertRaises(engines.EngineRegistryError) as ctx:
+                engines.EngineRegistry.builtin().load_dir(tmp)
+            self.assertIn("already registered", str(ctx.exception))
+
     def test_registry_for_engines_dir(self):
         with tempfile.TemporaryDirectory() as tmp:
             write_descriptor(tmp, variant("custom-a"))
@@ -121,7 +138,9 @@ class ManifestConsistencyTests(unittest.TestCase):
         self.assertEqual(data["engine"]["adapter"], "onscripter-nx")
         examples = ROOT / "examples"
         self.assertEqual(engines.validate_manifest_engine(data["engine"], base_dir=examples), [])
-        self.assertEqual(engines.manifest_engine_warnings(data["engine"], base_dir=examples), [])
+        warnings = engines.manifest_engine_warnings(data["engine"], base_dir=examples)
+        self.assertEqual(len(warnings), 1)
+        self.assertIn("research", warnings[0])
 
     def test_none_section_is_ignored(self):
         self.assertEqual(engines.validate_manifest_engine(None), [])
@@ -194,10 +213,13 @@ class WarningTests(unittest.TestCase):
         return section
 
     def test_ready_adapter_has_no_warnings(self):
-        self.assertEqual(
-            engines.manifest_engine_warnings(self._section("krkrsdl2", "krkrsdl2@124bdf84 (2026-10-01)")),
-            [],
-        )
+        with tempfile.TemporaryDirectory() as tmp:
+            data = variant("ready-engine", status="ready", status_reason="")
+            write_descriptor(tmp, data)
+            warnings = engines.manifest_engine_warnings(
+                self._section("ready-engine", "ready-engine@124bdf84"), engines_dir=tmp
+            )
+            self.assertEqual(warnings, [])
 
     def test_blocked_adapter_warns(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -220,10 +242,14 @@ class WarningTests(unittest.TestCase):
 
     def test_adapter_version_must_mention_pinned_commit(self):
         warnings = engines.manifest_engine_warnings(self._section("krkrsdl2", "krkrsdl2@deadbeef"))
-        self.assertEqual(len(warnings), 1)
-        self.assertIn("does not mention the pinned commit", warnings[0])
-        self.assertIn("124bdf84", warnings[0])
-        self.assertEqual(engines.manifest_engine_warnings(self._section("krkrsdl2", None)), [])
+        self.assertEqual(len(warnings), 2)
+        version_warnings = [item for item in warnings if "does not mention the pinned commit" in item]
+        self.assertEqual(len(version_warnings), 1)
+        self.assertIn("124bdf84", version_warnings[0])
+        pinned = engines.manifest_engine_warnings(self._section("krkrsdl2", "krkrsdl2@124bdf84 (2026-10-01)"))
+        self.assertEqual(len(pinned), 1)
+        self.assertIn("research", pinned[0])
+        self.assertEqual(len(engines.manifest_engine_warnings(self._section("krkrsdl2", None))), 1)
 
     def test_unknown_adapter_has_no_warnings(self):
         self.assertEqual(engines.manifest_engine_warnings(self._section("renpy")), [])

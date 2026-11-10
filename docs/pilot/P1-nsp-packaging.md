@@ -247,7 +247,7 @@
 | 打包脚本 | `scripts/build_pilot_nsp.sh` 651 行 / 29,135 B / 0d62f78f2021b003db7e23735e7c6d699f351695bf1dc95ff9f9340e31055f93 | — | 本仓库 |
 | Python / Pillow | Python 3.12.10（本机）；Pillow 用于 icon 256×256 JPEG 校验 | — | 本机 |
 
-- **keyset（仅元数据，不记录内容）**：`E:/Othergames/Nintendo Switch/Ryujinx-canary/portable/system/prod.keys`，12,007 B，sha256 `7bb3b6d2a2eedc83c9f244ee2ed2eaa4d59eb9ad95b66df575f7dfffa71a2a40`，mtime 2026-03-19 07:25:45.902258500 +0800；首选 `C:/Users/ACETaffy/.switch/prod.keys` 不存在。脚本不内置默认路径、不自动搜索，构建日志中 hacBrewPack 的 `Key area key` 行已被过滤。
+- **keyset（仅元数据，不记录内容）**：`E:/Othergames/Nintendo Switch/Ryujinx-canary/portable/system/prod.keys`，12,007 B，sha256 `7bb3b6d2a2eedc83c9f244ee2ed2eaa4d59eb9ad95b66df575f7dfffa71a2a40`，mtime 2026-03-19 07:25:45.902258500 +0800；首选 `C:/Users/<user>/.switch/prod.keys` 不存在。脚本不内置默认路径、不自动搜索，构建日志中 hacBrewPack 的 `Key area key` 行已被过滤。
 - CI 建议：仅用 `--keyset synthetic` 做离线结构冒烟（产物 NOT INSTALLABLE），绝不把真实 keys 写入 CI secrets/仓库；真机/模拟器验证由本机离线步骤完成。
 
 ### 7.2 与 GalNX 框架（M3/M6）的集成建议

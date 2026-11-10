@@ -26,56 +26,66 @@ license_notes: >-
 target_kind: self_contained_nsp
 build_backend: custom-script
 capabilities:
-  video:
+  graphics:
     supported: true
+    verification: game_verified
+    backend: sdl2-gles2
     note: >-
-      SDL2/GLES2 backend via patch (patchG): SDL_RenderGeometry for sprites,
-      custom blend modes for Multiply/Screen, and RenderReadPixels for the
-      save thumbnail / debug screenshot. Citron Nightly 0237a9b88 renders the
-      title screen and the Chinese narration at a locked 60.0 fps
-      (debug_report perf avg: vm 0.56 ms, scene 0.23 ms, render 15.57 ms
-      including the vsync wait).
+      SDL2/GLES2 backend via patch rfvp-sdl2-backend.patch (SDL_RenderGeometry
+      sprites, custom blend modes for Multiply/Screen, GPU previous-frame
+      sampling and render-target thumbnails). Device-verified on the Switch in
+      all four rfvp pilots (README Pilot table, docs/pilot/akaseka-fd-acceptance.md);
+      Citron keeps a locked 60.0 fps at ~15.6 ms render including the vsync wait.
+  movie:
+    supported: true
+    verification: device_verified
+    backend: nvdec+nvtegra+ffmpeg
+    note: >-
+      H.264 OP movies through FFmpeg + nvtegra (AV_PIX_FMT_NVTEGRA): the
+      decoder's NV12 planes go straight to GLES2 via SDL_UpdateNVTexture (P44
+      dual-plane zero copy, docs/builds/051), with the NEON NV12->RGBA
+      converter as fallback and the in-tree WMV2/WMV3/VC-1 software player for
+      the older OPs. Device-verified: the user confirmed the 1080p AKASEKA OP
+      plays with correct colour and no stutter (v1.4.1-test, user m40951). The
+      IROSEKA / MOYU OP quality tiers (video.txt) were still awaiting their own
+      user device run when this descriptor was updated.
   audio:
-    supported: false
+    supported: true
+    verification: device_verified
+    backend: audren
     note: >-
-      libnx audren path (audio_init/audio_pump) is linked and unchanged by the
-      SDL2 patch, but no run has verified sound output or mixer timing.
+      libnx audren path (audio_init/audio_pump) with the P27 continuity ring and
+      the P30 audio JIT (docs/builds/034-rfvp-audio-continuity.md,
+      037-rfvp-audio-jit.md): the ~3 s start-up delay seen on v1.1.4-test
+      hardware is fixed and device-verified on v1.1.6-test
+      (docs/pilot/P4-device-runbook.md section 13.8: lag_ms within +/-300,
+      underrun=0).
   input:
     supported: true
+    verification: game_verified
     note: >-
-      Rewritten for the user's hand-held mapping (docs/builds/019-rfvp-input-mapping.md,
-      patch `rfvp-input-remap.patch`): A=Enter, B=Escape (opens the in-game clock
-      menu), X=toolbar AUTO, Y=menu LOAD, PLUS=menu SAVE, MINUS=menu EXIT + confirm,
-      ZR=left mouse held, ZL=right mouse held (right-click closes the menu), R=Ctrl
-      (skip while held), D-Pad=arrow keys, left stick vertical=wheel (up opens
-      BACKLOG), right stick moves the pointer. Menu entries are reached with a
-      synthetic open-menu/move/click macro (MENU_SAVE=(1117,171), MENU_LOAD=(960,217),
-      MENU_EXIT=(654,608), TOOLBAR_AUTO=(1079,700), EXIT_CONFIRM=(560,379) - all
-      measured at 1280x720 by Citron hover scans; the macro waits 90 polls for the
-      menu fade-in before clicking). Verified in Citron one item at a time
-      (p12-c/d/f/g/h/i/n/o/p, 0 exceptions): A advances and completes the typewriter,
-      B opens the pause menu, ZL closes it (Esc cannot - the game is pointer-only),
-      ZR advances the text, Y/PLUS/MINUS open FILE LOAD / FILE SAVE / exit-confirm
-      and MINUS leaves a black window with no exception, X turns on AUTO, D-Pad and
-      left stick feed arrows/wheel, right stick moves the visible pointer.
-      Open: U1 R=Ctrl reaches the engine input state but Citron showed no
-      fast-forward (game-side use unproven) - re-check on hardware; U2 anchors are
-      layout-specific to this title; U3 hardware run of the whole map pending.
+      Hand-held pad mapping (docs/builds/019-rfvp-input-mapping.md, patch
+      rfvp-input-remap.patch): A=Enter, B=Escape (in-game clock menu), X=toolbar
+      AUTO, Y=menu LOAD, PLUS=menu SAVE, MINUS=menu EXIT + confirm, ZR=left
+      mouse, ZL=right mouse, R=Ctrl skip, D-Pad=arrows, left stick=wheel, right
+      stick=pointer; the in-game menus are driven by measured screen anchors.
+      Device-verified by the user in all four pilots (README Pilot table,
+      docs/pilot/akaseka-fd-acceptance.md).
   save:
     supported: true
+    verification: device_verified
     note: >-
-      Quick save / quick load to slot 0 verified in Citron (patch J):
-      sdmc:/switch/rfvp/saves/<game-id>/save/rfvp_s000.bin (490,104 B) is
-      written and read back, logged as "quick save: wrote slot 0" / "quick
-      load: read slot 0". The engine also consumes pending legacy
-      save/load requests by falling back to quick slot 0, because the desktop
-      slot UI (legacy_save_load_ui.rs) does not exist on this target; without
-      that fallback the VM halts forever after an in-game SAVE click. Only
-      slot 0 is exposed and the PLUS+ZR / PLUS+ZL chords still need a real
-      hardware run (harness cannot press two keys at once).
+      Quick save / quick load to slot 0 at
+      sdmc:/switch/rfvp/saves/<game-id>/save/rfvp_s000.bin, plus deferred
+      snapshot materialisation (P16, docs/builds/022-rfvp-save-latency.md) and
+      the consumed ExitDialog/ExitMode(3) quit path (P13). The save format is
+      rfvp's own and is not interchangeable with the PC build. Device-verified
+      save / load / clean quit in the rfvp pilots (P4-device-runbook.md section
+      13, README Pilot table).
   touch:
     supported: false
-    note: hidGetTouchScreenStates is forwarded; the game was never driven by touch.
+    verification: unknown
+    note: hidGetTouchScreenStates is forwarded, but the game has never been driven by touch.
 default_input_profile: generic-vn
 artifact_naming: "{id}-{version}.nsp"
 content_layout:
@@ -91,110 +101,21 @@ content_layout:
     which covers CJK). Saves are unaffected: they stay on SD at
     sdmc:/switch/rfvp/saves/<game-id>/. The NRO form still works and falls back
     to sdmc:/switch/rfvp/game when romfs is absent.
-status: research
+status: ready
 status_reason: >-
-  Simulator-level only, but now playable end to end in Citron. Patch 016 gives
-  a locked 60.0 fps SDL2/GLES2 backend; patch 017 (doc 017) calibrates the full
-  pad mapping (pointer, A/B, X/Y, MINUS, Ctrl skip, right-stick wheel, PLUS
-  quit) and adds quick save/load to slot 0 plus a fallback consumer for the
-  engine's pending save/load requests, so an in-game SAVE click no longer
-  wedges the VM. Verified: title menu, story advance, backlog, skip, quick
-  save -> restart -> quick load, clean quit; the final NRO was re-verified
-  without any diagnostic mapping (P10-i: pointer hover, A click, Enter
-  advance, right-stick wheel -> BACKLOG, PLUS quit, 0 exceptions). Open items: no Switch hardware
-  run yet (the PLUS+ZR / PLUS+ZL chords are untested), audio, in-game system
-  menu still needs pointer clicks (U2), NSP packaging, memory headroom on 4 GB
-  hardware unmeasured. Upstream still calls the port experimental. P11 closes the
-  packaging item: a self-contained NSP boots entirely from
-  romfs with no game data on SD, enters the Chinese story text and exits cleanly
-  in Citron, and the NRO form still passes its regression. Remaining before
-  "ready": the NSP has not been installed on real hardware (9.98 GB needs an
-  exFAT SD card or NAND; DBI FTP upload is ~25-30 min), audio/movie playback,
-  in-game system menu (pointer-only, U2), and the PLUS+ZR / PLUS+ZL chords.
-  P12 (docs/builds/019-rfvp-input-mapping.md) then replaced the whole pad layer
-  with the user's requested hand-held mapping and drove the native menus through
-  measured screen anchors, verified item by item in Citron; the remaining open
-  item is the hardware run plus the R=Ctrl fast-forward (U1). P13
-  (docs/builds/020-rfvp-device-fixes.md) answers the first hardware feedback
-  round: the console path now draws its own pointer and quit-confirmation
-  overlay in the video shim (the engine only renders its cursor through the
-  desktop host), consumes the game's own ExitDialog / ExitMode(3) so a native
-  quit really terminates instead of sitting on a black screen, reuses graph
-  textures instead of recreating them every frame, and rebinds MINUS to that
-  overlay dialog rather than synthesising in-game clicks. Verified in Citron:
-  cursor follows the right stick, MINUS shows QUIT GAME? (A confirms, B
-  cancels), native EXIT returns to the emulator's game list, 60.0 fps with
-  15.75 ms render. The hardware re-run is the only open item for this round.
-  P14 (docs/builds/021-rfvp-perf-gpu-prev-frame.md) removed the per-frame
-  1920x1080 readback that powered the engine's "previous frame" texture: the SDL
-  shim keeps two off-screen targets and samples the previous one on the GPU, and
-  the periodic debug_screen.bmp readback is compiled out. Same probe: slow frames
-  154 to 19, frames over 7 ms 151 to 15, frames with a 20 ms-plus thumbnail
-  readback 142 to 0. P15 fed the remaining device log back in; P16
-  (docs/builds/022-rfvp-save-latency.md) fixes the last per-line hitch: the game
-  issues two slot-less SaveCreate(3) calls per line and each one used to encode
-  the full 10.2 MB save snapshot (99.8% motion textures) only to throw it away.
-  Encoding is now deferred to a real commit, so a per-line pair costs 5.27-5.67 ms
-  instead of about 200 ms, and the system-slot commits still materialize and write
-  correctly in Citron. The NSP v1.0.4 artifact is built from this tree; the
-  hardware re-run is the remaining acceptance step.
-  P17 (docs/builds/023-rfvp-resource-cache.md, patch rfvp-cache.patch) then
-  attacked the remaining "CG expression / background switch / opening any game UI
-  stalls": the engine had no resource cache at all, so every graph_load/parts_load
-  re-read and re-inflated its texture. A process-wide LRU layer (decoded textures
-  160 MiB, parts 48 MiB, raw bytes 192 MiB) plus 5 call-site hooks, a boot-time
-  prefetch of 66 graph/ UI textures, chunked pixel conversion and devkitPro zlib
-  instead of miniz make the UI reopen stall-free in Citron (two ESC-menu
-  screenshots are byte-identical, graph cache hit 193, vfs cache hit 106, 66
-  textures inflate 204.4 -> 133.7 ms). Remaining Citron spikes are first-time
-  loads of big CG/parts sheets (0.1-0.8 s, U27) that are not prefetched yet;
-  hardware re-run of v1.0.5 is the acceptance step.
-  P20 (docs/builds/026-rfvp-async-watchdog.md, patch rfvp-async-watchdog.patch)
-  closes the black-screen question with hardware evidence: with async enabled the
-  console wrote async_status.txt enabled=1 create=0x0 start=0x0 hb=4 and froze
-  within 60 frames (the periodic report never advanced), so the worker thread does
-  start but the process hangs inside the first decode; the crash reports on the SD
-  card belong to hbloader/sphaira and not to this title. The switch now also
-  records a stage marker (0 idle, 1 pop, 2 read, 3 decode, 4 publish) into
-  async_status.txt every 600 frames, a 3 s watchdog on the main thread detects a
-  stalled queue and drains it inline so the picture recovers, and the worker stack
-  grew from 128 KiB to 1 MiB. Citron verifies the async-on path end to end
-  (hb=77000 stage=0, 30 submits/decodes with the expected byte counts); the
-  hardware A/B run is the acceptance step and async still defaults to off.
-  P19 (docs/builds/025-rfvp-async-toggle.md, patch rfvp-async-toggle.patch)
-  answers the first hardware regression: v1.0.6 (P18) booted to a black screen on
-  the console. The P18 worker thread was created unconditionally and graph_load
-  returned Nil for big loads as soon as submit_graph succeeded, so a device
-  where the thread fails to start would never show any big texture. Async decode
-  is now behind a runtime switch (sdmc:/switch/rfvp/async.txt, default off),
-  threadCreate/threadStart results are checked with an automatic fallback to the
-  synchronous path, and async_status.txt records enabled/create/start/heartbeat
-  for A/B diagnosis. Default-off behaviour equals v1.0.5, so the P18 CG gain is
-  off on hardware until the A/B run proves the thread healthy; NSP v1.0.7
-  (9,979,495,640 B) is built from this tree. The black-screen mechanism itself is
-  still inferred (U2) because no hardware log has been captured yet.
-  P18 (docs/builds/024-rfvp-async-decode.md, patch rfvp-async-decode.patch)
-  removed the remaining first-time big-image stall: a 2400x1350 background costs
-  133-160 ms of zlib inflate plus format conversion and an expression switch
-  decodes 2-4 such sheets, while the save-restore path re-read and re-decoded
-  them synchronously. Big resources (1 MiB and up) are now decoded on a worker
-  thread behind a four-table queue while the main thread keeps the previous
-  texture, restore snapshots carry an async id, and the UI textures decoded at
-  restore stay cached. The CG entry frame went 632.2 -> 299.1 -> 273.4 ms in
-  Citron with byte-identical screenshots, and the NSP v1.0.6 (9,979,494,616 B)
-  is built from this tree; hardware re-run is the acceptance step.
-  P34 (docs/builds/040-wmv2-left-edge.md, patch rfvp-wmv2-padding.patch)
-  fixes the mosaic column the v1.1.9-test hardware run saw on the left edge of
-  the OP: the bundled WMV2 decoder had no row guard in its IDCT write path, so
-  the last macroblock column of the 854-wide (non 16-aligned) frame spilled
-  into the first pixels of the following row. It now decodes on an 864x480
-  macroblock-aligned surface and crops back to 854x480. Host oracle vs ffmpeg:
-  mean |dY| 2.918 -> 1.470, |dY|>32 pixels 6,777 -> 30, left 12 columns
-  63.35 -> 3.36, spill rows 58 -> 0; Citron keeps 8.1-15.2 ms decode on the
-  854x480 path with a clean left edge. NSP v1.1.10-test (9,977,492,696 B,
-  sha256 fc35fa98...) verifies 13 checks / 0 fail / 1 unsigned warn. The OP
-  blur is the 480p upscale itself and is evaluated separately through the
-  video.txt quality tiers.
+  Device-verified engine. Four pilots pass on real hardware with the user's
+  sign-off (README Pilot table): Pilot-01 kirikiroid2-nx A10 1.0.9, Pilot-02
+  IROSEKA (1.2.4-test), Pilot-03 SAKURA MOYU (1.3.2-test) and Pilot-04 AKASEKA
+  FHD (1.4.0-test, 6,676,387,544 B, sha256
+  569af9fbffad68f9423c14b7072d29e14864dec503d5e6039e96b111f9585732, 2026-11-10).
+  The AKASEKA acceptance recorded OP playback, pad mapping and a clean exit
+  (docs/pilot/akaseka-fd-acceptance.md, user m39477), and the v1.4.1-test
+  1080p OP colour/fluency result is recorded in docs/builds/051 (user m40951).
+  Limits kept on record: 720p is the default output (1080p needs the NV12
+  zero-copy path and its own per-title budget), the save format is private to
+  rfvp, the IROSEKA / MOYU OP quality tiers (video.txt) and the WMV2 OP path
+  still need their own device confirmation, and the H.264 movie pipeline only
+  exists in the no_std build with the patched nvtegra stack.
 artifact_sha256: db31a312c745e46b73f11445168af94ad6790989d847f184a8d2cd6312190c8f
 evidence_urls:
   - docs/builds/008-rfvp-evaluation.md
@@ -210,6 +131,10 @@ evidence_urls:
   - docs/builds/025-rfvp-async-toggle.md
   - docs/builds/026-rfvp-async-watchdog.md
   - docs/builds/040-wmv2-left-edge.md
+  - docs/builds/050-akaseka-fd-nsp.md
+  - docs/builds/051-rfvp-nv12-zerocopy.md
+  - docs/builds/052-rfvp-p45-sync.md
+  - docs/pilot/akaseka-fd-acceptance.md
   - docs/milestones/evidence/P34-wmv2-left-edge/SHA256SUMS
   - docs/milestones/evidence/P19-rfvp-async-toggle/SHA256SUMS.txt
   - docs/milestones/evidence/P19b-rfvp-nsp107/SHA256SUMS.txt
@@ -259,6 +184,25 @@ notes: >-
   (control icon dat 26,706 B f35ac156... / 25,886 B 12ea3a07...). Both verify with
   0 failures and boot to their Chinese title screens in Citron; the game trees are
   byte-identical to the P40/P41 builds, so only the engine and the icon changed.
+verification:
+  status: device_verified
+  hardware: Nintendo Switch (user-owned console via hbloader)
+  tested_at: "2026-11-10"
+  evidence:
+    - README.md
+    - docs/pilot/akaseka-fd-acceptance.md
+    - docs/builds/050-akaseka-fd-nsp.md
+    - docs/builds/051-rfvp-nv12-zerocopy.md
+    - docs/builds/052-rfvp-p45-sync.md
+  notes: >-
+    Pilot-04 (AKASEKA FHD, v1.4.0-test) is the formal device acceptance: OP,
+    pad mapping and a clean exit, PASS signed off by the user (m39477).
+    Pilot-02 / Pilot-03 passed earlier with 1.2.4-test / 1.3.2-test (README
+    Pilot table). The newer 1.2.5-test / 1.3.3-test rebuilds are reported as
+    user-accepted in the P45 notes (docs/builds/052) but have no acceptance log
+    in this repository yet; firmware and Atmosphere versions were not recorded
+    in these reports, so those fields are left empty.
+
 source:
   url: https://github.com/xmoezzz/rfvp
   commit: 9f07adef2eb5d559777f9bf59a67b756875cb24f

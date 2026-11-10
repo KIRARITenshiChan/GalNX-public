@@ -163,7 +163,7 @@ devkitPro pacman 实测包版本：
 
 ### 6.1 前提
 
-- Citron Nightly `0237a9b88`（`workspaces/web-02/citron/citron.exe`），`CITRON_USER_DIR=C:/Users/ACETaffy/AppData/Roaming/citron`；
+- Citron Nightly `0237a9b88`（`workspaces/web-02/citron/citron.exe`），`CITRON_USER_DIR=C:/Users/<user>/AppData/Roaming/citron`；
 - 虚拟 SD：`.../citron/sdmc`；
 - 内容布局（模拟 README 安装路径）：`sdmc/switch/rfvp/game/{painter.hcb, graph/w95_*, default.ttf, save/}`、`sdmc/switch/rfvp/debug.txt`（内容 `shot=0`）；**未建 `nls.txt`**（默认 ShiftJIS，与 `painter.yaml` 的 `nls: ShiftJIS` 一致）；
 - 每个 run 前 tasklist 确认 0 个 citron 实例；只 kill 自己的 PID；`--keep` 保留证据。

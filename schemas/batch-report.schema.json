@@ -14,7 +14,7 @@
   "additionalProperties": false,
   "properties": {
     "schema_version": {
-      "const": 1
+      "const": 2
     },
     "generated_at": {
       "type": "string",
@@ -31,7 +31,9 @@
         "warn",
         "fail",
         "skipped",
-        "duration_s"
+        "duration_s",
+        "executed",
+        "not_configured"
       ],
       "additionalProperties": false,
       "properties": {
@@ -68,6 +70,14 @@
           "minimum": 0
         },
         "built": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "executed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "not_configured": {
           "type": "integer",
           "minimum": 0
         }
@@ -220,6 +230,16 @@
                 }
               }
             }
+          },
+          "build_state": {
+            "enum": [
+              "not_run",
+              "not_configured",
+              "executed",
+              "cache_hit",
+              "failed",
+              "skipped"
+            ]
           }
         }
       }

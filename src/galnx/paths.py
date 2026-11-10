@@ -1,12 +1,16 @@
 """Centralised path and environment defaults.
 
-Machine-specific paths live here so a future `galnx config` command can replace
-them from a profile file. Every default can be overridden by an environment
-variable, which keeps the codebase portable across the dev machines we use.
+GalNX does not hard-code a contributor's personal directories. Every location
+below can be overridden through an environment variable; when it is not set we
+fall back to a conventional, machine-independent location (and, for devkitPro,
+probe the two documented installer roots). Anything that is missing is reported
+by `galnx doctor` with a suggestion instead of silently pointing at somebody
+else's disk.
 """
 from __future__ import annotations
 
 import os
+import tempfile
 from pathlib import Path
 
 
@@ -35,23 +39,61 @@ def schema_path(name: str = "game-manifest.schema.json") -> Path:
     raise FileNotFoundError("schema not found: %s (set GALNX_SCHEMA_DIR)" % name)
 
 
-def _env_path(var: str, default: str) -> Path:
-    return Path(os.environ.get(var, default))
+def _env_path(var: str) -> Path | None:
+    value = os.environ.get(var)
+    return Path(value) if value else None
 
 
-# --- local machine defaults (overridable through env vars) -------------------
-DEVKITPRO = _env_path("GALNX_DEVKITPRO", "D:\\devkitPro")
-BUILD_ROOT = _env_path("GALNX_BUILD_ROOT", "E:\\galnx-build")
-PROD_KEYS = _env_path(
-    "GALNX_PROD_KEYS",
-    "E:\\Othergames\\Nintendo Switch\\Ryujinx-canary\\portable\\system\\prod.keys",
-)
-CITRON = _env_path(
-    "GALNX_CITRON",
-    "E:\\Othergames\\Nintendo Switch\\Workspace\\GalNX\\workspaces\\web-02\\citron\\citron.exe",
-)
-RYUJINX = _env_path(
-    "GALNX_RYUJINX",
-    "E:\\Othergames\\Nintendo Switch\\Ryujinx-canary\\Ryujinx.exe",
-)
+def _first_dir(*candidates: Path | None) -> Path | None:
+    for candidate in candidates:
+        if candidate is not None and candidate.is_dir():
+            return candidate
+    return None
+
+
+def _devkitpro_default() -> Path:
+    explicit = _env_path("GALNX_DEVKITPRO") or _env_path("DEVKITPRO")
+    if explicit is not None:
+        return explicit
+    # devkitPro's own installer documents C:/devkitPro as the default root; a
+    # data-drive install is common enough to be worth probing.
+    found = _first_dir(
+        Path("C:/devkitPro"),
+        Path("D:/devkitPro"),
+        Path.home() / "devkitPro",
+    )
+    if found is not None:
+        return found
+    return Path("C:/devkitPro")
+
+
+def _build_root_default() -> Path:
+    explicit = _env_path("GALNX_BUILD_ROOT")
+    if explicit is not None:
+        return explicit
+    # Temporary directories are space-free on every supported platform, which
+    # matters because the devkitPro make templates break on paths with spaces.
+    return Path(tempfile.gettempdir()) / "galnx-build"
+
+
+def _prod_keys_default() -> Path:
+    explicit = _env_path("GALNX_PROD_KEYS")
+    if explicit is not None:
+        return explicit
+    return Path.home() / ".galnx" / "prod.keys"
+
+
+def _emulator(var: str, *relative: str) -> Path:
+    explicit = _env_path(var)
+    if explicit is not None:
+        return explicit
+    return Path.home().joinpath(*relative)
+
+
+# --- configurable locations (all overridable through environment variables) ---
+DEVKITPRO = _devkitpro_default()
+BUILD_ROOT = _build_root_default()
+PROD_KEYS = _prod_keys_default()
+CITRON = _emulator("GALNX_CITRON", "citron", "citron.exe")
+RYUJINX = _emulator("GALNX_RYUJINX", "Ryujinx", "Ryujinx.exe")
 MSYS2_BASH = DEVKITPRO / "msys2" / "usr" / "bin" / "bash.exe"

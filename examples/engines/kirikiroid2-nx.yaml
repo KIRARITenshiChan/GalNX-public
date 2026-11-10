@@ -27,27 +27,52 @@ license_notes: >-
 target_kind: self_contained_nsp
 build_backend: cmake-switch
 capabilities:
-  video:
+  graphics:
     supported: true
-    note: cocos2d-x 3.11.1 renderer on Switch EGL; Citron Nightly 0237a9b88 renders the title screen and the script at 60 FPS.
+    verification: game_verified
+    backend: cocos2d-x-3.11.1-egl
+    note: >-
+      cocos2d-x 3.11.1 renderer on Switch EGL; Citron Nightly 0237a9b88 renders
+      the title screen and the script at 60 FPS. Device-verified with the A10
+      self-contained NSP (Pilot-01, README Pilot table).
+  movie:
+    supported: true
+    verification: device_verified
+    note: >-
+      The CN pilot swaps movie.xp3 for the Chinese-subtitled opening and the
+      device regression list covers the Chinese OP and audio playback
+      (docs/pilot/P4-device-runbook.md section 12.2). The bundled FFmpeg 3.2.19
+      portlib decodes the title's own movie format; no other title has been
+      checked on hardware yet.
   audio:
-    supported: false
-    note: The FFmpeg/audio path is linked in but was not exercised in the Citron runs.
+    supported: true
+    verification: device_verified
+    note: >-
+      The FFmpeg/audio path is part of the A10 device regression (Chinese OP and
+      audio in docs/pilot/P4-device-runbook.md section 12.2). No mixer timing
+      measurements were taken on hardware.
   input:
     supported: true
-    note: Switch pad buttons map to VK_* through the Kirikiroid2Preference.xml KeyMap; verified with RIGHT+C in Citron.
+    verification: game_verified
+    note: >-
+      Switch pad buttons map to VK_* through the Kirikiroid2Preference.xml
+      KeyMap plus patches D/E/G/H/I (virtual cursor, quick save/load hotkeys,
+      MINUS quit, hold-R Ctrl skip, ZR/ZL held mouse). Device-verified by the
+      user in the A10 acceptance (Pilot-01, README Pilot table).
   save:
     supported: true
+    verification: device_verified
     note: >-
-      Pad-only save/load works through patches D+E: Y toggles the virtual mouse
-      cursor, D-Pad moves it in 24 px steps, A/B are left/right click, L quick
-      saves, R opens this game's native LOAD screen, PLUS opens SAVE, ZR loads
-      slot 10 and ZL forces the system save. Verified both as NRO and inside the
-      A4 self-contained NSP: save wrote savedata010.bmp, restart -> LOAD -> slot
-      01 01 -> back to the save point and normal advancing. See
-      docs/pilot/saveload-acceptance.md; Nintendo Switch hardware still unverified.
+      Pad-only save/load through patches D/E: Y toggles the virtual mouse
+      cursor, D-Pad moves it, A/B are left/right click, L quick saves, R opens
+      the native LOAD screen, PLUS opens SAVE, ZR loads slot 10 and ZL forces
+      the system save. Patch I adds TraceSave + SystemSave before the delayed
+      exit, so settings and save metadata survive a quit. Device-verified as
+      NRO and as the A10 NSP (docs/pilot/saveload-acceptance.md,
+      docs/pilot/P4-device-runbook.md section 12.4, user m13918).
   touch:
     supported: false
+    verification: unknown
     note: Citron mouse input is the first-touch path; touch was not exercised.
 default_input_profile: krkr-ns
 artifact_naming: "{id}-{version}.nsp"
@@ -63,18 +88,22 @@ content_layout:
     game Init.tjs (Storages.addAutoPath), so the engine needs no change.
 status: ready
 status_reason: >-
-  Self-contained NSP verified in Citron only (A3/A4; A2 independent rerun, P2
-  acceptance). Pad-only save/load (U20) verified in Citron as NRO and as A4 NSP.
-  Nintendo Switch hardware is still unverified. The CN localization (P5) is
-  simulator-level PASS as well: data/scenario/image00.xp3 were repacked from the
-  public X'moe source repository and the A6 NSP boots the Chinese title menu and
-  script in Citron; A7 additionally swaps movie.xp3 for the Chinese-subtitled
-  opening, so the whole CN pilot (title, script, OP) is simulator-level PASS;
-  hardware unverified. Patch G (P6) is simulator-level PASS as well: the v2 pad
-  mapping, the MINUS quit path and the K2S drawer power-button quit all exit
-  cleanly in Citron; hardware unverified. Patch H (P7) adds a hold-R Ctrl skip
-  and fixes the left-stick wheel direction; the A9 NSP (1.0.8, cover icon) is
-  simulator-level PASS; hardware unverified.
+  Device-verified engine for the CN pilot. The A10 NSP (version 1.0.9,
+  2,870,911,704 B, sha256
+  0efc23f66f57a016c15ea3944cdb8ce5b396f03f6bef3b8f5ddc1794d03186f2) passed
+  real-hardware acceptance (Pilot-01, README Pilot table): the user reported the
+  four v1.8 issues fixed (settings persistence, save-load text, the forced
+  new/continue warning and ZR held-drag), and A10 is the delivered baseline for
+  this title (docs/pilot/P4-device-runbook.md section 12.4, user m13918,
+  2026-10-31). First boot copies the 23 embedded payload files (~2,843 MiB) to
+  sdmc:/kirikiri/haruno and later boots use the .galnx_extracted marker; the
+  install was done over DBI FTP (449.7 s, ~6.12 MiB/s) and verified with 19
+  checks (18 ok, 1 unsigned warning). Limits kept on record: only this title has
+  a hardware run, the nine-patch stack is not upstreamed, exit-save is
+  best-effort (SystemSave + TraceSave then a 1 s delayed exit, so a hard power
+  cut can still lose the last metadata write), and the engine save format is
+  private to Kirikiroid2. Earlier Citron-only milestones (A2-A9) are recorded in
+  docs/builds/009-015.
 artifact_sha256: 0efc23f66f57a016c15ea3944cdb8ce5b396f03f6bef3b8f5ddc1794d03186f2
 evidence_urls:
   - docs/builds/009-k2nx-selfcontained-build.md
@@ -89,6 +118,8 @@ evidence_urls:
   - docs/pilot/P1-engine-k2nx.md
   - docs/pilot/P2-acceptance.md
   - docs/pilot/saveload-acceptance.md
+  - docs/pilot/P4-device-runbook.md
+  - README.md
 notes: >-
   Pin v1.0.1. GalNX applies nine patches: A/B/C add autostart, first-boot
   payload extraction and a plugin alias; D/E add the controller-driven virtual
@@ -122,6 +153,25 @@ notes: >-
   and A10 (CN + patch I exit save / held mouse, version 1.0.9) sha256 0efc23f6...;
   artifact_sha256 records the current one (A10). Build docs: 012 sections 7-8,
   013 for the controller layer, 014 for patch H, 015 for patch I.
+verification:
+  status: game_verified
+  hardware: Nintendo Switch (user-owned console via hbloader)
+  tested_at: "2026-10-31"
+  evidence:
+    - README.md
+    - docs/pilot/P4-device-runbook.md
+    - docs/pilot/P2-acceptance.md
+    - docs/pilot/saveload-acceptance.md
+    - docs/builds/015-k2nx-save-exit-drag.md
+  notes: >-
+    Pilot-01 (晴霁之后 / Haruno CN, A10 v1.0.9) is the formal device acceptance:
+    DBI FTP install, first-boot payload extraction, title -> new game -> story
+    advance, pad-only save/load and a clean quit, PASS signed off by the user
+    (m13918, 2026-10-31). The A7 simulator milestone had already re-checked
+    start / PLUS menu / exit on hardware (docs/builds/013), and A10 is the
+    build the user accepted. Firmware and Atmosphere versions were not recorded
+    in the runbook, so those fields are left empty.
+
 source:
   url: https://github.com/Erige005/Kirikiroid2-NX
   commit: e96b6034c292c6ccdb099823ab6a0a6b505f77f3

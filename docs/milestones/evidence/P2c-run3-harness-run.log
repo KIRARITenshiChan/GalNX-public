@@ -1,6 +1,6 @@
 launch mode : runas-deelevated
-wrapper     : C:\Users\ACETaffy\AppData\Local\Temp\galnx-harness\launch-20261030-074626-Kirikiroid2-NX-010047410000b0b4.cmd
-cmdline     : "E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\web-02\citron\citron.exe" -g "C:\Users\ACETaffy\AppData\Roaming\citron\sdmc\switch\galnx-harness\Kirikiroid2-NX-010047410000b0b4.nsp"
+wrapper     : C:\Users\<user>\AppData\Local\Temp\galnx-harness\launch-20261030-074626-Kirikiroid2-NX-010047410000b0b4.cmd
+cmdline     : "E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\web-02\citron\citron.exe" -g "C:\Users\<user>\AppData\Roaming\citron\sdmc\switch\galnx-harness\Kirikiroid2-NX-010047410000b0b4.nsp"
 game type   : nsp
 game path   : /e/galnx-build/pilot-01/out/Kirikiroid2-NX-010047410000b0b4.nsp
 stage path  : /c/Users/ACETaffy/AppData/Roaming/citron/sdmc/switch/galnx-harness/Kirikiroid2-NX-010047410000b0b4.nsp

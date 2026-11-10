@@ -269,8 +269,8 @@ class DescriptorIntegrationTests(unittest.TestCase):
     def test_descriptor_exposes_new_sections(self):
         data = self.descriptor.to_dict()
         self.assertEqual(sorted(data), sorted(set(data)))
-        self.assertEqual(len(data), 23)
-        for key in ("source", "patches", "portlibs", "build"):
+        self.assertEqual(len(data), 24)
+        for key in ("source", "patches", "portlibs", "build", "verification"):
             self.assertIn(key, data)
         self.assertEqual(self.descriptor.source["commit"], "e96b6034c292c6ccdb099823ab6a0a6b505f77f3")
         self.assertEqual(len(self.descriptor.patches), 9)

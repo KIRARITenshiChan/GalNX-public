@@ -1,0 +1,55 @@
+# GalNX minimal game manifest template.
+# Copy this file somewhere outside the repository (next to your notes is fine),
+# replace every CHANGE_ME value, then run:
+#   python -m galnx preflight --manifest <your-file>.yaml
+#   python -m galnx build run --manifest <your-file>.yaml --dry-run
+# Relative paths resolve against this file's directory, so no absolute
+# developer-machine path is needed. The original game directory is opened
+# read-only and never modified.
+schema_version: 1
+
+game:
+  id: sample-game
+  title: "CHANGE_ME game title"
+  publisher: "CHANGE_ME publisher"
+  version: "1.0"
+  # Point this at the game directory you legally own (or a symlink/junction).
+  source_dir: "../games/sample-game"
+
+engine:
+  # Built-in adapters: krkrsdl2, brewser, onscripter-nx. For anything else
+  # register an external descriptor (see external-engine-descriptor.yaml) and
+  # add its path under engine.descriptor.
+  adapter: krkrsdl2
+  adapter_version: "krkrsdl2@CHANGE_ME_(40-hex-commit)"
+  profile: default
+  entry: data.xp3
+  # descriptor: "external-engine-descriptor.yaml"
+
+switch:
+  # Title IDs must live in the homebrew range 0x0100000000000000 - 0x0FFF...
+  # and be 0x2000 aligned; galnx package check validates the value.
+  title_id: "0100A1B2C3D4E000"
+  title: "SampleGame"
+  author: "GalNX"
+  icon: "icon.jpg"
+  target: nro
+  display_mode: both
+  save_policy: per-title-isolated
+
+input:
+  default_mode: keyboard_mouse
+  toggle_combo: "L+R+PLUS"
+  profile: generic-vn
+
+build:
+  # The build workspace must not contain spaces (devkitPro make limit).
+  output_dir: "../build/sample-game"
+  reproducible: true
+  clean_workspace_before_build: true
+  romfs_mode: embedded
+  # Optional: declare extra inputs for the build cache. Relative paths resolve
+  # against this manifest; 'tree' is hashed recursively in POSIX order.
+  # inputs:
+  #   - path: "../games/sample-game"
+  #     kind: tree

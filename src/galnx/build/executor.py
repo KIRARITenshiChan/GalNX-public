@@ -109,6 +109,53 @@ def build_environment(config: BuildConfig, manifest_path: Path, project_label: s
     return env
 
 
+SENSITIVE_NAME = re.compile(r"(KEY|TOKEN|SECRET|PASSWORD)", re.IGNORECASE)
+
+
+def plan_build_commands(
+    manifest_path: Path | str,
+    data: Mapping[str, Any],
+    project_label: str,
+) -> dict[str, Any]:
+    """Return the resolved execution plan without running anything.
+
+    This powers the build dry-run mode and the trust-boundary rule that a
+    manifest is executable configuration: the caller can inspect the exact
+    commands, working directory, timeout and manifest-assigned environment
+    variable *names* (never values) before anything is spawned.
+    """
+
+    manifest_path = Path(manifest_path)
+    config = parse_build_section(data, manifest_path)
+    return {
+        "manifest": str(manifest_path),
+        "project": project_label,
+        "state": config.execution_state,
+        "workdir": str(config.workdir),
+        "artifact": config.artifact,
+        "artifact_path": (
+            str((config.workdir / config.artifact).resolve()) if config.artifact else None
+        ),
+        "timeout_s": config.timeout_s,
+        "env": {
+            "names": sorted(config.env),
+            "sensitive": sorted(
+                name for name in config.env if SENSITIVE_NAME.search(name)
+            ),
+        },
+        "commands": [
+            {
+                "index": index,
+                "command": command_display(command),
+                "shell": isinstance(command, str),
+                "cwd": str(config.workdir),
+                "timeout_s": config.timeout_s,
+            }
+            for index, command in enumerate(config.commands, start=1)
+        ],
+    }
+
+
 def _write_log(path: Path, header: list[str], output: str, truncated: bool) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     lines = list(header)

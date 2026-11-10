@@ -86,7 +86,7 @@ PYTHONPATH=src python -m galnx package nsp verify \
 
 前置（反向验证 async 硬关闭）：
 
-1. 把 `C:/Users/ACETaffy/AppData/Roaming/citron/sdmc/switch/rfvp/game` 改名为 `game-sakura-hold`，让 NSP 走内嵌 romfs；
+1. 把 `C:/Users/<user>/AppData/Roaming/citron/sdmc/switch/rfvp/game` 改名为 `game-sakura-hold`，让 NSP 走内嵌 romfs；
 2. **故意**写 `async.txt` = `on`、`debug.txt` = `shot=600`，清旧日志。
 
 命令（`E:/galnx-build/p21/run-nsp109.sh`，detach 模式）：

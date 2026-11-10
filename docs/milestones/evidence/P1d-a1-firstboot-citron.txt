@@ -6,7 +6,7 @@
 ## 1. 运行参数（run.log）
 - 命令: scripts/citron_run.sh --game E:/galnx-build/pilot-01/out/K2NX-A1-selfcontained-010047410000b0b2.nsp --timeout 700 ...（input steps: wait 90s -> capture t90 -> wait 90s -> capture t180 -> wait 120s -> capture t300）
 - launch mode: runas-deelevated；cmdline: citron.exe -g <staged nsp>
-- stage path: C:/Users/ACETaffy/AppData/Roaming/citron/sdmc/switch/galnx-harness/K2NX-A1-selfcontained-010047410000b0b2.nsp
+- stage path: C:/Users/<user>/AppData/Roaming/citron/sdmc/switch/galnx-harness/K2NX-A1-selfcontained-010047410000b0b2.nsp
 - Citron build: main-0237a9b88（Development Build）
 - status: loaded；elapsed_s: 38；pid 35140；killed=true（harness 收尾关闭）
 - window title: citron Nightly | 0237a9b88 | Kirikiroid2-NX (64-bit) | 1.0.1 | NVIDIA
@@ -48,7 +48,7 @@
 | P1d-a1-k2s_log-second-run.txt（源 k2s_log.prev.txt） | 7,143 B | afcbbe5d3b4c186bcad98078a1cfe5a6f3b57ed9f8c1834edda928c318d41b04 | 07:01 第二次运行；开头 "[GALNX] payload pilot01-r1 already extracted, starting game"（证明首启解包已完成）；07:01:39 Scenario loaded : title.ks |
 | P1d-a1-k2s_log-latest.txt（源 k2s_log.txt） | 7,366 B | a7720af087bfd744fb21e5feed929cfdf2f59d74e20593515f5c9c95899f7192 | 07:03 第三次运行（marker 已存在，直接启动） |
 
-## 6. sdmc 状态（harness 前缀: C:/Users/ACETaffy/AppData/Roaming/citron/sdmc）
+## 6. sdmc 状态（harness 前缀: C:/Users/<user>/AppData/Roaming/citron/sdmc）
 - sdmc:/kirikiri/haruno/：顶层 16 项（15 个文件 + plugin/ 子目录）；du -sb = 2,870,634,016 B（= game_files.txt 的 bytes=2870634016，精确一致）
 - plugin/：7 个 .tpm，mtime 06:54（首启拷贝时间戳）：csvParser 86,016 / extrans 237,568 / fstat 128,000 / layerExImage 126,976 / windowEx 229,376 / wumsadp 57,856 / wuvorbis 200,704 = 1,066,496 B
 - 顶层文件合计 = 2,870,634,016 - 1,066,496 = 2,869,567,520 B（= Lead 记录的 2,869,567,520 B，口径为不含 plugin 子目录的顶层文件；两口径可对账）

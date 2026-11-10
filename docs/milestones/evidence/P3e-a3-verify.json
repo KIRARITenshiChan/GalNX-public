@@ -15,7 +15,7 @@
     "sha256": "7bb3b6d2a2eedc83c9f244ee2ed2eaa4d59eb9ad95b66df575f7dfffa71a2a40",
     "note": "explicitly supplied keyset; contents intentionally not recorded"
   },
-  "work_dir": "C:\\Users\\ACETaffy\\AppData\\Local\\Temp\\galnx-nsp-verify-nvczsxvs",
+  "work_dir": "C:\Users\<user>\\AppData\\Local\\Temp\\galnx-nsp-verify-nvczsxvs",
   "provenance": {
     "path": "E:\\galnx-build\\pilot-01\\p3\\out\\Kirikiroid2-NX-010047410000A000.nsp.PROVENANCE.json",
     "checks": [

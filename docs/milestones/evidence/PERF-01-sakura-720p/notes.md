@@ -8,7 +8,7 @@
 
 - 游戏源：`E:/Othergames/Galgame/さくら、もゆ。v0.2.0_0222_fix1`（FVP：Sakura.hcb 5,002,569 B + graph*.bin 等 12 个 *.bin + movie/01.wmv、02.wmv + default.ttf）
 - 组装副本：`E:/galnx-build/sakura-test/game`（7.5G，同卷 NTFS hardlink，不占额外空间；含空 save/；default.ttf 22,839,132 B 复用 m5-rfvp-run）
-- **重要布局事实**：Citron 实际读取的是 `C:/Users/ACETaffy/AppData/Roaming/citron/sdmc/switch/rfvp/game`，而该路径当前是**一份 7.5G 的真实拷贝**（此前用 Git-bash `ln -s` 创建链接时 MSYS 回退成了复制；`cmd dir /AL` 和 PowerShell Attributes 均确认无 reparse point）。**修改 nls 必须改 sdmc 里那份 config.toml，改 E:/galnx-build/sakura-test/game/… 不会影响运行**。两处现均为 sjis。
+- **重要布局事实**：Citron 实际读取的是 `C:/Users/<user>/AppData/Roaming/citron/sdmc/switch/rfvp/game`，而该路径当前是**一份 7.5G 的真实拷贝**（此前用 Git-bash `ln -s` 创建链接时 MSYS 回退成了复制；`cmd dir /AL` 和 PowerShell Attributes 均确认无 reparse point）。**修改 nls 必须改 sdmc 里那份 config.toml，改 E:/galnx-build/sakura-test/game/… 不会影响运行**。两处现均为 sjis。
 - config.toml（实际生效的一份，sdmc/switch/rfvp/game/config.toml，86 B）：
   ```
   # GalNX sakura-test config (Sakura, Moyu. FVP)
@@ -24,7 +24,7 @@
   export CITRON_USER_DIR=/c/Users/ACETaffy/AppData/Roaming/citron
   export CITRON_SD=$CITRON_USER_DIR/sdmc
   export CITRON_EXE='E:\\Othergames\\Nintendo Switch\\Workspace\\GalNX\\workspaces\\web-02\\citron\\citron.exe'
-  export APPDATA='C:\\Users\\ACETaffy\\AppData\\Roaming'
+  export APPDATA='C:\Users\<user>\\AppData\\Roaming'
   bash scripts/citron_run.sh --game E:/galnx-build/m5-rfvp/target/rfvp-switch/switch/rfvp.nro \\
     --detach --timeout 240 --settle 8 --allow-existing \\
     --out /e/galnx-build/sakura-test/runs \\

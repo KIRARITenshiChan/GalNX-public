@@ -147,7 +147,7 @@ class EnginePlanTests(unittest.TestCase):
         self.assertIn("artifact:  krkrsdl2-1.0.nro", output)
         for step in ["manifest", "source", "patches", "prepare-data", "configure", "compile", "artifact", "verify"]:
             self.assertIn("[%s]" % step, output)
-        self.assertIn("9 checks: 0 fail, 0 warn", output)
+        self.assertIn("10 checks: 0 fail, 1 warn", output)
 
     def test_plan_json(self):
         exit_code, output = run_cli(["engines", "plan", "--manifest", str(MANIFEST), "--json"])
@@ -177,7 +177,7 @@ class EnginePlanTests(unittest.TestCase):
         self.assertEqual(exit_code, 0)
         self.assertIn("Build plan (onscripter-nx, nro):", output)
         self.assertIn("artifact:  onscripter-nx-1.0.0.nro", output)
-        self.assertIn("9 checks: 0 fail, 0 warn", output)
+        self.assertIn("10 checks: 0 fail, 1 warn", output)
         for step in ["manifest", "source", "prepare-content", "compile", "artifact", "verify"]:
             self.assertIn("[%s]" % step, output)
         self.assertIn("src/engine/romfs", output)

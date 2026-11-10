@@ -5,45 +5,66 @@ id: krkrsdl2
 display_name: KiriKiri SDL2
 upstream_url: https://github.com/krkrsdl2/krkrsdl2
 pinned_commit: 124bdf841f09e7ce02aa99b7b55791a0f7a900ff
-pinned_version: "krkrsdl2@124bdf84 (2026-10-01)"
+pinned_version: krkrsdl2@124bdf84 (2026-10-01)
 license_spdx: MIT
 license_url: https://github.com/krkrsdl2/krkrsdl2/blob/main/LICENSE
-license_notes: >-
-  Upstream LICENSE (1063 bytes, Kirikiri SDL2 Developers) is MIT. Bundled
-  submodules (krkrz / FAudio / simde / zlib) keep their own licenses; the
-  upstream README states that src is MIT and third-party components are not GPL.
+license_notes: Upstream LICENSE (1063 bytes, Kirikiri SDL2 Developers) is MIT. Bundled submodules (krkrz
+  / FAudio / simde / zlib) keep their own licenses; the upstream README states that src is MIT and third-party
+  components are not GPL.
 target_kind: nro
 build_backend: cmake-switch
 capabilities:
-  video:
+  graphics:
     supported: true
     note: SDL2 renderer through switch-sdl2 + EGL (Mesa Nouveau).
+    verification: emulator_verified
+    backend: sdl2-egl
+  movie:
+    supported: true
+    note: Upstream movie path (FFmpeg/AVI) is linked but no run has exercised video playback.
+    verification: unknown
+    backend: ffmpeg
   audio:
     supported: true
-    note: FAudio (built from external/FAudio) plus the SDL2 audio device.
+    note: FAudio (built from external/FAudio) plus the SDL2 audio device; no run has verified sound output.
+    verification: unknown
+    backend: faudio+sdl2
   input:
     supported: true
-    note: SDL2 joystick/keyboard; the GalNX input layer injects keyboard/mouse events.
+    note: SDL2 joystick/keyboard; the GalNX input layer injects keyboard/mouse events. Citron M1 title
+      + advance passed.
+    verification: emulator_verified
   save:
     supported: true
-    note: KiriKiri save data through the libnx save namespace (per-title).
+    note: KiriKiri save data through the libnx save namespace (per-title); not exercised in the M1 run.
+    verification: unknown
   touch:
     supported: false
     note: Not wired in the upstream SDL2 backend.
+    verification: unknown
 default_input_profile: krkrsdl2
-artifact_naming: "{id}-{version}.nro"
+artifact_naming: '{id}-{version}.nro'
 content_layout:
   mode: romfs
   entry: data.xp3
   destination: romfs/data.xp3
-  notes: >-
-    Upstream CMake takes -DEMBED_DATA_PATH=<file> and embeds it as
-    romfs/<basename> through elf2nro.
-status: ready
+  notes: Upstream CMake takes -DEMBED_DATA_PATH=<file> and embeds it as romfs/<basename> through elf2nro.
+status: research
+status_reason: 'Emulator-level only: a clean GalNX build renders the title screen and advances text in
+  Citron Nightly 0237a9b88, but no Switch hardware run exists yet, audio/movie/save are unverified and
+  the engine has no on-device launcher/menu work. Use it for build plans and emulator experiments, not
+  for device claims.'
+artifact_sha256: ''
 evidence_urls:
+- docs/builds/001-krkrsdl2-upstream.md
+- docs/builds/004-krkrsdl2-switch-fixes.md
+- docs/audit/01-engines.md
+notes: GalNX pins the commit and applies four compatibility patches recorded in docs/builds/patches/krkrsdl2-switch-emulator/.
+verification:
+  status: emulator_verified
+  hardware: Citron Nightly 0237a9b88 (Windows, Vulkan)
+  tested_at: '2026-10-26'
+  notes: Title screen plus input passed in Citron; no Switch hardware run.
+  evidence:
   - docs/builds/001-krkrsdl2-upstream.md
   - docs/builds/004-krkrsdl2-switch-fixes.md
-  - docs/audit/01-engines.md
-notes: >-
-  GalNX pins the commit and applies four compatibility patches recorded in
-  docs/builds/patches/krkrsdl2-switch-emulator/.

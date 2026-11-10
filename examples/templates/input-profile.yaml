@@ -1,0 +1,19 @@
+# GalNX input profile template.
+# A profile maps physical Switch buttons onto GalNX semantic actions; also
+# reference it from a game manifest with:  input.profile: my-profile
+# Validate with:  python -m galnx input validate --profile <this-file>
+name: my-profile
+description: Template profile - copy, rename and validate before use.
+button_map:
+  advance_text: [A]
+  confirm_choice: [A]
+  back: [B]
+  open_menu: [PLUS]
+  show_history: [Y]
+  auto_mode: [X]
+  skip_hold: [R]
+hotkeys:
+  toggle_mode: "L+R+PLUS"
+  soft_reset: "L+R+MINUS"
+analog:
+  deadzone: 0.25

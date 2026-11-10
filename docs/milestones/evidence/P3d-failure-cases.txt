@@ -24,7 +24,7 @@ finished=2026-10-30T00:21:28Z
 --- run.log ---
 launch mode : runas-deelevated
 wrapper     : D:\devkitPro\msys2\tmp\galnx-harness\launch-20261030-081901-m1-sdl2.cmd
-cmdline     : "E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\web-02\citron\citron.exe" -g "C:\Users\ACETaffy\AppData\Roaming\citron\sdmc\switch\galnx-harness\m1-sdl2.nro"
+cmdline     : "E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\web-02\citron\citron.exe" -g "C:\Users\<user>\AppData\Roaming\citron\sdmc\switch\galnx-harness\m1-sdl2.nro"
 game type   : nro
 game path   : /e/galnx-build/m1-sdl2/m1-sdl2.nro
 stage path  : /c/Users/ACETaffy/AppData/Roaming/citron/sdmc/switch/galnx-harness/m1-sdl2.nro
@@ -56,7 +56,7 @@ finished=2026-10-30T00:31:05Z
 --- run.log ---
 launch mode : schtasks-limited
 wrapper     : D:\devkitPro\msys2\tmp\galnx-harness\launch-20261030-082919-m1-sdl2.cmd
-cmdline     : "E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\web-02\citron\citron.exe" -g "C:\Users\ACETaffy\AppData\Roaming\citron\sdmc\switch\galnx-harness\m1-sdl2.nro"
+cmdline     : "E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\web-02\citron\citron.exe" -g "C:\Users\<user>\AppData\Roaming\citron\sdmc\switch\galnx-harness\m1-sdl2.nro"
 game type   : nro
 game path   : /e/galnx-build/m1-sdl2/m1-sdl2.nro
 stage path  : /c/Users/ACETaffy/AppData/Roaming/citron/sdmc/switch/galnx-harness/m1-sdl2.nro

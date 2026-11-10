@@ -66,8 +66,8 @@ M4（Web 路线）前置验证：H1 Citron Neo nightly 能否加载 Brewser 预�
 ### 4.3 启动方式
 
 - CLI（`src/citron/main.cpp` 实测）：`citron.exe` 参数 `args.size()==2` 且不以 `-` 开头时直接作为 game path；另有 `-f`（全屏）、`-u <user>`、`-g <path>`。
-- wrapper（无空格路径，供 runas 调用）：`C:\Users\ACETaffy\glx\launch-citron-brewser.cmd`：`@echo off` / `cd /d "<citron 解压目录>"` / `"citron.exe" -g "<sdmc>\switch\brewser.nro"`。
-- 启动：`powershell Start-Process runas.exe -ArgumentList '/trustlevel:0x20000','C:\Users\ACETaffy\glx\launch-citron-brewser.cmd'`。本 agent shell 为 elevated 会话，为与 web-01 工作流一致用 runas 去提权启动；**Citron 本身是否拒绝管理员运行未单独验证**。
+- wrapper（无空格路径，供 runas 调用）：`C:\Users\<user>\glx\launch-citron-brewser.cmd`：`@echo off` / `cd /d "<citron 解压目录>"` / `"citron.exe" -g "<sdmc>\switch\brewser.nro"`。
+- 启动：`powershell Start-Process runas.exe -ArgumentList '/trustlevel:0x20000','C:\Users\<user>\glx\launch-citron-brewser.cmd'`。本 agent shell 为 elevated 会话，为与 web-01 工作流一致用 runas 去提权启动；**Citron 本身是否拒绝管理员运行未单独验证**。
 
 ## 5. 探针页（`probe.html`，全文见附录 A）
 
@@ -187,7 +187,7 @@ powershell -NoProfile -Command "Expand-Archive -Path Citron-msvc.zip -Destinatio
 # 4) 部署 SD：%APPDATA%/citron/sdmc/switch/{brewser.nro, hbmenu.nro, brewser/configs/config.json, brewser/shell/probe.html}
 # 5) 启动（elevated shell 下经 runas 去提权）
 #    launch-citron-brewser.cmd: cd /d <citron dir> && citron.exe -g <...>\brewser.nro
-powershell Start-Process runas.exe -ArgumentList '/trustlevel:0x20000','C:\Users\ACETaffy\glx\launch-citron-brewser.cmd'
+powershell Start-Process runas.exe -ArgumentList '/trustlevel:0x20000','C:\Users\<user>\glx\launch-citron-brewser.cmd'
 # 6) 截图窗口（标题含 'brewser (64-bit)'）并读取 %APPDATA%/citron/log/citron_log.txt
 ```
 
@@ -279,7 +279,7 @@ canvas { border: 4px solid #44aaff; background-color: #000000; margin-top: 12px;
 ```text
 sdmc/switch/brewser/configs/config.json: {"autorunApp":"brewser://probe/"}
 
-C:\Users\ACETaffy\glx\launch-citron-brewser.cmd:
+C:\Users\<user>\glx\launch-citron-brewser.cmd:
 @echo off
 cd /d "E:\Othergames\Nintendo Switch\Workspace\GalNX\workspaces\web-02\citron"
 "citron.exe" -g "%APPDATA%\citron\sdmc\switch\brewser.nro"

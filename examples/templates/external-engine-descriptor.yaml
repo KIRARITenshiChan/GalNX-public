@@ -1,0 +1,51 @@
+# GalNX external engine descriptor template.
+# Use this when the engine adapter is not built into GalNX. Register it from a
+# game manifest with:  engine.adapter: custom (or any slug) + engine.descriptor:
+# <path to this file>. Descriptors document identity, license, capabilities and
+# verification state; they never execute a build.
+id: my-engine
+display_name: My engine adapter
+upstream_url: https://example.com/my-engine
+# Builds from source must pin an exact 40-hex commit (the template uses a
+# placeholder all-zero commit; replace it with the real pin).
+pinned_commit: "0000000000000000000000000000000000000000"
+pinned_version: "0.0.0"
+license_spdx: MIT
+license_url: https://example.com/my-engine/blob/main/LICENSE
+license_notes: Replace with the real license situation, including bundled runtimes.
+target_kind: nro
+build_backend: custom-script
+capabilities:
+  graphics:
+    supported: true
+    note: Describe the renderer and how it was checked.
+    verification: unknown
+    backend: sdl2-egl
+  movie:
+    supported: false
+    note: No movie playback yet.
+    verification: unknown
+  audio:
+    supported: true
+    note: Describe the audio backend.
+    verification: unknown
+    backend: sdl2-mixer
+  input:
+    supported: true
+    note: Controller mapping is documented in the input profile.
+    verification: unknown
+  save:
+    supported: false
+    note: Saves are not implemented.
+    verification: unknown
+  touch:
+    supported: false
+    note: Touch input is not exposed.
+default_input_profile: kb_mouse
+artifact_naming: "{id}-{version}.nro"
+content_layout:
+  mode: romfs
+  entry: game
+  destination: "romfs:/game"
+status: research
+status_reason: "Template only: replace this with the real verification state (see docs/engines/verification-matrix.md)."

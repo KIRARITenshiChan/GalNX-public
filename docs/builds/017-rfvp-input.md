@@ -23,7 +23,7 @@
 | 产物 | `target/rfvp-switch/switch/rfvp.nro`（增量构建约 11–15 s） |
 | 模拟器 | Citron Nightly `0237a9b88`（GPL-3.0-or-later），Vulkan |
 | harness | `scripts/citron_run.sh --detach --input-steps 'wait:MS;capture:NAME;key:LIST'`（PowerShell 侧 PostMessage 逐键注入，**不能同时按住两个键**） |
-| guest 数据 | `C:/Users/ACETaffy/AppData/Roaming/citron/sdmc/switch/rfvp/game`（IROSEKA_FHD 解包数据，default.ttf=Sarasa Gothic SC Bold，nls=GBK） |
+| guest 数据 | `C:/Users/<user>/AppData/Roaming/citron/sdmc/switch/rfvp/game`（IROSEKA_FHD 解包数据，default.ttf=Sarasa Gothic SC Bold，nls=GBK） |
 | 存档根 | `sdmc/switch/rfvp/saves/iroseka-2ae7dc8e/save/`（文件名规则 `rfvp_s{slot:03}.bin`，见 `crates/rfvp/src/subsystem/resources/save_manager.rs:91`） |
 
 Citron 侧键盘→手柄重映射（`qt-config.ini [Controls]`，用于 harness 喂手柄）：
@@ -150,7 +150,7 @@ git apply docs/builds/patches/rfvp-switch/rfvp-input.patch
 # 构建（增量）
 bash /e/galnx-build/m5-switch-build3.sh
 # 运行（Citron，harness detach）
-export CITRON_USER_DIR="C:/Users/ACETaffy/AppData/Roaming/citron"
+export CITRON_USER_DIR="C:/Users/<user>/AppData/Roaming/citron"
 export TEMP=/c/Users/ACETaffy/AppData/Local/Temp
 cd '/e/Othergames/Nintendo Switch/Workspace/GalNX'
 bash scripts/citron_run.sh --nro E:/galnx-build/m5-rfvp/target/rfvp-switch/switch/rfvp.nro \

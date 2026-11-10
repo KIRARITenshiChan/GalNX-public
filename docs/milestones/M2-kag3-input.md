@@ -60,7 +60,7 @@
 | Initialize.tjs | 约 240 行 | 启动顺序：KAGLoadScript 列表、new KAGWindow() | E:/galnx-build/m1-content/demo/external/kag3/data/system/Initialize.tjs |
 | SDLApplication.cpp | 3,370 行（92,886 B） | Switch 端 SDL2→TJS VK 键/鼠标/触摸/手柄桥 | E:/galnx-build/m1-krkrsdl2/src/core/sdl2/SDLApplication.cpp |
 | first.ks / snow.ks | 628 / 283 行 | DEMO 剧本：链接菜单、[l]/[p]/[r] 等待点的实际用法 | E:/galnx-build/m1-content/demo/data-demo/scenario/first.ks |
-| qt-config.ini（Citron） | 1,376 行 | Citron 模拟器键盘→Switch 手柄映射 | C:/Users/ACETaffy/AppData/Roaming/citron/config/qt-config.ini |
+| qt-config.ini（Citron） | 1,376 行 | Citron 模拟器键盘→Switch 手柄映射 | C:/Users/<user>/AppData/Roaming/citron/config/qt-config.ini |
 
 > 说明：KAG3 侧文件名在 system/ 与 system_polyfill/ 的差异是本次取证的关键：**krkrsdl2/krkrz 均不含 KAGParser 与 MenuItem 的原生实现**，DEMO 由 polyfill 提供（`grep KAGParser` 在 E:/galnx-build/m1-krkrsdl2 全树 0 命中；`grep MenuItem` 在 krkrz 全树仅命中 win32/android 的平台消息字符串）。
 
@@ -85,7 +85,7 @@
 
 **关键细节（原文）**：createPadKeyMap L663-697 注释「十字キーはキーボードのカーソルキーにマッピング、ボタン1 は Return、ボタン2 は ESC、ボタン3 は メッセージ履歴の表示」；反向 `padKeyMapReverse` 使 `getKeyState(键盘键)` 能感知对应手柄键（L699-713），这是「按住手柄 A 也算按住 Enter」的依据。
 
-### 2.2 Citron 模拟器键盘映射（实测 C:/Users/ACETaffy/AppData/Roaming/citron/config/qt-config.ini）
+### 2.2 Citron 模拟器键盘映射（实测 C:/Users/<user>/AppData/Roaming/citron/config/qt-config.ini）
 
 | Switch 键 | 键盘键 | Qt key code | 配置行 |
 | --- | --- | --- | --- |
@@ -405,7 +405,7 @@
 
 ### 9.3 模拟器配置
 
-- C:/Users/ACETaffy/AppData/Roaming/citron/config/qt-config.ini：L66-69、L279-330（player_0 键位）
+- C:/Users/<user>/AppData/Roaming/citron/config/qt-config.ini：L66-69、L279-330（player_0 键位）
 
 ---
 
