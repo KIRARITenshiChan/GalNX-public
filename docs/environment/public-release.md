@@ -63,7 +63,7 @@ cd "E:/Othergames/Nintendo Switch/Workspace/GalNX"
 python scripts/public_release_publish.py \
   --mirror E:/galnx-build/public/GalNX-public
 # 首次会自动 git init -b main 并提交第一个快照；提交信息形如
-#   Public snapshot of private commit 265153f
+#   Public snapshot of private commit 7306669
 ```
 
 后续同步（私有仓库有新提交后）：
@@ -109,6 +109,12 @@ git filter-repo --force --invert-paths \
 ```
 
 重写后所有 commit 哈希都会变；`docs/builds/` 里引用的证据路径会失效，需要按第 5 节复查。
+
+### 4.5 发布记录
+
+| 日期 | 私有源 commit | 公开 commit | 快照规模 | 说明 |
+| --- | --- | --- | --- | --- |
+| 2026-11-10 | `7306669` | `ff49e0d` | 967 文件 / 24,286,065 B（排除 351） | 首次公开快照：建空仓库 `GalNX-public` 后推送，公开历史从 1 个 commit 开始 |
 
 ## 5. 发布前验收清单
 

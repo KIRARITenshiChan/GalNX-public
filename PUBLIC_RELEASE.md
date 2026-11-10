@@ -2,8 +2,8 @@
 
 This directory is a sanitized snapshot, not the full repository.
 
-- Source commit: 7306669
-- Generated (UTC): 2026-11-10T12:13:58Z
+- Source commit: fac1f44
+- Generated (UTC): 2026-11-10T12:24:59Z
 - Kept tracked files: 967
 - Excluded game-art files: 351
 - Markdown references rewritten: 0 in 0 files
