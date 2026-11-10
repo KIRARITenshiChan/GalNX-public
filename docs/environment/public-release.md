@@ -116,6 +116,8 @@ git filter-repo --force --invert-paths \
 | --- | --- | --- | --- | --- |
 | 2026-11-10 | `7306669` | `ff49e0d` | 967 文件 / 24,286,065 B（排除 351） | 首次公开快照：建空仓库 `GalNX-public` 后推送，公开历史从 1 个 commit 开始 |
 
+上表只登记「发布事件」；日常增量同步按 4.2 执行，不再逐条登记。任一快照对应的私有源 commit 都写在公开树的 `PUBLIC_RELEASE.md` 中，可用它反查是哪个私有提交导出的。
+
 ## 5. 发布前验收清单
 
 - [ ] `python scripts/public_release_sanitize.py ...` 退出码 0，输出 `excluded` 数与 `PUBLIC_RELEASE_ART_EXCLUSIONS.txt` 行数一致；
