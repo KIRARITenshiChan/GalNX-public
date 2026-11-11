@@ -1,0 +1,41 @@
+# GalNX quickstart - the smallest manifest that really builds.
+#
+# Unlike the pilot manifests this example declares build.commands and
+# build.artifact, so `galnx build run` executes a tool and verifies a product.
+# It needs Python only: no devkitPro, no Rust, no game data.
+schema_version: 1
+
+game:
+  id: quickstart-demo
+  title: "GalNX quickstart demo"
+  version: "0.0.0"
+  # Preflight resolves this path against the current directory; run the CLI
+  # from the repository root (see README.md in this directory).
+  source_dir: "examples/quickstart/content"
+  notes: "Small text assets that ship with the repository; not game data."
+
+engine:
+  adapter: krkrsdl2
+  adapter_version: "krkrsdl2@124bdf84 (2026-10-01)"
+  entry: demo.txt
+
+switch:
+  title_id: "010047414C4E0000"
+  title: "QuickstartDemo"
+  author: "GalNX"
+  target: nro
+
+build:
+  output_dir: "out"
+  commands:
+    - ["python", "tools/pack_demo.py", "content"]
+  workdir: "."
+  artifact: "out/demo.pak"
+  timeout_s: 60
+  # The cache key needs an explicit input set; without it a cacheable build is
+  # refused. Changing either input below invalidates the cached artifact.
+  inputs:
+    - path: content
+      kind: tree
+    - path: tools/pack_demo.py
+      kind: file

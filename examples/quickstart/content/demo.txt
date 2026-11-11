@@ -1,0 +1,2 @@
+GalNX quickstart demo content.
+This file is packed into out/demo.pak by tools/pack_demo.py.

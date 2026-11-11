@@ -1,6 +1,8 @@
 """Tests for build.inputs digests and toolchain component degradation."""
 from __future__ import annotations
 
+import contextlib
+import io
 import json
 import sys
 import tempfile
@@ -8,10 +10,12 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
+import yaml
+
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from galnx import build  # noqa: E402
+from galnx import build, cli  # noqa: E402
 from galnx.build.config import BuildError  # noqa: E402
 
 SCHEMA_PATH = ROOT / "schemas" / "game-manifest.schema.json"
@@ -368,6 +372,173 @@ class ManifestSchemaInputTests(unittest.TestCase):
             errors = self.errors(self.manifest(inputs=[item]))
             self.assertTrue(errors, item)
         self.assertTrue(self.errors(self.manifest(toolchain_components=[])))
+
+BUILD_SCRIPT = """import argparse
+from pathlib import Path
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--out", required=True)
+args = parser.parse_args()
+out = Path(args.out)
+out.parent.mkdir(parents=True, exist_ok=True)
+out.write_bytes(b"galnx-fix04-demo")
+print("wrote", out)
+"""
+
+
+class MissingInputsCacheTests(unittest.TestCase):
+    """FIX-04: a project with build.commands but no build.inputs must not cache."""
+
+    REASON = "build.inputs is not declared: cache disabled for this project"
+
+    def test_payload_blocks_cache_when_inputs_are_missing(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            current = payload(
+                root,
+                commands=[["python", "build.py"]],
+                artifact="out/demo.bin",
+            )
+            cache = current["cache"]
+            self.assertFalse(cache["inputs_declared"])
+            self.assertEqual(cache["blocking_reasons"], [self.REASON])
+            self.assertEqual(cache["miss_reasons"], [self.REASON])
+            # build.inputs itself is not invalid - it simply was not declared.
+            self.assertEqual(current["inputs"]["state"], "ok")
+
+    def test_payload_not_blocked_once_inputs_are_declared(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write(root / "src" / "main.c", b"int main(void){return 0;}")
+            current = payload(
+                root,
+                commands=[["python", "build.py"]],
+                artifact="out/demo.bin",
+                inputs=[{"path": "src"}],
+            )
+            cache = current["cache"]
+            self.assertTrue(cache["inputs_declared"])
+            self.assertEqual(cache["blocking_reasons"], [])
+            self.assertEqual(cache["miss_reasons"], [])
+
+    def test_payload_without_commands_is_not_blocked(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            current = payload(Path(tmp))
+            cache = current["cache"]
+            self.assertFalse(cache["inputs_declared"])
+            self.assertEqual(cache["blocking_reasons"], [])
+            self.assertEqual(cache["miss_reasons"], [])
+
+
+class BatchMissingInputsCacheCliTests(unittest.TestCase):
+    """End-to-end: batch build never caches when build.inputs is not declared."""
+
+    REASON = MissingInputsCacheTests.REASON
+
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.root = Path(self._tmp.name)
+        (self.root / "build.py").write_text(BUILD_SCRIPT, encoding="utf-8")
+        source = self.root / "games" / "demo"
+        source.mkdir(parents=True)
+        (source / "data.xp3").write_text("placeholder\n", encoding="utf-8")
+        self.write_manifest()
+
+    def tearDown(self) -> None:
+        self._tmp.cleanup()
+
+    def write_manifest(self, inputs: list[dict] | None = None) -> None:
+        build_section: dict = {
+            "output_dir": str(self.root / "out" / "demo"),
+            "clean_workspace_before_build": True,
+            "reproducible": True,
+            "keys_env": "GALNX_PROD_KEYS",
+            "commands": [[sys.executable, "build.py", "--out", "out/demo.bin"]],
+            "artifact": "out/demo.bin",
+            "timeout_s": 60,
+        }
+        if inputs is not None:
+            build_section["inputs"] = inputs
+        manifest = {
+            "schema_version": 1,
+            "game": {
+                "id": "demo",
+                "title": "Demo",
+                "source_dir": str(self.root / "games" / "demo"),
+            },
+            "engine": {
+                "adapter": "krkrsdl2",
+                "adapter_version": "krkrsdl2@124bdf84 (2026-10-01)",
+                "profile": "default",
+                "entry": "data.xp3",
+            },
+            "switch": {
+                "title_id": "010047410000A001",
+                "target": "nro",
+                "display_mode": "handheld",
+            },
+            "build": build_section,
+        }
+        (self.root / "demo.yaml").write_text(
+            yaml.safe_dump(manifest, sort_keys=False), encoding="utf-8"
+        )
+
+    def run_cli(self, *args: str) -> tuple[int, str]:
+        stream = io.StringIO()
+        with contextlib.redirect_stdout(stream):
+            code = cli.main(list(args))
+        return code, stream.getvalue()
+
+    def build_report(self) -> dict:
+        code, output = self.run_cli(
+            "batch", "build", "--yes", "--dir", str(self.root), "--json"
+        )
+        self.assertEqual(code, 0, output)
+        return json.loads(output)
+
+    def cache_entries(self) -> list[Path]:
+        return list((self.root / ".galnx" / "cache").glob("*/meta.json"))
+
+    def test_undeclared_inputs_always_miss_and_write_no_cache(self) -> None:
+        for _ in range(2):
+            report = self.build_report()
+            project = report["projects"][0]
+            checks = {check["id"]: check for check in project["checks"]}
+            self.assertIn("cache.miss", checks)
+            self.assertIn(self.REASON, checks["cache.miss"]["detail"])
+            self.assertEqual(checks["cache.miss"]["status"], "warn")
+            self.assertNotIn("cache.hit", checks)
+            self.assertFalse(project["cache"]["hit"])
+            # Blocked builds carry an empty key, so the existing totals
+            # definition (which requires a key) does not count them as miss.
+            self.assertEqual(project["cache"]["key"], "")
+            self.assertEqual(report["totals"]["cache_hits"], 0)
+            self.assertEqual(report["totals"]["built"], 1)
+        self.assertEqual(self.cache_entries(), [])
+
+    def test_declared_inputs_miss_then_hit_and_follow_content(self) -> None:
+        self.write_manifest(inputs=[{"path": "build.py", "kind": "file"}])
+        first = self.build_report()
+        self.assertFalse(first["projects"][0]["cache"]["hit"])
+        self.assertEqual(len(self.cache_entries()), 1)
+
+        second = self.build_report()
+        project = second["projects"][0]
+        self.assertTrue(project["cache"]["hit"])
+        self.assertIn("cache.hit", {check["id"] for check in project["checks"]})
+        key = project["cache"]["key"]
+
+        (self.root / "build.py").write_text(
+            BUILD_SCRIPT + "\n# touched\n", encoding="utf-8"
+        )
+        third = self.build_report()
+        changed = third["projects"][0]
+        self.assertFalse(changed["cache"]["hit"])
+        self.assertNotEqual(changed["cache"]["key"], key)
+        self.assertEqual(len(self.cache_entries()), 2)
+
+        fourth = self.build_report()
+        self.assertTrue(fourth["projects"][0]["cache"]["hit"])
 
 
 if __name__ == "__main__":

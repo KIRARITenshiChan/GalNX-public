@@ -39,6 +39,7 @@ galnx doctor
 `additionalProperties: false`：拼错字段名直接报错，避免“看起来生效其实没生效”。
 - `build.inputs` 中的相对路径按 manifest 所在目录解析；`kind: tree` 会递归收集文件、按相对 POSIX 路径排序后计算 sha256 摘要，任意层级的 `.git`/`.galnx` 恒被忽略，`ignore` 使用 fnmatch 语义（不支持 `!` 取反）。
 - 缓存条目 schema 已升到 2：旧 schema 条目会被当作缺失处理（安全重建），不需要手工清理 `.galnx/cache`。
+- 未声明 `build.inputs` 的工程不参与构建缓存：声明了 `build.commands` 但没有 `build.inputs` 时，缓存一律按 miss 处理并给出 `cache.miss` 警告（不读也不写 `.galnx/cache`），避免源文件变化后复用旧产物；需要缓存必须显式声明 `inputs`。
 
 ## 校验规则（`preflight`）
 
@@ -56,6 +57,7 @@ galnx doctor
 一份 manifest 里的 `build.commands` 会在本机直接执行（argv 数组或 shell 字符串），因此把别人给的 manifest 当成代码来对待：
 
 - **先看后跑**：`galnx build run` 在 spawn 之前总是先打印解析后的执行计划——每条命令、`cwd`、`timeout`、以及 manifest 分配的**环境变量名**（名字命中 `KEY|TOKEN|SECRET|PASSWORD` 的值显示为 `(value hidden)`，值永不打印）。交互式终端下会再问一次 `Execute these commands? [y/N]`，回答不是 y/yes 就中止；CI 用 `--yes` 跳过确认，但计划仍会打印。
+- **非交互不默认放行**：stdin 不是 TTY 且没有显式 `--yes` 时，`galnx build run` 与 `galnx batch build` 一律**拒绝执行**命令，stderr 打印 `refusing to execute build.commands: no interactive terminal and no --yes; re-run with --yes to execute`，退出码 2，且不创建任何产物——无头环境/CI/被管道调用的脚本必须自己传 `--yes`。
 - **只读预演**：`galnx build run --dry-run` 只解析并打印计划、绝不 spawn；`--json` 时计划走 stderr、报告走 stdout，便于管道消费。
 - **不静默跳过**：声明了 `artifact` 却没有 `commands`（或反之）在解析阶段直接报错；两者都没有时执行状态是 `not_configured`，CLI 退出码 3、batch 报告 `build_state=not_configured`，不会被算成构建成功。
 - **路径不越界**：`build.workdir` 缺省为 manifest 所在目录；`build.artifact` 必须落在 `workdir` 内（`..` 逃逸直接报错）；`game.output_dir` 同样做越界与 Windows MAX_PATH 检查。

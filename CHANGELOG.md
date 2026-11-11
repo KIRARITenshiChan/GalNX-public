@@ -108,6 +108,28 @@ four self-contained Chinese-language NSPs, all unsigned homebrew builds:
   the only warning is the expected "unsigned homebrew" NCA signature).
 - The public mirror contains no game screenshots, covers or captured game data.
 
+### Fixed (post-review FIX round)
+
+- **Non-interactive builds are fail-closed** (`src/galnx/cli.py`): `build run`
+  and `batch build` refuse to execute `build.commands` when stdin is not a TTY
+  and `--yes` is absent (exit code 2, fixed stderr message, no artifact);
+  `_confirm_execution()` treats `EOFError` as a decline so Windows `NUL` no
+  longer produces a traceback. Interactive sessions still ask `[y/N]`.
+- **Runnable build example** (`examples/quickstart/`): a self-contained
+  manifest, deterministic Python packer (`tools/pack_demo.py`, `GALNXPK1`),
+  content files and README prove the manifest→plan→execute→cache→artifact
+  loop from a clean tree without devkitPro; CI gained a
+  `Minimal build example (quickstart)` step.
+- **Empty `build.inputs` disables caching** (`src/galnx/build/cache.py`):
+  a project that declares `build.commands` without `build.inputs` now gets a
+  blocking `build.inputs is not declared: cache disabled for this project`
+  reason and neither reads nor writes the cache; the cache payload reports
+  `inputs_declared`.
+- **Verification levels follow evidence**: Pilot-04 (AKASEKA HD) is reported
+  as `device_verified` instead of `game_verified` at the game level because
+  the full story / save-load / soak sign-off is missing; the rfvp descriptor,
+  verification matrix, engine docs and device-acceptance index were aligned.
+
 ### Security
 
 - `prod.keys` / `title.keys` never enter the repository, logs or CI; the NSP

@@ -330,17 +330,27 @@ def build_inputs_digest(config: BuildConfig, base: Path | str) -> dict[str, Any]
 def _cache_reason_sections(
     toolchain: Mapping[str, Any],
     inputs: Mapping[str, Any],
+    *,
+    commands_declared: bool = False,
+    inputs_declared: bool = True,
 ) -> tuple[list[str], list[str]]:
     """Split cache validity reasons into (blocking, degraded).
 
-    blocking: a required build.inputs entry is missing or unreadable, so its
-    digest is meaningless and neither reading nor writing the cache is safe.
+    blocking: neither reading nor writing the cache is safe. This happens when
+    a required build.inputs entry is missing or unreadable, and also when a
+    project declares build.commands but no build.inputs at all: without a
+    declared input set the cache key cannot describe the build inputs, so a
+    stale artifact could be reused after the sources changed.
     degraded: a toolchain component version is unknown. The unknown marker is
     part of the cache key and surfaced as a warning, but a local cache entry is
     still usable (the cache lives under the project root, not across machines).
     """
     blocking: list[str] = []
     degraded: list[str] = []
+    if commands_declared and not inputs_declared:
+        blocking.append(
+            "build.inputs is not declared: cache disabled for this project"
+        )
     unknown = list(toolchain.get("degraded") or [])
     if unknown:
         degraded.append(
@@ -358,8 +368,16 @@ def _cache_reason_sections(
 def _cache_miss_reasons(
     toolchain: Mapping[str, Any],
     inputs: Mapping[str, Any],
+    *,
+    commands_declared: bool = False,
+    inputs_declared: bool = True,
 ) -> list[str]:
-    blocking, degraded = _cache_reason_sections(toolchain, inputs)
+    blocking, degraded = _cache_reason_sections(
+        toolchain,
+        inputs,
+        commands_declared=commands_declared,
+        inputs_declared=inputs_declared,
+    )
     return blocking + degraded
 
 
@@ -390,7 +408,14 @@ def cache_payload(
     toolchain = _toolchain_section(fingerprint_map, components)
     base = _manifest_base(manifest_ref, root)
     inputs = build_inputs_digest(config, base)
-    blocking_reasons, degraded_reasons = _cache_reason_sections(toolchain, inputs)
+    commands_declared = bool(getattr(config, "has_commands", False) or config.commands)
+    inputs_declared = bool(config.inputs)
+    blocking_reasons, degraded_reasons = _cache_reason_sections(
+        toolchain,
+        inputs,
+        commands_declared=commands_declared,
+        inputs_declared=inputs_declared,
+    )
     return {
         "schema": CACHE_SCHEMA_VERSION,
         "manifest": Path(manifest_ref).as_posix(),
@@ -407,9 +432,10 @@ def cache_payload(
         "toolchain": toolchain,
         "host_platform": host_platform(),
         "cache": {
-            "miss_reasons": _cache_miss_reasons(toolchain, inputs),
+            "miss_reasons": blocking_reasons + degraded_reasons,
             "blocking_reasons": blocking_reasons,
             "degraded_reasons": degraded_reasons,
+            "inputs_declared": inputs_declared,
         },
     }
 

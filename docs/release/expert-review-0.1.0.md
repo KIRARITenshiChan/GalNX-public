@@ -651,3 +651,34 @@ GalNX 当前不需要推翻架构，也不需要为了 0.1 增加更多引擎或
 - P2-2 部署模式、P2-3 兼容性数据库、P2-4 NS Launcher。
 - 跨平台构建（当前 CI 与构建链只验证 Windows）。
 - 真机性能长跑（P50/P95/P99、OP 长视频 soak）与 IROSEKA/MOYU 的 1080p OP 可选启用。
+
+## 12. FIX 一轮（复审后收口，2026-11-11）
+
+复审（用户 m42143 转来的 6 项表格）之后，本仓库按风险顺序完成 FIX-01..FIX-06；全部在同一工作树内验证，未新增游戏功能，GLES2 零拷贝 / 更多引擎 / GUI / NS Launcher 按要求留到 0.1 之后。
+
+| 编号 | 结论 | 关键改动 | 证据 |
+| --- | --- | --- | --- |
+| FIX-01 非 TTY 构建确认绕过 | 完成（fail-closed） | `build run` / `batch build` 非 TTY 且无 `--yes` ⇒ 退出码 2 且不执行；`EOFError` 视为拒绝；`docs/MANIFEST.md` 增「非交互不默认放行」 | `tests/test_build_contract.py` 19 passed；取证 `E:/galnx-build/fix01/evidence.json`（rc2 / NUL rc2 / `--yes` rc0） |
+| FIX-02 真正可执行的构建示例 | 完成 | `examples/quickstart/`（manifest + 确定性打包器 + 内容 + README）+ CI step；根目录 RUN1 `1 executed` → RUN2 `1 cache hit` | artifact 283 B sha256 `5982bb06…`、magic `GALNXPK1`；`tests/test_quickstart_example.py` |
+| FIX-03 Pilot-04 验证等级 | 完成 | `game_verified` → `device_verified`（缺口：剧情全流程/存档读档 soak/长时签收）；README、matrix、engine docs、device-acceptance 四处统一 | 152 passed / 12 subtests |
+| FIX-04 空 `build.inputs` 缓存保护 | 完成 | 声明 commands 未声明 inputs ⇒ blocking reason、不读不写缓存；cache 段 `inputs_declared` | 41 passed（+24 相邻回归）；报告 `docs/release/tasks/FIX-04.md` |
+| FIX-05 RFVP descriptor 旧信息 | 完成 | graphics/input 降级 `device_verified`，status_reason/notes 按 1.2.5 / 1.3.3 / 1.4.1-test 重写（pinned_commit、artifact sha 未变） | 与 `docs/engines/verification-matrix.md` 一致 |
+| FIX-06 重新生成发布快照 | 完成 | 重新导出 sanitized 树、审核 REVIEW、ZIP 解包复扫、更新 `PUBLIC_RELEASE.md` 时间/来源 commit，并在公开仓库干净 clone 上复跑 quickstart | 见 `docs/environment/public-release.md` §4.5 最新行 |
+
+### 12.1 与专家表的偏差
+
+1. **FIX-04 越界 1 行**：`tests/test_batch_build_cli.py:59` 的 fixture 补了 `inputs`（不在原 write scope），否则该文件既有 miss→hit/stale 用例必红；Lead 已批准，改动仅 1 行。
+2. **缓存键一次性失效**：新增 `inputs_declared` 字段使所有项目缓存键变化一次；语义是「一次性重建」而非数据错误，已写入 FIX-04 报告，未升 `CACHE_SCHEMA_VERSION`（blocking 在读写前判定，旧条目被自然忽略）。
+3. **FIX-02 不覆盖真实引擎构建**：示例刻意只用 Python 打包器，保证公开环境无需 devkitPro；真实引擎构建闭环仍以 pilot 清单与 `docs/builds/` 记录为准，已作为风险登记。
+
+### 12.2 验证数字（FIX 收敛后）
+
+- `PYTHONPATH=src GALNX_BUILD_ROOT=E:/galnx-build python -m pytest -q` → **747 passed / 63 subtests**（76.35 s）。
+- `python scripts/check_license_inventory.py --json` → rc 0、33 组件 / 4 产物 / 0 error / 2 warning（未随本轮变化）。
+- `scripts/public_release_sanitize.py` 重新导出 → BLOCK 0，REVIEW 数量与明细见发布记录；ZIP 已解包复扫。
+
+### 12.3 仍未做（0.1 之后）
+
+- GLES2 双平面零拷贝的扩大使用、更多引擎、GUI、NS Launcher（专家明确不建议并入本轮）。
+- Pilot-04 的剧情全流程 / 存档读档 / 长时 soak 签收（当前为 `device_verified`）。
+- 跨平台构建与真机性能长跑（P50/P95/P99、OP soak）。

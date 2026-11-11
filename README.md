@@ -11,7 +11,7 @@
 | Pilot-01 | 晴霁之后定是菜花盛开的好天气（CN） | `kirikiroid2-nx` | 自包含 NSP（romfs 2.87 GB） | A10 **1.0.9**，2,870,911,704 B sha256 `0efc23f6…` | **game_verified PASS**（2026-10-31，含中文 OP / 存档读档 / 干净退出） |
 | Pilot-02 | IROSEKA FHD（CN） | `rfvp` | 自包含 NSP（romfs 9.98 GB） | **1.2.5-test**，10,087,541,464 B sha256 `f6860842…` | **device_verified PASS**（OP / 映射 / 退出；P45 重建版本用户已确认） |
 | Pilot-03 | さくら、もゆ。（CN） | `rfvp` | 自包含 NSP（romfs 8.09 GB） | **1.3.3-test**，8,116,841,176 B sha256 `965ee356…` | **device_verified PASS**（含标题粒子修复；P45 重建版本用户已确认） |
-| Pilot-04 | AKASEKA HD 映入红瞳的世界 HD | `rfvp` | 自包含 NSP（romfs 6.72 GB） | **1.4.1-test**，6,738,209,496 B sha256 `db31a312…` | **game_verified PASS**（1080p H.264 OP 颜色正确且流畅 / 映射符合预期 / 干净退出） |
+| Pilot-04 | AKASEKA HD 映入红瞳的世界 HD | `rfvp` | 自包含 NSP（romfs 6.72 GB） | **1.4.1-test**，6,738,209,496 B sha256 `db31a312…` | **device_verified PASS**（1080p H.264 OP 颜色正确且流畅 / 映射符合预期 / 干净退出；缺剧情全流程与存档/读档验收） |
 
 rfvp 运行时目前具备：SDL2/GLES2 后端 **60 FPS**；电影路径 **H.264 + 真机 NVDEC 硬解 + NV12 双平面零拷贝**（1080p OP 实测 CPU 转换 7.3→1.8 ms、上传 8.29→3.11 MB/帧，单帧省约 9.5 ms；720p/540p/480p/360p 分档，软件 NV12→RGBA 回退）；资源三 LRU 缓存 + 启动预读 + zlib；大图异步解码与异步读档（CG 入口 632 → 273 ms）；惰性存档编码（逐句 112–135 → **5.3–5.8 ms**）；音频 JIT（延迟 ≈128 ms）；存档缩略图 GPU 下采样。
 
@@ -49,6 +49,16 @@ pip install -e .
 galnx doctor                 # 20 项环境检查
 galnx engines list           # 3 个内置适配器
 ```
+
+### 最小可跑示例（只需 Python）
+
+不想先装 devkitPro？用仓库自带的 quickstart 验证「manifest → 执行 → artifact → 缓存」整条链路：
+
+```bash
+PYTHONPATH=src python -m galnx build run --manifest examples/quickstart/manifest.yaml --yes
+```
+
+首跑会执行 `tools/pack_demo.py` 生成 `examples/quickstart/out/demo.pak`（约 283 B）；再跑一次命中缓存（`build: 0 executed, 0 not configured, 1 cache hit(s)`）。改动 `examples/quickstart/content/` 下任一文件后再跑，缓存失效并重新生成。该示例的 `game.source_dir` 相对当前目录解析，请**在仓库根执行**；完整说明见 [examples/quickstart/README.md](examples/quickstart/README.md)。
 
 用清单驱动（清单格式见 [docs/MANIFEST.md](docs/MANIFEST.md)；新移植请从 [examples/templates/](examples/templates/) 的模板起步，`examples/` 下其余清单是真实试点记录）：
 
@@ -213,7 +223,7 @@ tests/                pytest（见下方开发与测试）
 
 ```bash
 pip install -e .
-PYTHONPATH=src python -m pytest -q     # 737 passed / 63 subtests（Windows，清空环境）
+PYTHONPATH=src python -m pytest -q     # 747 passed / 63 subtests（Windows，清空环境）
 python scripts/check_license_inventory.py
 python scripts/public_release_sanitize.py --out .ci/public --force   # 0 BLOCK
 ```

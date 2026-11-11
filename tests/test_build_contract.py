@@ -39,6 +39,13 @@ def run_cli(argv: list[str]) -> tuple[int, str]:
     return code, stream.getvalue()
 
 
+def run_cli_split(argv: list[str]) -> tuple[int, str, str]:
+    out, err = io.StringIO(), io.StringIO()
+    with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+        code = cli.main(argv)
+    return code, out.getvalue(), err.getvalue()
+
+
 def write_yaml(path: Path, data) -> Path:
     path.write_text(yaml.safe_dump(data, sort_keys=False), encoding="utf-8")
     return path
@@ -200,6 +207,17 @@ class BuildContractCliTests(unittest.TestCase):
         self.assertIn("totals", payload)
         self.assertIn("build plan:", err.getvalue())
 
+    def test_build_run_refuses_non_interactive_without_yes(self) -> None:
+        manifest = self.manifest(configured_build(self.root))
+        # A piped / CI session cannot answer the confirmation prompt; the CLI
+        # must fail closed instead of executing build.commands.
+        code, output, errors = run_cli_split(["build", "run", "--manifest", str(manifest)])
+        self.assertEqual(code, 2, output)
+        self.assertIn("no interactive terminal and no --yes", errors)
+        self.assertIn("build plan:", output)
+        self.assertFalse((self.root / "out" / "demo.bin").exists())
+
+
     def test_engines_plan_is_plan_only(self) -> None:
         manifest = self.manifest(configured_build(self.root))
         code, output = run_cli(["engines", "plan", "--manifest", str(manifest), "--json"])
@@ -224,7 +242,7 @@ class BuildContractBatchTests(unittest.TestCase):
         self._tmp.cleanup()
 
     def test_batch_build_reports_not_configured_and_exits_3(self) -> None:
-        code, output = run_cli(["batch", "build", "--dir", str(self.root), "--json"])
+        code, output = run_cli(["batch", "build", "--yes", "--dir", str(self.root), "--json"])
         self.assertEqual(code, 3, output)
         report = json.loads(output)
         totals = report["totals"]
@@ -237,10 +255,30 @@ class BuildContractBatchTests(unittest.TestCase):
         self.assertIn("build.not_configured", check_ids)
         self.assertIn("cache.not_configured", check_ids)
 
+    def test_batch_build_refuses_non_interactive_without_yes(self) -> None:
+        code, output, errors = run_cli_split(["batch", "build", "--dir", str(self.root)])
+        self.assertEqual(code, 2, output)
+        self.assertIn("no interactive terminal and no --yes", errors)
+
+
     def test_batch_build_dry_run_of_root_uses_build_exit_code(self) -> None:
-        code, output = run_cli(["batch", "build", "--dir", str(self.root)])
+        code, output = run_cli(["batch", "build", "--yes", "--dir", str(self.root)])
         self.assertEqual(code, 3, output)
         self.assertIn("not configured", output)
+
+
+class ConfirmHelperTests(unittest.TestCase):
+    """Consent helper must fail closed on EOF (Windows NUL / closed stdin)."""
+
+    def test_confirm_helper_treats_eof_as_decline(self) -> None:
+        from unittest import mock
+
+        with mock.patch("builtins.input", side_effect=EOFError):
+            self.assertFalse(cli._confirm_execution("Execute? [y/N] "))
+        with mock.patch("builtins.input", return_value=" y "):
+            self.assertTrue(cli._confirm_execution("Execute? [y/N] "))
+        with mock.patch("builtins.input", return_value=""):
+            self.assertFalse(cli._confirm_execution("Execute? [y/N] "))
 
 
 if __name__ == "__main__":

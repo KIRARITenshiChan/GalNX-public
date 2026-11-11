@@ -36,9 +36,9 @@
 | Pilot-01 | 晴霁之后定是菜花盛开的好天气（CN） | `kirikiroid2-nx` | A10 1.0.9 | 2,870,911,704 B / `0efc23f6…` | Switch 真机（hbloader，DBI FTP 安装） | 2026-10-31 | ✓ | ✓ | ✓ | ✓ | ✓（中文 OP） | ✓ | ✓ | — | **game_verified PASS**（用户 m13918） | `docs/pilot/P4-device-runbook.md` §12.4；`docs/pilot/saveload-acceptance.md`；`docs/builds/015-k2nx-save-exit-drag.md` |
 | Pilot-02 | IROSEKA FHD（CN） | `rfvp` | **1.2.5-test** | 10,087,541,464 B / `f6860842…` | Switch 真机（MTP 安装） | 2026-11-11 | ✓ | ✓ | ✓ | 未单独记录 | ✓（OP） | ✓ | ✓ | — | **device_verified PASS**（用户 m41226：测试通过、图标正确） | `docs/builds/051-rfvp-nv12-zerocopy.md`、`052-rfvp-p45-sync.md` |
 | Pilot-03 | さくら、もゆ。（CN） | `rfvp` | **1.3.3-test** | 8,116,841,176 B / `965ee356…` | Switch 真机（MTP 安装） | 2026-11-11 | ✓ | ✓ | ✓ | 未单独记录 | ✓（OP，分档待确认） | ✓ | ✓ | ✓（标题粒子修复） | **device_verified PASS**（用户 m41226：测试通过、图标正确） | `docs/builds/049-p41-snow-particles.md`、`051`、`052` |
-| Pilot-04 | AKASEKA HD 映入红瞳的世界 HD | `rfvp` | **1.4.1-test** | 6,738,209,496 B / `db31a312…` | Switch 真机（MTP 安装） | 2026-11-11 | ✓ | 未单独记录 | 未单独记录（rfvp 私有存档格式） | 未单独记录 | ✓（1080p H.264 OP + NV12 零拷贝，颜色正确、播放流畅） | ✓（A 确认 / B 返回 / 双摇杆 / PLUS 存档 / MINUS 退出 / R 快进 / ZR·ZL） | ✓（干净退出） | — | **game_verified PASS**（用户 m39477、m40951） | `docs/pilot/akaseka-fd-acceptance.md`；`docs/builds/050-akaseka-fd-nsp.md`、`051-rfvp-nv12-zerocopy.md` |
+| Pilot-04 | AKASEKA HD 映入红瞳的世界 HD | `rfvp` | **1.4.1-test** | 6,738,209,496 B / `db31a312…` | Switch 真机（MTP 安装） | 2026-11-11 | ✓ | 未单独记录 | 未单独记录（rfvp 私有存档格式） | 未单独记录 | ✓（1080p H.264 OP + NV12 零拷贝，颜色正确、播放流畅） | ✓（A 确认 / B 返回 / 双摇杆 / PLUS 存档 / MINUS 退出 / R 快进 / ZR·ZL） | ✓（干净退出） | — | **device_verified PASS**（用户 m39477、m40951；缺剧情全流程与存档/读档验收，见 §6） | `docs/pilot/akaseka-fd-acceptance.md`；`docs/builds/050-akaseka-fd-nsp.md`、`051-rfvp-nv12-zerocopy.md` |
 
-> 说明：Pilot-01 的存档/读档细节见 `docs/pilot/saveload-acceptance.md`（pad-only 存档路径、A4 NSP 内验证）；Pilot-04 的存档/读档没有单独验收记录，只确认了存档菜单可达与退出不丢设置。Pilot-02/03 的「视频」项只覆盖 OP 播放，未做逐档分辨率确认。
+> 说明：Pilot-01 的存档/读档细节见 `docs/pilot/saveload-acceptance.md`（pad-only 存档路径、A4 NSP 内验证）；Pilot-04 的存档/读档没有单独验收记录，只确认了存档菜单可达与退出不丢设置。Pilot-02/03 的「视频」项只覆盖 OP 播放，未做逐档分辨率确认。Pilot-04 的签收证据只有 OP / 映射 / 干净退出，缺剧情全流程与存档/读档，因此结论按 device_verified 记录。
 
 ### 2.1 旧构建（已被上表取代，仅留档）
 
@@ -63,7 +63,7 @@
 
 | 引擎 | status | graphics | movie | audio | input | save | touch | 引擎级 verification |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `rfvp` | ready | game_verified | device_verified | device_verified | game_verified | device_verified | unknown | `device_verified`（Nintendo Switch，2026-11-10） |
+| `rfvp` | ready | device_verified | device_verified | device_verified | device_verified | device_verified | unknown | `device_verified`（Nintendo Switch，2026-11-10） |
 | `kirikiroid2-nx` | ready | game_verified | device_verified | device_verified | game_verified | device_verified | unknown | `game_verified`（Nintendo Switch，2026-10-31） |
 | `krkrsdl2` | research | emulator_verified | unknown | unknown | emulator_verified | unknown | unknown | `emulator_verified`（Citron，2026-10-26） |
 | `onscripter-nx` | research | emulator_verified | unknown | unknown | emulator_verified | unknown | unknown | `emulator_verified`（Citron，2026-10-30） |
@@ -93,3 +93,4 @@
 - `touch` 在全部 5 个引擎上都没有真机验证（依赖触摸的 UI 也不能承诺可用）。
 - IROSEKA / MOYU 当前包内仍是 720p OP（P45 只换引擎与图标，romfs 未变）；1080p 分档与 WMV2 回落路径只在 AKASEKA 源上验证过。
 - `kirikiroid2-nx` 的音频/视频只出现在真机回归清单里，没有做量化（帧率/延迟）测量。
+- Pilot-04 未达 game_verified：专家复审（2026-11-11）指出其证据只有 OP 播放、手柄映射与干净退出，缺剧情推进、存档/读档与结局级验收。在补一条完整流程验收记录之前，Pilot-04 与 rfvp 的 graphics/input 都保持 device_verified。

@@ -1,0 +1,1 @@
+Second asset. Nested POSIX paths are preserved in the pack.

@@ -28,14 +28,17 @@ build_backend: custom-script
 capabilities:
   graphics:
     supported: true
-    verification: game_verified
+    verification: device_verified
     backend: sdl2-gles2
     note: >-
       SDL2/GLES2 backend via patch rfvp-sdl2-backend.patch (SDL_RenderGeometry
       sprites, custom blend modes for Multiply/Screen, GPU previous-frame
       sampling and render-target thumbnails). Device-verified on the Switch in
-      all four rfvp pilots (README Pilot table, docs/pilot/akaseka-fd-acceptance.md);
-      Citron keeps a locked 60.0 fps at ~15.6 ms render including the vsync wait.
+      the three rfvp pilots (IROSEKA / MOYU / AKASEKA title, story and OP
+      screens; README Pilot table, docs/pilot/akaseka-fd-acceptance.md). An
+      end-to-end story run has not been recorded, so this capability stays at
+      device_verified rather than game_verified. Citron keeps a locked 60.0 fps
+      at ~15.6 ms render including the vsync wait.
   movie:
     supported: true
     verification: device_verified
@@ -62,15 +65,18 @@ capabilities:
       underrun=0).
   input:
     supported: true
-    verification: game_verified
+    verification: device_verified
     note: >-
       Hand-held pad mapping (docs/builds/019-rfvp-input-mapping.md, patch
       rfvp-input-remap.patch): A=Enter, B=Escape (in-game clock menu), X=toolbar
       AUTO, Y=menu LOAD, PLUS=menu SAVE, MINUS=menu EXIT + confirm, ZR=left
       mouse, ZL=right mouse, R=Ctrl skip, D-Pad=arrows, left stick=wheel, right
       stick=pointer; the in-game menus are driven by measured screen anchors.
-      Device-verified by the user in all four pilots (README Pilot table,
-      docs/pilot/akaseka-fd-acceptance.md).
+      Device-verified by the user in the three rfvp pilots (mapping and the
+      toolbar/menu entry points; README Pilot table,
+      docs/pilot/akaseka-fd-acceptance.md). Full game-flow input coverage has
+      not been recorded, so this stays at device_verified rather than
+      game_verified.
   save:
     supported: true
     verification: device_verified
@@ -79,9 +85,11 @@ capabilities:
       sdmc:/switch/rfvp/saves/<game-id>/save/rfvp_s000.bin, plus deferred
       snapshot materialisation (P16, docs/builds/022-rfvp-save-latency.md) and
       the consumed ExitDialog/ExitMode(3) quit path (P13). The save format is
-      rfvp's own and is not interchangeable with the PC build. Device-verified
-      save / load / clean quit in the rfvp pilots (P4-device-runbook.md section
-      13, README Pilot table).
+      rfvp's own and is not interchangeable with the PC build. The earlier
+      rfvp hardware runs cover the save/load path (docs/pilot/P4-device-runbook.md
+      section 13 checklists) and the pilots record a clean exit, but the 0.1.0
+      sign-off messages do not itemise save/load, so this capability is
+      device_verified with that gap.
   touch:
     supported: false
     verification: unknown
@@ -103,19 +111,21 @@ content_layout:
     to sdmc:/switch/rfvp/game when romfs is absent.
 status: ready
 status_reason: >-
-  Device-verified engine. Four pilots pass on real hardware with the user's
-  sign-off (README Pilot table): Pilot-01 kirikiroid2-nx A10 1.0.9, Pilot-02
-  IROSEKA (1.2.4-test), Pilot-03 SAKURA MOYU (1.3.2-test) and Pilot-04 AKASEKA
-  FHD (1.4.0-test, 6,676,387,544 B, sha256
-  569af9fbffad68f9423c14b7072d29e14864dec503d5e6039e96b111f9585732, 2026-11-10).
-  The AKASEKA acceptance recorded OP playback, pad mapping and a clean exit
-  (docs/pilot/akaseka-fd-acceptance.md, user m39477), and the v1.4.1-test
-  1080p OP colour/fluency result is recorded in docs/builds/051 (user m40951).
-  Limits kept on record: 720p is the default output (1080p needs the NV12
-  zero-copy path and its own per-title budget), the save format is private to
-  rfvp, the IROSEKA / MOYU OP quality tiers (video.txt) and the WMV2 OP path
-  still need their own device confirmation, and the H.264 movie pipeline only
-  exists in the no_std build with the patched nvtegra stack.
+  Device-verified engine: three rfvp pilots run on real hardware with the
+  user's sign-off (README Pilot table, docs/pilot/0.1.0-device-acceptance.md):
+  Pilot-02 IROSEKA FHD 1.2.5-test (10,087,541,464 B, sha256 f6860842...),
+  Pilot-03 SAKURA MOYU 1.3.3-test (8,116,841,176 B, sha256 965ee356...) and
+  Pilot-04 AKASEKA HD 1.4.1-test (6,738,209,496 B, sha256 db31a312..., signed
+  off 2026-11-11 for a correct and smooth 1080p H.264 OP, user m40951). The
+  earlier AKASEKA 1.4.0-test acceptance recorded OP playback, pad mapping and
+  a clean exit (docs/pilot/akaseka-fd-acceptance.md, user m39477). The pilots
+  stop at device_verified: story progression, save/load and a long soak were
+  not itemised in the sign-offs, so no rfvp capability is recorded as
+  game_verified. Limits kept on record: 720p is the default output (1080p
+  needs the NV12 zero-copy path and its own per-title budget), the save format
+  is private to rfvp, the IROSEKA / MOYU OP quality tiers (video.txt) and the
+  WMV2 OP path still need their own device confirmation, and the H.264 movie
+  pipeline only exists in the no_std build with the patched nvtegra stack.
 artifact_sha256: db31a312c745e46b73f11445168af94ad6790989d847f184a8d2cd6312190c8f
 evidence_urls:
   - docs/builds/008-rfvp-evaluation.md
@@ -167,9 +177,11 @@ notes: >-
   included in the patch. Verification screenshots must be taken at least 90 s
   after boot: this title shows a long white fade plus a typewriter reveal, and
   the narration only appears at about t=63.5 s. P11 packs the game tree into
-  romfs (docs/builds/018-rfvp-nsp.md); the current build (v1.0.8) is
-  9,979,496,664 B and boots from romfs with zero game data on SD; a real-hardware install is still pending
-  (9.98 GB needs an exFAT SD card or NAND).
+  romfs (docs/builds/018-rfvp-nsp.md); the current delivery builds are the
+  P44/P45 NSPs (AKASEKA 1.4.1-test 6,738,209,496 B, IROSEKA 1.2.5-test
+  10,087,541,464 B, MOYU 1.3.3-test 8,116,841,176 B), all boot from romfs with
+  zero game data on SD and were installed on real hardware (the ~10 GB
+  IROSEKA / MOYU packages need an exFAT SD card or NAND).
   P44 (docs/builds/051-rfvp-nv12-zerocopy.md, patch rfvp-nv12-zerocopy.patch) closes
   the 1080p movie budget: the H.264 player now hands the decoder's NV12 planes
   straight to GLES2 through SDL_UpdateNVTexture instead of converting to RGBA on the
@@ -190,18 +202,22 @@ verification:
   tested_at: "2026-11-10"
   evidence:
     - README.md
+    - docs/pilot/0.1.0-device-acceptance.md
     - docs/pilot/akaseka-fd-acceptance.md
+    - docs/builds/049-p41-snow-particles.md
     - docs/builds/050-akaseka-fd-nsp.md
     - docs/builds/051-rfvp-nv12-zerocopy.md
     - docs/builds/052-rfvp-p45-sync.md
   notes: >-
-    Pilot-04 (AKASEKA FHD, v1.4.0-test) is the formal device acceptance: OP,
-    pad mapping and a clean exit, PASS signed off by the user (m39477).
-    Pilot-02 / Pilot-03 passed earlier with 1.2.4-test / 1.3.2-test (README
-    Pilot table). The newer 1.2.5-test / 1.3.3-test rebuilds are reported as
-    user-accepted in the P45 notes (docs/builds/052) but have no acceptance log
-    in this repository yet; firmware and Atmosphere versions were not recorded
-    in these reports, so those fields are left empty.
+    Pilot-04 (AKASEKA HD, v1.4.1-test) is the latest device acceptance: the
+    1080p H.264 OP plays with correct colour and no stutter (user m40951), and
+    the earlier 1.4.0-test run recorded pad mapping and a clean exit (user
+    m39477). Pilot-02 / Pilot-03 were accepted with 1.2.5-test / 1.3.3-test
+    (P45 rebuilds, user m41226; docs/builds/052). None of these sign-offs
+    included story progression, save/load or a long soak, so the engine and
+    its graphics/input capabilities stay at device_verified rather than
+    game_verified. Firmware and Atmosphere versions were not recorded, so
+    those fields are left empty.
 
 source:
   url: https://github.com/xmoezzz/rfvp

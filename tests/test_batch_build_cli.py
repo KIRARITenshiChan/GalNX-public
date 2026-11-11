@@ -56,6 +56,7 @@ def project_manifest(root: Path, slug: str = "demo", title_id: str = "0100474100
         "commands": [[sys.executable, "build.py", "--out", "out/demo.bin"]],
         "artifact": "out/demo.bin",
         "timeout_s": 60,
+        "inputs": [{"path": "build.py", "kind": "file"}],
     }
     build.update(build_overrides)
     return {
@@ -86,7 +87,7 @@ class BatchBuildCliTests(unittest.TestCase):
         return len(list((self.root / ".galnx").glob("batch-report-*.json")))
 
     def test_batch_build_miss_then_hit(self) -> None:
-        code, output = run_cli(["batch", "build", "--dir", str(self.root), "--json"])
+        code, output = run_cli(["batch", "build", "--yes", "--dir", str(self.root), "--json"])
         self.assertEqual(code, 0, output)
         report = json.loads(output)
         totals = report["totals"]
@@ -109,7 +110,7 @@ class BatchBuildCliTests(unittest.TestCase):
         self.assertTrue((self.root / project["commands"][0]["log"]).is_file())
         self.assertTrue((self.root / ".galnx" / "latest.json").is_file())
 
-        code, output = run_cli(["batch", "build", "--dir", str(self.root), "--json"])
+        code, output = run_cli(["batch", "build", "--yes", "--dir", str(self.root), "--json"])
         self.assertEqual(code, 0, output)
         hit = json.loads(output)["projects"][0]
         self.assertEqual(hit["cache"]["hit"], True)
@@ -119,8 +120,8 @@ class BatchBuildCliTests(unittest.TestCase):
         self.assertGreaterEqual(self.build_count(), 2)
 
     def test_rebuild_and_no_cache(self) -> None:
-        run_cli(["batch", "build", "--dir", str(self.root)])
-        code, output = run_cli(["batch", "build", "--dir", str(self.root), "--rebuild", "--json"])
+        run_cli(["batch", "build", "--yes", "--dir", str(self.root)])
+        code, output = run_cli(["batch", "build", "--yes", "--dir", str(self.root), "--rebuild", "--json"])
         self.assertEqual(code, 0, output)
         report = json.loads(output)
         self.assertEqual(report["totals"]["built"], 1)
@@ -128,7 +129,7 @@ class BatchBuildCliTests(unittest.TestCase):
         ids = {check["id"] for check in report["projects"][0]["checks"]}
         self.assertIn("cache.rebuild", ids)
 
-        code, output = run_cli(["batch", "build", "--dir", str(self.root), "--no-cache", "--json"])
+        code, output = run_cli(["batch", "build", "--yes", "--dir", str(self.root), "--no-cache", "--json"])
         self.assertEqual(code, 0, output)
         report = json.loads(output)
         self.assertEqual(report["totals"]["built"], 1)
@@ -137,9 +138,9 @@ class BatchBuildCliTests(unittest.TestCase):
         self.assertNotIn("build.cache", ids)
 
     def test_stale_cache_rebuilds_after_artifact_removed(self) -> None:
-        run_cli(["batch", "build", "--dir", str(self.root)])
+        run_cli(["batch", "build", "--yes", "--dir", str(self.root)])
         (self.root / "out" / "demo.bin").unlink()
-        code, output = run_cli(["batch", "build", "--dir", str(self.root), "--json"])
+        code, output = run_cli(["batch", "build", "--yes", "--dir", str(self.root), "--json"])
         self.assertEqual(code, 0, output)
         report = json.loads(output)
         project = report["projects"][0]
@@ -164,14 +165,14 @@ class BatchBuildCliTests(unittest.TestCase):
         self.assertRegex(entry["manifest_sha256"], r"^[0-9a-f]{64}$")
         self.assertEqual(entry["artifact"], "out/demo.bin")
 
-        code, output = run_cli(["batch", "build", "--dir", str(self.root), "--locked", "--json"])
+        code, output = run_cli(["batch", "build", "--yes", "--dir", str(self.root), "--locked", "--json"])
         self.assertEqual(code, 0, output)
         self.assertIn("lock.verified", {check["id"] for check in json.loads(output)["projects"][0]["checks"]})
 
         drifted = project_manifest(self.root)
         drifted["build"]["env"] = {"GALNX_DEMO_SEED": "drifted"}
         write_yaml(self.root / "demo.yaml", drifted)
-        code, output = run_cli(["batch", "build", "--dir", str(self.root), "--locked", "--json"])
+        code, output = run_cli(["batch", "build", "--yes", "--dir", str(self.root), "--locked", "--json"])
         self.assertEqual(code, 2, output)
         report = json.loads(output)
         project = report["projects"][0]
@@ -181,11 +182,11 @@ class BatchBuildCliTests(unittest.TestCase):
         self.assertIn("manifest_sha256 changed", checks["lock.drift"]["detail"])
         self.assertEqual(report["totals"]["built"], 0)
 
-        code, output = run_cli(["batch", "build", "--dir", str(self.root)])
+        code, output = run_cli(["batch", "build", "--yes", "--dir", str(self.root)])
         self.assertEqual(code, 0, output)
 
     def test_locked_without_lock_file_fails(self) -> None:
-        code, output = run_cli(["batch", "build", "--dir", str(self.root), "--locked", "--json"])
+        code, output = run_cli(["batch", "build", "--yes", "--dir", str(self.root), "--locked", "--json"])
         self.assertEqual(code, 2, output)
         checks = {check["id"]: check for check in json.loads(output)["projects"][0]["checks"]}
         self.assertIn("lock.drift", checks)
@@ -193,7 +194,7 @@ class BatchBuildCliTests(unittest.TestCase):
 
     def test_bad_project_isolation(self) -> None:
         (self.root / "broken.yaml").write_text("game: [unclosed\n", encoding="utf-8")
-        code, output = run_cli(["batch", "build", "--dir", str(self.root), "--json"])
+        code, output = run_cli(["batch", "build", "--yes", "--dir", str(self.root), "--json"])
         self.assertEqual(code, 2, output)
         report = json.loads(output)
         self.assertEqual(report["totals"]["total"], 2)
@@ -203,7 +204,7 @@ class BatchBuildCliTests(unittest.TestCase):
         self.assertTrue((self.root / "out" / "demo.bin").is_file())
 
     def test_report_matches_schema(self) -> None:
-        run_cli(["batch", "build", "--dir", str(self.root)])
+        run_cli(["batch", "build", "--yes", "--dir", str(self.root)])
         report = json.loads((self.root / ".galnx" / "latest.json").read_text(encoding="utf-8"))
         schema = json.loads((ROOT / "schemas" / "batch-report.schema.json").read_text(encoding="utf-8"))
         validator = Draft202012Validator(schema, format_checker=FormatChecker())
@@ -219,13 +220,13 @@ class BatchBuildCliTests(unittest.TestCase):
         self.assertEqual(report["totals"].get("executed"), 0)
 
     def test_batch_build_rejects_missing_directory(self) -> None:
-        code, output = run_cli(["batch", "build", "--dir", str(self.root / "missing")])
+        code, output = run_cli(["batch", "build", "--yes", "--dir", str(self.root / "missing")])
         self.assertEqual(code, 2)
         self.assertIn("FAIL", output)
 
     def test_build_run_single_manifest(self) -> None:
         manifest = self.root / "demo.yaml"
-        code, output = run_cli(["build", "run", "--manifest", str(manifest), "--json"])
+        code, output = run_cli(["build", "run", "--manifest", str(manifest), "--yes", "--json"])
         self.assertEqual(code, 0, output)
         report = json.loads(output)
         self.assertEqual(report["totals"]["total"], 1)

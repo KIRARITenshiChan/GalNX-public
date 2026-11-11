@@ -243,10 +243,10 @@ docs/engines/verification-matrix.md  游戏级验收索引
 | 锁定 commit | 9f07adef2eb5d559777f9bf59a67b756875cb24f（HEAD 2026-10-25；tag 0.7.0 = 99435f22） | descriptor；`docs/builds/008-rfvp-evaluation.md` |
 | 许可证 | MPL-2.0 | descriptor；`docs/audit/05` |
 | 构建后端 | custom-script（`platform/switch/build_switch.sh` + 自建 portlibs；Rust nightly 交叉到 aarch64-nintendo-switch） | `docs/builds/001`、`docs/builds/016`–`026` |
-| 产物 | 自包含 NSP（内容 100% 内嵌 romfs:/game），例：AKASEKA 1.4.0-test 6,676,387,544 B（sha256 569af9fb…） | `docs/builds/050-akaseka-fd-nsp.md` |
-| 能力 | graphics/input = `game_verified`；movie/audio/save = `device_verified`；touch = `unknown` | descriptor + 验证矩阵 |
-| 引擎级验证 | `device_verified`，2026-11-10，4 个 Pilot 真机 PASS | descriptor `verification` 块 |
-| 已知限制 | 默认 720p（1080p 突破帧预算）、私有存档格式不与 PC 互通、IROSEKA/MOYU 的 OP 分档与 WMV2 路径待各自确认、no_std 构建的视频解码器依赖 NVDEC/nvtegra | descriptor `status_reason`、`docs/pilot/akaseka-fd-acceptance.md` |
+| 产物 | 自包含 NSP（内容 100% 内嵌 romfs:/game），例：AKASEKA 1.4.1-test 6,738,209,496 B（sha256 db31a312…）；1.4.0-test（6,676,387,544 B / 569af9fb…）为上一版 | `docs/builds/051-rfvp-nv12-zerocopy.md`、`docs/builds/050-akaseka-fd-nsp.md` |
+| 能力 | graphics/input/movie/audio/save = `device_verified`；touch = `unknown` | descriptor + 验证矩阵 |
+| 引擎级验证 | `device_verified`，2026-11-10，3 个 rfvp Pilot 真机 PASS（Pilot-01 属 kirikiroid2-nx） | descriptor `verification` 块 |
+| 已知限制 | 默认 720p（1080p 突破帧预算）、私有存档格式不与 PC 互通、IROSEKA/MOYU 的 OP 分档与 WMV2 路径待各自确认、no_std 构建的视频解码器依赖 NVDEC/nvtegra；Pilot-04 的签收缺剧情全流程与存档/读档，故各能力最高 `device_verified` | descriptor `status_reason`、`docs/pilot/akaseka-fd-acceptance.md` |
 
 ### 8.2 kirikiroid2-nx（KiriKiri2 移植，自包含 NSP）
 
@@ -322,7 +322,7 @@ python -m galnx engines plan --manifest examples/pilot04-akaseka.yaml --engines-
 
 | 层级 | 引擎 | 依据 |
 | --- | --- | --- |
-| 真机已验证（可交付） | `rfvp`（4 个 Pilot）、`kirikiroid2-nx`（Pilot-01） | 验证矩阵 §2；descriptor `verification` |
+| 真机已验证（可交付） | `rfvp`（3 个 Pilot）、`kirikiroid2-nx`（Pilot-01） | 验证矩阵 §2；descriptor `verification` |
 | 模拟器级（研究/待真机） | `krkrsdl2`、`onscripter-nx`、`brewser` | 验证矩阵 §3；descriptor `status: research` |
 | 暂缓（无适配器） | Ren'Py | `docs/audit/04-renpy-official.md`：官方无 Switch 平台，硬阻塞为 CPython 交叉编译 |
 

@@ -69,6 +69,18 @@ jobs:
         env:
           PYTHONPATH: src
 
+      # The public quickstart must build from a clean checkout with Python
+      # only: the first run executes a real command and verifies the artifact,
+      # the second run must hit the content-addressed cache.
+      - name: Minimal build example (quickstart)
+        shell: bash
+        run: |
+          python -m galnx build run --manifest examples/quickstart/manifest.yaml --yes
+          python -m galnx build run --manifest examples/quickstart/manifest.yaml --yes
+          python -c "import pathlib; p = pathlib.Path('examples/quickstart/out/demo.pak'); data = p.read_bytes(); assert data[:8] == b'GALNXPK1', data[:8]; print('artifact', p, len(data), 'bytes')"
+        env:
+          PYTHONPATH: src
+
       - name: License inventory (SBOM) check
         run: python scripts/check_license_inventory.py --json
 

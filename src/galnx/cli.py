@@ -572,6 +572,21 @@ def cmd_batch_clean(args: argparse.Namespace) -> int:
 
 
 def cmd_batch_build(args: argparse.Namespace) -> int:
+    # Trust boundary: batch build spawns build.commands from every matching
+    # manifest.  Non-interactive sessions must opt in explicitly with --yes.
+    if not args.yes:
+        if not _stdin_is_interactive():
+            print(
+                "refusing to execute build.commands: no interactive terminal and no --yes; "
+                "re-run with --yes to execute",
+                file=sys.stderr,
+            )
+            return 2
+        if not _confirm_execution(
+            "Execute build commands for manifests under %s? [y/N] " % args.dir
+        ):
+            print("aborted: user declined; nothing was executed")
+            return 2
     try:
         report = batch_layer.run_batch_build(
             Path(args.dir),
@@ -669,6 +684,29 @@ def _print_build_plan(plan: dict, stream=None) -> None:
         )
 
 
+def _stdin_is_interactive() -> bool:
+    """True only when stdin can actually be prompted (never for pipes / CI)."""
+    stream = getattr(sys, "stdin", None)
+    try:
+        return bool(stream is not None and stream.isatty())
+    except (AttributeError, ValueError):
+        return False
+
+
+def _confirm_execution(prompt: str) -> bool:
+    """Ask for explicit consent before spawning build.commands.
+
+    A closed/absent stdin (for example a Windows NUL device, which still looks
+    like a character device to isatty) must never count as consent: an EOF is
+    treated exactly like an empty answer.
+    """
+    try:
+        answer = input(prompt)
+    except EOFError:
+        return False
+    return answer.strip().lower() in {"y", "yes"}
+
+
 def cmd_build_run(args: argparse.Namespace) -> int:
     manifest = Path(args.manifest)
     if args.dry_run:
@@ -706,9 +744,18 @@ def cmd_build_run(args: argparse.Namespace) -> int:
         _print_build_plan(plan, stream=sys.stderr)
     else:
         _print_build_plan(plan)
-    if plan.get("state") == "configured" and not args.yes and sys.stdin.isatty():
-        answer = input("Execute these commands? [y/N] ")
-        if answer.strip().lower() not in {"y", "yes"}:
+    if plan.get("state") == "configured" and not args.yes:
+        if not _stdin_is_interactive():
+            # Fail closed: a manifest is executable configuration and a piped or
+            # CI session cannot answer the confirmation prompt, so refuse instead
+            # of silently executing build.commands.
+            print(
+                "refusing to execute build.commands: no interactive terminal and no --yes; "
+                "re-run with --yes to execute",
+                file=sys.stderr,
+            )
+            return 2
+        if not _confirm_execution("Execute these commands? [y/N] "):
             print("aborted: user declined; nothing was executed")
             return 2
     root = manifest.resolve().parent
@@ -895,6 +942,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="timestamped reports to keep under .galnx (default: %(default)s)",
     )
     q.add_argument("--json", action="store_true", help="machine-readable report on stdout")
+    q.add_argument(
+        "--yes",
+        action="store_true",
+        help="skip the interactive confirmation before executing build.commands (CI)",
+    )
     q.set_defaults(func=cmd_batch_build)
 
     q = batch_sub.add_parser(
