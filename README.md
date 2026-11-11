@@ -23,7 +23,7 @@ rfvp 运行时目前具备：SDL2/GLES2 后端 **60 FPS**；电影路径 **H.264
 
 | 适配器 | 上游 / 许可 | 引擎级状态 | 说明 |
 | --- | --- | --- | --- |
-| `rfvp` | xmoezzz/rfvp · MPL-2.0 | `ready` · `device_verified`（2026-11-10） | Rust 重写 FVP；GalNX 提供 Switch 后端、输入映射、电影、缓存等补丁栈；4 部试点 |
+| `rfvp` | xmoezzz/rfvp · MPL-2.0 | `ready` · `device_verified`（2026-11-10） | Rust 重写 FVP；GalNX 提供 Switch 后端、输入映射、电影、缓存等补丁栈；3 部试点（Pilot-02/03/04，Pilot-01 是 kirikiroid2-nx） |
 | `kirikiroid2-nx` | Erige005/Kirikiroid2-NX · 非 SPDX | `ready` · `game_verified`（2026-10-31） | KiriKiri2 系；补丁 A–I 覆盖首启解包/自启动/内部插件/虚拟光标/存档 UI/退出崩溃/输入 |
 | `krkrsdl2` | krkrsdl2 · MIT | `research` · `emulator_verified` | 上游自带 Switch 目标；KAG3 内容包在 Citron 出画面并可推进；音频/存档/真机未验证 |
 | `onscripter-nx` | ONScripter-NX · GPL-2.0-or-later | `research` · `emulator_verified` | 零源码修改可构建、Citron R1–R5 通过；无启动器 UI，GPL 传染需法务评估，真机未验证 |
@@ -58,7 +58,7 @@ galnx engines list           # 3 个内置适配器
 PYTHONPATH=src python -m galnx build run --manifest examples/quickstart/manifest.yaml --yes
 ```
 
-首跑会执行 `tools/pack_demo.py` 生成 `examples/quickstart/out/demo.pak`（约 283 B）；再跑一次命中缓存（`build: 0 executed, 0 not configured, 1 cache hit(s)`）。改动 `examples/quickstart/content/` 下任一文件后再跑，缓存失效并重新生成。该示例的 `game.source_dir` 相对当前目录解析，请**在仓库根执行**；完整说明见 [examples/quickstart/README.md](examples/quickstart/README.md)。
+首跑会执行 `tools/pack_demo.py` 生成 `examples/quickstart/out/demo.pak`（269 B）；再跑一次命中缓存（`build: 0 executed, 0 not configured, 1 cache hit(s)`）。改动 `examples/quickstart/content/` 下任一文件后再跑，缓存失效并重新生成。该示例的 `game.source_dir` 相对当前目录解析，请**在仓库根执行**；完整说明见 [examples/quickstart/README.md](examples/quickstart/README.md)。
 
 用清单驱动（清单格式见 [docs/MANIFEST.md](docs/MANIFEST.md)；新移植请从 [examples/templates/](examples/templates/) 的模板起步，`examples/` 下其余清单是真实试点记录）：
 
@@ -71,9 +71,14 @@ galnx payload plan --manifest examples/pilot01-haruno-cn.yaml
 构建与打包（真实 keyset 必须**显式**传路径）：
 
 ```bash
-# 1) 执行 manifest 声明的 build.commands（先打印命令/cwd/timeout/env 名，交互式再确认；CI 加 --yes）
-galnx build run --manifest examples/pilot04-akaseka.yaml --dry-run   # 只看计划
-galnx build run --manifest examples/pilot04-akaseka.yaml --yes       # 真正执行
+# 1) 查看 manifest 声明的 build.commands（先打印命令/cwd/timeout/env 名，不执行任何东西）
+#    试点清单是真实记录、不声明 build.commands：真实引擎构建由 docs/builds/ 记录的
+#    scripts/*.sh 驱动（命令见各 manifest 头注释），GalNX 不代跑。
+galnx build run --manifest examples/pilot04-akaseka.yaml --dry-run
+#    输出 state: not_configured（退出码 3）；加 --yes 会进入批处理预检但仍不执行构建
+#    （缺 prod.keys 等前置时预检报 fail、退出码 2；前置齐全时退出码 3），不生成构建产物。
+#    想验证「真正执行 + 缓存」请用上一节的 examples/quickstart（FIX-02）。
+#    非 TTY 会话必须显式 --yes，否则一律拒绝执行（CI 同理）。
 
 # 2) 内容暂存 + NSP 打包（elf2nso → npdmtool → nacptool → hacBrewPack → nstool）
 galnx package nsp plan  --manifest examples/pilot04-akaseka.yaml
@@ -97,7 +102,7 @@ scripts/citron_run.sh --game <out.nsp> --no-stage --expect-title AKASEKA
 
 1. **写清单**（从 `examples/templates/minimal-manifest.yaml` 复制）：游戏元数据、引擎适配器、入口、Switch 参数、输入 profile、打包方式。
 2. **静态检查**：`galnx preflight` / `galnx engines plan` / `galnx package plan`——不构建只验证。
-3. **引擎构建**：执行 manifest 的 `build.commands`（`galnx build run` / `galnx batch build`；本机为 devkitPro / CMake / cargo 交叉编译）。
+3. **引擎构建**：由 `docs/builds/` 记录的脚本完成（本机为 devkitPro / CMake / cargo 交叉编译）；manifest 显式声明 `build.commands` 时可用 `galnx build run` / `galnx batch build` 执行并缓存，未声明时状态为 `not_configured`。
 4. **内容暂存与打包**：`payload` 决定 romfs 放什么；`package nsp` 产出**自包含** NSP（游戏数据全在 romfs，SD 卡无需放数据）。
 5. **验证**：`nstool` 校验 → Citron 首启/输入/存档冒烟 → 真机（MTP/DBI 安装）。
 6. **记录**：编号构建文档 `docs/builds/NNN-*.md` + 证据 `docs/milestones/evidence/`（E1 日志 / E2 截图 / E3 哈希 / E4 源码片段）。
@@ -163,7 +168,7 @@ tests/                pytest（见下方开发与测试）
 | 0.1.0 Preview 发布说明 | [docs/release/0.1.0-preview.md](docs/release/0.1.0-preview.md) |
 | 变更记录 | [CHANGELOG.md](CHANGELOG.md) |
 | 构建记录（按编号，含补丁与产物哈希） | [docs/builds/README.md](docs/builds/README.md) |
-| 框架计划（v1.44 快照） | [docs/PLAN_DRAFT_v1.44.md](docs/PLAN_DRAFT_v1.44.md) |
+| 框架计划（v1.47 快照） | [docs/PLAN_DRAFT_v1.47.md](docs/PLAN_DRAFT_v1.47.md) |
 | 清单格式与信任边界 | [docs/MANIFEST.md](docs/MANIFEST.md) |
 | 引擎适配器与能力模型 | [docs/engines/README.md](docs/engines/README.md) |
 | 游戏级真机验收索引 | [docs/engines/verification-matrix.md](docs/engines/verification-matrix.md) |

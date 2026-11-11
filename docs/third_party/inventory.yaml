@@ -17,7 +17,7 @@ schema_version: 1
 generated_at: 2026-11-11
 scope:
   project: GalNX（Nintendo Switch Galgame 移植框架）
-  baseline_commit: 974a4141af4a86a83f9434ea69ebb9dc9ffe4834
+  baseline_commit: 1595ae34639ac74176e510e016d212a087c2cb1b
   baseline_date: 2026-11-11
   distribution_note: 当前所有 NSP 均为内部自用测试产物，未对外分发。分发决策 = 方案 B（2026-11-11 拍板）：保留 NVDEC + GPL-2.0-or-later 合规分发；GalNX 公共仓库只分发 MIT 编排层与上游 MPL/MIT 补丁，不含任何 NSP 二进制；若将来对外分发 NSP，随包提供对应源码（rvfp fork + FFmpeg nvtegra 分支 + 构建脚本）与许可文本。详见 THIRD_PARTY_NOTICES.md §0。
   artifacts:
@@ -43,6 +43,18 @@ scope:
       evidence:
         - path: docs/builds/052-rfvp-p45-sync.md
           note: 第二包体积/sha256 记录（L40-L45）
+    - id: akaseka-nsp
+      description: AKASEKA HD 自包含测试 NSP（rfvp 引擎 + GPL FFmpeg nvtegra 硬解；1080p H.264 OP）
+      version: 1.4.1-test
+      size_bytes: 6738209496
+      sha256: db31a312c745e46b73f11445168af94ad6790989d847f184a8d2cd6312190c8f
+      path: /e/galnx-build/p45/out/AKASEKA_HD-010047420000d000.nsp
+      distributed: false
+      evidence:
+        - path: docs/builds/051-rfvp-nv12-zerocopy.md
+          note: NSP 体积/sha256、verify 与 NV12 零拷贝 A/B 记录
+        - path: examples/pilot04-akaseka.yaml
+          note: manifest 版本 1.4.1-test 与打包命令（头注释）
     - id: k2nx-a10-nsp
       description: Kirikiroid2-NX A10 CN 自包含 NSP（K2 1.3.9 + 补丁 A-J）
       version: 1.0.9
@@ -65,7 +77,7 @@ components:
   - id: galnx
     name: GalNX framework（本仓库）
     upstream: https://github.com/KIRARITenshiChan/GalNX
-    version_or_commit: 974a4141af4a86a83f9434ea69ebb9dc9ffe4834（审计基线 HEAD）
+    version_or_commit: 1595ae34639ac74176e510e016d212a087c2cb1b（审计基线 HEAD）
     license_spdx: MIT
     license_file: LICENSE
     license_family: permissive
@@ -99,6 +111,7 @@ components:
     artifacts:
       - iroseka-nsp
       - sakura-nsp
+      - akaseka-nsp
     patches:
       - docs/builds/patches/rfvp-switch/P40-op-h264.diff
       - docs/builds/patches/rfvp-switch/P40b-nv12-color.diff
@@ -162,6 +175,7 @@ components:
     artifacts:
       - iroseka-nsp
       - sakura-nsp
+      - akaseka-nsp
     patches: []
     obligations:
       - include_license_text
@@ -214,6 +228,7 @@ components:
     artifacts:
       - iroseka-nsp
       - sakura-nsp
+      - akaseka-nsp
     patches: []
     obligations:
       - include_license_text
@@ -247,6 +262,7 @@ components:
     artifacts:
       - iroseka-nsp
       - sakura-nsp
+      - akaseka-nsp
     patches: []
     obligations:
       - include_license_text
@@ -310,6 +326,7 @@ components:
     artifacts:
       - iroseka-nsp
       - sakura-nsp
+      - akaseka-nsp
     patches: []
     obligations:
       - include_license_text
@@ -336,6 +353,7 @@ components:
     artifacts:
       - iroseka-nsp
       - sakura-nsp
+      - akaseka-nsp
     patches: []
     obligations:
       - include_license_text
@@ -362,6 +380,7 @@ components:
     artifacts:
       - iroseka-nsp
       - sakura-nsp
+      - akaseka-nsp
       - k2nx-a10-nsp
     patches: []
     obligations:
@@ -389,6 +408,7 @@ components:
     artifacts:
       - iroseka-nsp
       - sakura-nsp
+      - akaseka-nsp
     patches: []
     obligations:
       - include_license_text

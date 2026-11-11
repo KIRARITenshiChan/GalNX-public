@@ -659,7 +659,7 @@ GalNX 当前不需要推翻架构，也不需要为了 0.1 增加更多引擎或
 | 编号 | 结论 | 关键改动 | 证据 |
 | --- | --- | --- | --- |
 | FIX-01 非 TTY 构建确认绕过 | 完成（fail-closed） | `build run` / `batch build` 非 TTY 且无 `--yes` ⇒ 退出码 2 且不执行；`EOFError` 视为拒绝；`docs/MANIFEST.md` 增「非交互不默认放行」 | `tests/test_build_contract.py` 19 passed；取证 `E:/galnx-build/fix01/evidence.json`（rc2 / NUL rc2 / `--yes` rc0） |
-| FIX-02 真正可执行的构建示例 | 完成 | `examples/quickstart/`（manifest + 确定性打包器 + 内容 + README）+ CI step；根目录 RUN1 `1 executed` → RUN2 `1 cache hit` | artifact 283 B sha256 `5982bb06…`、magic `GALNXPK1`；`tests/test_quickstart_example.py` |
+| FIX-02 真正可执行的构建示例 | 完成 | `examples/quickstart/`（manifest + 确定性打包器 + 内容 + README）+ CI step；根目录 RUN1 `1 executed` → RUN2 `1 cache hit` | artifact 269 B sha256 `5982bb06…`、magic `GALNXPK1`；`tests/test_quickstart_example.py` |
 | FIX-03 Pilot-04 验证等级 | 完成 | `game_verified` → `device_verified`（缺口：剧情全流程/存档读档 soak/长时签收）；README、matrix、engine docs、device-acceptance 四处统一 | 152 passed / 12 subtests |
 | FIX-04 空 `build.inputs` 缓存保护 | 完成 | 声明 commands 未声明 inputs ⇒ blocking reason、不读不写缓存；cache 段 `inputs_declared` | 41 passed（+24 相邻回归）；报告 `docs/release/tasks/FIX-04.md` |
 | FIX-05 RFVP descriptor 旧信息 | 完成 | graphics/input 降级 `device_verified`，status_reason/notes 按 1.2.5 / 1.3.3 / 1.4.1-test 重写（pinned_commit、artifact sha 未变） | 与 `docs/engines/verification-matrix.md` 一致 |
@@ -675,10 +675,35 @@ GalNX 当前不需要推翻架构，也不需要为了 0.1 增加更多引擎或
 
 - `PYTHONPATH=src GALNX_BUILD_ROOT=E:/galnx-build python -m pytest -q` → **747 passed / 63 subtests**（76.35 s）。
 - `python scripts/check_license_inventory.py --json` → rc 0、33 组件 / 4 产物 / 0 error / 2 warning（未随本轮变化）。
-- `scripts/public_release_sanitize.py` 重新导出 → BLOCK 0，REVIEW 数量与明细见发布记录；ZIP 已解包复扫。
+- `scripts/public_release_sanitize.py` 重新导出（私有源 `cc6148c`）→ kept=1018 / excluded=359 / bytes=26,606,932，BLOCK 0，review 469（dev path 439 + keyword 30）；ZIP 9,142,838 B sha256 `17688031…`，解包复扫 0 BLOCK。
+- 公开仓库干净 clone（`071e2c9`）复跑 `examples/quickstart/`：首跑 exit 0、`1 executed`、artifact 269 B sha256 `5982bb06…`，二跑 `1 cache hit`、RC 0。
 
 ### 12.3 仍未做（0.1 之后）
 
 - GLES2 双平面零拷贝的扩大使用、更多引擎、GUI、NS Launcher（专家明确不建议并入本轮）。
 - Pilot-04 的剧情全流程 / 存档读档 / 长时 soak 签收（当前为 `device_verified`）。
 - 跨平台构建与真机性能长跑（P50/P95/P99、OP soak）。
+
+## 13. CLEAN 一轮（专家清单第 3 轮，2026-11-11）
+
+专家第三轮清单（用户 m42594）只要求 4 项收口，并明确「完成这四项后不需要第三轮全面整理」。本轮只改文档、元数据与发布操作，未改源码/引擎/产物行为。
+
+| 编号 | 结论 | 关键改动 | 证据 |
+| --- | --- | --- | --- |
+| CLEAN-01 README Pilot-04 状态 / RFVP 试点数量 | 完成 | README 的 rfvp 行「4 部试点」→「3 部试点（Pilot-02/03/04，Pilot-01 是 kirikiroid2-nx）」；试点表 Pilot-04 标 `device_verified PASS` 并保留缺口（剧情全流程 / 存档读档 soak 未签收） | 与 `docs/engines/verification-matrix.md`、`examples/engines/rfvp.yaml` 一致 |
+| CLEAN-02 Pilot-04 构建命令示例 | 完成 | 删除 pilot 清单的 `--yes`「真正执行」示例；明确真实引擎构建由 `docs/builds/` 记录的脚本驱动；`--dry-run` 退出码 3、`--yes` 仅进入批处理预检（缺 prod.keys 退出码 2 / 齐全退出码 3）且不产生产物；可执行示例仅 `examples/quickstart/` | 实测 `DRY_RC=3`、`YES_RC=2/3`，日志 `E:/galnx-build/clean02-*.log` |
+| CLEAN-03 AKASEKA SBOM 及组件关联 | 完成 | `inventory.yaml` 新增 `akaseka-nsp`（v1.4.1-test、6,738,209,496 B sha256 `db31a312…`），8 个运行时组件补 artifacts 关联；notices / third_party README 改「33 组件 / 5 产物」 | checker rc 0、components=33、artifacts=5、errors=0、warnings=2；`tests/test_license_inventory.py` 24 passed |
+| CLEAN-04 重新生成 Sanitized Release | 完成 | 在本轮提交后的 HEAD 重跑 sanitizer + publish，推送公开快照 7；登记 `docs/environment/public-release.md` §4.5 与 `docs/release/0.1.0-preview.md` §8 | 快照数字见 `docs/environment/public-release.md` §4.5 最新行 |
+
+### 13.1 验证数字（CLEAN 收敛后）
+
+- `PYTHONPATH=src GALNX_BUILD_ROOT=E:/galnx-build python -m pytest -q` → **747 passed / 63 subtests**（本轮无代码改动，与 FIX 轮基线相同）。
+- `python scripts/check_license_inventory.py --json` → rc 0、33 组件 / **5 产物** / 0 error / 2 warning。
+- README 命令实测：`--dry-run` 退出码 3；`--yes` 缺 prod.keys 退出码 2、齐全退出码 3，两种情况均不产生产物。
+- 公开快照 7：kept / excluded / bytes / BLOCK / REVIEW / ZIP sha256 以 `docs/environment/public-release.md` §4.5 最新行为准。
+
+### 13.2 仍未做（0.1 之后）
+
+- `docs/builds/` 的 50+ 篇历史记录与旧计划快照未按新口径回改（按「历史不可篡改」保留，仅新文档采用统一口径）。
+- Pilot-04 的完整验收缺口（剧情全流程 / 存档读档 / 长时 soak）仍需真机签收。
+- 专家已确认第三轮收口后不再需要全面整理；后续只按新反馈做增量修复。

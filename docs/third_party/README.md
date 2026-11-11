@@ -4,7 +4,7 @@
 
 ## 机器可读清单与校验
 
-- [inventory.yaml](inventory.yaml)：仓库全部第三方组件与产物的许可清单（33 个组件 / 4 个产物），字段说明见文件头。
+- [inventory.yaml](inventory.yaml)：仓库全部第三方组件与产物的许可清单（33 个组件 / 5 个产物），字段说明见文件头。
 - [../../scripts/check_license_inventory.py](../../scripts/check_license_inventory.py)：清单校验器，运行 `python scripts/check_license_inventory.py --json`（退出码 0/1）。
 - 仓库级分发边界与合规结论（含 FFmpeg GPL 风险）见 [../../THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md)。
 

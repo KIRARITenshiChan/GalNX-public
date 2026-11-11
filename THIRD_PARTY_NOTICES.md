@@ -1,7 +1,7 @@
 # 第三方组件与许可声明（THIRD_PARTY_NOTICES）
 
-> 元数据：生成日期 2026-11-11；对照基线 commit 974a4141af4a86a83f9434ea69ebb9dc9ffe4834（main）。
-> 机器可读清单：[docs/third_party/inventory.yaml](docs/third_party/inventory.yaml)（33 个组件 / 4 个产物），
+> 元数据：生成日期 2026-11-11；对照基线 commit 1595ae34639ac74176e510e016d212a087c2cb1b（main）。
+> 机器可读清单：[docs/third_party/inventory.yaml](docs/third_party/inventory.yaml)（33 个组件 / 5 个产物），
 > 校验脚本：[scripts/check_license_inventory.py](scripts/check_license_inventory.py)。
 > 本文件只界定许可边界，不构成法律意见。
 

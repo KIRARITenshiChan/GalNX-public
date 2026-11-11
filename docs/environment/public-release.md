@@ -6,7 +6,7 @@
 
 ## 1. 为什么需要隔离
 
-GalNX 仓库同时承担「框架代码」和「实验记录」两个角色。按当前基线，`git ls-files` 跟踪 1,365 个文件，其中：
+GalNX 仓库同时承担「框架代码」和「实验记录」两个角色。按当前基线，`git ls-files` 跟踪 1,377 个文件，其中：
 
 - **游戏素材** 357 个（350 png + 6 jpg + 1 bmp），约 367 MB：
   - `docs/milestones/`：Citron / 真机截图，含商业游戏的标题画面、立绘、CG、OP 帧；
@@ -120,19 +120,19 @@ python scripts/public_release_sanitize.py \
 
 退出码：`0` 成功（BLOCK=0）；`1` 策略文件缺失、输出不可用或有 BLOCK 命中。
 
-当前基线（2026-11-11，0.1.0-preview 公开快照，私有源 `a798fac`，脚本一次实际输出）：
+当前基线（2026-11-11，0.1.0-preview 公开快照，私有源 `cc6148c`，脚本一次实际输出）：
 
 ```text
-kept=1006 excluded=359 bytes=26078021 rewritten_refs=0
+kept=1018 excluded=359 bytes=26606932 rewritten_refs=0
 excluded kinds: {'art': 357, 'data': 2}
-scan: block=0 review=466 scanned=1006
-  review dev machine absolute path: 436
+scan: block=0 review=469 scanned=1018
+  review dev machine absolute path: 439
   review sensitive path keyword: 30
 allowlist: examples/batch/games/demo-a/data.xp3 (62-byte UTF-8 placeholder fixture ...)
-zip: E:/galnx-build/public/GalNX-0.1.0-public.zip (8913959 bytes, sha256=7f793d07...)
+zip: E:/galnx-build/public/GalNX-v145-final.zip (9142838 bytes, sha256=17688031...)
 ```
 
-`review=466` 是允许保留的历史证据（路径关键词与 `E:/` 构建路径），不是 BLOCK；发布前只需确认没有新增异常类别。
+`review=469` 是允许保留的历史证据（路径关键词与 `E:/` 构建路径），不是 BLOCK；发布前只需确认没有新增异常类别。
 
 ## 4. 发布方式（v1.41 起：公私双仓库）
 
@@ -141,7 +141,7 @@ zip: E:/galnx-build/public/GalNX-0.1.0-public.zip (8913959 bytes, sha256=7f793d0
 | 仓库 | 可见性 | 内容 | 用途 |
 | --- | --- | --- | --- |
 | `KIRARITenshiChan/GalNX` | 私有 | 全部源码、文档、**357 张游戏截图/封面/图标 + 2 个原始游戏数据文件**、计划快照、实验日志 | 开发主仓库，每个里程碑都推这里 |
-| `KIRARITenshiChan/GalNX-public` | 公开 | sanitized 快照（当前 1,006 个文件 / 约 26 MB），无游戏素材、无 keys、无游戏数据 | 对外展示与分发代码/补丁/文档 |
+| `KIRARITenshiChan/GalNX-public` | 公开 | sanitized 快照（当前 1,018 个文件 / 约 26.6 MB），无游戏素材、无 keys、无游戏数据 | 对外展示与分发代码/补丁/文档 |
 
 公开仓库只接收干净树快照，**不 push 私有历史**：公开历史从 0 开始，每个快照是一个独立 commit（message 记录私有源 commit），因此公开树里的图片路径永远不存在，也不会因为历史回溯而泄漏。私有仓库继续按原节奏开发，攒到「一个里程碑完成 / 一次真机验收通过 / 计划升版」后再同步公开仓库。
 
@@ -212,6 +212,7 @@ git filter-repo --force --invert-paths \
 | 2026-11-10 | `7306669` | `ff49e0d` | 967 文件 / 24,286,065 B（排除 351） | 首次公开快照：建空仓库 `GalNX-public` 后推送，公开历史从 1 个 commit 开始 |
 | 2026-11-11 | `15f6d91` | `0f50c00` | 988 文件 / 25,342,753 B（排除 356） | 第 4 个快照：P44 NV12 零拷贝引擎同步到 IROSEKA / MOYU 两包 + 用户封面图标 + 计划 v1.43 |
 | 2026-11-11 | `a798fac` | `26dedca` | 1,006 文件 / 26,078,021 B（排除 359，其中 art 357 + data 2） | 第 5 个快照：0.1.0-preview 收敛（构建契约 not_configured、引擎能力/verification、fail-closed 公开闸门、SBOM inventory、缓存 schema 2、CI），脚本 `0 BLOCK`，ZIP 8,913,959 B sha256 `7f793d07…` |
+| 2026-11-11 | `cc6148c` | `071e2c9` | 1,018 文件 / 26,630,480 B（排除 359，其中 art 357 + data 2） | 第 6 个快照：专家复审 FIX-01..FIX-06 收口（非 TTY 构建确认 fail-closed、`examples/quickstart/` 可执行示例、Pilot-04 验证等级校准、未声明 `build.inputs` 禁用缓存）+ 计划 v1.45；sanitizer `0 BLOCK` / review 469（dev path 439 + keyword 30），导出 bytes 26,606,932，ZIP 9,142,838 B sha256 `17688031…`；公开仓库干净 clone 复跑 quickstart 首跑 artifact 269 B sha256 `5982bb06…`、二跑 cache hit |
 
 上表只登记「发布事件」；日常增量同步按 4.2 执行，不再逐条登记（`ffe8db7`、`44d8e57` 为过渡期增量快照，未单列）。任一快照对应的私有源 commit 都写在公开树的 `PUBLIC_RELEASE.md` 中，可用它反查是哪个私有提交导出的。
 

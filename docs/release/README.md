@@ -6,7 +6,7 @@ Release-facing documentation for GalNX.
 | --- | --- |
 | `0.1.0-preview.md` | Release notes for the current preview: scope, verified artifacts, requirements, known limitations, release-gate results. |
 | `expert-review-0.1.0.md` | External review plan that drove the 0.1.0 convergence (audit baseline, P0/P1/P2 task list, release checklist), kept with its §11 execution-status and deviations record after completion. |
-| `tasks/` | Implementation reports produced while converging on 0.1.0 (`TASK-*.md`). Each report follows the fixed format: task id, source commit, files changed, observed problem, decision, behaviour before/after, tests, commands, deviations, limitations, rollback. |
+| `tasks/` | Implementation reports produced while converging on 0.1.0 (`TASK-*.md`) while closing the post-review fix round (`FIX-01.md` … `FIX-06.md`; FIX-03 and FIX-05 share one report), and the third-round cleanup (`CLEAN-01-04.md`). Each report follows the fixed format: task id, source commit, files changed, observed problem, decision, behaviour before/after, tests, commands, deviations, limitations, rollback. |
 
 ## Versioning and release process
 

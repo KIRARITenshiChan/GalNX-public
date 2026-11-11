@@ -69,7 +69,7 @@ Scope 遵守：
 PYTHONPATH=src python -m galnx build run --manifest examples/quickstart/manifest.yaml --yes --json
 ```
 
-- 首跑：exit 0，`executed=1, cache_hits=0, cache_misses=1, built=1`，`build_state=executed`；产出 `examples/quickstart/out/demo.pak` 283 B，magic `GALNXPK1`，2 个条目（`demo.txt` 106 B、`sub/extra.txt` 60 B），sha256 `5982bb067d6c48654f2b346168c3192de34e141a70d17f06fbdebc1660ef8870`。项目 `status=warn`（唯一 warn 来自既有检查 `build-root`：默认全局构建根目录尚未创建；与本示例无关，不阻塞、退出码 0）。
+- 首跑：exit 0，`executed=1, cache_hits=0, cache_misses=1, built=1`，`build_state=executed`；产出 `examples/quickstart/out/demo.pak` 269 B，magic `GALNXPK1`，2 个条目（`demo.txt` 92 B、`sub/extra.txt` 60 B），sha256 `5982bb067d6c48654f2b346168c3192de34e141a70d17f06fbdebc1660ef8870`。项目 `status=warn`（唯一 warn 来自既有检查 `build-root`：默认全局构建根目录尚未创建；与本示例无关，不阻塞、退出码 0）。
 - 二跑同一命令：exit 0，`executed=0, cache_hits=1, cache_misses=0, built=0`，`build_state=cache_hit`，artifact 字节不变。
 - 改动声明过的输入 `content/demo.txt` 后再跑：缓存 key 从 `4cd40986…` 变为 `c6e8b405…`，exit 0，`executed=1, cache_hits=0`，artifact sha256 变为 `cc5b0380b527636039b0692a3088999da2e5f3da27113a5b4d4e358ab0e63920`。
 
@@ -117,7 +117,7 @@ python -c "import yaml; d=yaml.safe_load(open('.github/workflows/ci.yml',encodin
 | 二跑 | 0 | 0 | 1 | 0 | 0 | cache_hit | `4cd40986` | `5982bb06` |
 | 改输入后 | 0 | 1 | 0 | 1 | 1 | executed | `c6e8b405` | `cc5b0380` |
 
-artifact 解析（独立 Python 解析器）：magic `GALNXPK1`，文件数 2，条目 `demo.txt`（106 B，sha256 前缀 `2eb1e197309b`）与 `sub/extra.txt`（60 B，sha256 前缀 `13f034d75e29`），总 283 B，无尾随字节。
+artifact 解析（独立 Python 解析器）：magic `GALNXPK1`，文件数 2，条目 `demo.txt`（92 B，sha256 前缀 `eaf1f17e88f8`）与 `sub/extra.txt`（60 B，sha256 前缀 `13f034d75e29`），总 269 B，无尾随字节。
 
 ## Test results
 
@@ -171,7 +171,7 @@ git revert <FIX-02 提交>
 PYTHONPATH=src python -m galnx build run --manifest examples/quickstart/manifest.yaml --yes
 ```
 
-首跑会执行 `tools/pack_demo.py` 生成 `examples/quickstart/out/demo.pak`（约 283 B）；再跑一次会命中缓存：
+首跑会执行 `tools/pack_demo.py` 生成 `examples/quickstart/out/demo.pak`（269 B）；再跑一次会命中缓存：
 
 ```
 build: 0 executed, 0 not configured, 1 cache hit(s)
