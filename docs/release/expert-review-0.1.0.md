@@ -700,7 +700,7 @@ GalNX 当前不需要推翻架构，也不需要为了 0.1 增加更多引擎或
 - `PYTHONPATH=src GALNX_BUILD_ROOT=E:/galnx-build python -m pytest -q` → **747 passed / 63 subtests**（本轮无代码改动，与 FIX 轮基线相同）。
 - `python scripts/check_license_inventory.py --json` → rc 0、33 组件 / **5 产物** / 0 error / 2 warning。
 - README 命令实测：`--dry-run` 退出码 3；`--yes` 缺 prod.keys 退出码 2、齐全退出码 3，两种情况均不产生产物。
-- 公开快照 7：kept / excluded / bytes / BLOCK / REVIEW / ZIP sha256 以 `docs/environment/public-release.md` §4.5 最新行为准。
+- 公开快照 7：源 `14e6f4c` → 公开 `9fd346a`；导出 kept=1,022 / excluded=359 / bytes=27,524,118，`0 BLOCK` / review 473；镜像 1,022 文件 / 27,547,657 B；ZIP 9,543,597 B sha256 `ffddcef4…`。
 
 ### 13.2 仍未做（0.1 之后）
 

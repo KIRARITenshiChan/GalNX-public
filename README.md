@@ -168,7 +168,7 @@ tests/                pytest（见下方开发与测试）
 | 0.1.0 Preview 发布说明 | [docs/release/0.1.0-preview.md](docs/release/0.1.0-preview.md) |
 | 变更记录 | [CHANGELOG.md](CHANGELOG.md) |
 | 构建记录（按编号，含补丁与产物哈希） | [docs/builds/README.md](docs/builds/README.md) |
-| 框架计划（v1.47 快照） | [docs/PLAN_DRAFT_v1.47.md](docs/PLAN_DRAFT_v1.47.md) |
+| 框架计划（v1.48 快照） | [docs/PLAN_DRAFT_v1.48.md](docs/PLAN_DRAFT_v1.48.md) |
 | 清单格式与信任边界 | [docs/MANIFEST.md](docs/MANIFEST.md) |
 | 引擎适配器与能力模型 | [docs/engines/README.md](docs/engines/README.md) |
 | 游戏级真机验收索引 | [docs/engines/verification-matrix.md](docs/engines/verification-matrix.md) |
